@@ -19,7 +19,7 @@ This package allows you to
 ##Requirements
 
 * Mac OS X 
-	* El Capitan (10.11) or Sierra (10.12)
+	* 10.6.x+
 
 * Linux (Any Debian-derived distro)
 	* Ubuntu and Linux Mint
