@@ -5,7 +5,7 @@ The Dendro platform is a completely open-source platform designed to help resear
 It is under development at [Faculdade de Engenharia da Universidade do Porto](https://www.fe.up.pt/)'s [Infolab](http://infolab.fe.up.pt) since 2013. If you are interested in the academic foundations and innovations behind Dendro, please check out our **publications** at the [Dendro official website](http://dendro.fe.up.pt).
 
 
-You are free to use the source code in a commercial product or service for your research group or institution.
+You are free to use Dendro to build any service for your research group or institution.
 
 ##What is this?
 
