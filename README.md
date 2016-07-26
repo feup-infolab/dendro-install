@@ -1,12 +1,21 @@
-#	Dendro automated installation scripts
+#	Welcome to Dendro
 
-This package allows you to install the Dendro platform. It is a completely open-source platform designed to help researchers describe their datasets, fully build on Linked Open Data.
+The Dendro platform is a completely open-source platform designed to help researchers describe their datasets, fully build on Linked Open Data. It is designed to capture data and metadata during the research workflow. Whenever researchers want to publish a dataset, they can export to repositories such as [CKAN](http://ckan.org/), [DSpace](http://www.dspace.org/), [Invenio](http://invenio-software.org/), or [EUDAT's B2Share](https://www.eudat.eu/services/b2share). Any repository can be added by writing small plug-ins.
 
-It is under development at [Faculdade de Engenharia da Universidade do Porto](https://www.fe.up.pt/)'s [Infolab](http://infolab.fe.up.pt) since 2013.
+It is under development at [Faculdade de Engenharia da Universidade do Porto](https://www.fe.up.pt/)'s [Infolab](http://infolab.fe.up.pt) since 2013. If you are interested in the academic foundations and innovations behind Dendro, please check out our **publications** at the [Dendro official website](http://dendro.fe.up.pt).
 
-If you are interested in the academic foundations and innovations behind Dendro, please check out our publications at the [Dendro official website](http://dendro.fe.up.pt).
 
-You are free to use the source code in a commercial product or service. 
+You are free to use the source code in a commercial product or service for your research group or institution.
+
+##What is this?
+
+This package allows you to 
+
+ * Install and try out [Dendro](http://dendro.fe.up.pt/blog/index.php/dendro/) 
+ * The installation is 100% automatic
+ * We use a [virtual machine](https://en.wikipedia.org/wiki/Virtual_machine) inside your computer and not your real computer. 
+   * No garbage is installed on it
+   * When you are done, just delete the virtual machine, and nothing will remain.
 
 ##Requirements
 
@@ -49,22 +58,35 @@ You are free to use the source code in a commercial product or service.
 	* (Windows) Right-click the install.bat file and select "Run as Administrator"
 	* (Mac OS X and Linux) 
 		* On the Terminal, type:
-			```bash
-			cd </scripts/folder/location #open scripts folder directory
-			chmod +x ./install.sh
-			```
+		* `cd </scripts/folder/location>`
+		* `chmod +x ./install.sh`
+		* `./install.sh`
 
+7. **Go grab a coffee :-)**
+	* Really, the installation takes long, around 30 minutes in an average machine.
+	* If the script does not output anything for a while, please don't kill it. We have suppressed all compilation output to save CPU time. Just be patient.
+	* Wait until you see this message:
+		* `[SUCCESS] Dendro is now installed!`
 
+8. **Access your new Dendro installation**
+	* Dendro can be accessed on your browser through the following address: [http://192.168.56.200:3001]()
+		* (if you did not change the `constants.sh` file in step **5**).
 
 ##Dependencies
 
+Dendro relies on
 
-
-##Tips
-
+ * OpenLink Virtuoso for the database layer
+ * ElasticSearch for free text searching
+ * MongoDB and its GridFS system for scalable file storage
+ * NodeJS and ExpressJS for the server side
+ * Twitter Boostrap
 
 ##Acknowledgements
 
+This work was supported by project NORTE-07-0124-FEDER-000059, financed by the North Portugal Regional Operational Programme (ON.2-O Novo Norte), under the National Strategic Reference Framework (NSRF), through the European Regional Development Fund (ERDF), and by national funds, through the Portuguese funding agency, Fundação para a Ciência e a Tecnologia (FCT). João Rocha da Silva was also supported by research grant SFRH/BD/77092/2011, provided by the Portuguese funding agency, Fundação para a Ciência e a Tecnologia (FCT).
+
+This work is financed by the ERDF – European Regional Development Fund through the Operational Programme for Competitiveness and Internationalisation - COMPETE 2020 Programme and by National Funds through the Portuguese funding agency, FCT - Fundação para a Ciência e a Tecnologia within project POCI-01-0145-FEDER-016736.
 
 
 
@@ -72,7 +94,7 @@ You are free to use the source code in a commercial product or service.
 
 All source code is freely available under a standard [BSD 3-Clause license](https://opensource.org/licenses/BSD-3-Clause).
 
-Copyright (c) 2016, João Rocha da Silva, FEUP Infolab
+Copyright (c) 2016, João Rocha da Silva
 
 All rights reserved.
 
