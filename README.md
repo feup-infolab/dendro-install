@@ -11,8 +11,7 @@ You are free to use Dendro to build any service for your research group or insti
 
 This package allows you to 
 
- * Install and try out [Dendro](http://dendro.fe.up.pt/blog/index.php/dendro/) 
- * The installation is 100% automatic
+ * Install and try out [Dendro](http://dendro.fe.up.pt/blog/index.php/dendro/) without having to write any code
  * We use a [virtual machine](https://en.wikipedia.org/wiki/Virtual_machine) inside your computer and not your real computer. 
    * No garbage is installed on it
    * When you are done, just delete the virtual machine, and nothing will remain.
