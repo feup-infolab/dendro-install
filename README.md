@@ -26,7 +26,7 @@ This package allows you to
 	* Ubuntu and Linux Mint
 	* Tested on Debian Jessie 
 
-* Windows 10
+* **COMING SOON** Windows 7+
 
 ##Instructions
 1. **Download and install the _latest versions_ of:**
@@ -51,6 +51,13 @@ This package allows you to
 
 5. (optional) **Customize the installation**
 	* Edit the `constants.sh` file if you want to customize the installation
+	* You may want to change the following parameters:
+		* Root passwords for all services (MySQL, ElasticSearch, Virtuoso...) are specified in `constants.sh`
+		* `svn_user` + `svn_user_password` --> Until we have a public GitHub repository, these are the credentials for accessing the private Subversion repository at FEUP
+		* `emailing_account_gmail_user` + `emailing_account_gmail_password`  
+			* Credentials of a GMail account for sending emails such as password resets
+		* You will find what needs to be changed by searching for the `FIXME_____` keyword within `constants.sh`
+		
 
 6. **Run the installation**
 
@@ -70,6 +77,9 @@ This package allows you to
 8. **Access your new Dendro installation**
 	* Dendro can be accessed on your browser through the following address: [http://192.168.56.200:3001]()
 		* (if you did not change the `constants.sh` file in step **5**).
+	* The default credentials for the administrator are:
+		`user: admin`
+		`password: admintest123`
 
 ##Dependencies
 
