@@ -96,7 +96,7 @@ This work was supported by project NORTE-07-0124-FEDER-000059, financed by the N
 
 This work is financed by the ERDF – European Regional Development Fund through the Operational Programme for Competitiveness and Internationalisation - COMPETE 2020 Programme and by National Funds through the Portuguese funding agency, FCT - Fundação para a Ciência e a Tecnologia within project POCI-01-0145-FEDER-016736.
 
-
+<img src="https://github.com/feup-infolab-rdm/dendro-install/raw/master/logos.jpg">
 
 ## License
 
