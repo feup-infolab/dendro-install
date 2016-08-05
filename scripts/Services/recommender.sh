@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-echo "[INFO] Setting up Dendro Recommender service..."
-
 if [ -z ${DIR+x} ]; then 
 	#running by itself
 	source ../constants.sh
@@ -9,6 +7,8 @@ else
 	#running from dendro_full_setup_ubuntu_server_ubuntu_16.sh
 	source ./constants.sh
 fi
+
+printf "${Cyan}[INFO]${Color_Off} Setting up Dendro Recommender service...\n"
 
 #save current dir
 setup_dir=$(pwd)
@@ -39,7 +39,7 @@ User=${dendro_user_name}
 Group=${dendro_user_group}
 WorkingDirectory=${dendro_recommender_install_path}
 KillMode=control-group
-ExecStart=/bin/sh -c '${dendro_recommender_install_path}/bin/recommender -Dhttp.port=${dendro_recommender_port} | tee ${dendro_recommender_log_file}'
+ExecStart=/bin/sh -c '${dendro_recommender_install_path}/bin/recommender -Dconfig.file=${dendro_recommender_install_path}/conf/application.conf -Dhttp.port=${dendro_recommender_port} | tee ${dendro_recommender_log_file}'
 PIDFile=$installation_path/service_pids/${dendro_recommender_service_name}
 [Install]
 WantedBy=multi-user.target\n" | sudo tee $dendro_recommender_startup_item_file
@@ -53,7 +53,7 @@ sudo systemctl start $dendro_recommender_service_name
 #go back to initial dir
 cd $setup_dir
 
-echo "[OK] Finished setting up Dendro Recommender service."
+printf "${Green}[OK]${Color_Off} Finished setting up Dendro Recommender service.\n"
 
 #SCRAP
 #kill processes on a given port

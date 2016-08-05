@@ -74,7 +74,7 @@ This package allows you to
 		* `[SUCCESS] Dendro is now installed!`
 
 8. **Access your new Dendro installation**
-	* Dendro can be accessed on your browser through the following address: [http://192.168.56.200:3001]()
+	* Dendro can be accessed on your browser through the following address: [http://192.168.56.200:3001] 
 		* (if you did not change the `constants.sh` file in step **5**).
 	* The default credentials for the administrator are:
 		`user: admin`

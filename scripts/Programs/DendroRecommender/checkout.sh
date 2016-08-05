@@ -12,16 +12,16 @@ fi
 setup_dir=$(pwd)
 
 #stop current recommender service if present
-echo "[INFO] Stopping ${dendro_recommender_service_name} service..."
+printf "${Cyan}[INFO]${Color_Off} Stopping ${dendro_recommender_service_name} service...\n"
 sudo systemctl stop $dendro_recommender_service_name
 
 #check out dendro recommender code from svn repo
-echo "[INFO] Installing Dendro Recommender to path : ${dendro_recommender_install_path}"
+printf "${Cyan}[INFO]${Color_Off} Installing Dendro Recommender to path : ${dendro_recommender_install_path}\n"
 sudo rm -rf $dendro_recommender_install_path
 cd $temp_downloads_folder
 
-echo "[INFO] Checking out Dendro Recommender from SVN to path : ${dendro_recommender_install_path}. PLEASE STAND BY!"
-sudo svn -q export $dendro_recommender_svn_url $dendro_recommender_install_path --username $svn_user --password $svn_user_password --force
+printf "${Cyan}[INFO]${Color_Off} Checking out Dendro Recommender from SVN to path : ${dendro_recommender_install_path}. PLEASE STAND BY!\n"
+sudo svn -q --no-auth-cache export $dendro_recommender_svn_url $dendro_recommender_install_path --username $svn_user --password $svn_user_password --force
 
 #compile program
 cd $dendro_recommender_install_path

@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-echo "[INFO] ElasticSearch 2.2.3......"
-
 if [ -z ${DIR+x} ]; then 
 	#running by itself
 	source ../constants.sh
@@ -10,11 +8,13 @@ else
 	source ./constants.sh
 fi
 
+printf "${Cyan}[INFO]${Color_Off} Installing ElasticSearch 2.2.3......\n"
+
 #save current dir
 setup_dir=$(pwd)
 
 #install elasticsearch
-sudo add-apt-repository ppa:webupd8team/java
+sudo add-apt-repository -y ppa:webupd8team/java
 sudo apt-get -qq update
 sudo apt-get -qq install oracle-java8-installer
 cd $temp_downloads_folder
@@ -24,4 +24,4 @@ sudo dpkg -i elasticsearch-2.3.3.deb
 #go back to initial dir
 cd $setup_dir
 
-echo "[OK] Installed ElasticSearch 2.2.3."
+printf "${Green}[OK]${Color_Off} Installed ElasticSearch 2.2.3.\n"

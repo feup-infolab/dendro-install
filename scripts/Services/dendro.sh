@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-echo "[INFO] Setting up Dendro service..."
-
 if [ -z ${DIR+x} ]; then 
 	#running by itself
 	source ../constants.sh
@@ -10,13 +8,15 @@ else
 	source ./constants.sh
 fi
 
+printf "${Cyan}[INFO]${Color_Off} Setting up Dendro service...\n"
+
 #printf "/usr/local/bin/node ${dendro_installation_path}/app.js >> ${dendro_log_file} 2>&1"
 
 #save current dir
 setup_dir=$(pwd)
 
 #stop current recommender service if present
-echo "[INFO] Stopping $dendro_service_name service..."
+printf "${Cyan}[INFO]${Color_Off} Stopping $dendro_service_name service...\n"
 sudo systemctl stop $dendro_service_name
 
 #setup auto-start dendro service
@@ -57,4 +57,4 @@ sudo systemctl start $dendro_service_name
 #go back to initial dir
 cd $setup_dir
 
-echo "[OK] Finished setting up Dendro service."
+printf "${Green}[OK]${Color_Off} Finished setting up Dendro service.\n"

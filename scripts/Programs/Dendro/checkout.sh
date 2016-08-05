@@ -11,15 +11,15 @@ fi
 #save current dir
 setup_dir=$(pwd)
 
-echo "[INFO] Stopping ${dendro_service_name} service..."
+printf "${Cyan}[INFO]${Color_Off} Stopping ${dendro_service_name} service...\n"
 sudo systemctl stop $dendro_service_name
 
 #check out dendro code from svn repo
-echo "[INFO] Installing Dendro to path : ${dendro_installation_path}"
+printf "${Cyan}[INFO]${Color_Off} Installing Dendro to path : ${dendro_installation_path}\n"
 sudo rm -rf $dendro_installation_path
 cd $temp_downloads_folder
-echo "[INFO] Exporting Dendro from code repository at : ${dendro_svn_url} to $dendro_installation_path. PLEASE STAND BY!"
-sudo svn -q export $dendro_svn_url $dendro_installation_path --username $svn_user --password $svn_user_password --force
+printf "${Cyan}[INFO]${Color_Off} Exporting Dendro from code repository at : ${dendro_svn_url} to $dendro_installation_path. PLEASE STAND BY!\n"
+sudo svn -q --no-auth-cache export $dendro_svn_url $dendro_installation_path --username $svn_user --password $svn_user_password --force
 
 #give "dendro" user ownership of the installation
 sudo chown -R $dendro_user_name:$dendro_user_group $installation_path

@@ -9,7 +9,7 @@ chmod -R 0777 ~/.vagrant.d
 vagrant destroy -f dendro
 vagrant up --provider virtualbox --provision
 
-echo "[SUCCESS] Dendro is now installed!"
+printf "${Green}[END]${Color_Off} Dendro setup complete.\n"
 
 #clean list of VMs
 #sudo vagrant global-status --prune

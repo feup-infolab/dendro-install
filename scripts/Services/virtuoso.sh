@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-echo "[INFO] Setting up Virtuoso service..."
-
 #save current dir
 setup_dir=$(pwd)
 
@@ -12,6 +10,8 @@ else
 	#running from dendro_full_setup_ubuntu_server_ubuntu_16.sh
 	source ./constants.sh
 fi
+
+printf "${Cyan}[INFO]${Color_Off} Setting up Virtuoso service...\n"
 
 #create pids folder...
 sudo mkdir -p $dendro_installation_path/service_pids
@@ -49,4 +49,4 @@ sudo systemctl start virtuoso
 #go back to initial dir
 cd $setup_dir
 
-echo "[OK] Finished setting up Virtuoso service."
+printf "${Green}[OK]${Color_Off} Finished setting up Virtuoso service.\n"

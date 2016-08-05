@@ -12,9 +12,9 @@ fi
 setup_dir=$(pwd)
 
 #create database to hold interaction logs
-echo "[INFO] Creating MySQL database ${mysql_database_to_create} using user ${mysql_username}"
-echo "create database ${mysql_database_to_create}" | mysql -u $mysql_username -p$mysql_root_password
-echo "[OK] MySQL database ${mysql_database_to_create} successfully created."
+printf "${Cyan}[INFO]${Color_Off} Creating MySQL database ${mysql_database_to_create} using user ${mysql_username}\n"
+echo "create database ${mysql_database_to_create};" | mysql -u $mysql_username -p$mysql_root_password
+printf "${Green}[OK]${Color_Off} MySQL database ${mysql_database_to_create} successfully created.\n"
 
 #go back to initial dir
 cd $setup_dir

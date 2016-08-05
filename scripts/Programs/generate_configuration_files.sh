@@ -12,6 +12,8 @@ else
 	running_folder=$script_dir/Programs
 fi
 
+printf "${Cyan}[INFO]${Color_Off} Generating Configuration Files...\n"
+
 node $running_folder/build_configuration_files.js \
 	--dr_config_output_folder_location "${running_folder}/generated_configurations" \
 	--dendro_config_output_folder_location "${running_folder}/generated_configurations" \
@@ -46,7 +48,13 @@ node $running_folder/build_configuration_files.js \
 	--dendro_recommender_active $dendro_recommender_active \
 	--dendro_recommender_host $dendro_recommender_host \
 	--dendro_recommender_port $dendro_recommender_port \
+	--interactions_table_stage1 $interactions_table_stage1 \
+	--interactions_table_stage2 $interactions_table_stage2 \
 	--emailing_account_gmail_user $emailing_account_gmail_user \
 	--emailing_account_gmail_password $emailing_account_gmail_password \
 	--dr_all_ontologies_uri $dendro_recommender_all_ontologies_url \
-	--dr_interactions_table $dendro_recommender_interactions_table
+	--dr_interactions_table $dendro_recommender_interactions_table \
+	--dr_stage1_active $dr_stage1_active \
+	--dr_stage2_active $dr_stage2_active 
+
+printf "${Yellow}[INFO]${Color_Off} Generated Configuration Files. Check for errors.\n"

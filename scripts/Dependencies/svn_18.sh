@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-echo "[INFO] Installing Subversion 1.8......"
-
 if [ -z ${DIR+x} ]; then 
 	#running by itself
 	source ../constants.sh
@@ -9,6 +7,8 @@ else
 	#running from dendro_full_setup_ubuntu_server_ubuntu_16.sh
 	source ./constants.sh
 fi
+
+printf "${Cyan}[INFO]${Color_Off} Installing Subversion 1.8......\n"
 
 #save current dir
 setup_dir=$(pwd)
@@ -19,11 +19,11 @@ sudo wget --progress=bar:force http://opensource.wandisco.com/wandisco-debian.gp
 sudo apt-get -qq update > /dev/null
 sudo apt-cache show subversion | grep '^Version:'
 sudo apt-get -qq install subversion
-sudo dpkg -l|grep subversion
+sudo dpkg -l | grep subversion
 svn --version
 
 
 #go back to initial dir
 cd $setup_dir
 
-echo "[OK] Installed Subversion 1.8."
+printf "${Green}[OK]${Color_Off} Installed Subversion 1.8.\n"

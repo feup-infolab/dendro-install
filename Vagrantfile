@@ -101,8 +101,8 @@ SCRIPT
   config.vm.provision "shell", inline: $unzip_script
 
   $run_script = <<SCRIPT
-  chmod +x #{destination_folder}/scripts/dendro_full_setup_ubuntu_server_ubuntu_16.sh
-  #{destination_folder}/scripts/dendro_full_setup_ubuntu_server_ubuntu_16.sh
+  chmod +x #{destination_folder}/scripts/install.sh
+  #{destination_folder}/scripts/install.sh 
 SCRIPT
 
   config.vm.provision "shell", inline: $run_script

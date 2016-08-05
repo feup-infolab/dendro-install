@@ -274,7 +274,19 @@ var arguments = {
 		type: "string",
 		example : "root",
 		tip : "Coming soon"
-	}
+	},
+	"dr_stage1_active" : 
+	{
+		type: "boolean",
+		example : "interactions_stage1",
+		tip : "Coming soon"
+	},
+	"dr_stage2_active" : 
+	{
+		type: "boolean",
+		example : "interactions_stage2",
+		tip : "Coming soon"
+	},
 };
 
 var get_argument_by_name = function(argument)
@@ -353,7 +365,7 @@ var print_usage = function(arguments)
 	console.log(output);
 }
 
-var write_dendro_configuration_file = function()
+var write_dendro_configuration_file = function ()
 {
 	var config_id = get_argument_by_name('config_identifier');
 	var dendro_config_template = {};
@@ -493,12 +505,12 @@ var write_dendro_configuration_file = function()
 					"log_modes" : {
 						"phase_1" :
 						{
-							"table_to_write_interactions" : "interactions",
+							"table_to_write_interactions" : get_argument_by_name('interactions_table_stage1'),
 							"active" : false
 						},
 						"phase_2" :
 						{
-							"table_to_write_interactions" : "interactions",
+							"table_to_write_interactions" : get_argument_by_name('interactions_table_stage2'),
 							"active" : true
 						}
 					}
@@ -539,7 +551,7 @@ var write_dendro_configuration_file = function()
 	return destinationFile;
 }
 
-var write_dendro_recommender_configuration_file = function()
+var write_dendro_recommender_configuration_file = function () 
 {
 	var dr_parameters = [
 		{

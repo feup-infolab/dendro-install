@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-echo "[INFO] Installing latest MongoDB......"
-
 if [ -z ${DIR+x} ]; then 
 	#running by itself
 	source ../constants.sh
@@ -10,11 +8,13 @@ else
 	source ./constants.sh
 fi
 
+printf "${Cyan}[INFO]${Color_Off} Installing latest MongoDB......\n"
+
 #save current dir
 setup_dir=$(pwd)
 
 #install Java 8
-sudo add-apt-repository ppa:webupd8team/java
+sudo add-apt-repository -y ppa:webupd8team/java
 sudo apt-get -qq update
 sudo apt-get -qq install oracle-java8-installer
 
@@ -42,7 +42,7 @@ sudo chown `id -u` /data/db
 #go back to initial dir
 cd $setup_dir
 
-echo "[OK] Installed latest MongoDB."
+printf "${Green}[OK]${Color_Off} Installed latest MongoDB.\n"
 
 
 #SCRAP
