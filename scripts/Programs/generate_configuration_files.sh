@@ -34,6 +34,9 @@ node $running_folder/build_configuration_files.js \
 	--mongodb_port $mongodb_port \
 	--mongodb_dba_user $mongodb_dba_user \
 	--mongodb_dba_password $mongodb_dba_password \
+	--redis_host $redis_host \
+	--redis_port $redis_port \
+	--redis_database $redis_database \
 	--mysql_host $mysql_host \
 	--mysql_port $mysql_port \
 	--mysql_dba_user $mysql_username \
@@ -52,6 +55,7 @@ node $running_folder/build_configuration_files.js \
 	--interactions_table_stage2 $interactions_table_stage2 \
 	--emailing_account_gmail_user $emailing_account_gmail_user \
 	--emailing_account_gmail_password $emailing_account_gmail_password \
+	--cache_static_files $cache_static_files \
 	--dr_all_ontologies_uri $dendro_recommender_all_ontologies_url \
 	--dr_interactions_table $dendro_recommender_interactions_table \
 	--dr_stage1_active $dr_stage1_active \

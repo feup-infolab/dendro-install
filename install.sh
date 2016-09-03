@@ -6,7 +6,7 @@ tar -zcf scripts.tar.gz ./scripts
 
 # start vagrant and provision virtual machine
 chmod -R 0777 ~/.vagrant.d
-vagrant destroy -f dendro
+
 vagrant up --provider virtualbox --provision
 
 printf "${Green}[END]${Color_Off} Dendro setup complete.\n"

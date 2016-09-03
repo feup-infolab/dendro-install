@@ -125,6 +125,27 @@ var arguments = {
 		tip : "Coming soon"
 	},
 	
+	//redis
+	
+	"redis_host" : 
+	{
+		type: "string",
+		example : "127.0.0.1",
+		tip : "Coming soon"
+	},
+	"redis_port" : 
+	{
+		type: "integer",
+		example : "6379",
+		tip : "Coming soon"
+	},
+	"redis_database" : 
+	{
+		type: "integer",
+		example : "1",
+		tip : "Coming soon"
+	},
+	
 	//mysql
 	"mysql_host" : 
 	{
@@ -238,6 +259,14 @@ var arguments = {
 	{
 		type: "string",
 		example : "gmail_user_password",
+		tip : "Coming soon"
+	},
+	
+	//caching of static content
+	"cache_static_files" :
+	{
+		type: "boolean",
+		example : "true",
 		tip : "Coming soon"
 	},
 	
@@ -381,6 +410,24 @@ var write_dendro_configuration_file = function ()
 	    "sendGridPassword" : get_argument_by_name('emailing_account_gmail_user'),
 		"elasticSearchHost" : get_argument_by_name('elasticsearch_host'),
 		"elasticSearchPort" : get_argument_by_name('elasticsearch_port'),
+		"cache": {
+			"active": true,
+			"redis" :
+			{
+				"options":
+				{
+					"host" : get_argument_by_name('redis_host'),
+					"port" : get_argument_by_name('redis_port')
+				},
+				"database_number" : get_argument_by_name('redis_database')
+			},
+			"static" :
+			{
+				"thumbnails_timeout_in_seconds" : 3600,
+				"cache_static_files" : get_argument_by_name('cache_static_files'),
+				"files_timeout_in_seconds" : 3600
+			}
+		},
 		"virtuosoHost" : get_argument_by_name('virtuoso_host'),
 		"virtuosoPort" : get_argument_by_name('virtuoso_port'),
 		"virtuosoAuth" : {
@@ -476,6 +523,16 @@ var write_dendro_configuration_file = function ()
 			"views" : {
 				"show_all_buttons_in_recommendations" : false,
 				"prefill_text_boxes" : false
+			},
+			"cache" : 
+			{
+				"log_cache_hits" : true,
+				"log_cache_writes" : true,
+				"log_cache_deletes" : true
+			},
+			"diagnostics" :
+			{
+				"ram_usage_report" : true
 			}
 		},
 		"startup" : {

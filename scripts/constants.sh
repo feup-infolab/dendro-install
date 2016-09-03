@@ -3,7 +3,7 @@
 #global
 active_deployment_setting='dendro_vagrant_demo'
 #will be used to generate URLs relative to a base address, so set it wisely
-	host="192.168.56.200" 
+	host="192.168.56.201" 
 installation_path='/dendro'
 recommender_installation_path='/dendro_recommender'
 
@@ -61,6 +61,8 @@ dendro_user_password='dendr0'
 	emailing_account_gmail_user="FIXME_____gmail_user_to_send_emails"
 	emailing_account_gmail_password="FIXME_____password_for_gmail_user_to_send_emails"
 
+	#cache static files such as images or thumbnails
+	cache_static_files="true"
 
 	#dependencies
 		#elasticsearch
@@ -84,6 +86,11 @@ dendro_user_password='dendr0'
 		mongodb_port=27017
 		mongodb_dba_user="root"
 		mongodb_dba_password="r00t"
+		
+		#redis
+		redis_port=6379
+		redis_host="127.0.0.1"
+		redis_database=1
 
 #dendro recommender
 	dendro_recommender_service_name=$active_deployment_setting-recommender

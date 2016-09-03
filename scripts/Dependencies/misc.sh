@@ -13,7 +13,7 @@ printf "${Cyan}[INFO]${Color_Off} Installing Preliminary Dependencies......\n"
 #save current dir
 setup_dir=$(pwd)
 
-sudo apt-get -y -f -qq install autoconf automake libtool flex bison gperf gawk m4 make libssl-dev git imagemagick subversion zip htop --fix-missing
+sudo apt-get -y -f -qq install autoconf automake libtool flex bison gperf gawk m4 make libssl-dev git imagemagick subversion zip htop redis-server --fix-missing
 
 #go back to initial dir
 cd $setup_dir
