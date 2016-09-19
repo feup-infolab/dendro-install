@@ -8,7 +8,7 @@ else
 	source ./constants.sh
 fi
 
-printf "${Cyan}[INFO]${Color_Off} Installing ElasticSearch 2.2.3......\n"
+info "Installing ElasticSearch 2.2.3......"
 
 #save current dir
 setup_dir=$(pwd)
@@ -21,7 +21,9 @@ cd $temp_downloads_folder
 sudo wget --progress=bar:force https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.3.3/elasticsearch-2.3.3.deb
 sudo dpkg -i elasticsearch-2.3.3.deb
 
+
+
 #go back to initial dir
 cd $setup_dir
 
-printf "${Green}[OK]${Color_Off} Installed ElasticSearch 2.2.3.\n"
+success "Installed ElasticSearch 2.2.3."

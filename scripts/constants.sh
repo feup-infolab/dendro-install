@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 #global
-active_deployment_setting='dendro_vagrant_demo'
+active_deployment_setting='dendroVagrantDemo'
 #will be used to generate URLs relative to a base address, so set it wisely
-	host="192.168.56.201" 
+	host="192.168.56.249" 
 installation_path='/dendro'
 recommender_installation_path='/dendro_recommender'
 
@@ -33,6 +33,7 @@ dendro_user_password='dendr0'
 	dendro_installation_path=$installation_path/$active_deployment_setting
 	temp_downloads_folder='/tmp/dendro_setup'
 	dendro_svn_url='http://dendro-dev.fe.up.pt/svn/dendro/'
+	dendro_git_url='https://github.com/feup-infolab-rdm/dendro.git'
 	
 	#deployment settings
 	dendro_log_file=/var/log/$active_deployment_setting.log
@@ -44,6 +45,7 @@ dendro_user_password='dendr0'
 	dendro_theme="lumen"
 	reload_administrators_on_startup="true"
 	reload_demo_users_on_startup="true"
+	reload_ontologies_on_startup="true"
 	config_human_readable_name='DendroVagrantDemo'
 	
 	#descriptor recommendation
@@ -62,7 +64,12 @@ dendro_user_password='dendr0'
 	emailing_account_gmail_password="FIXME_____password_for_gmail_user_to_send_emails"
 
 	#cache static files such as images or thumbnails
-	cache_static_files="true"
+	last_modified_caching="true"
+	cache_period_in_seconds=3600
+	
+	#gmaps API key
+	gmaps_api_key="AIzaSyBOTCYmWS_J3JSnLb34TsICY7MC-TbBVx4"
+	gmaps_map_height=500
 
 	#dependencies
 		#elasticsearch
@@ -86,6 +93,7 @@ dendro_user_password='dendr0'
 		mongodb_port=27017
 		mongodb_dba_user="root"
 		mongodb_dba_password="r00t"
+		mongodb_collection_name="${active_deployment_setting}_data"
 		
 		#redis
 		redis_port=6379
@@ -97,7 +105,10 @@ dendro_user_password='dendr0'
 	dendro_recommender_startup_item_file=/etc/systemd/system/$dendro_recommender_service_name.service
 	dendro_recommender_install_path=$recommender_installation_path/$active_deployment_setting
 	dendro_recommender_active="true"
+	
 	dendro_recommender_svn_url='http://dendro-dev.fe.up.pt/svn/dendro_recommender/NewDendroRecommender/'
+	dendro_recommender_git_url='https://github.com/feup-infolab-rdm/dendro-recommender.git'
+	
 	dendro_recommender_host=$host
 	dendro_recommender_port=9007
 	dendro_recommender_log_file=/var/log/$active_deployment_setting-recommender.log
@@ -141,6 +152,27 @@ cd_to_current_dir () {
 	DIR="$(get_script_dir)"
 	printf "${Cyan}[INFO]${Color_Off} CD'ing to ${DIR}\n"
 	cd "${DIR}"	
+}
+
+info () {
+	printf "${Cyan}[INFO]${Color_Off} $1\n"
+}
+
+warning () {
+	printf "${Yellow}[INFO]${Color_Off} $1\n"
+}
+
+success () {
+	printf "${Green}[SUCCESS]${Color_Off} $1\n"
+}
+
+error () {
+	printf "${Red}[ERROR]${Color_Off} $1\n"
+}
+
+die () {
+	printf "${On_IRed}[FATAL ERROR]${Color_Off} $1\n${Red}Please check any prior error messages.${Color_Off}"
+	exit 1
 }
 
 #console colors

@@ -12,18 +12,20 @@ fi
 setup_dir=$(pwd)
 
 #stop current recommender service if present
-printf "${Cyan}[INFO]${Color_Off} Stopping ${dendro_recommender_service_name} service...\n"
+info "Stopping ${dendro_recommender_service_name} service..."
 sudo systemctl stop $dendro_recommender_service_name
 
 #check out dendro recommender code from svn repo
-printf "${Cyan}[INFO]${Color_Off} Installing Dendro Recommender to path : ${dendro_recommender_install_path}\n"
+info "Installing Dendro Recommender to path : ${dendro_recommender_install_path}"
 sudo rm -rf $dendro_recommender_install_path
 cd $temp_downloads_folder
 
-printf "${Cyan}[INFO]${Color_Off} Checking out Dendro Recommender from SVN to path : ${dendro_recommender_install_path}. PLEASE STAND BY!\n"
-sudo svn -q --no-auth-cache export $dendro_recommender_svn_url $dendro_recommender_install_path --username $svn_user --password $svn_user_password --force
+info "Checking out Dendro Recommender from GIT to path : ${dendro_recommender_install_path}. PLEASE STAND BY!"
+#sudo svn -q --no-auth-cache export $dendro_recommender_svn_url $dendro_recommender_install_path --username $svn_user --password $svn_user_password --force
+sudo git clone $dendro_recommender_git_url $dendro_recommender_install_path
 
 #compile program
+info "Compiling Dendro Recommender at "$dendro_recommender_install_path
 cd $dendro_recommender_install_path
 
 #compile program
@@ -47,6 +49,8 @@ sudo rm -rf $temp_folder_for_compiled_recommender
 #give dendro user ownership of the installation, now compiled
 sudo chown -R $dendro_user_name:$dendro_user_group $recommender_installation_path
 sudo chmod -R 0755 $dendro_recommender_install_path
+
+success "Installed Dendro Recommender at ${dendro_recommender_install_path}"
 
 #go back to initial dir
 cd $setup_dir

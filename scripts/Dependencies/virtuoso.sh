@@ -8,29 +8,30 @@ else
 	source ./constants.sh
 fi
 
-printf "${Cyan}[INFO]${Color_Off} Installing OpenLink Virtuoso 7......\n"
+info "Installing OpenLink Virtuoso 7......"
 
 #save current dir
-setup_dir=$(pwd)
+setup_dir=$(pwd) &&
 
 #stop virtuoso server if running
-sudo systemctl stop virtuoso
+sudo systemctl stop virtuoso &&
 
 #install virtuoso opensource 7
-cd $temp_downloads_folder
-sudo rm -rf virtuoso-opensource
-sudo git clone https://github.com/openlink/virtuoso-opensource.git virtuoso-opensource
-cd virtuoso-opensource
-sudo git branch remotes/origin/develop/7
-sudo ./autogen.sh
-CFLAGS="-O2 -m64"
-export CFLAGS
-sudo ./configure #> /dev/null 2>&1
-sudo make --silent #> /dev/null 2>&1
-sudo make install #--silent /dev/null 2>&1
+cd $temp_downloads_folder &&
+sudo rm -rf virtuoso-opensource &&
+sudo git clone https://github.com/openlink/virtuoso-opensource.git virtuoso-opensource &&
+cd virtuoso-opensource &&
+sudo git branch remotes/origin/develop/7 &&
+sudo ./autogen.sh &&
+CFLAGS="-O2 -m64" &&
+export CFLAGS &&
+sudo ./configure && #> /dev/null 2>&1
+sudo make --silent && #> /dev/null 2>&1
+sudo make install || #--silent /dev/null 2>&1
+die "Failed to install Virtuoso OpenSource"
 
 #create virtuoso user and give ownership
-sudo useradd $virtuoso_user 
+sudo useradd $virtuoso_user
 sudo addgroup $virtuoso_group
 sudo usermod $virtuoso_user -g $virtuoso_group
 echo "${virtuoso_user}:${virtuoso_user_password}" | sudo chpasswd
@@ -56,10 +57,10 @@ sudo chown -R $virtuoso_user:$virtuoso_group /usr/local/virtuoso-opensource
 	#  │ └──────────────────── hour (0 - 23)
 	#  └───────────────────────── min (0 - 59)
 
-add_line_to_file_if_not_present "00 4 * * *   root    test -x /usr/sbin/anacron || ( systemctl restart virtuoso  )" "/etc/crontab"
+add_line_to_file_if_not_present "00 4 * * *   root    test -x /usr/sbin/anacron || ( systemctl restart virtuoso  )" "/etc/crontab" || 
+die "Failed to set Virtuoso OpenSource crontab" 
 
-
-printf "${Green}[OK]${Color_Off} Installed OpenLink Virtuoso 7.\n"
+success "Installed OpenLink Virtuoso 7"
 
 #go back to initial dir
 cd $setup_dir

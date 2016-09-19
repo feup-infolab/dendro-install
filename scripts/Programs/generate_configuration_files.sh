@@ -12,7 +12,7 @@ else
 	running_folder=$script_dir/Programs
 fi
 
-printf "${Cyan}[INFO]${Color_Off} Generating Configuration Files...\n"
+info "Generating Configuration Files..."
 
 node $running_folder/build_configuration_files.js \
 	--dr_config_output_folder_location "${running_folder}/generated_configurations" \
@@ -34,6 +34,7 @@ node $running_folder/build_configuration_files.js \
 	--mongodb_port $mongodb_port \
 	--mongodb_dba_user $mongodb_dba_user \
 	--mongodb_dba_password $mongodb_dba_password \
+	--mongodb_collection_name $mongodb_collection_name \
 	--redis_host $redis_host \
 	--redis_port $redis_port \
 	--redis_database $redis_database \
@@ -47,6 +48,7 @@ node $running_folder/build_configuration_files.js \
 	--dendro_theme $dendro_theme \
 	--reload_administrators_on_startup $reload_administrators_on_startup \
 	--reload_demo_users_on_startup $reload_demo_users_on_startup \
+	--reload_ontologies_on_startup $reload_ontologies_on_startup \
 	--config_human_readable_name $config_human_readable_name \
 	--dendro_recommender_active $dendro_recommender_active \
 	--dendro_recommender_host $dendro_recommender_host \
@@ -55,10 +57,14 @@ node $running_folder/build_configuration_files.js \
 	--interactions_table_stage2 $interactions_table_stage2 \
 	--emailing_account_gmail_user $emailing_account_gmail_user \
 	--emailing_account_gmail_password $emailing_account_gmail_password \
-	--cache_static_files $cache_static_files \
+	--last_modified_caching $last_modified_caching \
+	--cache_period_in_seconds $cache_period_in_seconds \
 	--dr_all_ontologies_uri $dendro_recommender_all_ontologies_url \
 	--dr_interactions_table $dendro_recommender_interactions_table \
 	--dr_stage1_active $dr_stage1_active \
-	--dr_stage2_active $dr_stage2_active 
-
-printf "${Yellow}[INFO]${Color_Off} Generated Configuration Files. Check for errors.\n"
+	--dr_stage2_active $dr_stage2_active \
+	--gmaps_api_key $gmaps_api_key \
+	--gmaps_map_height $gmaps_map_height || die "Failure generating configuration files."
+	
+	
+success "Generated configuration files."

@@ -43,7 +43,7 @@ User=$dendro_user_name
 Group=$dendro_user_group
 RuntimeMaxSec=infinity
 KillMode=control-group
-ExecStart=/bin/sh -c '/usr/local/bin/node ${dendro_installation_path}/app.js >> ${dendro_log_file} 2>&1'
+ExecStart=/bin/sh -c '/usr/local/bin/node ${dendro_installation_path}/src/app.js >> ${dendro_log_file} 2>&1'
 PIDFile=$installation_path/service_pids/${dendro_service_name}
 [Install]
 WantedBy=multi-user.target\n" | sudo tee $dendro_startup_item_file

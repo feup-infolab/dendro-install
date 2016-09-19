@@ -8,7 +8,7 @@ else
 	source ./constants.sh
 fi
 
-printf "${Cyan}[INFO]${Color_Off} Installing Subversion 1.8......\n"
+info "Installing Subversion 1.8......"
 
 #save current dir
 setup_dir=$(pwd)
@@ -26,4 +26,4 @@ svn --version
 #go back to initial dir
 cd $setup_dir
 
-printf "${Green}[OK]${Color_Off} Installed Subversion 1.8.\n"
+success "Installed Subversion 1.8."

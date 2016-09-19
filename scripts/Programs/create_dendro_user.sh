@@ -9,12 +9,13 @@ else
 fi
 
 #save current dir
-setup_dir=$(pwd)
+setup_dir=$(pwd) &&
 
-sudo useradd $dendro_user_name
-sudo addgroup $dendro_user_group
-sudo usermod $dendro_user_name -g $dendro_user_group
-echo "${dendro_user_name}:${dendro_user_password}" | sudo chpasswd
+sudo useradd $dendro_user_name &&
+sudo addgroup $dendro_user_group &&
+sudo usermod $dendro_user_name -g $dendro_user_group &&
+echo "${dendro_user_name}:${dendro_user_password}" | sudo chpasswd ||
+die "Failed to create ${dendro_user_name} user."
 
 #go back to initial dir
 cd $setup_dir
