@@ -8,23 +8,24 @@ else
 	source ./constants.sh
 fi
 
-printf "${Cyan}[INFO]${Color_Off} Installing NodeJS......\n"
+info "Installing NodeJS......\n"
 
 #save current dir
 setup_dir=$(pwd)
 
 #install nodejs
-sudo apt-get -qq update && sudo apt-get -y -f -qq install git-core python curl build-essential openssl libssl-dev
-cd $temp_downloads_folder
-sudo rm -rf node
-sudo git clone https://github.com/joyent/node.git
-cd node
-sudo git checkout v0.10.28
-sudo ./configure --openssl-libpath=/usr/lib/ssl # > /dev/null 2>&1
-sudo make --silent > /dev/null # > /dev/null 2>&1
-sudo make install --silent # /dev/null 2>&1
+sudo apt-get -qq update && sudo apt-get -y -f -qq install git-core python curl build-essential openssl libssl-dev &&
+cd $temp_downloads_folder &&
+sudo rm -rf node &&
+sudo git clone https://github.com/nodejs/node.git &&
+cd node &&
+sudo ./configure &&
+sudo make --silent > /dev/null &&
+sudo make install --silent || 
+sudo npm install -g bower
+die "Failed to install NodeJS." 
 
 #go back to initial dir
 cd $setup_dir
 
-printf "${Green}[INFO]${Color_Off} Installed NodeJS.\n"
+success "$Installed NodeJS.\n"

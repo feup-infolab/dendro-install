@@ -6,7 +6,7 @@ starting_dir=$(pwd)
 #cd to the directory of this script
 #from http://www.ostricher.com/2014/10/the-right-way-to-get-the-directory-of-a-bash-script/
 
-cd_to_current_dir  {
+cd_to_current_dir () {
 	DIR="$(get_script_dir)"
 	printf "${Cyan}[INFO]${Color_Off} CD'ing to ${DIR}\n"
 	cd "${DIR}"

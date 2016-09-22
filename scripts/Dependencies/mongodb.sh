@@ -8,24 +8,24 @@ else
 	source ./constants.sh
 fi
 
-printf "${Cyan}[INFO]${Color_Off} Installing latest MongoDB......\n"
+info "Installing latest MongoDB......"
 
 #save current dir
-setup_dir=$(pwd)
+setup_dir=$(pwd) &&
 
 #install Java 8
-sudo add-apt-repository -y ppa:webupd8team/java
-sudo apt-get -qq update
-sudo apt-get -qq install oracle-java8-installer
+sudo add-apt-repository -y ppa:webupd8team/java &&
+sudo apt-get -qq update &&
+sudo apt-get -qq install oracle-java8-installer &&
 
 #install mongodb 10g
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
-echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list
-sudo apt-get -qq update
-sudo apt-get -y -qq install -f mongodb-10gen
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 &&
+echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list &&
+sudo apt-get -qq update &&
+sudo apt-get -y -qq install -f mongodb-10gen &&
 
-sudo mkdir -p /data/db/
-sudo chown `id -u` /data/db
+sudo mkdir -p /data/db/ &&
+sudo chown `id -u` /data/db &&
 
 #Apply locales fix...
 # line="LC_ALL=\"en_GB.utf8\""
@@ -40,9 +40,10 @@ sudo chown `id -u` /data/db
 # fi
 	
 #go back to initial dir
-cd $setup_dir
+cd $setup_dir ||
+die "Failed to install latest MongoDB."
 
-printf "${Green}[OK]${Color_Off} Installed latest MongoDB.\n"
+success "Installed latest MongoDB."
 
 
 #SCRAP

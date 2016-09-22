@@ -213,8 +213,52 @@ var arguments = {
 	
 	"reload_demo_users_on_startup" :
 	{
-		type: "string",
+		type: "boolean",
 		example : "\"true\" | \"false\"",
+		tip : "Coming soon"
+	},
+	"reload_ontologies_on_startup" :
+	{
+		type: "boolean",
+		example : "\"true\" | \"false\"",
+		tip : "Coming soon"
+	},
+	//logging
+	"logging_format" : 
+	{
+		type: "string",
+		example : "\"dev\"",
+		tip : "Coming soon"
+	},
+	
+	"logging_app_logs_folder" :
+	{
+		type: "string",
+		example : "\"logs/app\"",
+		tip : "Coming soon"
+	},
+	"logging_log_request_times" :
+	{
+		type: "boolean",
+		example : "\"true\" | \"false\"",
+		tip : "Coming soon"
+	},
+	"logging_request_times_log_folder" :
+	{
+		type: "string",
+		example : "\"logs/request_times\"",
+		tip : "Coming soon"
+	},
+	"logging_log_requests_in_apache_format" :
+	{
+		type: "boolean",
+		example : "\"true\" | \"false\"",
+		tip : "Coming soon"
+	},
+	"logging_requests_in_apache_format_log_folder" :
+	{
+		type: "string",
+		example : "\"logs/requests_apache_format\"",
 		tip : "Coming soon"
 	},
 	
@@ -263,9 +307,15 @@ var arguments = {
 	},
 	
 	//caching of static content
-	"cache_static_files" :
+	"last_modified_caching" :
 	{
 		type: "boolean",
+		example : "true",
+		tip : "Coming soon"
+	},
+	"cache_period_in_seconds" :
+	{
+		type: "integer",
 		example : "true",
 		tip : "Coming soon"
 	},
@@ -316,6 +366,18 @@ var arguments = {
 		example : "interactions_stage2",
 		tip : "Coming soon"
 	},
+	"gmaps_api_key" : 
+	{
+		type: "string",
+		example : "Get it from Google Maps website",
+		tip : "Coming soon"
+	},
+	"gmaps_map_height" : 
+	{
+		type: "integer",
+		example : "Map height for the control in metadata editor",
+		tip : "for example 500"
+	}
 };
 
 var get_argument_by_name = function(argument)
@@ -421,12 +483,11 @@ var write_dendro_configuration_file = function ()
 				},
 				"database_number" : get_argument_by_name('redis_database')
 			},
-			"static" :
-			{
-				"thumbnails_timeout_in_seconds" : 3600,
-				"cache_static_files" : get_argument_by_name('cache_static_files'),
-				"files_timeout_in_seconds" : 3600
-			}
+	  	  	"static" :
+	        {
+	          "last_modified_caching" : get_argument_by_name('last_modified_caching'),
+	          "cache_period_in_seconds" : get_argument_by_name('cache_period_in_seconds')
+	        }
 		},
 		"virtuosoHost" : get_argument_by_name('virtuoso_host'),
 		"virtuosoPort" : get_argument_by_name('virtuoso_port'),
@@ -436,6 +497,7 @@ var write_dendro_configuration_file = function ()
 		},
 		"mongoDBHost" : get_argument_by_name('mongodb_host'),
 		"mongoDbPort" : get_argument_by_name('mongodb_port'),
+		"mongoDbCollectionName" : get_argument_by_name('mongodb_collection_name'),
 		"mongoDbVersion" : "",
 		"mongoDBAuth" : {
 			"user" : get_argument_by_name('mongodb_dba_user'),
@@ -537,14 +599,20 @@ var write_dendro_configuration_file = function ()
 		},
 		"startup" : {
 			"reload_administrators_on_startup" : get_argument_by_name('reload_administrators_on_startup'),
-			"reload_demo_users_on_startup" : get_argument_by_name('reload_demo_users_on_startup')
+			"reload_demo_users_on_startup" : get_argument_by_name('reload_demo_users_on_startup'),
+			"reload_ontologies_on_startup" : get_argument_by_name('reload_ontologies_on_startup')
 		},
 		"baselines" : {
 			"dublin_core_only" : false
 		},
 		"logging" :
 		{
-			"config" : null
+			"format" : get_argument_by_name('logging_format'),
+			"app_logs_folder" : get_argument_by_name('logging_app_logs_folder'),
+			"log_request_times" : get_argument_by_name('logging_log_request_times'),
+			"request_times_log_folder" : get_argument_by_name('logging_request_times_log_folder'),
+			"log_requests_in_apache_format" : get_argument_by_name('logging_log_requests_in_apache_format'),
+			"requests_in_apache_format_log_folder" : get_argument_by_name('logging_requests_in_apache_format_log_folder')
 		},
 		"version" :
 		{
@@ -592,7 +660,12 @@ var write_dendro_configuration_file = function ()
 				"username" : get_argument_by_name('emailing_account_gmail_user'),
 				"password" : get_argument_by_name('emailing_account_gmail_password')
 			}
-		}
+		},
+		"maps" :
+	    {
+	      "gmaps_api_key" : get_argument_by_name('gmaps_api_key'),
+	      "map_height" : get_argument_by_name('gmaps_map_height')
+	    }
 	}
 	
 	var util = require('util');

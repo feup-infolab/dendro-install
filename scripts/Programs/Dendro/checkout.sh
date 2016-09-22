@@ -9,25 +9,43 @@ else
 fi
 
 #save current dir
-setup_dir=$(pwd)
+setup_dir=$(pwd) 
 
-printf "${Cyan}[INFO]${Color_Off} Stopping ${dendro_service_name} service...\n"
+info "Stopping ${dendro_service_name} service..."
 sudo systemctl stop $dendro_service_name
 
 #check out dendro code from svn repo
-printf "${Cyan}[INFO]${Color_Off} Installing Dendro to path : ${dendro_installation_path}\n"
+info "Installing Dendro to path : ${dendro_installation_path}\n"
 sudo rm -rf $dendro_installation_path
 cd $temp_downloads_folder
-printf "${Cyan}[INFO]${Color_Off} Exporting Dendro from code repository at : ${dendro_svn_url} to $dendro_installation_path. PLEASE STAND BY!\n"
-sudo svn -q --no-auth-cache export $dendro_svn_url $dendro_installation_path --username $svn_user --password $svn_user_password --force
+info "Exporting Dendro from GIT at : ${dendro_git_url} to $dendro_installation_path. PLEASE STAND BY!\n"
+#sudo svn -q --no-auth-cache export $dendro_svn_url $dendro_installation_path --username $svn_user --password $svn_user_password --force
+sudo git clone $dendro_git_url $dendro_installation_path
+
+
+user_running_this=$(whoami)
+sudo chown -R $user_running_this $dendro_installation_path
+sudo chmod -R 0755 $dendro_installation_path
+
+#install npm dependencies
+cd $dendro_installation_path
+sudo npm update && sudo npm install
+cd -
+
+#install bower dependencies
+cd $dendro_installation_path/public
+sudo npm install -g bower
+sudo bower install --allow-root
+cd -
 
 #give "dendro" user ownership of the installation
-sudo chown -R $dendro_user_name:$dendro_user_group $installation_path
-sudo chmod -R 0755 $installation_path
+sudo chown -R $dendro_user_name:$dendro_user_group $dendro_installation_path
+sudo chmod -R 0755 $dendro_installation_path
 
 #set active deployment configuration
-sudo npm --prefix $dendro_installation_path install $dendro_installation_path
-echo "{\"key\" : \"${active_deployment_setting}\"}" | sudo tee $dendro_installation_path/deployment/active_deployment_config.json
+echo "{\"key\" : \"${active_deployment_setting}\"}" | sudo tee $dendro_installation_path/conf/active_deployment_config.json
+
+success "Installed Dendro into ${dendro_installation_path}"
 
 #go back to initial dir
 cd $setup_dir

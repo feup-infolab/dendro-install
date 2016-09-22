@@ -43,7 +43,6 @@ refresh_code_only="false"
 while getopts 'r' flag; do
   case $flag in
     r) 
-		echo "-r flag found"
 		refresh_code_only="true"
 		;;
     *) 
@@ -55,64 +54,69 @@ done
 cd_to_current_dir
 source ./constants.sh
 
+#apply pre-installation fixes such as DNS fixes (thank you bugged Ubuntu distros)
+info "Applying pre-installation fixes..."
+source ./Fixes/fix_dns.sh
+
 #fix any unfinished installations
+	info "Preparing setup..."
 	sudo dpkg --configure -a
 	sudo apt-get -qq update
 
 #save current working directory
 	setup_dir=$(pwd)
-	printf "${Cyan}[INFO]${Color_Off} Setup running at : ${setup_dir}\n"
+	info "Setup running at : ${setup_dir}"
 
 #create temp downloads folder
-	printf "${Cyan}[INFO]${Color_Off} Creating temporary folder for downloads at : ${setup_dir}\n"
+	info "Creating temporary folder for downloads at : ${setup_dir}"
 	sudo mkdir -p $temp_downloads_folder
 
-#install dependencies
+	#install dependencies
 	if [[ "${refresh_code_only}" == "true" ]]
 	then
-		printf "${Cyan}[INFO]${Color_Off} ${Yellow}Bypassing dependency installation.${Color_Off}\n"
+		warning "Bypassing dependency installation"
 	else
-		printf "${Cyan}[INFO]${Color_Off} ${Yellow}Installing dependencies.${Color_Off}\n"
-		source ./Dependencies/misc.sh #OK
-		source ./Dependencies/node.sh #OK
-
+		warning "Installing dependencies"
+		source ./Dependencies/misc.sh
+		#source ./Dependencies/node.sh #not needed anymore, moved to misc.sh
+		
 		#install virtuoso
-		source ./Dependencies/virtuoso.sh #OK
-		source ./Services/virtuoso.sh #OK
-		source ./SQLCommands/grant_commands.sh #OK
+		source ./Dependencies/virtuoso.sh
+		source ./Services/virtuoso.sh
+		source ./SQLCommands/grant_commands.sh
 		source ./Checks/check_services_status.sh
 
-		source ./Dependencies/svn_18.sh #OK
-		source ./Programs/create_dendro_user.sh #OK
-		source ./Dependencies/play_framework.sh #OK
+		source ./Programs/create_dendro_user.sh
+		source ./Dependencies/play_framework.sh
+		source ./Dependencies/mysql.sh
+		source ./Dependencies/mongodb.sh
+		source ./Services/mongodb.sh
 
-		source ./Dependencies/mysql.sh #OK
-		source ./Dependencies/mongodb.sh #OK
-		source ./Services/mongodb.sh #OK
-
-		source ./Dependencies/elasticsearch.sh #OK
-		source ./Services/elasticsearch.sh #OK
+		source ./Dependencies/elasticsearch.sh
+		source ./Services/elasticsearch.sh
 	fi
 
 #generate configuration files for both solutions
 	source ./Programs/generate_configuration_files.sh
 
 #create shared mysql database
-	source ./Programs/create_database.sh #OK
+	source ./Programs/create_database.sh
 
 #install dendro
-	source ./Programs/Dendro/create_log.sh #OK
-	source ./Programs/Dendro/checkout.sh #OK
+	source ./Programs/Dendro/create_log.sh
+	source ./Programs/Dendro/checkout.sh
 
 	#place configuration file in dendro's deployment configs folder
-	sudo cp $(pwd)/Programs/generated_configurations/deployment_configs.json $dendro_installation_path/deployment
+	wd=$(pwd)
+	warning "Copying configuration file ${wd}/Programs/generated_configurations/deployment_configs.json to ${dendro_installation_path}/conf"
+	sudo cp $(pwd)/Programs/generated_configurations/deployment_configs.json $dendro_installation_path/conf
 
 	#stage dendro service
 	source ./Services/dendro.sh #??
 
 #install dendro recommender
-	source ./Programs/DendroRecommender/create_log.sh #OK
-	source ./Programs/DendroRecommender/checkout.sh #ok
+	source ./Programs/DendroRecommender/create_log.sh
+	source ./Programs/DendroRecommender/checkout.sh
 	
 	#place configuration file in dendro recommender's config folder
 	sudo cp ./Programs/generated_configurations/application.conf $dendro_recommender_install_path/conf

@@ -80,10 +80,24 @@ This package allows you to
 		`user: admin`
 		`password: admintest123`
 
+##Next Steps
+
+###SSH into the VM
+
+	* **DON'T** use `vagrant ssh`. You should run the command `./ssh_into_machine.sh` in the installation folder
+###Rebooting the VM
+	* Run the
+	 command `./reboot_vm.sh` in the installation folder
+###Shutting down the VM
+	* Run the command `./halt_vm.sh` in the installation folder
+###Reinstalling the VM
+	* Run the command `./reinstall.sh` in the installation folder
+###Refreshing only the code of Dendro inside the VM without having to reinstall all dependencies
+	* Run the command `./install.sh -r` in the installation folder
+
 ##Dependencies
 
-Dendro relies on
-
+Dendro relies on:
  * OpenLink Virtuoso for the database layer
  * ElasticSearch for free text searching
  * MongoDB and its GridFS system for scalable file storage
