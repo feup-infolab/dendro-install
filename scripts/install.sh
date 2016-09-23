@@ -77,8 +77,9 @@ source ./Fixes/fix_dns.sh
 		warning "Bypassing dependency installation"
 	else
 		warning "Installing dependencies"
+		
 		source ./Dependencies/misc.sh
-		#source ./Dependencies/node.sh #not needed anymore, moved to misc.sh
+		#source ./Dependencies/node.sh #not needed anymore, moved to misc.sh as Node is now installed via apt-get
 		
 		#install virtuoso
 		source ./Dependencies/virtuoso.sh
@@ -105,6 +106,7 @@ source ./Fixes/fix_dns.sh
 #install dendro
 	source ./Programs/Dendro/create_log.sh
 	source ./Programs/Dendro/checkout.sh
+
 
 	#place configuration file in dendro's deployment configs folder
 	wd=$(pwd)

@@ -8,7 +8,7 @@ else
 	source ./constants.sh
 fi
 
-info "Installing NodeJS......\n"
+info "Installing NodeJS from source......\n"
 
 #save current dir
 setup_dir=$(pwd)
@@ -25,7 +25,9 @@ sudo make install --silent ||
 sudo npm install -g bower
 die "Failed to install NodeJS." 
 
+#sudo git checkout -b v4.5.0 &&
+
 #go back to initial dir
 cd $setup_dir
 
-success "$Installed NodeJS.\n"
+success "$Installed NodeJS from source.\n"

@@ -22,7 +22,6 @@ info "Exporting Dendro from GIT at : ${dendro_git_url} to $dendro_installation_p
 #sudo svn -q --no-auth-cache export $dendro_svn_url $dendro_installation_path --username $svn_user --password $svn_user_password --force
 sudo git clone $dendro_git_url $dendro_installation_path
 
-
 user_running_this=$(whoami)
 sudo chown -R $user_running_this $dendro_installation_path
 sudo chmod -R 0755 $dendro_installation_path
