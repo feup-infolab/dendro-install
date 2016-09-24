@@ -1,18 +1,33 @@
+﻿param (
+    #[string]$price = 100, 
+    #[string]$ComputerName = $env:computername,    
+    #[string]$username = $(throw "-username is required."),
+    #[string]$password = $( Read-Host -asSecureString "Input password" ),
+    [switch]$refresh = $false
+)
+
+Write-Output "Refresh is $refresh"
+
 # read shell arguments to pass to vagrant script
-set SHELL_ARGS=''
+set VAGRANT_SHELL_ARGS=''
 
-echo "First parameter: " $p1
-
-if ($p1 -eq "-r") {
-	echo "Refreshing code"; 
+if ($null -eq $refresh) {
+	echo "Refreshing code";
 	set VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS;'-r '
+	echo $VAGRANT_SHELL_ARGS
+	echo "Performing a code refresh only"
 }
 else {
-	if(($p1 -ne $null)) {
-		echo Unrecognized parameter supplied.
-		exit 1
+	if(($refresh -eq $false)) {
+		echo "Performing a full installation"
+	}
+	else
+	{
+		echo "Unrecognized option: $refresh"
 	}
 }
+
+exit 1;
 
 $name = Read-Host 'What is your username?'read $1
 
@@ -30,7 +45,7 @@ function ZipFiles( $zipfilename, $sourcedir )
 }
 
 ZipFiles './scripts.zip' './scripts'
-	
+
 # define vagrant environment variables
 ./define_env_vars.ps1
 
@@ -40,7 +55,7 @@ if ($? -ne 1)
 {
 	echo "Unable to bring vagrant VM up"
 	exit 1
-} 
+}
 
 echo "Cleaning up..."
 del ./scripts.zip
