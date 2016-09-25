@@ -58,7 +58,14 @@ Vagrant.configure("2") do |config|
   destination_folder = destination_folder
   
   #send compressed scripts folder
-  config.vm.provision "file", source: "./scripts.tar.gz", destination: "#{destination_folder}/scripts.tar.gz"
+  if File.file?("./scripts.tar.gz") && !File.file?("./scripts.zip") then
+	config.vm.provision "file", source: "./scripts.tar.gz", destination: "#{destination_folder}/scripts.tar.gz"
+  elsif File.file?("./scripts.zip") then
+	config.vm.provision "file", source: "./scripts.zip", destination: "#{destination_folder}/scripts.zip"
+  elsif !File.file?("./scripts.tar.gz") && !File.file?("./scripts.zip") then
+	puts "Neither a scripts.zip file not a scripts.tar.gz file exists in the same directory as the Vagrantfile (your installation directory. Aborting Vagrant setup..."
+	exit
+  end
   
   #uncompress remote gzipped scripts folder
   $unzip_script = <<SCRIPT
