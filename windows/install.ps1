@@ -1,38 +1,64 @@
-# read shell arguments to pass to vagrant script
-set SHELL_ARGS=''
+﻿param (
+    #[string]$price = 100, 
+    #[string]$ComputerName = $env:computername,    
+    #[string]$username = $(throw "-username is required."),
+    #[string]$password = $( Read-Host -asSecureString "Input password" ),
+    [switch]$refresh = $false
+)
 
-echo "First parameter: " $p1
-
-if ($p1 -eq "-r") {
-	echo "Refreshing code"; 
-	set VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS;'-r '
-}
-else {
-	if(($p1 -ne $null)) {
-		echo Unrecognized parameter supplied.
-		exit 1
-	}
-}
-
-$name = Read-Host 'What is your username?'read $1
-
-# set constants
-./scripts/constants.ps1
-
-# compress scripts folder
-del -rf scripts.zip
+#function to zip a directory into a target zip folder
 function ZipFiles( $zipfilename, $sourcedir )
 {
-   Add-Type -Assembly System.IO.Compression.FileSystem
-   $compressionLevel = [System.IO.Compression.CompressionLevel]::Optimal
-   [System.IO.Compression.ZipFile]::CreateFromDirectory($sourcedir,
-        $zipfilename, $compressionLevel, $false)
+    Add-Type -Assembly System.IO.Compression.FileSystem
+    $compressionLevel = [System.IO.Compression.CompressionLevel]::Optimal
+    [System.IO.Compression.ZipFile]::CreateFromDirectory(
+        $sourcedir,
+        $zipfilename, 
+        $compressionLevel, 
+        $true);
 }
 
-ZipFiles './scripts.zip' './scripts'
-	
 # define vagrant environment variables
-./define_env_vars.ps1
+./scripts/define_env_vars.ps1
+
+# read shell arguments to pass to vagrant script
+    $VAGRANT_SHELL_ARGS=''
+
+    if ($refresh -eq $true) {
+	    $VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS + '-r '
+	    echo "Performing a code refresh only"
+    }
+    else {
+	    if(!$refresh) {
+		    echo "Performing a full installation"
+	    }
+	    else
+	    {
+		    echo "Unrecognized option: $refresh"
+	    }
+    }
+
+    $ENV:VAGRANT_SHELL_ARGS = $VAGRANT_SHELL_ARGS
+
+#scripts zip file
+    $targetZipFile = (get-item $PWD).Parent.FullName + "\scripts.zip";
+
+#source scripts folder
+    $sourceScriptsFolder = (get-item $PWD).Parent.FullName + "\scripts";
+
+# delete existing scripts zip if exists
+if([System.IO.File]::Exists($targetZipFile)){
+    del $targetZipFile
+}
+
+#zip scripts folder
+ZipFiles $targetZipFile $sourceScriptsFolder;
+
+echo "Booting up machine " $ENV:VAGRANT_VM_NAME
+     " with IP " + $ENV:VAGRANT_VM_IP 
+     " and arguments " + $ENV:VAGRANT_SHELL_ARGS;
+
+exit 1;
 
 # vagrant box update &&
 vagrant up --provider virtualbox --provision
@@ -40,10 +66,10 @@ if ($? -ne 1)
 {
 	echo "Unable to bring vagrant VM up"
 	exit 1
-} 
+}
 
 echo "Cleaning up..."
-del ./scripts.zip
+del $targetZipFile
 echo "Deleted temporary scripts package."
 
 echo "Dendro setup complete."
