@@ -26,11 +26,6 @@ This package allows you to
 	* Tested on Debian Jessie 
 
 * Windows 7+
-```powershell
-	git config --global core.autocrlf false
-	git clone https://github.com/feup-infolab-rdm/dendro-install.git
-	git config --global core.autocrlf true 
-```
 
 ##Instructions
 1. **Download and install the _latest versions_ of:**
@@ -42,12 +37,21 @@ This package allows you to
 
 2. **Check that everything is working**
 	* On Windows, press Windows+R, type `cmd`, press Enter
+		* Paste: `vagrant -v; VBoxControl.exe -v; git --version`
 	* On the Mac or in Linux, open your Terminal application
-		* Paste: `vagrant -v; VBoxManage -v; git -v`
+		* Paste: `vagrant -v; VBoxManage -v -v; git --version`
 		* You should see the versions of the installed programs.
 
 3. **Downloading the installer scripts**
-	* Cloning: `git clone https://github.com/feup-rdm/dendro-vagrant-install` or
+	* Cloning (Mac + Linux)
+		`git clone https://github.com/feup-rdm/dendro-vagrant-install` 
+	* Cloning using Powershell (Windows) --This is necessary to prevent git from automatically converting CR into CRLF
+		```powershell
+		git config --global core.autocrlf false
+		git clone https://github.com/feup-infolab-rdm/dendro-install.git
+		git config --global core.autocrlf true 
+		```
+
 	* Downloading: Click the "Clone or Download" button at the top of this page and then "Download ZIP"
 
 4. **Open the installer scripts folder**
