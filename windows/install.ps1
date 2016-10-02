@@ -1,28 +1,50 @@
 ﻿param (
-    #[string]$price = 100, 
-    #[string]$ComputerName = $env:computername,    
+    #[string]$price = 100,
+    #[string]$ComputerName = $env:computername,
     #[string]$username = $(throw "-username is required."),
     #[string]$password = $( Read-Host -asSecureString "Input password" ),
     [switch]$refresh = $false
 )
 
 #function to zip a directory into a target zip folder
-function ZipFiles( $zipfilename, $sourcedir )
+function ZipFiles( $tarGzfilename, $sourcedir )
 {
-    Add-Type -Assembly System.IO.Compression.FileSystem
-    $compressionLevel = [System.IO.Compression.CompressionLevel]::Optimal
-    [System.IO.Compression.ZipFile]::CreateFromDirectory(
-        $sourcedir,
-        $zipfilename, 
-        $compressionLevel, 
-        $true);
+    echo "Zipping folder "  $sourcedir  " into file "  $tarGzfilename;
+
+    #source dir
+    $sourceDirName = Split-Path $sourcedir -Leaf
+    $sourceDirParent=(get-item $sourcedir).Parent.FullName
+
+    #tar file
+    $tarGzFileName = Split-Path $tarGzfilename -Leaf
+
+    #compress the package
+    If (Test-Path $sourcedir){
+
+      If (Test-Path $tarGzfilename){
+        rm $tarGzfilename
+      }
+
+      $prev = $PWD
+      cd ..
+      .\windows\libarchive\bin\bsdtar.exe cfzv $tarGzfilename scripts
+      cd $prev
+    }
+    Else
+    {
+      echo "File "$tarfileName" does not exist. There was likely an error compressing it. Aborting setup."
+      exit 1
+    }
+
 }
 
 # define vagrant environment variables
 ./scripts/define_env_vars.ps1
 
+$ENV:VAGRANT_VM_INSTALL='true'
+
 # read shell arguments to pass to vagrant script
-    $VAGRANT_SHELL_ARGS=''
+$VAGRANT_SHELL_ARGS=''
 
     if ($refresh -eq $true) {
 	    $VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS + '-r '
@@ -40,8 +62,8 @@ function ZipFiles( $zipfilename, $sourcedir )
 
     $ENV:VAGRANT_SHELL_ARGS = $VAGRANT_SHELL_ARGS
 
-#scripts zip file
-    $targetZipFile = (get-item $PWD).Parent.FullName + "\scripts.zip";
+    #scripts zip file
+    $targetZipFile = (get-item $PWD).Parent.FullName + "\scripts.tar.gz";
 
 #source scripts folder
     $sourceScriptsFolder = (get-item $PWD).Parent.FullName + "\scripts";
@@ -55,10 +77,10 @@ if([System.IO.File]::Exists($targetZipFile)){
 ZipFiles $targetZipFile $sourceScriptsFolder;
 
 echo "Booting up machine " $ENV:VAGRANT_VM_NAME
-     " with IP " + $ENV:VAGRANT_VM_IP 
+     " with IP " + $ENV:VAGRANT_VM_IP
      " and arguments " + $ENV:VAGRANT_SHELL_ARGS;
 
-exit 1;
+cd (get-item $PWD).Parent.FullName
 
 # vagrant box update &&
 vagrant up --provider virtualbox --provision
@@ -69,7 +91,11 @@ if ($? -ne 1)
 }
 
 echo "Cleaning up..."
-del $targetZipFile
+
+If (Test-Path $targetZipFile){
+  del $targetZipFile
+}
+
 echo "Deleted temporary scripts package."
 
 echo "Dendro setup complete."

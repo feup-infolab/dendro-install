@@ -13,17 +13,18 @@ SHELL_ARGS=''
 
 while getopts 'r' flag; do
   case $flag in
-    r) 
+    r)
 		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-r '
 		;;
-    *) 
-		error "Unexpected option ${flag}" 
+    *)
+		error "Unexpected option ${flag}"
 		;;
   esac
-	
+
 done
 
 source ./define_env_vars.sh
+export VAGRANT_VM_INSTALL='true'
 
 #vagrant box update &&
 vagrant up --provider virtualbox --provision ||
