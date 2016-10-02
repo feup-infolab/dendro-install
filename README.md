@@ -25,7 +25,12 @@ This package allows you to
 	* Ubuntu and Linux Mint
 	* Tested on Debian Jessie 
 
-* **COMING SOON** Windows 7+
+* Windows 7+
+```powershell
+	git config --global core.autocrlf false
+	git clone https://github.com/feup-infolab-rdm/dendro-install.git
+	git config --global core.autocrlf true 
+```
 
 ##Instructions
 1. **Download and install the _latest versions_ of:**
