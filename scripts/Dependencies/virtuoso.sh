@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-if [ -z ${DIR+x} ]; then 
+if [ -z ${DIR+x} ]; then
 	#running by itself
 	source ../constants.sh
-else 
+else
 	#running from dendro_full_setup_ubuntu_server_ubuntu_16.sh
 	source ./constants.sh
 fi
@@ -14,11 +14,12 @@ info "Installing OpenLink Virtuoso 7......"
 setup_dir=$(pwd) &&
 
 #stop virtuoso server if running
-sudo systemctl stop virtuoso &&
+sudo systemctl stop virtuoso
 
 #install virtuoso opensource 7
 cd $temp_downloads_folder &&
-sudo rm -rf virtuoso-opensource &&
+sudo rm -rf virtuoso-opensource
+
 sudo git clone https://github.com/openlink/virtuoso-opensource.git virtuoso-opensource &&
 cd virtuoso-opensource &&
 sudo git branch remotes/origin/develop/7 &&
@@ -39,7 +40,7 @@ sudo chown -R $virtuoso_user:$virtuoso_group /usr/local/virtuoso-opensource
 
 # Setting crontab to reboot virtuoso every day at 4am (likely has memory leaks...)
 
-	#from http://stackoverflow.com/questions/23309120/setting-cron-task-every-day-at-2am-makes-it-run-every-minute 
+	#from http://stackoverflow.com/questions/23309120/setting-cron-task-every-day-at-2am-makes-it-run-every-minute
 	# This runs the script every minute of 2am (02:00, 02:01, 02:02 and so on):
 	#
 	#  * 2 * * *
@@ -57,11 +58,10 @@ sudo chown -R $virtuoso_user:$virtuoso_group /usr/local/virtuoso-opensource
 	#  │ └──────────────────── hour (0 - 23)
 	#  └───────────────────────── min (0 - 59)
 
-add_line_to_file_if_not_present "00 4 * * *   root    test -x /usr/sbin/anacron || ( systemctl restart virtuoso  )" "/etc/crontab" || 
-die "Failed to set Virtuoso OpenSource crontab" 
+add_line_to_file_if_not_present "00 4 * * *   root    test -x /usr/sbin/anacron || ( systemctl restart virtuoso  )" "/etc/crontab" ||
+die "Failed to set Virtuoso OpenSource crontab"
 
 success "Installed OpenLink Virtuoso 7"
 
 #go back to initial dir
 cd $setup_dir
-
