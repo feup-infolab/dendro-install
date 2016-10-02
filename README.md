@@ -38,11 +38,12 @@ This package allows you to
 	*	[Vagrant](https://www.vagrantup.com/downloads.html)
 
 	*	> #####**DO NOT** use packaged versions from your Linux Distro, as they are often outdated and will not work. On Debian-based distros you can use `$ sudo gdebi <package.deb>` to install `.deb` packages.
+	* 	[Git](https://git-scm.com/downloads)
 
 2. **Check that everything is working**
 	* On Windows, press Windows+R, type `cmd`, press Enter
 	* On the Mac or in Linux, open your Terminal application
-		* Paste: `vagrant -v; VBoxManage -v`
+		* Paste: `vagrant -v; VBoxManage -v; git -v`
 		* You should see the versions of the installed programs.
 
 3. **Downloading the installer scripts**
@@ -50,8 +51,13 @@ This package allows you to
 	* Downloading: Click the "Clone or Download" button at the top of this page and then "Download ZIP"
 
 4. **Open the installer scripts folder**
-	* `cd dendro-vagrant-install` (if you cloned)
+	4.1 Linux + Mac
+	* Open Terminal
+		* `cd dendro-vagrant-install` (if you cloned)
 	* Open the folder (if you downloaded)
+	
+	4.2 Windows 7+
+		* Navigate to the folder to where you cloned (dendro-install, typically)
 
 5. (optional) **Customize the installation**
 	* Edit the `constants.sh` file if you want to customize the installation
@@ -65,7 +71,9 @@ This package allows you to
 
 6. **Run the installation**
 
-	* (Windows) Right-click the install.bat file and select "Run as Administrator"
+	* (Windows)
+		* Open the `windows` folder
+		* DRight-click the `install.bat` file and select "Run as Administrator"
 	* (Mac OS X and Linux) 
 		* On the Terminal, type:
 		* `cd </scripts/folder/location>`
