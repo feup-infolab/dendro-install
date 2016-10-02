@@ -38,6 +38,9 @@ if ($confirmation -eq 'y') {
 
   #clean list of VMs
   vagrant global-status --prune
+
+  #delete .vagrant folder (purge logs and junk)
+  Remove-Item .\.vagrant -recurse
 }
 else
 {

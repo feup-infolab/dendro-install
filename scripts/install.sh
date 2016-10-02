@@ -22,7 +22,7 @@ get_script_dir  () {
 cd_to_current_dir () {
 	DIR="$(get_script_dir)"
 	printf "${Cyan}[INFO]${Color_Off} CD'ing to ${DIR}\n"
-	cd "${DIR}"	
+	cd "${DIR}"
 }
 
 add_line_to_file_if_not_present () {
@@ -42,11 +42,11 @@ refresh_code_only="false"
 
 while getopts 'r' flag; do
   case $flag in
-    r) 
+    r)
 		refresh_code_only="true"
 		;;
-    *) 
-		error "Unexpected option ${flag}" 
+    *)
+		error "Unexpected option ${flag}"
 		;;
   esac
 done
@@ -83,7 +83,7 @@ source ./constants.sh
 		source ./Checks/check_services_status.sh
 
 		source ./Programs/create_dendro_user.sh
-		source ./Dependencies/play_framework.sh 
+		source ./Dependencies/play_framework.sh
 
 		source ./Dependencies/mysql.sh
 		source ./Dependencies/mongodb.sh
@@ -114,14 +114,14 @@ source ./constants.sh
 #install dendro recommender
 	source ./Programs/DendroRecommender/create_log.sh
 	source ./Programs/DendroRecommender/checkout.sh
-	
+
 	#place configuration file in dendro recommender's config folder
 	sudo cp ./Programs/generated_configurations/application.conf $dendro_recommender_install_path/conf
-	
+
 	#stage dendro recommender service
 	source ./Services/recommender.sh #??
 
-#cleanup 
+#cleanup
 	sudo apt-get -qq autoremove
 	sudo rm -rf Programs/generated_configurations
 
@@ -137,9 +137,3 @@ source ./constants.sh
 
 #go back to whatever was the directory at the start of this script
 	cd $starting_dir
-
-
-
-
-
-
