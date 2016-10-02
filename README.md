@@ -36,7 +36,7 @@ This package allows you to
 	* 	[Git](https://git-scm.com/downloads)
 
 2. **Check that everything is working**
-	* On Windows, press Windows+R, type `cmd`, press Enter
+	* On Windows, press Windows+R, type `powershell.exe`, press Enter
 		* Paste: `vagrant -v; VBoxControl.exe -v; git --version`
 	* On the Mac or in Linux, open your Terminal application
 		* Paste: `vagrant -v; VBoxManage -v -v; git --version`
