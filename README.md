@@ -51,13 +51,12 @@ This package allows you to
 	* Downloading: Click the "Clone or Download" button at the top of this page and then "Download ZIP"
 
 4. **Open the installer scripts folder**
-	4.1 Linux + Mac
-	* Open Terminal
-		* `cd dendro-vagrant-install` (if you cloned)
-	* Open the folder (if you downloaded)
-	
-	4.2 Windows 7+
-		* Navigate to the folder to where you cloned (dendro-install, typically)
+	* Linux + Mac
+		* Open Terminal
+		* type `cd dendro-vagrant-install` (if you cloned)
+		* Unzip the compressed folder (if you downloaded)
+	* Windows 7+
+		* Navigate to the folder to where you cloned or downloaded the ZIP (dendro-install, typically)
 
 5. (optional) **Customize the installation**
 	* Edit the `constants.sh` file if you want to customize the installation
