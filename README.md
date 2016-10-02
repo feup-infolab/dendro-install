@@ -18,6 +18,9 @@ This package allows you to
 
 ##Requirements
 
+* All OS's
+	* 1GB of free memory
+
 * Mac OS X 
 	* 10.6.x+
 
@@ -26,6 +29,7 @@ This package allows you to
 	* Tested on Debian Jessie 
 
 * Windows 7+
+
 
 ##Instructions
 1. **Download and install the _latest versions_ of:**
