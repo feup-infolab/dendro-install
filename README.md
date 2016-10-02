@@ -72,7 +72,7 @@ This package allows you to
 
 	* (Windows)
 		* Open the `windows` folder
-		* DRight-click the `install.bat` file and select "Run as Administrator"
+		* Right-click the `install.bat` file and select "Run as Administrator"
 	* (Mac OS X and Linux) 
 		* On the Terminal, type:
 		* `cd </scripts/folder/location>`
