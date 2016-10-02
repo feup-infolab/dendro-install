@@ -86,10 +86,7 @@ SCRIPT
 
     #start install script
     $run_script = <<SCRIPT
-    echo "ai ai"
     chmod +x #{destination_folder}/scripts/install.sh
-    /bin/bash
-    echo "ai ai2"
     #{destination_folder}/scripts/install.sh #{ENV['VAGRANT_SHELL_ARGS']}
 SCRIPT
 
