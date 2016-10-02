@@ -34,8 +34,18 @@ Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/xenial64"
   config.vm.box_version = "20160606.1.0"
 
+  if ENV['VAGRANT_VM_SSH_USERNAME'] != nil && ENV['VAGRANT_VM_SSH_PASSWORD'] != nil
+    config.ssh.username=ENV['VAGRANT_VM_SSH_USERNAME']
+    puts "SSH username to connect to the VM will be " + config.ssh.username
+
+    config.ssh.password=ENV['VAGRANT_VM_SSH_PASSWORD']
+    puts "SSH password to connect to the VM will be " + config.ssh.password
+
+    config.ssh.insert_key = true
+  end
+
   puts "IP of Virtualbox: #{ENV['VAGRANT_VM_IP']}"
-  
+
   config.vm.define "#{ENV['VAGRANT_VM_NAME']}" do |subconfig|
     subconfig.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}"
     subconfig.vm.network :forwarded_port, :guest => 22, :host => 7665
@@ -49,35 +59,42 @@ Vagrant.configure("2") do |config|
      vb.memory = "4096"
      vb.cpus = "2"
      vb.name = "#{ENV['VAGRANT_VM_NAME']}"
-     
+
      vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
   end
-  
+
   time = sanitize_filename(Time.new.inspect)
   destination_folder = '/tmp/dendro_setup_scripts/' + time
   destination_folder = destination_folder
-  
-  #send compressed scripts folder
-  if File.file?("./scripts.tar.gz") && !File.file?("./scripts.zip") then
-	config.vm.provision "file", source: "./scripts.tar.gz", destination: "#{destination_folder}/scripts.tar.gz"
-  elsif File.file?("./scripts.zip") then
-	config.vm.provision "file", source: "./scripts.zip", destination: "#{destination_folder}/scripts.zip"
-  elsif !File.file?("./scripts.tar.gz") && !File.file?("./scripts.zip") then
-	puts "Neither a scripts.zip file not a scripts.tar.gz file exists in the same directory as the Vagrantfile (your installation directory. Aborting Vagrant setup..."
-	exit
-  end
-  
-  #uncompress remote gzipped scripts folder
-  $unzip_script = <<SCRIPT
-    tar -zxf #{destination_folder}/scripts.tar.gz -C #{destination_folder}
-SCRIPT
-  config.vm.provision "shell", inline: $unzip_script
 
-  $run_script = <<SCRIPT
-  chmod +x #{destination_folder}/scripts/install.sh
-  #{destination_folder}/scripts/install.sh #{ENV['VAGRANT_SHELL_ARGS']}
+  if(ENV['VAGRANT_VM_INSTALL']=='true') then
+    puts "Vagrant File starting installation..."
+    #send compressed scripts folder
+    if File.file?("./scripts.tar.gz") then
+      puts "Sending scripts.tar.gz file to #{destination_folder}/scripts.tar.gz...."
+      config.vm.provision "file", source: "./scripts.tar.gz", destination: "#{destination_folder}/scripts.tar.gz"
+      $unzip_script = <<SCRIPT
+        tar -zxf #{destination_folder}/scripts.tar.gz -C #{destination_folder}
 SCRIPT
-  
-  config.vm.provision "shell", inline: $run_script
-  
+    else
+      puts "A scripts.tar.gz file does not exist in the same directory as the Vagrantfile (your installation directory. Aborting Vagrant setup..."
+      exit 1
+    end
+
+    #run uncompressing script
+    config.vm.provision "shell", inline: $unzip_script
+
+    #start install script
+    $run_script = <<SCRIPT
+    echo "ai ai"
+    chmod +x #{destination_folder}/scripts/install.sh
+    /bin/bash
+    echo "ai ai2"
+    #{destination_folder}/scripts/install.sh #{ENV['VAGRANT_SHELL_ARGS']}
+SCRIPT
+
+    config.vm.provision "shell", inline: $run_script
+  else
+    puts "Bypassing installation."
+  end
 end
