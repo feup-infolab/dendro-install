@@ -67,7 +67,7 @@ Vagrant.configure("2") do |config|
   destination_folder = '/tmp/dendro_setup_scripts/' + time
   destination_folder = destination_folder
 
-  if(ENV['VAGRANT_VM_INSTALL']=='true') then
+  if(ENV['VAGRANT_VM_INSTALL']=="true") then
     puts "Vagrant File starting installation..."
     #send compressed scripts folder
     if File.file?("./scripts.tar.gz") then
@@ -91,7 +91,5 @@ SCRIPT
 SCRIPT
 
     config.vm.provision "shell", inline: $run_script
-  else
-    puts "Bypassing installation."
   end
 end
