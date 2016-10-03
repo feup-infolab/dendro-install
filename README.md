@@ -46,10 +46,17 @@ This package allows you to
 		* Paste: `vagrant -v; VBoxManage -v -v; git --version`
 		* You should see the versions of the installed programs.
 
-3. **Downloading the installer scripts**
+3. **Installing with default settings**
 	* Cloning (Mac + Linux)
-		`git clone https://github.com/feup-rdm/dendro-vagrant-install` 
+		Open Terminal and paste the following:
+		```bash	
+		git clone https://github.com/feup-rdm/dendro-vagrant-install
+		cd dendro-vagrant-install
+		chmod +x ./install.sh
+		./install.sh
+		```
 	* Cloning using Powershell (Windows) --This is necessary to prevent git from automatically converting CR into CRLF
+		Press Windows+R, type `powershell.exe`, press Enter and paste the following:
 		```powershell
 		git config --global core.autocrlf false
 		git clone https://github.com/feup-infolab-rdm/dendro-install.git
@@ -58,17 +65,7 @@ This package allows you to
 		.\install.bat
 		```
 
-	* Downloading: Click the "Clone or Download" button at the top of this page and then "Download ZIP"
-
-4. **Open the installer scripts folder**
-	* Linux + Mac
-		* Open Terminal
-		* type `cd dendro-vagrant-install` (if you cloned)
-		* Unzip the compressed folder (if you downloaded)
-	* Windows 7+
-		* Navigate to the folder to where you cloned or downloaded the ZIP (dendro-install, typically)
-
-5. (optional) **Customize the installation**
+4. (optional) **Customize the installation**
 	* Edit the `constants.sh` file if you want to customize the installation
 	* You may want to change the following parameters:
 		* Root passwords for all services (MySQL, ElasticSearch, Virtuoso...) are specified in `constants.sh`
@@ -76,28 +73,8 @@ This package allows you to
 		* `emailing_account_gmail_user` + `emailing_account_gmail_password`  
 			* Credentials of a GMail account for sending emails such as password resets
 		* You will find what needs to be changed by searching for the `FIXME_____` keyword within `constants.sh`
-		
 
-6. **Run the installation**
-
-	* (Windows)
-		* Open the `windows` folder
-		* Right-click the `install.bat` file and select "Run as Administrator"
-	* (Mac OS X and Linux) 
-		* On the Terminal, type:
-		* `cd </scripts/folder/location>`
-		* `chmod +x ./install.sh`
-		* `./install.sh`
-
-7. **Go grab a coffee :-)**
-	* Really, the installation takes long, around 30 minutes in an average machine.
-	* If the script does not output anything for a while, please don't kill it. We have suppressed all compilation output to save CPU time. Just be patient.
-	* Wait until you see this message:
-		* `[SUCCESS] Dendro is now installed!`
-
-8. **Access your new Dendro installation**
-	* Dendro can be accessed on your browser through the following address: [http://192.168.56.200:3001] 
-		* (if you did not change the `constants.sh` file in step **5**).
+5. **Access your new Dendro installation**
 	* The default credentials for the administrator are:
 		`user: admin`
 		`password: admintest123`
