@@ -52,7 +52,7 @@ This package allows you to
 		Open Terminal and paste the following:
 		
 		```bash	
-		git clone https://github.com/feup-rdm/dendro-vagrant-install;
+		git clone https://github.com/feup-infolab-rdm/dendro-install.git;
 		cd dendro-vagrant-install;
 		chmod +x ./install.sh;
 		./install.sh
