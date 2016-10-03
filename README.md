@@ -48,6 +48,7 @@ This package allows you to
 
 3. **Installing with default settings**
 	* Cloning (Mac + Linux)
+	
 		Open Terminal and paste the following:
 		
 		```bash	
@@ -56,7 +57,8 @@ This package allows you to
 		chmod +x ./install.sh
 		./install.sh
 		```
-	* Cloning using Powershell (Windows) --This is necessary to prevent git from automatically converting CR into CRLF
+	* Cloning using Powershell (Windows) 
+	
 		Press Windows+R, type `powershell.exe`, press Enter and paste the following:
 		
 		```powershell
