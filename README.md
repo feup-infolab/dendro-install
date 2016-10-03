@@ -53,10 +53,9 @@ This package allows you to
 		
 		```bash	
 		git clone https://github.com/feup-infolab-rdm/dendro-install.git;
-		cd dendro-vagrant-install;
+		cd dendro-install;
 		chmod +x ./install.sh;
-		./install.sh
-		
+		exec ./install.sh
 		```
 	* Cloning using Powershell (Windows) 
 	
