@@ -54,6 +54,8 @@ This package allows you to
 		git config --global core.autocrlf false
 		git clone https://github.com/feup-infolab-rdm/dendro-install.git
 		git config --global core.autocrlf true 
+		cd dendro-install\windows
+		.\install.bat
 		```
 
 	* Downloading: Click the "Clone or Download" button at the top of this page and then "Download ZIP"
