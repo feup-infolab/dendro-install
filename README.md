@@ -52,9 +52,9 @@ This package allows you to
 		Open Terminal and paste the following:
 		
 		```bash	
-		git clone https://github.com/feup-rdm/dendro-vagrant-install
-		cd dendro-vagrant-install
-		chmod +x ./install.sh
+		git clone https://github.com/feup-rdm/dendro-vagrant-install;
+		cd dendro-vagrant-install;
+		chmod +x ./install.sh;
 		./install.sh
 		```
 	* Cloning using Powershell (Windows) 
