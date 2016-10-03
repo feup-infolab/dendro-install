@@ -49,6 +49,7 @@ This package allows you to
 3. **Installing with default settings**
 	* Cloning (Mac + Linux)
 		Open Terminal and paste the following:
+		
 		```bash	
 		git clone https://github.com/feup-rdm/dendro-vagrant-install
 		cd dendro-vagrant-install
@@ -57,6 +58,7 @@ This package allows you to
 		```
 	* Cloning using Powershell (Windows) --This is necessary to prevent git from automatically converting CR into CRLF
 		Press Windows+R, type `powershell.exe`, press Enter and paste the following:
+		
 		```powershell
 		git config --global core.autocrlf false
 		git clone https://github.com/feup-infolab-rdm/dendro-install.git
