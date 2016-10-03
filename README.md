@@ -19,7 +19,7 @@ This package allows you to
 ##Requirements
 
 * All OS's
-	* 1GB of free memory
+	* **2GB of free memory for the Virtual Machine**
 
 * Mac OS X 
 	* 10.6.x+
