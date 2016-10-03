@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
-if [ -z ${DIR+x} ]; then 
+if [ -z ${DIR+x} ]; then
 	#running by itself
 	source ../constants.sh
-else 
+else
 	#running from dendro_full_setup_ubuntu_server_ubuntu_16.sh
 	source ./constants.sh
 fi
 
-printf "${Cyan}[INFO]${Color_Off} Setting up Dendro Recommender service...\n"
+info "Setting up Dendro Recommender service..."
 
 #save current dir
 setup_dir=$(pwd)
@@ -53,7 +53,7 @@ sudo systemctl start $dendro_recommender_service_name
 #go back to initial dir
 cd $setup_dir
 
-printf "${Green}[OK]${Color_Off} Finished setting up Dendro Recommender service.\n"
+success "Finished setting up Dendro Recommender service."
 
 #SCRAP
 #kill processes on a given port

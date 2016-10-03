@@ -17,7 +17,8 @@ setup_dir=$(pwd) &&
 sudo systemctl stop virtuoso
 
 #install virtuoso opensource 7
-cd $temp_downloads_folder &&
+cd $temp_downloads_folder
+
 sudo rm -rf virtuoso-opensource
 
 sudo git clone https://github.com/openlink/virtuoso-opensource.git virtuoso-opensource &&

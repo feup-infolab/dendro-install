@@ -13,7 +13,7 @@ fi
 #save current dir
 setup_dir=$(pwd) &&
 
-echo "java 8 installation"
+info "Installing Java 8 JDK"
 apt-get install --yes python-software-properties
 add-apt-repository ppa:webupd8team/java
 apt-get update -qq

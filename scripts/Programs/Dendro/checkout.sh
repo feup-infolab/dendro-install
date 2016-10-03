@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
-if [ -z ${DIR+x} ]; then 
+if [ -z ${DIR+x} ]; then
 	#running by itself
 	source ../../constants.sh
-else 
+else
 	#running from dendro_full_setup_ubuntu_server_ubuntu_16.sh
 	source ./constants.sh
 fi
 
 #save current dir
-setup_dir=$(pwd) 
+setup_dir=$(pwd)
 
 info "Stopping ${dendro_service_name} service..."
 sudo systemctl stop $dendro_service_name
@@ -33,7 +33,7 @@ cd -
 
 #install bower dependencies
 cd $dendro_installation_path/public
-sudo bower install 
+bower install --allow-root
 cd -
 
 #set active deployment configuration

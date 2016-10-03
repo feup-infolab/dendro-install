@@ -21,7 +21,7 @@ get_script_dir  () {
 
 cd_to_current_dir () {
 	DIR="$(get_script_dir)"
-	printf "${Cyan}[INFO]${Color_Off} CD'ing to ${DIR}\n"
+	info "CD'ing to ${DIR}"
 	cd "${DIR}"
 }
 
@@ -53,6 +53,10 @@ done
 
 cd_to_current_dir
 source ./constants.sh
+
+#apply pre-installation fixes such as DNS fixes (thank you bugged Ubuntu distros)
+info "Applying pre-installation fixes..."
+source ./Fixes/fix_dns.sh
 
 #fix any unfinished installations
 	info "Preparing setup..."
@@ -100,7 +104,7 @@ source ./constants.sh
 	source ./Programs/create_database.sh
 
 #install dendro
-	source ./Programs/Dendro/create_log.s
+	source ./Programs/Dendro/create_log.sh
 	source ./Programs/Dendro/checkout.sh
 
 	#place configuration file in dendro's deployment configs folder

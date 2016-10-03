@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-if [ -z ${DIR+x} ]; then 
+if [ -z ${DIR+x} ]; then
 	#running by itself
 	source ../../constants.sh
-else 
+else
 	#running from dendro_full_setup_ubuntu_server_ubuntu_16.sh
 	source ./constants.sh
 fi
@@ -54,4 +54,3 @@ success "Installed Dendro Recommender at ${dendro_recommender_install_path}"
 
 #go back to initial dir
 cd $setup_dir
-

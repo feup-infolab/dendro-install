@@ -26,7 +26,8 @@ done
 source ./define_env_vars.sh
 export VAGRANT_VM_INSTALL='true'
 
-#vagrant box update &&
+vagrant halt
+#vagrant box update
 vagrant up --provider virtualbox --provision ||
 die "There were errors installing Dendro."
 
@@ -35,6 +36,8 @@ rm ./scripts.tar.gz
 success "Deleted temporary scripts package."
 
 success "Dendro setup complete."
+info "Visit ${dendro_base_uri} for the Dendro web interface."
+info "Visit http://${dendro_recommender_host}:${dendro_recommender_port} for the Dendro Recommender web interface."
 
 #clean list of VMs
 #sudo vagrant global-status --prune

@@ -3,7 +3,7 @@
 #global
 active_deployment_setting='dendroVagrantDemo'
 #will be used to generate URLs relative to a base address, so set it wisely
-	host="192.168.56.249" 
+	host="192.168.56.249"
 installation_path='/dendro'
 recommender_installation_path='/dendro_recommender'
 
@@ -28,13 +28,13 @@ dendro_user_password='dendr0'
 	#startup services
 	dendro_service_name=$active_deployment_setting
 	dendro_startup_item_file=/etc/systemd/system/$dendro_service_name.service
-	
+
 	#installation
 	dendro_installation_path=$installation_path/$active_deployment_setting
 	temp_downloads_folder='/tmp/dendro_setup'
 	dendro_svn_url='http://dendro-dev.fe.up.pt/svn/dendro/'
 	dendro_git_url='https://github.com/feup-infolab-rdm/dendro.git'
-	
+
 	#deployment settings
 	dendro_log_file=/var/log/$active_deployment_setting.log
 	dendro_port=3007
@@ -47,14 +47,24 @@ dendro_user_password='dendr0'
 	reload_demo_users_on_startup="true"
 	reload_ontologies_on_startup="true"
 	config_human_readable_name='DendroVagrantDemo'
-	
+
+	#logging
+ 	logging_format="dev"
+ 	logging_app_logs_folder="logs/app"
+ 	logging_log_request_times="true"
+ 	logging_request_times_log_folder="logs/request_times"
+ 	logging_log_requests_in_apache_format="true"
+ 	logging_requests_in_apache_format_log_folder="logs/requests_apache_format"
+ 	#version
+ 	config_human_readable_name='Dendro RDM Demo @ UPorto'
+
 	#descriptor recommendation
 	interactions_table_stage1="interactions_${active_deployment_setting}_stage1"
 	interactions_table_stage2="interactions_${active_deployment_setting}_stage2"
-	
+
 	dr_stage1_active="false"
 	dr_stage2_active="true"
-	
+
 	#eudat
 	eudat_base_url="https://trng-b2share.eudat.eu"
 	eudat_token="FIXME_____veryLongAndComplicatedString"
@@ -66,7 +76,7 @@ dendro_user_password='dendr0'
 	#cache static files such as images or thumbnails
 	last_modified_caching="true"
 	cache_period_in_seconds=3600
-	
+
 	#gmaps API key
 	gmaps_api_key="AIzaSyBOTCYmWS_J3JSnLb34TsICY7MC-TbBVx4"
 	gmaps_map_height=500
@@ -75,26 +85,26 @@ dendro_user_password='dendr0'
 		#elasticsearch
 		elasticsearch_port=9200
 		elasticsearch_host="127.0.0.1"
-		
+
 		#virtuoso
 		virtuoso_host="127.0.0.1"
 		virtuoso_port=8890
 		virtuoso_dba_user="dba"
 		virtuoso_dba_password="dba"
 		virtuoso_startup_item_file='/etc/systemd/system/virtuoso.service'
-		
+
 			#virtuoso user (owner of the virtuoso installation and process)
 			virtuoso_user='virtuoso'
 			virtuoso_group='virtuoso'
 			virtuoso_user_password='virtu0s0'
-	
+
 		#mongodb
 		mongodb_host="127.0.0.1"
 		mongodb_port=27017
 		mongodb_dba_user="root"
 		mongodb_dba_password="r00t"
 		mongodb_collection_name="${active_deployment_setting}_data"
-		
+
 		#redis
 		redis_port=6379
 		redis_host="127.0.0.1"
@@ -105,16 +115,16 @@ dendro_user_password='dendr0'
 	dendro_recommender_startup_item_file=/etc/systemd/system/$dendro_recommender_service_name.service
 	dendro_recommender_install_path=$recommender_installation_path/$active_deployment_setting
 	dendro_recommender_active="true"
-	
+
 	dendro_recommender_svn_url='http://dendro-dev.fe.up.pt/svn/dendro_recommender/NewDendroRecommender/'
 	dendro_recommender_git_url='https://github.com/feup-infolab-rdm/dendro-recommender.git'
-	
+
 	dendro_recommender_host=$host
 	dendro_recommender_port=9007
 	dendro_recommender_log_file=/var/log/$active_deployment_setting-recommender.log
-	
+
 	dendro_recommender_all_ontologies_url="${dendro_base_uri}/ontologies/all"
-	
+
 	if [[ "${dr_stage1_active}" == "true" ]]
 	then
 		dendro_recommender_interactions_table="${interactions_table_stage1}"
@@ -127,12 +137,12 @@ dendro_user_password='dendr0'
 		printf "${Red}[ERROR]${Color_Off} Either stage 1 or stage 2 of dendro recommender must be active..."
 		exit
 	fi
-	
+
 	#dependencies
 		#play framework
 		play_framework_install_path='/tmp/play'
-		
-		
+
+
 #running variables help
 
 get_script_dir  () {
@@ -151,7 +161,7 @@ get_script_dir  () {
 cd_to_current_dir () {
 	DIR="$(get_script_dir)"
 	printf "${Cyan}[INFO]${Color_Off} CD'ing to ${DIR}\n"
-	cd "${DIR}"	
+	cd "${DIR}"
 }
 
 info () {

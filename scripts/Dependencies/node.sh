@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-if [ -z ${DIR+x} ]; then 
+if [ -z ${DIR+x} ]; then
 	#running by itself
 	source ../constants.sh
-else 
+else
 	#running from dendro_full_setup_ubuntu_server_ubuntu_16.sh
 	source ./constants.sh
 fi
@@ -17,15 +17,16 @@ setup_dir=$(pwd)
 sudo apt-get -qq update && sudo apt-get -y -f -qq install git-core python curl build-essential openssl libssl-dev &&
 cd $temp_downloads_folder &&
 sudo rm -rf node &&
-sudo git clone https://github.com/joyent/node.git &&
+sudo git clone https://github.com/nodejs/node.git &&
 cd node &&
-sudo git checkout v0.10.28 &&
-sudo ./configure --openssl-libpath=/usr/lib/ssl && 
+sudo ./configure &&
 sudo make --silent > /dev/null &&
-sudo make install --silent || 
-die "Failed to install NodeJS." 
+sudo make install --silent &&
+sudo npm install -g bower ||
+die "Failed to install NodeJS."
+#sudo git checkout -b v4.5.0 &&
 
 #go back to initial dir
 cd $setup_dir
 
-success "$Installed NodeJS.\n"
+success "$Installed NodeJS from source.\n"

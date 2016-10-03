@@ -2,4 +2,4 @@
 
 source ./define_env_vars.sh
 
-vagrant up
+vagrant halt

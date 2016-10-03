@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
-if [ -z ${DIR+x} ]; then 
+if [ -z ${DIR+x} ]; then
 	#running by itself
 	source ../constants.sh
-else 
+else
 	#running from dendro_full_setup_ubuntu_server_ubuntu_16.sh
 	source ./constants.sh
 fi
 
-printf "${Cyan}[INFO]${Color_Off} Setting up Dendro service...\n"
+info "Setting up Dendro service...\n"
 
 #printf "/usr/local/bin/node ${dendro_installation_path}/app.js >> ${dendro_log_file} 2>&1"
 
@@ -16,7 +16,7 @@ printf "${Cyan}[INFO]${Color_Off} Setting up Dendro service...\n"
 setup_dir=$(pwd)
 
 #stop current recommender service if present
-printf "${Cyan}[INFO]${Color_Off} Stopping $dendro_service_name service...\n"
+info "Stopping $dendro_service_name service..."
 sudo systemctl stop $dendro_service_name
 
 #setup auto-start dendro service
@@ -29,7 +29,7 @@ sudo mkdir -p $installation_path/service_pids
 
 printf "Dendro Running Service Command:"
 printf "\n"
-printf "/usr/local/bin/node ${dendro_installation_path}/app.js | tee ${dendro_log_file}"
+printf "/usr/local/bin/nodejs ${dendro_installation_path}/app.js | tee ${dendro_log_file}"
 printf "\n"
 
 printf "[Unit]
@@ -43,7 +43,7 @@ User=$dendro_user_name
 Group=$dendro_user_group
 RuntimeMaxSec=infinity
 KillMode=control-group
-ExecStart=/bin/sh -c '/usr/local/bin/node ${dendro_installation_path}/src/app.js >> ${dendro_log_file} 2>&1'
+ExecStart=/bin/sh -c '/usr/bin/nodejs ${dendro_installation_path}/src/app.js >> ${dendro_log_file} 2>&1'
 PIDFile=$installation_path/service_pids/${dendro_service_name}
 [Install]
 WantedBy=multi-user.target\n" | sudo tee $dendro_startup_item_file
@@ -57,4 +57,4 @@ sudo systemctl start $dendro_service_name
 #go back to initial dir
 cd $setup_dir
 
-printf "${Green}[OK]${Color_Off} Finished setting up Dendro service.\n"
+success "Finished setting up Dendro service.\n"

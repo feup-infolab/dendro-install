@@ -1,8 +1,6 @@
 .vagrant/
 *.log
 *.gz
-
-*.log
-*.log
-
-*.gz
+ubuntu-xenial-16.04-cloudimg-console.log
+scripts/constants.sh
+.DS_Store
