@@ -56,6 +56,7 @@ This package allows you to
 		cd dendro-vagrant-install;
 		chmod +x ./install.sh;
 		./install.sh
+		
 		```
 	* Cloning using Powershell (Windows) 
 	
