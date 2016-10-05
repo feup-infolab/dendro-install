@@ -73,13 +73,7 @@ recommender_installation_path='/dendro_recommender'
 		#virtuoso
 		virtuoso_host="127.0.0.1"
 		virtuoso_port=8890
-		virtuoso_dba_user="dba"
-		virtuoso_dba_password="dba"
 		virtuoso_startup_item_file='/etc/systemd/system/virtuoso.service'
-
-			#virtuoso user (owner of the virtuoso installation and process)
-			virtuoso_user='virtuoso'
-			virtuoso_group='virtuoso'
 
 		#mongodb
 		mongodb_host="127.0.0.1"

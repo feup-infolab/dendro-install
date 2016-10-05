@@ -13,10 +13,17 @@ info "Installing ElasticSearch 2.2.3......"
 #save current dir
 setup_dir=$(pwd)
 
+#install JDK 8
+info "Installing Java 8 JDK"
+sudo apt-get install --yes python-software-properties
+sudo add-apt-repository ppa:webupd8team/java
+sudo apt-get update -qq
+sudo sh -c "echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections"
+sudo sh -c "echo debconf shared/accepted-oracle-license-v1-1 seen true | /usr/bin/debconf-set-selections"
+sudo apt-get install --yes oracle-java8-installer
+sudo sh -c "yes \"\" | apt-get -f install"
+
 #install elasticsearch
-sudo add-apt-repository -y ppa:webupd8team/java
-sudo apt-get -qq update
-sudo apt-get -qq install oracle-java8-installer
 cd $temp_downloads_folder
 sudo wget --progress=bar:force https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.3.3/elasticsearch-2.3.3.deb
 sudo dpkg -i elasticsearch-2.3.3.deb

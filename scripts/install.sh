@@ -28,7 +28,7 @@ cd_to_current_dir () {
 add_line_to_file_if_not_present () {
 	LINE=$1
 	FILE=$2
-	sudo grep -q "$LINE" "$FILE" || sudo echo "$LINE" >> "$FILE"
+	sudo sh -c "grep -q -F \"$LINE\" \"$FILE\" || sudo echo \"$LINE\" >> \"$FILE\""
 }
 
 
@@ -136,10 +136,15 @@ source ./Fixes/fix_locales.sh
 	sudo dpkg-reconfigure -f noninteractive locales
 
 #check services are up
-	source ./Checks/check_services_status.sh
+	#source ./Checks/check_services_status.sh
 
 #reload all services to start dendro and dendro recommender
 	sudo systemctl reload
 
 #go back to whatever was the directory at the start of this script
 	cd $starting_dir
+
+#all ok.
+success "Dendro setup complete."
+info "Visit ${dendro_base_uri} for the Dendro web interface."
+info "Visit http://${dendro_recommender_host}:${dendro_recommender_port} for the Dendro Recommender web interface."

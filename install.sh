@@ -35,9 +35,5 @@ info "Cleaning up..."
 rm ./scripts.tar.gz
 success "Deleted temporary scripts package."
 
-success "Dendro setup complete."
-info "Visit ${dendro_base_uri} for the Dendro web interface."
-info "Visit http://${dendro_recommender_host}:${dendro_recommender_port} for the Dendro Recommender web interface."
-
 #clean list of VMs
 #sudo vagrant global-status --prune
