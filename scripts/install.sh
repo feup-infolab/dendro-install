@@ -57,6 +57,7 @@ source ./constants.sh
 #apply pre-installation fixes such as DNS fixes (thank you bugged Ubuntu distros)
 info "Applying pre-installation fixes..."
 source ./Fixes/fix_dns.sh
+source ./Fixes/fix_locales.sh
 
 #fix any unfinished installations
 	info "Preparing setup..."
