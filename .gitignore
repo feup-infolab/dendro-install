@@ -2,5 +2,6 @@
 *.log
 *.gz
 ubuntu-xenial-16.04-cloudimg-console.log
-scripts/constants.sh
+scripts/secrets.sh
 .DS_Store
+

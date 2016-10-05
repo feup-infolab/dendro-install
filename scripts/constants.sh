@@ -12,17 +12,6 @@ recommender_installation_path='/dendro_recommender'
 		mysql_host='127.0.0.1'
 		mysql_port='3306'
 		mysql_database_to_create=$active_deployment_setting
-		mysql_username='root'
-		mysql_root_password='r00t_p4ssw0rd'
-
-#svn users and passwords
-svn_user="FIXME_____user_for_dendro_svn_repo"
-svn_user_password="FIXME_____password_for_dendro_svn_repo"
-
-#user who will own the installation folders and the dendro processes
-dendro_user_name='dendro'
-dendro_user_group='dendro'
-dendro_user_password='dendr0'
 
 #dendro
 	#startup services
@@ -67,18 +56,13 @@ dendro_user_password='dendr0'
 
 	#eudat
 	eudat_base_url="https://trng-b2share.eudat.eu"
-	eudat_token="FIXME_____veryLongAndComplicatedString"
-
-	#email account for messages and password recovery messaging
-	emailing_account_gmail_user="FIXME_____gmail_user_to_send_emails"
-	emailing_account_gmail_password="FIXME_____password_for_gmail_user_to_send_emails"
 
 	#cache static files such as images or thumbnails
 	last_modified_caching="true"
 	cache_period_in_seconds=3600
 
 	#gmaps API key
-	gmaps_api_key="AIzaSyBOTCYmWS_J3JSnLb34TsICY7MC-TbBVx4"
+
 	gmaps_map_height=500
 
 	#dependencies
@@ -96,13 +80,10 @@ dendro_user_password='dendr0'
 			#virtuoso user (owner of the virtuoso installation and process)
 			virtuoso_user='virtuoso'
 			virtuoso_group='virtuoso'
-			virtuoso_user_password='virtu0s0'
 
 		#mongodb
 		mongodb_host="127.0.0.1"
 		mongodb_port=27017
-		mongodb_dba_user="root"
-		mongodb_dba_password="r00t"
 		mongodb_collection_name="${active_deployment_setting}_data"
 
 		#redis

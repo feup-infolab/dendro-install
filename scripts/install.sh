@@ -53,6 +53,7 @@ done
 
 cd_to_current_dir
 source ./constants.sh
+source ./secrets.sh
 
 #apply pre-installation fixes such as DNS fixes (thank you bugged Ubuntu distros)
 info "Applying pre-installation fixes..."
