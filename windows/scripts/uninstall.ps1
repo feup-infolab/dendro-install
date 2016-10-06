@@ -41,6 +41,7 @@ if ($confirmation -eq 'y') {
 
   #delete .vagrant folder (purge logs and junk)
   Remove-Item .\.vagrant -recurse
+  rmdir .\.vagrant -r -f
 }
 else
 {
