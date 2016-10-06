@@ -99,6 +99,3 @@ If (Test-Path $targetZipFile){
 echo "Deleted temporary scripts package."
 
 echo "Dendro setup complete."
-
-# clean list of VMs
-vagrant global-status --prune
