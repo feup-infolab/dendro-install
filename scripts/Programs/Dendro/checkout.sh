@@ -33,7 +33,7 @@ cd -
 
 #install bower dependencies
 cd $dendro_installation_path/public
-bower install --allow-root
+sudo bower install --allow-root
 cd -
 
 #set active deployment configuration
