@@ -26,7 +26,7 @@ if [[ ! -z "$dendro_branch" ]]
 then
   info "Checking out Dendro branch $dendro_branch..."
 	cd $dendro_installation_path
-  git checkout "$dendro_branch"
+  sudo git checkout "$dendro_branch"
 	cd -
 fi
 
