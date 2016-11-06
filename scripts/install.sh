@@ -40,11 +40,14 @@ add_line_to_file_if_not_present () {
 
 refresh_code_only="false"
 
-while getopts 'r' flag; do
+while getopts 'rb:' flag; do
   case $flag in
     r)
 		refresh_code_only="true"
 		;;
+    b)
+    dendro_branch=$OPTARG
+    ;;
     *)
 		error "Unexpected option ${flag}"
 		;;
