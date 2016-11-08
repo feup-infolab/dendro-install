@@ -42,8 +42,8 @@ cd -
 #install bower dependencies
 cd $dendro_installation_path/public
 sudo mkdir bower_components
-sudo chmod ugo+rw bower_components/
-bower install
+sudo chmod 0777 bower_components/
+sudo bower install --allow-root
 cd -
 
 #set active deployment configuration
