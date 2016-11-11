@@ -83,7 +83,7 @@ source ./Fixes/fix_locales.sh
 	else
 		warning "Installing dependencies"
 		source ./Dependencies/misc.sh
-		source ./Dependencies/node.sh
+		#source ./Dependencies/node.sh
 
 		#install virtuoso
 		source ./Dependencies/virtuoso.sh
