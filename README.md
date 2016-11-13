@@ -1,6 +1,6 @@
 #	Installation Tutorial on YouTube
 
-[![YouTube installation tutorial for Dendro](http://imgur.com/a/TTABr)](https://www.youtube.com/watch?v=LMGDL4IVLvg)
+[![YouTube installation tutorial for Dendro](http://imgur.com/J9ujqdp)](https://www.youtube.com/watch?v=LMGDL4IVLvg)
 
 #	Welcome to Dendro
 
