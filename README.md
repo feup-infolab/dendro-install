@@ -3,7 +3,7 @@
 | Regular Users            | Developers                                                                              |
 |--------------------|------------------------------------------------------------------------------------------|
 | Want to try Dendro? Watch the video below. It is intended to get you up and running with a fully configured Virtual Machine that you can destroy after you are done. | Interested in developing for the Dendro platform? Follow the video below for setting up your development environment. You should follow the video for Regular Users before following this one. |
-| [![YouTube installation tutorial for Dendro](http://i.imgur.com/gRj2OIA.png)](https://www.youtube.com/watch?v=YEKQ1InfmOE) | [![YouTube Development setup tutorial for Dendro](http://i.imgur.com/Em8MuNn.png)](https://www.youtube.com/watch?v=eXgyO9S4tl4). | 
+| [![YouTube installation tutorial for Dendro](http://i.imgur.com/gRj2OIA.png) =250x](https://www.youtube.com/watch?v=YEKQ1InfmOE) | [![YouTube Development setup tutorial for Dendro](http://i.imgur.com/Em8MuNn.png) =250x](https://www.youtube.com/watch?v=eXgyO9S4tl4). | 
 
 
 
