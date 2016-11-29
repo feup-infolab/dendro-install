@@ -22,6 +22,14 @@ info "Exporting Dendro from GIT at : ${dendro_git_url} to $dendro_installation_p
 #sudo svn -q --no-auth-cache export $dendro_svn_url $dendro_installation_path --username $svn_user --password $svn_user_password --force
 sudo git clone $dendro_git_url $dendro_installation_path
 
+if [[ ! -z "$dendro_branch" ]]
+then
+  info "Checking out Dendro branch $dendro_branch..."
+	cd $dendro_installation_path
+  sudo git checkout "$dendro_branch"
+	cd -
+fi
+
 #give "dendro" user ownership of the installation
 sudo chown -R $dendro_user_name:$dendro_user_group $installation_path
 sudo chmod -R 0755 $installation_path
@@ -33,6 +41,8 @@ cd -
 
 #install bower dependencies
 cd $dendro_installation_path/public
+sudo mkdir bower_components
+sudo chmod 0777 bower_components/
 sudo bower install --allow-root
 cd -
 
