@@ -621,6 +621,51 @@ var write_dendro_configuration_file = function ()
 	    {
 	      "gmaps_api_key" : get_argument_by_name('gmaps_api_key'),
 	      "map_height" : get_argument_by_name('gmaps_map_height')
+	    },
+	    "exporting" :
+	    {
+	      "generated_files_metadata" :
+	      {
+	    	"bagit" :
+	    	{
+	    	  "dcterms" : {
+	    		"title" : "Full contents of the dataset in ZIP format (Bagit Specification)",
+	    		"description" : "This file contains all the files and corresponding metadata in a ZIP arghive that follows the BagIt (https://tools.ietf.org/html/draft-kunze-bagit-08) specification. Exported by the Dendro platform."
+	    	  }
+	    	},
+	    	"zip" :
+	    	{
+	    	  "dcterms" : {
+	    		"title" : "Full contents of the dataset in ZIP format",
+	    		"description" : "This file contains all the files and corresponding metadata in a ZIP archive. Exported by the Dendro platform."
+	    	  }
+	    	},
+	    	"json" :
+	    	{
+	    	  "dcterms" : {
+	    		"title" : "Dataset metadata in JSON format",
+	    		"description" : "This file contains all the metadata in JSON format. Exported by the Dendro platform."
+	    	  }
+	    	},
+	    	"rdf" :
+	    	{
+	    	  "dcterms" : {
+	    		"title" : "Dataset metadata in RDF format",
+	    		"description" : "This file contains all the metadata in RDF (Resource Description Framework) format. Exported by the Dendro platform."
+	    	  }
+	    	},
+	    	"txt" :
+	    	{
+	    	  "dcterms" : {
+	    		"title" : "Dataset metadata in human-readable TXT format",
+	    		"description" : "This file contains all the metadata in Plain text for human reading. Exported by the Dendro platform."
+	    	  }
+	    	}
+	      },
+	      "ckan" :
+	      {
+	    
+	      }
 	    }
 	}
 	
