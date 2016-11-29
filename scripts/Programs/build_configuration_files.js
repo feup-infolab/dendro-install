@@ -338,6 +338,12 @@ var arguments = {
 		type: "integer",
 		example : "Map height for the control in metadata editor",
 		tip : "for example 500"
+	},
+	"secret" : 
+	{
+		type: "string",
+		example : "Crypto secret of the app",
+		tip : "VERY LONG AND COMPLICATED STRING"
 	}
 };
 
