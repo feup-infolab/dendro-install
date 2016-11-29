@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+#app crypto secret
+secret="app_secretttttt192818923782364781263486712384761528764512asldkfjak"
+
 #dendro linux user -- who will own the installation folders and the dendro processes
 dendro_user_name='dendro'
 dendro_user_group='dendro'
