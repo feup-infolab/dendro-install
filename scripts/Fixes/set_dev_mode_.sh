@@ -15,28 +15,35 @@ setup_dir=$(pwd)
 
 warning "[[[Setting up this Dendro instance for development.]]]"
 
+#MongoDB
+info "Opening MongoDB to ANY remote connection."
+patch_file $mongodb_conf_file "bind_ip: 127.0.0.1" "#bind_ip: 127.0.0.1"
+sudo service mongodb restart | die "Unable to patch mongodb configuration file."
+success "Opened MongoDB."
+
 ##ElasticSearch
 info "Opening ElasticSearch to ANY remote connection..."
-
+patch_file $elasticsearch_conf_file "network.host: 127.0.0.1" "network.host: 0.0.0.0"
+sudo service elasticsearch restart | die "Unable to patch ElasticSearch configuration file."
 success "Opened ElasticSearch."
-
 
 ##Redis
 info "Opening Redis to ANY remote connection..."
-
-
+patch_file $redis_conf_file "bind 127.0.0.1" "bind 0.0.0.0"
+sudo service redis restart | die "Unable to patch Redis configuration file."
 success "Opened Redis."
 
 #MySQL
 info "Opening MySQL to ANY remote connection."
+patch_file $mysql_conf_file "bind-address            = 127.0.0.1" "#bind-address            = 127.0.0.1"
 
+sudo service mysql restart | die "Unable to enable MySQL remote access."
 success "Opened MySQL."
-
-
 
 
 #go back to initial dir
 cd $setup_dir
 
 #all ok.
-success "This Dendro instance is in dev mode. DO NOT USE THIS IN PRODUCTION ENVIRONMENT, IT IS UNSAFE."
+success "This Dendro instance is in dev mode."
+warning "DO NOT USE THIS IN PRODUCTION ENVIRONMENT. IT IS EXTREMELY INSECURE."
