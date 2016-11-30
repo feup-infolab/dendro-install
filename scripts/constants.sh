@@ -160,6 +160,73 @@ die () {
 	exit 1
 }
 
+file_is_patched_for_line()
+{
+	file=$1
+	old_line=$2
+	new_line=$3
+
+	if grep -Fxq "$FILENAME" my_list.txt
+	then
+    return true
+	else
+    return false
+	fi
+}
+
+get_tmp_folder()
+{
+	filename=$(basename "$1")
+	extension="${filename##*.}"
+	filename="${filename%.*}"
+
+	mseconds="date +%s%N | cut -b1-13"
+	tmp_file_path=/tmp/dendro_file_patches/${mseconds}/${filename}
+}
+
+get_replaced_line()
+{
+	old_line=$1
+	new_line=$1
+
+	replaced_line="###Replaced by Dendro install scripts";
+	replaced_line="#OLD: ${replaced_line}\n"
+	replaced_line="###\n"
+	replaced_line="${new_line}\n"
+	replaced_line="###\n"
+
+	return replaced_line;
+}
+
+replace_line_in_file()
+{
+	file=$1
+	old_line=$2
+	new_line=$3
+
+	replaced_line=get_replaced_line old_line new_line
+
+	if [[ file_is_patched_for_line file old_line new_line ]]; then
+		info "File ${file} is already patched."
+	else
+		#Create temporary file with new line in place
+		cat file | sed -e "s/old_line/new_line/" > /tmp/temp_file
+		#Copy the new file over the original file
+		mv /dir/temp_file file
+	fi
+}
+
+undo_replace_line_in_file(file, line, new_line)
+{
+	replaced_line=get_replaced_line line
+}
+
+#configuration files for servers
+redis_conf_file=/etc/redis/redis.conf
+elasticsearch_conf_file=/etc/elasticsearch/elasticsearch.yml
+mongodb_conf_file=/etc/mongodb.conf
+mysql_conf_file=/etc/mysql/mysql.conf.d/mysqld.cnf
+
 #console colors
 
 # Reset

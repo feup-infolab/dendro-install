@@ -40,10 +40,13 @@ add_line_to_file_if_not_present () {
 
 refresh_code_only="false"
 
-while getopts 'rb:' flag; do
+while getopts 'rdb:' flag; do
   case $flag in
     r)
 		refresh_code_only="true"
+		;;
+		r)
+		set_dev_mode="true"
 		;;
     b)
     dendro_branch=$OPTARG
@@ -140,6 +143,11 @@ source ./Fixes/fix_locales.sh
 
 #check services are up
 	#source ./Checks/check_services_status.sh
+
+	if [[ "${set_dev_mode}" == "true" ]]
+	then
+		source ./fixes/set_dev_mode.sh
+	fi
 
 #reload all services to start dendro and dendro recommender
 	sudo systemctl reload
