@@ -174,14 +174,15 @@ file_is_patched_for_line()
 	fi
 }
 
-get_tmp_folder()
+get_tmp_copy_of_file()
 {
-	filename=$(basename "$1")
+	full_path=$1
+	filename=$(basename "$full_path")
 	extension="${filename##*.}"
-	filename="${filename%.*}"
+	name_only="${filename%.*}"
 
 	mseconds="date +%s%N | cut -b1-13"
-	tmp_file_path=/tmp/dendro_file_patches/${mseconds}/${filename}
+	tmp_file_path="/tmp/dendro_file_patches/$mseconds$full_path"
 }
 
 get_replaced_line()
@@ -189,36 +190,54 @@ get_replaced_line()
 	old_line=$1
 	new_line=$1
 
-	replaced_line="###Replaced by Dendro install scripts";
-	replaced_line="#OLD: ${replaced_line}\n"
+	replaced_line="###START REPLACEMENT by Dendro install scripts";
+	replaced_line="#OLD VALUE: ################$replaced_line################\n"
 	replaced_line="###\n"
-	replaced_line="${new_line}\n"
-	replaced_line="###\n"
+	replaced_line="$new_line\n"
+	replaced_line="###END REPLACEMENT by Dendro install scripts";
 
 	return replaced_line;
 }
 
-replace_line_in_file()
+replace_text_in_file()
 {
 	file=$1
 	old_line=$2
 	new_line=$3
 
-	replaced_line=get_replaced_line old_line new_line
+	#Create temporary file with new line in place
+	tmp_copy=get_tmp_copy_of_file $file
+	cat $file | sed -e "s/old_line/new_line/" > $tmp_copy
+	info "REPLACED."
+	cat $tmp_copy
+	#Copy the new file over the original file
+	#rm -rf $file
+	#mv $tmp_copy $file
+}
+
+patch_file()
+{
+	file=$1
+	old_line=$2
+	new_line=$3
+
+	replacement_line=get_replaced_line old_line new_line
 
 	if [[ file_is_patched_for_line file old_line new_line ]]; then
-		info "File ${file} is already patched."
+		info "File $file is already patched."
 	else
-		#Create temporary file with new line in place
-		cat file | sed -e "s/old_line/new_line/" > /tmp/temp_file
-		#Copy the new file over the original file
-		mv /dir/temp_file file
+		replace_text_in_file file old_line replacement_line
 	fi
 }
 
-undo_replace_line_in_file(file, line, new_line)
+unpatch_file()
 {
-	replaced_line=get_replaced_line line
+	file=$1
+	old_line=$2
+	new_line=$3
+
+	replacement_line=get_replaced_line old_line
+	replace_text_in_file replacement_line old_line
 }
 
 #configuration files for servers
