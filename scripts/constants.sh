@@ -185,6 +185,7 @@ get_tmp_copy_of_file()
 	local tmp_file_path="/tmp/dendro_file_patches/$mseconds$full_path"
 	
 	eval "$1=\$tmp_file_path"
+	printf "Temporary file at: $tmp_file_path" 
 }
 
 get_replacement_line()
@@ -208,13 +209,23 @@ replace_text_in_file()
 	local new_line=$4
 
 	#Create temporary file with new line in place
-	local tmp_copy=get_tmp_copy_of_file $file
+	get_tmp_copy_of_file tmp_copy $file
 	cat $file | sed -e "s/old_line/new_line/" > $tmp_copy
 	info "REPLACED."
 	cat $tmp_copy
 	#Copy the new file over the original file
 	#rm -rf $file
 	#mv $tmp_copy $file
+}
+
+file_exists()
+{
+	file=$2
+	if [ ! -f $file ]; then
+		eval "$1=\"false\""
+	else
+		eval "$1=\"true\""		
+	fi
 }
 
 patch_file()
@@ -224,13 +235,15 @@ patch_file()
 	local new_line=$3
 	local replacement_line
 	local file_is_patched=""
-
-	get_replacement_line replacement_line "$old_line" "$new_line"
+	local file_exists_flag
 	
-	if [ ! -f $file ]; then
+	file_exists file_exists_flag $file
+	
+	if [ "$file_exists_flag" == "false" ]; then
 	    error "File $file not found!"
 		return 1
 	else
+		get_replacement_line replacement_line "$old_line" "$new_line"
 		file_is_patched_for_line file_is_patched "$file" "$old_line" "$new_line"
 		if [[ "$file_is_patched"=="true" ]]; then
 			warning "File $file is already patched."
@@ -259,15 +272,10 @@ unpatch_file()
 }
 
 #configuration files for servers
-redis_conf_file=/etc/redis/redis.conf
-elasticsearch_conf_file=/etc/elasticsearch/elasticsearch.yml
-mongodb_conf_file=/etc/mongodb.conf
-mysql_conf_file=/etc/mysql/mysql.conf.d/mysqld.cnf
-
-redis_conf_file=/Users/joaorocha/etc/redis/redis.conf
-elasticsearch_conf_file=/etc/elasticsearch/elasticsearch.yml
-mongodb_conf_file=/etc/mongodb.conf
-mysql_conf_file=/etc/mysql/mysql.conf.d/mysqld.cnf
+redis_conf_file=/Users/joaorocha/Desktop/confs/redis.conf
+elasticsearch_conf_file=/Users/joaorocha/Desktop/confs/elasticsearch.yml
+mongodb_conf_file=/Users/joaorocha/Desktop/confs/mongodb.conf
+mysql_conf_file=/Users/joaorocha/Desktop/confs/mysqld.cnf
 
 #console colors
 
