@@ -39,13 +39,17 @@ add_line_to_file_if_not_present () {
 # http://wiki.bash-hackers.org/howto/getopts_tutorial
 
 refresh_code_only="false"
+set_dev_mode="false"
 
-while getopts 'rdb:' flag; do
+while getopts 'sdrb:' flag; do
   case $flag in
+    s)
+  		install_virtuoso_from_source="true"
+  		;;
     r)
 		refresh_code_only="true"
 		;;
-		r)
+	d)
 		set_dev_mode="true"
 		;;
     b)
@@ -89,8 +93,20 @@ source ./Fixes/fix_locales.sh
 		#source ./Dependencies/node.sh
 
 		#install virtuoso
-		source ./Dependencies/virtuoso.sh
-		source ./Services/virtuoso.sh
+		if [[ "${install_virtuoso_from_source}" == "true" ]]
+		then
+			info "Installing OpenLink Virtuoso Database from source"
+			source ./Dependencies/virtuoso_from_source.sh
+			source ./Services/virtuoso.sh
+		else
+			info "Installing OpenLink Virtuoso Database from source, as PPA is not yet available."
+			source ./Dependencies/virtuoso_from_source.sh
+			source ./Services/virtuoso.sh
+			# info "Installing OpenLink Virtuoso Database from PPA (Binary)"
+			# source ./Dependencies/virtuoso_from_ppa.sh
+		fi
+
+		source ./Services/virtuoso_from_ppa.sh
 		source ./SQLCommands/grant_commands.sh
 		source ./Checks/check_services_status.sh
 
@@ -144,11 +160,6 @@ source ./Fixes/fix_locales.sh
 #check services are up
 	#source ./Checks/check_services_status.sh
 
-	if [[ "${set_dev_mode}" == "true" ]]
-	then
-		source ./fixes/set_dev_mode.sh
-	fi
-
 #reload all services to start dendro and dendro recommender
 	sudo systemctl reload
 
@@ -159,3 +170,8 @@ source ./Fixes/fix_locales.sh
 success "Dendro setup complete."
 info "Visit ${dendro_base_uri} for the Dendro web interface."
 info "Visit http://${dendro_recommender_host}:${dendro_recommender_port} for the Dendro Recommender web interface."
+
+if [[ "${set_dev_mode}" == "true" ]]
+then
+	source ./fixes/set_dev_mode.sh
+fi

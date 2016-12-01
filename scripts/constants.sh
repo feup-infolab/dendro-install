@@ -222,8 +222,9 @@ patch_file()
 	new_line=$3
 
 	replacement_line=get_replaced_line old_line new_line
-
-	if [[ file_is_patched_for_line file old_line new_line ]]; then
+	file_is_patched=file_is_patched_for_line file old_line new_line
+	
+	if [[ file_is_patched ]]; then
 		info "File $file is already patched."
 	else
 		replace_text_in_file file old_line replacement_line

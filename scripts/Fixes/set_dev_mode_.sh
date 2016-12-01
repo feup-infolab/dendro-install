@@ -35,7 +35,13 @@ success "Opened Redis."
 
 #MySQL
 info "Opening MySQL to ANY remote connection."
-patch_file $mysql_conf_file "bind-address            = 127.0.0.1" "#bind-address            = 127.0.0.1"
+patch_file $mysql_conf_file "bind-address            = 127.0.0.1" "#bind-address            = 127.0.0.1" | die "Unable to patch MySQL configuration file."
+
+mysql 	--user="$user" \
+		--password="$password" \
+		--database="$database" \
+		--execute="GRANT ALL PRIVILEGES ON *.* TO '$mysql_username'@'%' IDENTIFIED BY '$mysql_root_password' WITH GRANT OPTION;
+ FLUSH PRIVILEGES;"
 
 sudo service mysql restart | die "Unable to enable MySQL remote access."
 success "Opened MySQL."

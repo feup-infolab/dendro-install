@@ -8,12 +8,12 @@ else
 	source ./constants.sh
 fi
 
-info "Installing Preliminary Dependencies...."
+info "Installing Preliminary Dependencies....PLEASE WAIT, as this will take several minutes."
 
 #save current dir
 setup_dir=$(pwd)
 
-sudo apt-get -y -f -qq install autoconf automake libtool flex bison gperf gawk m4 make libssl-dev git imagemagick subversion zip htop redis-server nodejs npm --fix-missing || die "Failed to install preliminary dependencies. Please check any prior error messages."
+sudo apt-get -y -f -qq install devscripts autoconf automake libtool flex bison gperf gawk m4 make libssl-dev git imagemagick subversion zip htop redis-server nodejs npm --fix-missing || die "Failed to install preliminary dependencies. Please check any prior error messages."
 
 #install bower
 sudo npm install -g bower
