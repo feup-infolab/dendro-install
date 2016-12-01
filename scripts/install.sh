@@ -65,6 +65,14 @@ cd_to_current_dir
 source ./constants.sh
 source ./secrets.sh
 
+
+if [[ "${set_dev_mode}" == "true" ]]
+then
+	source ./Fixes/set_dev_mode.sh
+fi
+
+exit
+
 #apply pre-installation fixes such as DNS fixes (thank you bugged Ubuntu distros)
 info "Applying pre-installation fixes..."
 source ./Fixes/fix_dns.sh
@@ -171,7 +179,4 @@ success "Dendro setup complete."
 info "Visit ${dendro_base_uri} for the Dendro web interface."
 info "Visit http://${dendro_recommender_host}:${dendro_recommender_port} for the Dendro Recommender web interface."
 
-if [[ "${set_dev_mode}" == "true" ]]
-then
-	source ./fixes/set_dev_mode.sh
-fi
+
