@@ -156,55 +156,56 @@ error () {
 }
 
 die () {
-	printf "${On_IRed}[FATAL ERROR]${Color_Off} $1\n${Red}Please check any prior error messages.${Color_Off}"
+	printf "${On_IRed}[FATAL ERROR]${Color_Off} $1\n${Red}Please check any prior error messages.${Color_Off}\n"
 	exit 1
 }
 
 file_is_patched_for_line()
 {
-	local file=$1
-	local old_line=$2
-	local new_line=$3
+	local file=$2
+	local old_line=$3
+	local new_line=$4
 
-	if grep -Fxq "$FILENAME" my_list.txt
+	if grep -Fxq "${old_line}" $file
 	then
-    	return true
+    	eval "$1=\"true\""
 	else
-    	return false
+    	eval "$1=\"false\""
 	fi
 }
 
 get_tmp_copy_of_file()
 {
-	local full_path=$1
+	local full_path=$2
 	local filename=$(basename "$full_path")
 	local extension="${filename##*.}"
 	local name_only="${filename%.*}"
 
 	local mseconds="date +%s%N | cut -b1-13"
 	local tmp_file_path="/tmp/dendro_file_patches/$mseconds$full_path"
-	return $tmp_file_path
+	
+	eval "$1=\$tmp_file_path"
 }
 
-get_replaced_line()
+get_replacement_line()
 {
-	local old_line=$1
-	local new_line=$1
+	local old_line=$2
+	local new_line=$3
 
-	local replaced_line="###START REPLACEMENT by Dendro install scripts";
-	local replaced_line="#OLD VALUE: ################$replaced_line################\n"
-	local replaced_line="###\n"
-	local replaced_line="$new_line\n"
-	local replaced_line="###END REPLACEMENT by Dendro install scripts";
+	local replaced_line="###START REPLACEMENT by Dendro install scripts\n"
+	replaced_line="$replaced_line#OLD VALUE: $old_line\n"
+	replaced_line="$replaced_line#NEW VALUE\n"
+	replaced_line="$replaced_line$new_line\n"
+	replaced_line="$replaced_line###END REPLACEMENT by Dendro install scripts\n"
 
-	return replaced_line;
+	eval "$1=\$replaced_line"
 }
 
 replace_text_in_file()
 {
-	local file=$1
-	local old_line=$2
-	local new_line=$3
+	local file=$2
+	local old_line=$3
+	local new_line=$4
 
 	#Create temporary file with new line in place
 	local tmp_copy=get_tmp_copy_of_file $file
@@ -221,14 +222,21 @@ patch_file()
 	local file=$1
 	local old_line=$2
 	local new_line=$3
+	local replacement_line
+	local file_is_patched=""
 
-	local replacement_line=get_replaced_line "$old_line" "$new_line"
-	local file_is_patched=file_is_patched_for_line "$file" "$old_line" "$new_line"
+	get_replacement_line replacement_line "$old_line" "$new_line"
 	
-	if [[ file_is_patched ]]; then
-		info "File $file is already patched."
+	if [ ! -f $file ]; then
+	    error "File $file not found!"
+		return 1
 	else
-		replace_text_in_file file $old_line $replacement_line
+		file_is_patched_for_line file_is_patched "$file" "$old_line" "$new_line"
+		if [[ "$file_is_patched"=="true" ]]; then
+			warning "File $file is already patched."
+		else
+			replace_text_in_file $file $old_line $replacement_line
+		fi
 	fi
 }
 
@@ -237,13 +245,26 @@ unpatch_file()
 	local file=$1
 	local old_line=$2
 	local new_line=$3
+	local replacement_line=""
+	local file_is_patched=""
 
-	local replacement_line=get_replaced_line $old_line
-	replace_text_in_file $replacement_line $old_line
+	get_replacement_line replacement_line "$old_line" "$new_line"
+	file_is_patched_for_line file_is_patched "$file" "$old_line" "$new_line"
+	
+	if [[ "$file_is_patched"=="false" ]]; then
+		warning "File $file is not patched."
+	else
+		replace_text_in_file $replacement_line $old_line
+	fi
 }
 
 #configuration files for servers
 redis_conf_file=/etc/redis/redis.conf
+elasticsearch_conf_file=/etc/elasticsearch/elasticsearch.yml
+mongodb_conf_file=/etc/mongodb.conf
+mysql_conf_file=/etc/mysql/mysql.conf.d/mysqld.cnf
+
+redis_conf_file=/Users/joaorocha/etc/redis/redis.conf
 elasticsearch_conf_file=/etc/elasticsearch/elasticsearch.yml
 mongodb_conf_file=/etc/mongodb.conf
 mysql_conf_file=/etc/mysql/mysql.conf.d/mysqld.cnf

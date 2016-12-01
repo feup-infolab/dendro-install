@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 
-#!/usr/bin/env bash
-
 if [ -z ${DIR+x} ]; then
 	#running by itself
-	source ../../constants.sh
+	source ./constants.sh
 else
 	#running from dendro_full_setup_ubuntu_server_ubuntu_16.sh
 	source ./constants.sh
@@ -17,25 +15,25 @@ warning "[[[Setting up this Dendro instance for development.]]]"
 
 #MongoDB
 info "Opening MongoDB to ANY remote connection."
-patch_file $mongodb_conf_file "bind_ip: 127.0.0.1" "#bind_ip: 127.0.0.1"
-sudo service mongodb restart | die "Unable to patch mongodb configuration file."
+patch_file $mongodb_conf_file "bind_ip: 127.0.0.1" "#bind_ip: 127.0.0.1" || die "Unable to patch mongodb configuration file."
+#sudo service mongodb restart | die "Unable to restart mongodb service."
 success "Opened MongoDB."
 
 ##ElasticSearch
 info "Opening ElasticSearch to ANY remote connection..."
-patch_file $elasticsearch_conf_file "network.host: 127.0.0.1" "network.host: 0.0.0.0"
-sudo service elasticsearch restart | die "Unable to patch ElasticSearch configuration file."
+patch_file $elasticsearch_conf_file "network.host: 127.0.0.1" "network.host: 0.0.0.0" || die "Unable to patch ElasticSearch configuration file."
+#sudo service elasticsearch restart | die "Unable to restart ElasticSearch service."
 success "Opened ElasticSearch."
 
 ##Redis
 info "Opening Redis to ANY remote connection..."
-patch_file $redis_conf_file "bind 127.0.0.1" "bind 0.0.0.0"
-sudo service redis restart | die "Unable to patch Redis configuration file."
+patch_file $redis_conf_file "bind 127.0.0.1" "bind 0.0.0.0" || die "Unable to patch Redis configuration file."
+#sudo service redis restart | die "Unable to restart Redis service."
 success "Opened Redis."
 
 #MySQL
 info "Opening MySQL to ANY remote connection."
-patch_file $mysql_conf_file "bind-address            = 127.0.0.1" "#bind-address            = 127.0.0.1" | die "Unable to patch MySQL configuration file."
+patch_file $mysql_conf_file "bind-address            = 127.0.0.1" "#bind-address            = 127.0.0.1" || die "Unable to patch MySQL configuration file."
 
 mysql 	--user="$user" \
 		--password="$password" \
@@ -43,7 +41,7 @@ mysql 	--user="$user" \
 		--execute="GRANT ALL PRIVILEGES ON *.* TO '$mysql_username'@'%' IDENTIFIED BY '$mysql_root_password' WITH GRANT OPTION;
  FLUSH PRIVILEGES;"
 
-sudo service mysql restart | die "Unable to enable MySQL remote access."
+#sudo service mysql restart | die "Unable to enable MySQL remote access."
 success "Opened MySQL."
 
 

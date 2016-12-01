@@ -53,15 +53,15 @@ while getopts 'sdrb:' flag; do
 		set_dev_mode="true"
 		;;
     b)
-    dendro_branch=$OPTARG
-    ;;
+   	 	dendro_branch=$OPTARG
+    	;;
     *)
 		error "Unexpected option ${flag}"
 		;;
   esac
 done
 
-cd_to_current_dir
+#cd_to_current_dir
 source ./constants.sh
 source ./secrets.sh
 
