@@ -165,8 +165,14 @@ file_is_patched_for_line()
 	local file=$2
 	local old_line=$3
 	local new_line=$4
+	local patch_tag=$5
+	local replacement_line
+	
+	get_replacement_line replacement_line "$old_line" "$new_line"
 
-	if grep -Fxq "${old_line}" $file
+	printf "grep -Fxqz \"#START_PATCH_TAG: $patch_tag.*#END_PATCH_TAG: $patch_tag\n" $file
+
+	if grep -Fxqz "#START_PATCH_TAG: $patch_tag.*#END_PATCH_TAG: $patch_tag\n" $file
 	then
     	eval "$1=\"true\""
 	else
@@ -192,12 +198,15 @@ get_replacement_line()
 {
 	local old_line=$2
 	local new_line=$3
+	local patch_tag=$4
 
-	local replaced_line="###START REPLACEMENT by Dendro install scripts\n"
+	local replaced_line="#START_PATCH_TAG: $patch_tag\n"
+	replaced_line="###START REPLACEMENT by Dendro install scripts\n"
 	replaced_line="$replaced_line#OLD VALUE: $old_line\n"
 	replaced_line="$replaced_line#NEW VALUE\n"
 	replaced_line="$replaced_line$new_line\n"
 	replaced_line="$replaced_line###END REPLACEMENT by Dendro install scripts\n"
+	replaced_line="#END_PATCH_TAG: $patch_tag\n"
 
 	eval "$1=\$replaced_line"
 }
@@ -233,6 +242,8 @@ patch_file()
 	local file=$1
 	local old_line=$2
 	local new_line=$3
+	local patch_tag=$4
+	
 	local replacement_line
 	local file_is_patched=""
 	local file_exists_flag
@@ -258,6 +269,8 @@ unpatch_file()
 	local file=$1
 	local old_line=$2
 	local new_line=$3
+	local patch_tag=$4
+	
 	local replacement_line=""
 	local file_is_patched=""
 

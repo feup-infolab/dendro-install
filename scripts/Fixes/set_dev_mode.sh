@@ -19,7 +19,7 @@ file_exists_flag="true"
 info "Trying to open MongoDB to ANY remote connection."
 file_exists file_exists_flag $mongodb_conf_file
 if [[ "$file_exists_flag" == "true" ]]; then
-	patch_file $mongodb_conf_file "bind_ip: 127.0.0.1" "#bind_ip: 127.0.0.1" && success "Opened MongoDB." || die "Unable to patch mongodb configuration file."
+	patch_file $mongodb_conf_file "bind_ip: 127.0.0.1" "#bind_ip: 127.0.0.1" "mongodb_dendro_dev_patch" && success "Opened MongoDB." || die "Unable to patch mongodb configuration file."
 	#sudo service mongodb restart | die "Unable to restart mongodb service."
 else
 	die "File $mongodb_conf_file does not exist."
@@ -31,7 +31,7 @@ info "Trying to open MongoDB to ANY remote connection."
 file_exists file_exists_flag $mongodb_conf_file
 if [[ "$file_exists_flag" == "true" ]]; then
 	info "Trying to open  ElasticSearch to ANY remote connection..."
-	patch_file $elasticsearch_conf_file "network.host: 127.0.0.1" "network.host: 0.0.0.0" && success "Opened ElasticSearch." || die "Unable to patch ElasticSearch configuration file."
+	patch_file $elasticsearch_conf_file "network.host: 127.0.0.1" "network.host: 0.0.0.0" "elasticsearch_dendro_dev_patch" && success "Opened ElasticSearch." || die "Unable to patch ElasticSearch configuration file."
 	#sudo service elasticsearch restart | die "Unable to restart ElasticSearch service."
 else
 	die "File $elasticsearch_conf_file does not exist."
@@ -44,7 +44,7 @@ info "Trying to open MongoDB to ANY remote connection."
 file_exists file_exists_flag $mongodb_conf_file
 if [[ "$file_exists_flag" == "true" ]]; then
 	info "Trying to open  Redis to ANY remote connection..."
-	patch_file $redis_conf_file "bind 127.0.0.1" "bind 0.0.0.0" && success "Opened Redis." || die "Unable to patch Redis configuration file."
+	patch_file $redis_conf_file "bind 127.0.0.1" "bind 0.0.0.0" "redis_dendro_dev_patch"  && success "Opened Redis." || die "Unable to patch Redis configuration file."
 	#sudo service redis restart | die "Unable to restart Redis service."
 else
 	die "File $redis_conf_file does not exist."
@@ -56,7 +56,7 @@ info "Trying to open MongoDB to ANY remote connection."
 file_exists file_exists_flag $mongodb_conf_file
 if [[ "$file_exists_flag" == "true" ]]; then	
 	info "Trying to open  MySQL to ANY remote connection."
-	patch_file $mysql_conf_file "bind-address            = 127.0.0.1" "#bind-address            = 127.0.0.1" && success "Opened MySQL." || die "Unable to patch MySQL configuration file."
+	patch_file $mysql_conf_file "bind-address            = 127.0.0.1" "#bind-address            = 127.0.0.1" "mysql_dendro_dev_patch"  && success "Opened MySQL." || die "Unable to patch MySQL configuration file."
 
 	mysql 	--user="$user" \
 		--password="$password" \
