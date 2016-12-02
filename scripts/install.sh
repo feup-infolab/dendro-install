@@ -30,7 +30,6 @@ add_line_to_file_if_not_present () {
 	FILE=$2
 	sudo sh -c "grep -q -F \"$LINE\" \"$FILE\" || sudo echo \"$LINE\" >> \"$FILE\""
 }
-s
 
 #see if we are supposed to install dependencies or just refresh code from Dendro repositories
 # code from http://stackoverflow.com/questions/7069682/how-to-get-arguments-with-flags-in-bash-script
@@ -47,14 +46,14 @@ while getopts 'sdurb:' flag; do
   		install_virtuoso_from_source="true"
   		;;
     r)
-		refresh_code_only="true"
+			refresh_code_only="true"
+			;;
+		d)
+			set_dev_mode="true"
 		;;
-	d)
-		set_dev_mode="true"
-		;;
-	u)
-		unset_dev_mode="true"
-		;;
+		u)
+			unset_dev_mode="true"
+			;;
     b)
    	 	dendro_branch=$OPTARG
     	;;
@@ -171,13 +170,14 @@ if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ]; then
 		info "NOTE: To enable Development mode, re-run the installer with the -d flag. Example: ./install.sh -d"
 else
 	info "Running the Dendro Developer Setup."
-	if [[ "${set_dev_mode}" -eq "true" ]]
+	if [[ "${set_dev_mode}" == "true" ]]
 	then
 		info "NOTE: To disable Development mode, use the -u flag. Example: ./install.sh -u"
 		source ./Fixes/set_dev_mode.sh
 		info "This Dendro instance has been set to Development mode."
+		warning "DO NOT use this in a production environment. Having all your databases accepting remote connections can represent a serious security risk."
 	fi
-	if [[ "${unset_dev_mode}" -eq "true" ]]
+	if [[ "${unset_dev_mode}" == "true" ]]
 	then
 		info "NOTE: To enable Development mode, use the -d flag. Example: ./install.sh -d"
 		source ./Fixes/unset_dev_mode.sh
