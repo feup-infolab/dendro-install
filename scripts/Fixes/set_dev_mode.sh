@@ -59,8 +59,7 @@ if [[ "$file_exists_flag" == "true" ]]; then
 
 	mysql -u"${mysql_username}" \
 	 -p"${mysql_root_password}" \
-	 -e"GRANT ALL PRIVILEGES ON *.* TO '${mysql_username}'@'%' IDENTIFIED BY '${mysql_root_password}' WITH GRANT OPTION;  FLUSH PRIVILEGES;" \
-	 --database="${mysql_database_to_create}"
+	 -e"GRANT ALL PRIVILEGES ON *.* TO '${mysql_username}'@'%' IDENTIFIED BY '${mysql_root_password}' WITH GRANT OPTION;  FLUSH PRIVILEGES;"
 
  	sudo service mysql restart || die "Unable to enable MySQL remote access."
 else
