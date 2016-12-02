@@ -283,10 +283,15 @@ unpatch_file()
 }
 
 #configuration files for servers
-redis_conf_file=/Users/joaorocha/Desktop/confs/redis.conf
-elasticsearch_conf_file=/Users/joaorocha/Desktop/confs/elasticsearch.yml
-mongodb_conf_file=/Users/joaorocha/Desktop/confs/mongodb.conf
-mysql_conf_file=/Users/joaorocha/Desktop/confs/mysqld.cnf
+# redis_conf_file=/Users/joaorocha/Desktop/confs/redis.conf
+# elasticsearch_conf_file=/Users/joaorocha/Desktop/confs/elasticsearch.yml
+# mongodb_conf_file=/Users/joaorocha/Desktop/confs/mongodb.conf
+# mysql_conf_file=/Users/joaorocha/Desktop/confs/mysqld.cnf
+
+redis_conf_file=/etc/redis/redis.conf
+elasticsearch_conf_file=/etc/elasticsearch/elasticsearch.yml
+mongodb_conf_file=/etc/mongodb.conf
+mysql_conf_file=/etc/mysql/mysql.conf.d/mysqld.cnf
 
 #console colors
 
