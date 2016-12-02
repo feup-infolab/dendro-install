@@ -125,8 +125,6 @@ source ./Fixes/fix_locales.sh
 		source ./Fixes/set_dev_mode.sh
 	fi
 
-	exit
-
 #generate configuration files for both solutions
 	source ./Programs/generate_configuration_files.sh
 
