@@ -61,17 +61,9 @@ while getopts 'sdrb:' flag; do
   esac
 done
 
-#cd_to_current_dir
+cd_to_current_dir
 source ./constants.sh
 source ./secrets.sh
-
-
-if [[ "${set_dev_mode}" == "true" ]]
-then
-	source ./Fixes/set_dev_mode.sh
-fi
-
-exit
 
 #apply pre-installation fixes such as DNS fixes (thank you bugged Ubuntu distros)
 info "Applying pre-installation fixes..."
@@ -113,8 +105,7 @@ source ./Fixes/fix_locales.sh
 			# info "Installing OpenLink Virtuoso Database from PPA (Binary)"
 			# source ./Dependencies/virtuoso_from_ppa.sh
 		fi
-
-		source ./Services/virtuoso_from_ppa.sh
+		
 		source ./SQLCommands/grant_commands.sh
 		source ./Checks/check_services_status.sh
 
@@ -128,6 +119,13 @@ source ./Fixes/fix_locales.sh
 		source ./Dependencies/elasticsearch.sh
 		source ./Services/elasticsearch.sh
 	fi
+
+	if [[ "${set_dev_mode}" == "true" ]]
+	then
+		source ./Fixes/set_dev_mode.sh
+	fi
+
+	exit
 
 #generate configuration files for both solutions
 	source ./Programs/generate_configuration_files.sh
