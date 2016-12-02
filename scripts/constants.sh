@@ -166,13 +166,10 @@ file_is_patched_for_line()
 	local old_line=$3
 	local new_line=$4
 	local patch_tag=$5
-	local replacement_line
+
+	#printf "grep -q \"$patch_tag\" $file"
 	
-	get_replacement_line replacement_line "$old_line" "$new_line"
-
-	printf "grep -Fxqz \"#START_PATCH_TAG: $patch_tag.*#END_PATCH_TAG: $patch_tag\n" $file
-
-	if grep -Fxqz "#START_PATCH_TAG: $patch_tag.*#END_PATCH_TAG: $patch_tag\n" $file
+	if grep -q "$patch_tag" $file
 	then
     	eval "$1=\"true\""
 	else
@@ -183,15 +180,20 @@ file_is_patched_for_line()
 get_tmp_copy_of_file()
 {
 	local full_path=$2
+	
 	local filename=$(basename "$full_path")
 	local extension="${filename##*.}"
 	local name_only="${filename%.*}"
 
-	local mseconds="date +%s%N | cut -b1-13"
-	local tmp_file_path="/tmp/dendro_file_patches/$mseconds$full_path"
+	local date="$(date +"%m_%d_%Y_%hh_%mm_%ss")"
+	local tmp_folder_path="/tmp/dendro_file_patches/$date"
+	local tmp_file_path="$tmp_folder_path/$filename"
+	
+	mkdir -p $tmp_folder_path
+	
+	touch "$tmp_file_path"
 	
 	eval "$1=\$tmp_file_path"
-	printf "Temporary file at: $tmp_file_path" 
 }
 
 get_replacement_line()
@@ -201,30 +203,38 @@ get_replacement_line()
 	local patch_tag=$4
 
 	local replaced_line="#START_PATCH_TAG: $patch_tag\n"
-	replaced_line="###START REPLACEMENT by Dendro install scripts\n"
+	replaced_line="$replaced_line###START REPLACEMENT by Dendro install scripts\n"
 	replaced_line="$replaced_line#OLD VALUE: $old_line\n"
 	replaced_line="$replaced_line#NEW VALUE\n"
 	replaced_line="$replaced_line$new_line\n"
 	replaced_line="$replaced_line###END REPLACEMENT by Dendro install scripts\n"
-	replaced_line="#END_PATCH_TAG: $patch_tag\n"
+	replaced_line="$replaced_line#END_PATCH_TAG: $patch_tag\n"
 
 	eval "$1=\$replaced_line"
 }
 
 replace_text_in_file()
 {
-	local file=$2
-	local old_line=$3
-	local new_line=$4
+	local file=$1
+	local old_line=$2
+	local new_line=$3
+	local tmp_copy=""
 
 	#Create temporary file with new line in place
 	get_tmp_copy_of_file tmp_copy $file
-	cat $file | sed -e "s/old_line/new_line/" > $tmp_copy
-	info "REPLACED."
-	cat $tmp_copy
+	
+	if [ "$(uname)" == "Darwin" ]; then
+		brew install gnu-sed
+		cat $file | gsed -e "s/$old_line/$new_line/" > $tmp_copy
+	elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+		cat $file | sed -e "s/$old_line/$new_line/" > $tmp_copy
+	elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
+		cat $file | sed -e "s/$old_line/$new_line/" > $tmp_copy
+	fi
+	
 	#Copy the new file over the original file
-	#rm -rf $file
-	#mv $tmp_copy $file
+	rm -rf $file
+	cp $tmp_copy $file
 }
 
 file_exists()
@@ -250,38 +260,26 @@ patch_file()
 	
 	file_exists file_exists_flag $file
 	
-	if [ "$file_exists_flag" == "false" ]; then
+	if [ "$file_exists_flag" == "false" ]
+	then
 	    error "File $file not found!"
 		return 1
 	else
-		get_replacement_line replacement_line "$old_line" "$new_line"
-		file_is_patched_for_line file_is_patched "$file" "$old_line" "$new_line"
-		if [[ "$file_is_patched"=="true" ]]; then
+		get_replacement_line replacement_line "$old_line" "$new_line" "$patch_tag"
+		file_is_patched_for_line file_is_patched "$file" "$old_line" "$new_line" "$patch_tag"
+		
+		if [ "$file_is_patched" == "true" ] 
+		then
 			warning "File $file is already patched."
 		else
-			replace_text_in_file $file $old_line $replacement_line
+			replace_text_in_file "$file" "$old_line" "$replacement_line" "$patch_tag"
 		fi
 	fi
 }
 
 unpatch_file()
 {
-	local file=$1
-	local old_line=$2
-	local new_line=$3
-	local patch_tag=$4
-	
-	local replacement_line=""
-	local file_is_patched=""
-
-	get_replacement_line replacement_line "$old_line" "$new_line"
-	file_is_patched_for_line file_is_patched "$file" "$old_line" "$new_line"
-	
-	if [[ "$file_is_patched"=="false" ]]; then
-		warning "File $file is not patched."
-	else
-		replace_text_in_file $replacement_line $old_line
-	fi
+	echo 1
 }
 
 #configuration files for servers
