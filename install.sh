@@ -22,6 +22,9 @@ while getopts 'sdrb:' flag; do
 	d)
 		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-d '
 		;;
+	u)
+		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-u '
+		;;
 	b)
 		VAGRANT_SHELL_ARGS="$VAGRANT_SHELL_ARGS-b $flag "
 		;;
