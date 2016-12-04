@@ -22,7 +22,7 @@ get_script_dir  () {
 cd_to_current_dir () {
 	DIR="$(get_script_dir)"
 	info "CD'ing to ${DIR}"
-	cd "${DIR}"
+	cd "${DIR}" || die "Folder ${DIR} does not exist."
 }
 
 add_line_to_file_if_not_present () {
@@ -31,7 +31,6 @@ add_line_to_file_if_not_present () {
 	sudo sh -c "grep -q -F \"$LINE\" \"$FILE\" || sudo echo \"$LINE\" >> \"$FILE\""
 }
 
-
 #see if we are supposed to install dependencies or just refresh code from Dendro repositories
 # code from http://stackoverflow.com/questions/7069682/how-to-get-arguments-with-flags-in-bash-script
 
@@ -39,15 +38,25 @@ add_line_to_file_if_not_present () {
 # http://wiki.bash-hackers.org/howto/getopts_tutorial
 
 refresh_code_only="false"
+set_dev_mode="false"
 
-while getopts 'rb:' flag; do
+while getopts 'sdurb:' flag; do
   case $flag in
+    s)
+  		install_virtuoso_from_source="true"
+  		;;
     r)
-		refresh_code_only="true"
+			refresh_code_only="true"
+			;;
+		d)
+			set_dev_mode="true"
 		;;
+		u)
+			unset_dev_mode="true"
+			;;
     b)
-    dendro_branch=$OPTARG
-    ;;
+   	 	dendro_branch=$OPTARG
+    	;;
     *)
 		error "Unexpected option ${flag}"
 		;;
@@ -58,94 +67,126 @@ cd_to_current_dir
 source ./constants.sh
 source ./secrets.sh
 
-#apply pre-installation fixes such as DNS fixes (thank you bugged Ubuntu distros)
-info "Applying pre-installation fixes..."
-source ./Fixes/fix_dns.sh
-source ./Fixes/fix_locales.sh
+if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ]; then
+	info "Running the Dendro User Setup."
+	info "NOTE: To setup this Virtual Machine for Development, use the -d flag. Example: ./install.sh -d"
 
-#fix any unfinished installations
-	info "Preparing setup..."
-	sudo dpkg --configure -a
-	sudo apt-get -qq update
+	#apply pre-installation fixes such as DNS fixes (thank you bugged Vagrant Ubuntu boxes)
+	info "Applying pre-installation fixes..."
+	source ./Fixes/fix_dns.sh
+	source ./Fixes/fix_locales.sh
 
-#save current working directory
-	setup_dir=$(pwd)
-	info "Setup running at : ${setup_dir}"
+	#fix any unfinished installations
+		info "Preparing setup..."
+		sudo dpkg --configure -a
+		sudo apt-get -qq update
 
-#create temp downloads folder
-	info "Creating temporary folder for downloads at : ${setup_dir}"
-	sudo mkdir -p $temp_downloads_folder
+	#save current working directory
+		setup_dir=$(pwd)
+		info "Setup running at : ${setup_dir}"
 
-#install dependencies
-	if [[ "${refresh_code_only}" == "true" ]]
+	#create temp downloads folder
+		info "Creating temporary folder for downloads at : ${setup_dir}"
+		sudo mkdir -p $temp_downloads_folder
+
+	#install dependencies
+		if [ "${refresh_code_only}" == "true" ]; then
+			warning "Bypassing dependency installation"
+		else
+			warning "Installing dependencies"
+			source ./Dependencies/misc.sh
+			#source ./Dependencies/node.sh
+
+			#install virtuoso
+			if [[ "${install_virtuoso_from_source}" == "true" ]]
+			then
+				info "Installing OpenLink Virtuoso Database from source"
+				source ./Dependencies/virtuoso_from_source.sh
+				source ./Services/virtuoso.sh
+			else
+				info "Installing OpenLink Virtuoso Database from source, as PPA is not yet available."
+				source ./Dependencies/virtuoso_from_source.sh
+				source ./Services/virtuoso.sh
+				# info "Installing OpenLink Virtuoso Database from PPA (Binary)"
+				# source ./Dependencies/virtuoso_from_ppa.sh
+			fi
+
+			source ./SQLCommands/grant_commands.sh
+			source ./Checks/check_services_status.sh
+
+			source ./Programs/create_dendro_user.sh
+			source ./Dependencies/play_framework.sh
+
+			source ./Dependencies/mysql.sh
+			source ./Dependencies/mongodb.sh
+			source ./Services/mongodb.sh
+
+			source ./Dependencies/elasticsearch.sh
+			source ./Services/elasticsearch.sh
+		fi
+
+		#generate configuration files for both solutions
+		source ./Programs/generate_configuration_files.sh
+
+	#create shared mysql database
+		source ./Programs/create_database.sh
+
+	#install dendro
+		source ./Programs/Dendro/create_log.sh
+		source ./Programs/Dendro/checkout.sh
+
+		#place configuration file in dendro's deployment configs folder
+		wd=$(pwd)
+		warning "Copying configuration file ${wd}/Programs/generated_configurations/deployment_configs.json to ${dendro_installation_path}/conf"
+		sudo cp "$(pwd)/Programs/generated_configurations/deployment_configs.json" "$dendro_installation_path/conf"
+
+		#stage dendro service
+		source ./Services/dendro.sh #??
+
+	#install dendro recommender
+		source ./Programs/DendroRecommender/create_log.sh
+		source ./Programs/DendroRecommender/checkout.sh
+
+		#place configuration file in dendro recommender's config folder
+		sudo cp "./Programs/generated_configurations/application.conf" "$dendro_recommender_install_path/conf"
+
+		#stage dendro recommender service
+		source ./Services/recommender.sh #??
+
+	#cleanup
+		sudo apt-get -qq autoremove
+		sudo rm -rf Programs/generated_configurations
+
+	#regenerate variables
+		sudo locale-gen --purge en_US en_US.UTF-8 hu_HU hu_HU.UTF-8
+		sudo dpkg-reconfigure -f noninteractive locales
+
+	#check services are up
+		#source ./Checks/check_services_status.sh
+
+	#reload all services to start dendro and dendro recommender
+		sudo systemctl reload
+		info "This Dendro instance has been installed in User mode."
+		info "NOTE: To enable Development mode, re-run the installer with the -d flag. Example: ./install.sh -d"
+else
+	info "Running the Dendro Developer Setup."
+	if [[ "${set_dev_mode}" == "true" ]]
 	then
-		warning "Bypassing dependency installation"
-	else
-		warning "Installing dependencies"
-		source ./Dependencies/misc.sh
-		#source ./Dependencies/node.sh
-
-		#install virtuoso
-		source ./Dependencies/virtuoso.sh
-		source ./Services/virtuoso.sh
-		source ./SQLCommands/grant_commands.sh
-		source ./Checks/check_services_status.sh
-
-		source ./Programs/create_dendro_user.sh
-		source ./Dependencies/play_framework.sh
-
-		source ./Dependencies/mysql.sh
-		source ./Dependencies/mongodb.sh
-		source ./Services/mongodb.sh
-
-		source ./Dependencies/elasticsearch.sh
-		source ./Services/elasticsearch.sh
+		info "NOTE: To disable Development mode, use the -u flag. Example: ./install.sh -u"
+		source ./Fixes/set_dev_mode.sh
+		info "This Dendro instance has been set to Development mode."
+		warning "DO NOT use this in a production environment. Having all your databases accepting remote connections can represent a serious security risk."
 	fi
-
-#generate configuration files for both solutions
-	source ./Programs/generate_configuration_files.sh
-
-#create shared mysql database
-	source ./Programs/create_database.sh
-
-#install dendro
-	source ./Programs/Dendro/create_log.sh
-	source ./Programs/Dendro/checkout.sh
-
-	#place configuration file in dendro's deployment configs folder
-	wd=$(pwd)
-	warning "Copying configuration file ${wd}/Programs/generated_configurations/deployment_configs.json to ${dendro_installation_path}/conf"
-	sudo cp $(pwd)/Programs/generated_configurations/deployment_configs.json $dendro_installation_path/conf
-
-	#stage dendro service
-	source ./Services/dendro.sh #??
-
-#install dendro recommender
-	source ./Programs/DendroRecommender/create_log.sh
-	source ./Programs/DendroRecommender/checkout.sh
-
-	#place configuration file in dendro recommender's config folder
-	sudo cp ./Programs/generated_configurations/application.conf $dendro_recommender_install_path/conf
-
-	#stage dendro recommender service
-	source ./Services/recommender.sh #??
-
-#cleanup
-	sudo apt-get -qq autoremove
-	sudo rm -rf Programs/generated_configurations
-
-#regenerate variables
-	sudo locale-gen --purge en_US en_US.UTF-8 hu_HU hu_HU.UTF-8
-	sudo dpkg-reconfigure -f noninteractive locales
-
-#check services are up
-	#source ./Checks/check_services_status.sh
-
-#reload all services to start dendro and dendro recommender
-	sudo systemctl reload
+	if [[ "${unset_dev_mode}" == "true" ]]
+	then
+		info "NOTE: To enable Development mode, use the -d flag. Example: ./install.sh -d"
+		source ./Fixes/unset_dev_mode.sh
+		info "This Dendro instance has been reverted to User mode."
+	fi
+fi
 
 #go back to whatever was the directory at the start of this script
-	cd $starting_dir
+cd "${starting_dir}" || warning "Unable to go back to the starting directory."
 
 #all ok.
 success "Dendro setup complete."

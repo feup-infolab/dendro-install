@@ -16,7 +16,6 @@ then
 	VBoxManage unregistervm $VAGRANT_VM_NAME -delete || warning "Unable to delete VM ${active_deployment_setting}."
 	rmdir .\.vagrant -r -f
 
-
 	#clean list of VMs
 	vagrant global-status --prune || true
 

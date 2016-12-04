@@ -156,9 +156,142 @@ error () {
 }
 
 die () {
-	printf "${On_IRed}[FATAL ERROR]${Color_Off} $1\n${Red}Please check any prior error messages.${Color_Off}"
+	printf "${On_IRed}[FATAL ERROR]${Color_Off} $1\n${Red}Please check any prior error messages.${Color_Off}\n"
 	exit 1
 }
+
+file_is_patched_for_line()
+{
+	local file=$2
+	local old_line=$3
+	local new_line=$4
+	local patch_tag=$5
+
+	#printf "grep -q \"$patch_tag\" $file"
+	
+	if grep -q "$patch_tag" $file
+	then
+    	eval "$1=\"true\""
+	else
+    	eval "$1=\"false\""
+	fi
+}
+
+get_tmp_copy_of_file()
+{
+	local full_path=$2
+	
+	local filename=$(basename "$full_path")
+	local extension="${filename##*.}"
+	local name_only="${filename%.*}"
+
+	local date="$(date +"%m_%d_%Y_%hh_%mm_%ss")"
+	local tmp_folder_path="/tmp/dendro_file_patches/$date"
+	local tmp_file_path="$tmp_folder_path/$filename"
+	
+	mkdir -p $tmp_folder_path
+	
+	touch "$tmp_file_path"
+	
+	eval "$1=\$tmp_file_path"
+}
+
+get_replacement_line()
+{
+	local old_line=$2
+	local new_line=$3
+	local patch_tag=$4
+
+	local replaced_line="#START_PATCH_TAG: $patch_tag\n"
+	replaced_line="$replaced_line###START REPLACEMENT by Dendro install scripts\n"
+	replaced_line="$replaced_line#OLD VALUE: $old_line\n"
+	replaced_line="$replaced_line#NEW VALUE\n"
+	replaced_line="$replaced_line$new_line\n"
+	replaced_line="$replaced_line###END REPLACEMENT by Dendro install scripts\n"
+	replaced_line="$replaced_line#END_PATCH_TAG: $patch_tag\n"
+
+	eval "$1=\$replaced_line"
+}
+
+replace_text_in_file()
+{
+	local file=$1
+	local old_line=$2
+	local new_line=$3
+	local tmp_copy=""
+
+	#Create temporary file with new line in place
+	get_tmp_copy_of_file tmp_copy $file
+	
+	if [ "$(uname)" == "Darwin" ]; then
+		brew install gnu-sed
+		cat $file | gsed -e "s/$old_line/$new_line/" > $tmp_copy
+	elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+		cat $file | sed -e "s/$old_line/$new_line/" > $tmp_copy
+	elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
+		cat $file | sed -e "s/$old_line/$new_line/" > $tmp_copy
+	fi
+	
+	#Copy the new file over the original file
+	rm -rf $file
+	cp $tmp_copy $file
+}
+
+file_exists()
+{
+	file=$2
+	if [ ! -f $file ]; then
+		eval "$1=\"false\""
+	else
+		eval "$1=\"true\""		
+	fi
+}
+
+patch_file()
+{
+	local file=$1
+	local old_line=$2
+	local new_line=$3
+	local patch_tag=$4
+	
+	local replacement_line
+	local file_is_patched=""
+	local file_exists_flag
+	
+	file_exists file_exists_flag $file
+	
+	if [ "$file_exists_flag" == "false" ]
+	then
+	    error "File $file not found!"
+		return 1
+	else
+		get_replacement_line replacement_line "$old_line" "$new_line" "$patch_tag"
+		file_is_patched_for_line file_is_patched "$file" "$old_line" "$new_line" "$patch_tag"
+		
+		if [ "$file_is_patched" == "true" ] 
+		then
+			warning "File $file is already patched."
+		else
+			replace_text_in_file "$file" "$old_line" "$replacement_line" "$patch_tag"
+		fi
+	fi
+}
+
+unpatch_file()
+{
+	echo 1
+}
+
+#configuration files for servers
+# redis_conf_file=/Users/joaorocha/Desktop/confs/redis.conf
+# elasticsearch_conf_file=/Users/joaorocha/Desktop/confs/elasticsearch.yml
+# mongodb_conf_file=/Users/joaorocha/Desktop/confs/mongodb.conf
+# mysql_conf_file=/Users/joaorocha/Desktop/confs/mysqld.cnf
+
+redis_conf_file=/etc/redis/redis.conf
+elasticsearch_conf_file=/etc/elasticsearch/elasticsearch.yml
+mongodb_conf_file=/etc/mongodb.conf
+mysql_conf_file=/etc/mysql/mysql.conf.d/mysqld.cnf
 
 #console colors
 
