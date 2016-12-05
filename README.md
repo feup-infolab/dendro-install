@@ -126,28 +126,7 @@ Open VirtualBox. You should see a VM called `dendroVagrantDemo`. If it is not ru
 
 Most of the development environment setup is enabling remote accesses to the servers running on the VM. This will allow you to work on your host machine, use the editor and debugger you want to develop for Dendro, while having all the dependencies neatly running on your VM. When you need to reset everything, simply delete the VM and start over.
 
-Througout this guide, we will be referrring to the dendro instalation script folder as **<dendro-install>**. These installation scripts can be
-
-#### Connecting to the machine
-
-#### Redis
-
-edit
-
-#### ElasticSearch
-
-Locate the
-
-#### Virtuoso
-
-#### MongoDB
-
-#### MySQL
-
-### Edit the Dendro configuration file
-
-
-
+After installing the Virtual Machine with `./install.sh`, you can simply run the command `./install.sh -d` to open up all servers to external connections.
 
 # Acknowledgements
 
