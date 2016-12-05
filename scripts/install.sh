@@ -168,6 +168,10 @@ if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ]; then
 		sudo systemctl reload
 		info "This Dendro instance has been installed in User mode."
 		info "NOTE: To enable Development mode, re-run the installer with the -d flag. Example: ./install.sh -d"
+
+		if [[ "$dendro_branch" != "" ]]; then
+			info "Development branch $dendro_branch now active."
+		fi
 else
 	info "Running the Dendro Developer Setup."
 	if [[ "${set_dev_mode}" == "true" ]]

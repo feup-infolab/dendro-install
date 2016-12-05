@@ -11,7 +11,7 @@ chmod -R 0777 ~/.vagrant.d
 
 SHELL_ARGS=''
 
-while getopts 'sdrb:' flag; do
+while getopts 'usdrb:' flag; do
   case $flag in
     s)
   		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-s '
@@ -26,7 +26,7 @@ while getopts 'sdrb:' flag; do
 		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-u '
 		;;
 	b)
-		VAGRANT_SHELL_ARGS="$VAGRANT_SHELL_ARGS-b $flag "
+		VAGRANT_SHELL_ARGS="$VAGRANT_SHELL_ARGS-b $OPTARG "
 		;;
     *)
 		error "Unexpected option ${flag}"
