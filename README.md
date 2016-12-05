@@ -128,6 +128,7 @@ Most of the development environment setup is enabling remote accesses to the ser
 
 After installing the Virtual Machine with `./install.sh`, you can simply run the command `./install.sh -d` to open up all servers to external connections.
 
+####For the curious
 If you want to know what the `./install.sh -d` command does, see the video below. Because following this video took too much of an effort every time we wanted to setup a machine for development, we have decided to automate those steps in the installation script with the `-d` flag.
 
 [![YouTube Development setup tutorial for Dendro](http://i.imgur.com/Z7I9B98.png)](https://www.youtube.com/watch?v=baEsv-KTK8w).
