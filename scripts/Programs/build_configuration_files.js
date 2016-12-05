@@ -432,6 +432,10 @@ var write_dendro_configuration_file = function ()
 	{  
 		"port" : get_argument_by_name('port'),
 		"host" : get_argument_by_name('host'),
+		"crypto" :
+	    {
+	      "secret" : get_argument_by_name('secret')
+	    },
 		"baseUri" : get_argument_by_name('base_uri'),
 	    "eudatBaseUrl" : get_argument_by_name('eudat_base_url'),
 	    "eudatToken" : get_argument_by_name('eudat_token'),
