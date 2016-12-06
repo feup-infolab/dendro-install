@@ -14,7 +14,7 @@ then
 	vagrant destroy -f $VAGRANT_VM_NAME || warning "Unable to destroy VM ${active_deployment_setting}"
 	VBoxManage controlvm $VAGRANT_VM_NAME poweroff || warning "Unable to power off VM ${active_deployment_setting}. Does it exist?"
 	VBoxManage unregistervm $VAGRANT_VM_NAME -delete || warning "Unable to delete VM ${active_deployment_setting}."
-	rmdir .\.vagrant -r -f
+	rm -rf .\.vagrant
 
 	#clean list of VMs
 	vagrant global-status --prune || true

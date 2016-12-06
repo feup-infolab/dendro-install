@@ -85,6 +85,9 @@ recommender_installation_path='/dendro_recommender'
 		redis_host="127.0.0.1"
 		redis_database=1
 
+		#jenkins
+		jenkins_port=8080
+
 #dendro recommender
 	dendro_recommender_service_name=$active_deployment_setting-recommender
 	dendro_recommender_startup_item_file=/etc/systemd/system/$dendro_recommender_service_name.service
@@ -168,7 +171,7 @@ file_is_patched_for_line()
 	local patch_tag=$5
 
 	#printf "grep -q \"$patch_tag\" $file"
-	
+
 	if grep -q "$patch_tag" $file
 	then
     	eval "$1=\"true\""
@@ -180,7 +183,7 @@ file_is_patched_for_line()
 get_tmp_copy_of_file()
 {
 	local full_path=$2
-	
+
 	local filename=$(basename "$full_path")
 	local extension="${filename##*.}"
 	local name_only="${filename%.*}"
@@ -188,11 +191,11 @@ get_tmp_copy_of_file()
 	local date="$(date +"%m_%d_%Y_%hh_%mm_%ss")"
 	local tmp_folder_path="/tmp/dendro_file_patches/$date"
 	local tmp_file_path="$tmp_folder_path/$filename"
-	
+
 	mkdir -p $tmp_folder_path
-	
+
 	touch "$tmp_file_path"
-	
+
 	eval "$1=\$tmp_file_path"
 }
 
@@ -222,7 +225,7 @@ replace_text_in_file()
 
 	#Create temporary file with new line in place
 	get_tmp_copy_of_file tmp_copy $file
-	
+
 	if [ "$(uname)" == "Darwin" ]; then
 		brew install gnu-sed
 		cat $file | gsed -e "s/$old_line/$new_line/" > $tmp_copy
@@ -231,7 +234,7 @@ replace_text_in_file()
 	elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
 		cat $file | sed -e "s/$old_line/$new_line/" > $tmp_copy
 	fi
-	
+
 	#Copy the new file over the original file
 	rm -rf $file
 	cp $tmp_copy $file
@@ -243,7 +246,7 @@ file_exists()
 	if [ ! -f $file ]; then
 		eval "$1=\"false\""
 	else
-		eval "$1=\"true\""		
+		eval "$1=\"true\""
 	fi
 }
 
@@ -253,13 +256,13 @@ patch_file()
 	local old_line=$2
 	local new_line=$3
 	local patch_tag=$4
-	
+
 	local replacement_line
 	local file_is_patched=""
 	local file_exists_flag
-	
+
 	file_exists file_exists_flag $file
-	
+
 	if [ "$file_exists_flag" == "false" ]
 	then
 	    error "File $file not found!"
@@ -267,8 +270,8 @@ patch_file()
 	else
 		get_replacement_line replacement_line "$old_line" "$new_line" "$patch_tag"
 		file_is_patched_for_line file_is_patched "$file" "$old_line" "$new_line" "$patch_tag"
-		
-		if [ "$file_is_patched" == "true" ] 
+
+		if [ "$file_is_patched" == "true" ]
 		then
 			warning "File $file is already patched."
 		else
