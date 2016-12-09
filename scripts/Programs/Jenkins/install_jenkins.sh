@@ -25,7 +25,7 @@ sudo apt-get update &&
 sudo apt-get -y install jenkins ||
 die "Failed to install Jenkins."
 
-password=$(cat /var/lib/jenkins/secrets/initialAdminPassword)
+password=$(sudo cat /var/lib/jenkins/secrets/initialAdminPassword)
 success "Installed Jenkins. Your initial Admin password is $password. "
 
 #go back to initial dir
