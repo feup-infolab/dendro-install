@@ -19,4 +19,12 @@ then
   #clean list of VMs
   vagrant global-status --prune || true
 
+  VBoxManage list vms | grep dendroVagrantDemo > /dev/null
+  vbox_exists=$?
+
+  if [[ "$vbox_exists" == "0" ]]
+  then
+    die "Virtualbox still exists, unable to delete"
+  fi
+
 fi
