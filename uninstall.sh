@@ -28,5 +28,6 @@ then
   then
     die "Virtualbox still exists, unable to delete"
   fi
-
+else
+  warning "Virtualbox does not exist, there is nothing to delete."
 fi
