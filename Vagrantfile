@@ -50,13 +50,14 @@ Vagrant.configure("2") do |config|
     subconfig.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}"
     subconfig.vm.network :forwarded_port, :guest => 22, :host => 7665
     subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
+    config.vm.boot_timeout= 600
   end
 
   config.vm.provider "virtualbox" do |vb|
      # Display the VirtualBox GUI when booting the machine
      # vb.gui = true
      # Customize the amount of memory on the VM:
-     vb.memory = "2048"
+     vb.memory = "768"
      vb.cpus = "1"
      vb.name = "#{ENV['VAGRANT_VM_NAME']}"
 

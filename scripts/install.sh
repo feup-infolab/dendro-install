@@ -40,23 +40,26 @@ add_line_to_file_if_not_present () {
 refresh_code_only="false"
 set_dev_mode="false"
 
-while getopts 'jsdurb:' flag; do
+while getopts 'tjsdurb:' flag; do
   case $flag in
+    t)
+     	run_tests="true"
+      	;;
     s)
   		install_virtuoso_from_source="true"
   		;;
     r)
-			refresh_code_only="true"
-			;;
-		d)
-			set_dev_mode="true"
+		refresh_code_only="true"
 		;;
-		u)
-			unset_dev_mode="true"
-			;;
-		j)
-			install_jenkins="true"
-			;;
+	d)
+		set_dev_mode="true"
+		;;
+	u)
+		unset_dev_mode="true"
+		;;
+	j)
+		install_jenkins="true"
+		;;
     b)
    	 	dendro_branch=$OPTARG
     	;;

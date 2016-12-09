@@ -11,8 +11,11 @@ chmod -R 0777 ~/.vagrant.d
 
 SHELL_ARGS=''
 
-while getopts 'jusdrb:' flag; do
+while getopts 'tjusdrb:' flag; do
   case $flag in
+    t)
+    	VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-t '
+    	;;
     s)
   		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-s '
   		;;
@@ -25,9 +28,9 @@ while getopts 'jusdrb:' flag; do
 	u)
 		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-u '
 		;;
-  j)
-  	VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-j '
-  	;;
+    j)
+  		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-j '
+  		;;
 	b)
 		VAGRANT_SHELL_ARGS="$VAGRANT_SHELL_ARGS-b $OPTARG "
 		;;
