@@ -6,9 +6,9 @@ vbox_exists=$?
 
 if [[ "$vbox_exists" == "0" ]]
 then
-  vbox_id=$(VBoxManage list vms | grep -o "{.*}" | grep -P -o "[^{}]+")
+  vbox_id="{$(VBoxManage list vms | grep -o "{.*}" | grep -P -o "[^{}]+")}"
 
-  info "Virtualbox ${active_deployment_setting} was found and has ID: {$vbox_id}"
+  info "Virtualbox ${active_deployment_setting} was found and has ID: $vbox_id"
 
   vagrant destroy -f ${active_deployment_setting} || warning "Unable to destroy VM ${active_deployment_setting}"
   VBoxManage controlvm $vbox_id poweroff || warning "Unable to power off VM ${active_deployment_setting}. Does it exist?"
@@ -21,6 +21,8 @@ then
 
   VBoxManage list vms | grep dendroVagrantDemo > /dev/null
   vbox_exists=$?
+
+  exit 1
 
   if [[ "$vbox_exists" == "0" ]]
   then
