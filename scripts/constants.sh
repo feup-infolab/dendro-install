@@ -162,7 +162,6 @@ die () {
 	printf "${On_IRed}[FATAL ERROR]${Color_Off} $1\n${Red}Please check any prior error messages.${Color_Off}\n"
 	exit 1
 }
-
 file_is_patched_for_line()
 {
 	local file=$2
