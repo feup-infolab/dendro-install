@@ -45,7 +45,7 @@ source ./define_env_vars.sh
 export VAGRANT_VM_INSTALL='true'
 
 info "Running vagrant halt..."
-vagrant halt
+vagrant halt -f
 
 info "Running vagrant up..."
 #vagrant box update
