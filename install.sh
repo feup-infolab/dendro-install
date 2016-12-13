@@ -44,7 +44,10 @@ done
 source ./define_env_vars.sh
 export VAGRANT_VM_INSTALL='true'
 
+info "Running vagrant halt..."
 vagrant halt
+
+info "Running vagrant up..."
 #vagrant box update
 vagrant up --provider virtualbox --provision ||
 die "There were errors installing Dendro."
