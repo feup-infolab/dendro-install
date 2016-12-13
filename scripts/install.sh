@@ -40,20 +40,26 @@ add_line_to_file_if_not_present () {
 refresh_code_only="false"
 set_dev_mode="false"
 
-while getopts 'sdurb:' flag; do
+while getopts 'tjsdurb:' flag; do
   case $flag in
+    t)
+     	run_tests="true"
+      	;;
     s)
   		install_virtuoso_from_source="true"
   		;;
     r)
-			refresh_code_only="true"
-			;;
-		d)
-			set_dev_mode="true"
+		refresh_code_only="true"
 		;;
-		u)
-			unset_dev_mode="true"
-			;;
+	d)
+		set_dev_mode="true"
+		;;
+	u)
+		unset_dev_mode="true"
+		;;
+	j)
+		install_jenkins="true"
+		;;
     b)
    	 	dendro_branch=$OPTARG
     	;;
@@ -67,14 +73,15 @@ cd_to_current_dir
 source ./constants.sh
 source ./secrets.sh
 
-if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ]; then
+#apply pre-installation fixes such as DNS fixes (thank you bugged Vagrant Ubuntu boxes)
+info "Applying pre-installation fixes..."
+source ./Fixes/fix_dns.sh
+source ./Fixes/fix_locales.sh
+
+if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ] && [ "$install_jenkins" != "true" ]
+then
 	info "Running the Dendro User Setup."
 	info "NOTE: To setup this Virtual Machine for Development, use the -d flag. Example: ./install.sh -d"
-
-	#apply pre-installation fixes such as DNS fixes (thank you bugged Vagrant Ubuntu boxes)
-	info "Applying pre-installation fixes..."
-	source ./Fixes/fix_dns.sh
-	source ./Fixes/fix_locales.sh
 
 	#fix any unfinished installations
 		info "Preparing setup..."
@@ -173,26 +180,37 @@ if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ]; then
 			info "Development branch $dendro_branch now active."
 		fi
 else
-	info "Running the Dendro Developer Setup."
-	if [[ "${set_dev_mode}" == "true" ]]
-	then
-		info "NOTE: To disable Development mode, use the -u flag. Example: ./install.sh -u"
-		source ./Fixes/set_dev_mode.sh
-		info "This Dendro instance has been set to Development mode."
-		warning "DO NOT use this in a production environment. Having all your databases accepting remote connections can represent a serious security risk."
-	fi
-	if [[ "${unset_dev_mode}" == "true" ]]
-	then
-		info "NOTE: To enable Development mode, use the -d flag. Example: ./install.sh -d"
-		source ./Fixes/unset_dev_mode.sh
-		info "This Dendro instance has been reverted to User mode."
-	fi
+		if [[ "${set_dev_mode}" == "true" ]]
+		then
+			info "Running the Dendro Developer Setup."
+			info "NOTE: To disable Development mode, use the -u flag. Example: ./install.sh -u"
+			source ./Fixes/set_dev_mode.sh
+			info "This Dendro instance has been set to Development mode."
+			warning "DO NOT use this in a production environment. Having all your databases accepting remote connections can represent a serious security risk."
+		fi
+		if [[ "${unset_dev_mode}" == "true" ]]
+		then
+			info "NOTE: To enable Development mode, use the -d flag. Example: ./install.sh -d"
+			source ./Fixes/unset_dev_mode.sh
+			info "This Dendro instance has been reverted to User mode."
+		fi
+		if [[ "$install_jenkins" == "true" ]]
+		then
+			info "Running Jenkins Setup."
+			source ./Programs/Jenkins/install_jenkins.sh
+		fi
 fi
 
 #go back to whatever was the directory at the start of this script
 cd "${starting_dir}" || warning "Unable to go back to the starting directory."
 
 #all ok.
-success "Dendro setup complete."
-info "Visit ${dendro_base_uri} for the Dendro web interface."
-info "Visit http://${dendro_recommender_host}:${dendro_recommender_port} for the Dendro Recommender web interface."
+success "Setup operations complete."
+
+if [[ "$install_jenkins" == "true" ]]
+then
+	info "Visit http://${host}:${jenkins_port} for the Jenkins web interface."
+else
+	info "Visit ${dendro_base_uri} for the Dendro web interface."
+	info "Visit http://${dendro_recommender_host}:${dendro_recommender_port} for the Dendro Recommender web interface."
+fi

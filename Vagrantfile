@@ -34,7 +34,15 @@ Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/xenial64"
   config.vm.box_version = "20160606.1.0"
 
+  config.vm.provision "fix-no-tty", type: "shell" do |s|
+    s.privileged = false
+    s.inline = "sudo sed -i '/tty/!s/mesg n/tty -s \\&\\& mesg n/' /root/.profile"
+  end
+
+
   if ENV['VAGRANT_VM_SSH_USERNAME'] != nil && ENV['VAGRANT_VM_SSH_PASSWORD'] != nil
+    config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+
     config.ssh.username=ENV['VAGRANT_VM_SSH_USERNAME']
     puts "SSH username to connect to the VM will be " + config.ssh.username
 
@@ -50,13 +58,14 @@ Vagrant.configure("2") do |config|
     subconfig.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}"
     subconfig.vm.network :forwarded_port, :guest => 22, :host => 7665
     subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
+    config.vm.boot_timeout= 600
   end
 
   config.vm.provider "virtualbox" do |vb|
      # Display the VirtualBox GUI when booting the machine
      # vb.gui = true
      # Customize the amount of memory on the VM:
-     vb.memory = "2048"
+     vb.memory = "768"
      vb.cpus = "1"
      vb.name = "#{ENV['VAGRANT_VM_NAME']}"
 

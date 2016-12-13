@@ -11,8 +11,11 @@ chmod -R 0777 ~/.vagrant.d
 
 SHELL_ARGS=''
 
-while getopts 'usdrb:' flag; do
+while getopts 'tjusdrb:' flag; do
   case $flag in
+    t)
+    	VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-t '
+    	;;
     s)
   		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-s '
   		;;
@@ -25,6 +28,9 @@ while getopts 'usdrb:' flag; do
 	u)
 		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-u '
 		;;
+    j)
+  		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-j '
+  		;;
 	b)
 		VAGRANT_SHELL_ARGS="$VAGRANT_SHELL_ARGS-b $OPTARG "
 		;;
@@ -38,7 +44,10 @@ done
 source ./define_env_vars.sh
 export VAGRANT_VM_INSTALL='true'
 
+info "Running vagrant halt..."
 vagrant halt
+
+info "Running vagrant up..."
 #vagrant box update
 vagrant up --provider virtualbox --provision ||
 die "There were errors installing Dendro."
