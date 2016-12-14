@@ -81,8 +81,6 @@ info "Applying pre-installation fixes..."
 source ./Fixes/fix_dns.sh
 source ./Fixes/fix_locales.sh
 
-info "Install Teamcity: $install_teamcity."
-
 if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ] && [ "$install_jenkins" != "true" ] && [ "$install_teamcity" != "true" ]
 then
 	info "Running the Dendro User Setup."
@@ -216,9 +214,12 @@ cd "${starting_dir}" || warning "Unable to go back to the starting directory."
 #all ok.
 success "Setup operations complete."
 
-if [[ "$install_jenkins" == "true" ]]
+if [ "$install_jenkins" == "true" ]
 then
 	info "Visit http://${host}:${jenkins_port} for the Jenkins web interface."
+elif [ "$install_teamcity" == "true" ]
+then
+	info "TeamCity running at http://$host:8111"
 else
 	info "Visit ${dendro_base_uri} for the Dendro web interface."
 	info "Visit http://${dendro_recommender_host}:${dendro_recommender_port} for the Dendro Recommender web interface."
