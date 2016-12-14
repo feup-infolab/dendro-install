@@ -40,7 +40,7 @@ add_line_to_file_if_not_present () {
 refresh_code_only="false"
 set_dev_mode="false"
 
-while getopts 'tjsdurb:' flag; do
+while getopts 'ctjsdurb:' flag; do
   case $flag in
 		c)
      	install_teamcity="true"
@@ -80,6 +80,8 @@ source ./secrets.sh
 info "Applying pre-installation fixes..."
 source ./Fixes/fix_dns.sh
 source ./Fixes/fix_locales.sh
+
+info "Install Teamcity: $install_teamcity."
 
 if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ] && [ "$install_jenkins" != "true" ] && [ "$install_teamcity" != "true" ]
 then

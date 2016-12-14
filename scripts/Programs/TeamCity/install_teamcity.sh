@@ -17,9 +17,11 @@ info "Installing TeamCity by JetBrains..."
 source ./Dependencies/oracle_jdk8.sh &&
 
 #install TeamCity
-sudo wget -q -O https://download.jetbrains.com/teamcity/TeamCity-10.0.3.tar.gz || die "Unable to download TeamCity."
+sudo wget --progress=bar:force https://download.jetbrains.com/teamcity/TeamCity-10.0.3.tar.gz || die "Unable to download TeamCity."
 tar xfz TeamCity-10.0.3.tar.gz || die "Unable to extract TeamCity package"
+sudo mkdir $teamcity_installation_path
 sudo mv TeamCity/* $teamcity_installation_path
+sudo chmod -R 0644 $teamcity_installation_path
 
 info "Setting up TeamCity service...\n"
 
