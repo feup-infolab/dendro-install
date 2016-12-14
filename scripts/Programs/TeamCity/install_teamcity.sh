@@ -22,6 +22,7 @@ tar xfz TeamCity-10.0.3.tar.gz || die "Unable to extract TeamCity package"
 sudo mkdir $teamcity_installation_path
 sudo mv TeamCity/* $teamcity_installation_path
 sudo chmod -R 0644 $teamcity_installation_path
+sudo chmod -R $teamcity_installation_path $dendro_user_name:$dendro_user_group
 
 info "Setting up TeamCity service...\n"
 
@@ -46,7 +47,7 @@ printf "/bin/sh -c '$teamcity_installation_path/bin/teamcity-server start >> ${t
 printf "\n"
 
 #create dendro user
-source ./Programs/create_dendro_user.sh
+source ../Programs/create_dendro_user.sh
 
 printf "[Unit]
 Description=Teamcity server daemon
