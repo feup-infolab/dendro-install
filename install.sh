@@ -11,8 +11,11 @@ chmod -R 0777 ~/.vagrant.d
 
 SHELL_ARGS=''
 
-while getopts 'tjusdrb:' flag; do
+while getopts 'tcjusdrb:' flag; do
   case $flag in
+    c)
+    	VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-c '
+    	;;
     t)
     	VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-t '
     	;;
@@ -20,23 +23,23 @@ while getopts 'tjusdrb:' flag; do
   		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-s '
   		;;
     r)
-		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-r '
-		;;
-	d)
-		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-d '
-		;;
-	u)
-		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-u '
-		;;
+		  VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-r '
+		  ;;
+    d)
+		  VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-d '
+		  ;;
+    u)
+		  VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-u '
+	    ;;
     j)
   		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-j '
   		;;
-	b)
-		VAGRANT_SHELL_ARGS="$VAGRANT_SHELL_ARGS-b $OPTARG "
-		;;
+	  b)
+		  VAGRANT_SHELL_ARGS="$VAGRANT_SHELL_ARGS-b $OPTARG "
+		  ;;
     *)
-		error "Unexpected option ${flag}"
-		;;
+		  error "Unexpected option ${flag}"
+		  ;;
   esac
 
 done

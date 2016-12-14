@@ -9,6 +9,7 @@ else
 fi
 
 info "Installing Preliminary Dependencies....PLEASE WAIT, as this will take several minutes."
+info "NOTE: To setup this Virtual Machine for Development, use the -d flag. Example: ./install.sh -d"
 
 #save current dir
 setup_dir=$(pwd)

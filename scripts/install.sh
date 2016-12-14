@@ -42,30 +42,33 @@ set_dev_mode="false"
 
 while getopts 'tjsdurb:' flag; do
   case $flag in
+		c)
+     	install_teamcity="true"
+      ;;
     t)
      	run_tests="true"
-      	;;
+      ;;
     s)
   		install_virtuoso_from_source="true"
   		;;
     r)
-		refresh_code_only="true"
-		;;
-	d)
-		set_dev_mode="true"
-		;;
-	u)
-		unset_dev_mode="true"
-		;;
-	j)
-		install_jenkins="true"
-		;;
+			refresh_code_only="true"
+		  ;;
+		d)
+			set_dev_mode="true"
+		  ;;
+		u)
+			unset_dev_mode="true"
+		  ;;
+		j)
+			install_jenkins="true"
+		  ;;
     b)
    	 	dendro_branch=$OPTARG
     	;;
     *)
-		error "Unexpected option ${flag}"
-		;;
+			error "Unexpected option ${flag}"
+		  ;;
   esac
 done
 
@@ -78,10 +81,9 @@ info "Applying pre-installation fixes..."
 source ./Fixes/fix_dns.sh
 source ./Fixes/fix_locales.sh
 
-if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ] && [ "$install_jenkins" != "true" ]
+if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ] && [ "$install_jenkins" != "true" ] && [ "$install_teamcity" != "true" ]
 then
 	info "Running the Dendro User Setup."
-	info "NOTE: To setup this Virtual Machine for Development, use the -d flag. Example: ./install.sh -d"
 
 	#fix any unfinished installations
 		info "Preparing setup..."
@@ -198,6 +200,11 @@ else
 		then
 			info "Running Jenkins Setup."
 			source ./Programs/Jenkins/install_jenkins.sh
+		fi
+		if [[ "$install_teamcity" == "true" ]]
+		then
+			info "Running TeamCity Setup."
+			source ./Programs/TeamCity/install_teamcity.sh
 		fi
 fi
 
