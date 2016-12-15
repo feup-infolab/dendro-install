@@ -25,9 +25,9 @@ sudo apt-get -y -f -qq install devscripts autoconf automake libtool flex bison g
 sudo npm install -g bower
 
 #alias nodejs to node
-sudo ln -s `which nodejs` /usr/bin/node
+sudo ln -s "$(which nodejs)" /usr/bin/node
 
 #go back to initial dir
-cd $setup_dir
+cd $setup_dir || die "Unable to return to setup directory while installing base dependencies"
 
 success "Installed Preliminary Dependencies."
