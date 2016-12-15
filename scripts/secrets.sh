@@ -7,6 +7,7 @@ secret="app_secretttttt192818923782364781263486712384761528764512asldkfjak"
 dendro_user_name='dendro'
 dendro_user_group='dendro'
 dendro_user_password='dendr0'
+dendro_user_home_folder="/home/$dendro_user_name"
 
 #mysql
 mysql_username='root'

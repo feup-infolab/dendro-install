@@ -373,5 +373,5 @@ On_IWhite='\033[0;107m'   # White
 #teamcity
 teamcity_installation_path='/TeamCity'
 teamcity_service_name='teamcity'
-teamcity_startup_item_file="/etc/systemd/system/$teamcity_service_name.service"
+teamcity_startup_item_file="/etc/init.d/teamcity"
 teamcity_log_file="/var/log/$teamcity_service_name.log"

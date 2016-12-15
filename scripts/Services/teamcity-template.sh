@@ -21,8 +21,8 @@ dendro_username='%DENDRO_USERNAME%'
 #teamcity
 teamcity_installation_path='%TEAMCITY_INSTALLATION_PATH%'
 teamcity_service_name='%TEAMCITY_SERVICE_NAME%'
-teamcity_startup_item_file="%TEAMCITY_STARTUP_ITEM_FILE%"
-teamcity_log_file="%TEAMCITY_LOG_FILE%"
+teamcity_startup_item_file='%TEAMCITY_STARTUP_ITEM_FILE%'
+teamcity_log_file='%TEAMCITY_LOG_FILE%'
 
 start() {
   su $dendro_username -c "(cd $teamcity_installation_path && $teamcity_installation_path/bin/teamcity-server.sh start >> $teamcity_log_file 2>&1 )"
