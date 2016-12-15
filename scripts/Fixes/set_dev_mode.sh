@@ -66,7 +66,5 @@ else
 	die "File $mongodb_conf_file does not exist."
 fi
 
-
-
 #go back to initial dir
 cd $setup_dir
