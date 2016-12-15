@@ -20,7 +20,7 @@ else
 	info "User ${dendro_user_name} already exists, no need to create it again."
 fi
 
-if [[ -d $dendro_user_home_folder ]]
+if [[ ! -d $dendro_user_home_folder ]]
 then
 	sudo mkdir -p $dendro_user_home_folder
 	sudo chown -R $dendro_user_name $dendro_user_home_folder
