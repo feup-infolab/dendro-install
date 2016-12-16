@@ -17,6 +17,11 @@ setup_dir=$(pwd)
 sudo apt-get update
 sudo apt-get -y -f -qq install devscripts autoconf automake libtool flex bison gperf gawk m4 make libssl-dev git imagemagick subversion zip htop redis-server nodejs npm htop --fix-missing || die "Failed to install preliminary dependencies. Please check any prior error messages."
 
+#update npm
+sudo npm -g install npm@latest
+sudo npm cache clean
+
+
 #install vim plugins
 #http://vim.spf13.com/#install
 	#curl http://j.mp/spf13-vim3 -L -o - | sh
