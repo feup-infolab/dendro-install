@@ -54,13 +54,14 @@ printf "\n"
 sudo touch $teamcity_log_file
 sudo chmod ugo+r $teamcity_log_file
 sudo chown $dendro_user_name $teamcity_log_file
+sudo chmod 0777 $teamcity_startup_item_file
 
 sudo sed -e "s;%DENDRO_USERNAME%;$dendro_user_name;g" \
 				 -e "s;%TEAMCITY_INSTALLATION_PATH%;$teamcity_installation_path;g" \
 				 -e "s;%TEAMCITY_SERVICE_NAME%;$teamcity_service_name;g" \
 				 -e "s;%TEAMCITY_STARTUP_ITEM_FILE%;$teamcity_startup_item_file;g" \
 				 -e "s;%TEAMCITY_LOG_FILE%;$teamcity_log_file;g" \
-				 ./Services/teamcity-template.sh | tee $teamcity_startup_item_file
+				 ./Services/teamcity-template.sh | sudo $teamcity_startup_item_file
 
 sudo chmod 0755 $teamcity_startup_item_file
 sudo update-rc.d $teamcity_service_name enable
