@@ -20,6 +20,7 @@ source ./Dependencies/oracle_jdk8.sh &&
 source ./Programs/create_dendro_user.sh
 
 #install TeamCity
+sudo rm -rf ./TeamCity-10.0.3.tar.gz*
 sudo wget --progress=bar:force https://download.jetbrains.com/teamcity/TeamCity-10.0.3.tar.gz || die "Unable to download TeamCity."
 tar xfz TeamCity-10.0.3.tar.gz || die "Unable to extract TeamCity package"
 sudo rm -rf $teamcity_installation_path
