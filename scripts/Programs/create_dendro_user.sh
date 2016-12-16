@@ -27,7 +27,7 @@ then
 fi
 
 #group exists?
-if [ $(getent group ${dendro_user_group}) ]; then
+if [ "$(getent group ${dendro_user_group})" ]; then
   info "Group ${dendro_user_group} exists. It is not necessary to create it again."
 else
   info "Group $dendro_user_group does not exist. Creating..."

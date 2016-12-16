@@ -139,7 +139,7 @@ get_script_dir  () {
 cd_to_current_dir () {
 	DIR="$(get_script_dir)"
 	printf "${Cyan}[INFO]${Color_Off} CD'ing to ${DIR}\n"
-	cd "${DIR}"
+	cd "${DIR}" || die "Unable to return to the current directory"
 }
 
 info () {

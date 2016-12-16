@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
+
 source ./scripts/constants.sh
+source ./define_env_vars.sh
 
 machine_exists()
 {
