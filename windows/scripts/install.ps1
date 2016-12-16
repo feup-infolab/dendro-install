@@ -3,7 +3,14 @@
     #[string]$ComputerName = $env:computername,
     #[string]$username = $(throw "-username is required."),
     #[string]$password = $( Read-Host -asSecureString "Input password" ),
-    [switch]$refresh = $false
+    [switch]$t = $false,
+	[switch]$c = $false,
+	[switch]$j = $false,
+	[switch]$u = $false,
+	[switch]$s = $false,
+	[switch]$d = $false,
+	[switch]$r = $false,
+	[string]$b
 )
 
 #function to zip a directory into a target zip folder
@@ -44,22 +51,15 @@ function ZipFiles( $tarGzfilename, $sourcedir )
 $ENV:VAGRANT_VM_INSTALL='true'
 
 # read shell arguments to pass to vagrant script
-$VAGRANT_SHELL_ARGS=''
+	$VAGRANT_SHELL_ARGS=''
 
-    if ($refresh -eq $true) {
-	    $VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS + '-r '
-	    echo "Performing a code refresh only"
-    }
-    else {
-	    if(!$refresh) {
-		    echo "Performing a full installation"
-	    }
-	    else
-	    {
-		    echo "Unrecognized option: $refresh"
-	    }
-    }
+	foreach ($key in $MyInvocation.BoundParameters.keys)
+	{
+		$value = (get-variable $key).Value 
+		$VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS + "-$key $value "
+	}
 
+	echo "passed arguments: " + $VAGRANT_SHELL_ARGS
     $ENV:VAGRANT_SHELL_ARGS = $VAGRANT_SHELL_ARGS
 
     #scripts zip file
