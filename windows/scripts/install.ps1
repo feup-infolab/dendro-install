@@ -56,10 +56,18 @@ $ENV:VAGRANT_VM_INSTALL='true'
 	foreach ($key in $MyInvocation.BoundParameters.keys)
 	{
 		$value = (get-variable $key).Value 
-		$VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS + "-$key $value "
+		
+		if($value -eq $TRUE)
+		{
+			$VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS + "-$key ";
+		}
+		elseif($value -ne $FALSE)	
+		{
+			$VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS + "-$key $value";
+		}
 	}
 
-	echo "passed arguments: " + $VAGRANT_SHELL_ARGS
+	echo "passed arguments: "$VAGRANT_SHELL_ARGS
     $ENV:VAGRANT_SHELL_ARGS = $VAGRANT_SHELL_ARGS
 
     #scripts zip file
