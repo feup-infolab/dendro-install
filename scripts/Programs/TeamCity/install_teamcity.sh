@@ -20,14 +20,19 @@ source ./Dependencies/oracle_jdk8.sh &&
 source ./Programs/create_dendro_user.sh
 
 #install TeamCity
-sudo rm -rf ./TeamCity-10.0.3.tar.gz*
-sudo wget --progress=bar:force https://download.jetbrains.com/teamcity/TeamCity-10.0.3.tar.gz || die "Unable to download TeamCity."
-tar xfz TeamCity-10.0.3.tar.gz || die "Unable to extract TeamCity package"
-sudo rm -rf $teamcity_installation_path
-sudo mkdir -p $teamcity_installation_path
-sudo mv TeamCity/* $teamcity_installation_path
-sudo chown -R $dendro_user_name $teamcity_installation_path
-sudo chmod -R ug+w $teamcity_installation_path
+# sudo rm -rf ./TeamCity-10.0.3.tar.gz*
+# sudo wget --progress=bar:force https://download.jetbrains.com/teamcity/TeamCity-10.0.3.tar.gz || die "Unable to download TeamCity."
+# tar xfz TeamCity-10.0.3.tar.gz || die "Unable to extract TeamCity package"
+# sudo rm -rf $teamcity_installation_path
+# sudo mkdir -p $teamcity_installation_path
+# sudo mv TeamCity/* $teamcity_installation_path
+replace_text_in_file 	"$teamcity_installation_path/conf/server.xml" \'
+											'<Connector port="8111" protocol="org.apache.coyote.http11.Http11NioProtocol"' \
+											'<Connector port="3001" protocol="org.apache.coyote.http11.Http11NioProtocol"' \
+											'teamcity_patch_dendro_build_server_port'
+# sudo chown -R $dendro_user_name $teamcity_installation_path
+# sudo chmod -R ug+w $teamcity_installation_path
+
 
 info "Setting up TeamCity service...\n"
 
@@ -61,11 +66,50 @@ sudo sed -e "s;%DENDRO_USERNAME%;$dendro_user_name;g" \
 				 -e "s;%TEAMCITY_SERVICE_NAME%;$teamcity_service_name;g" \
 				 -e "s;%TEAMCITY_STARTUP_ITEM_FILE%;$teamcity_startup_item_file;g" \
 				 -e "s;%TEAMCITY_LOG_FILE%;$teamcity_log_file;g" \
-				 ./Services/teamcity-template.sh | tee $teamcity_startup_item_file
+				 ./Services/TeamCity/teamcity-template.sh | tee $teamcity_startup_item_file
 
 sudo chmod 0755 $teamcity_startup_item_file
 sudo update-rc.d $teamcity_service_name enable
 sudo $teamcity_startup_item_file start && success "TeamCity service successfully installed." || die "Unable to install TeamCity service."
+
+#install teamcity agent
+
+cd $teamcity_installation_path || die "Unable to cd to TeamCity directory."
+wget "http://$host:$teamcity_port/update/buildAgent.zip"
+mkdir buildAgent
+mv buildAgent.zip buildAgent
+cd buildAgent || die "Unable to cd to TeamCity BuildAgent directory."
+unzip buildAgent.zip
+chown -R $dendro_user_name:$dendro_user_group ../buildAgent
+cp conf/buildAgent.dist.properties conf/buildAgent.properties
+
+replace_text_in_file conf/buildAgent.properties \
+	'serverUrl=http://localhost:8111/' \
+	"serverUrl=http://localhost:$teamcity_port/" \
+	'teamcity_patch_dendro_build_server'
+
+replace_text_in_file conf/buildAgent.properties \
+	'name=' \
+	"name=teamcity_patch_dendro_build_server_agent" \
+	'teamcity_patch_dendro_build_server_agent_name'
+
+chmod u+x bin/*.sh
+cd - || die "Unable to return to previous directory during TeamCity Setup."
+
+#teamcity agent bootup service
+
+sudo chmod 0777 $teamcity_agent_startup_item_file
+
+sudo sed -e "s;%DENDRO_USERNAME%;$dendro_user_name;g" \
+				 -e "s;%TEAMCITY_AGENT_INSTALLATION_PATH%;$teamcity_agent_installation_path;g" \
+				 -e "s;%TEAMCITY_AGENT_SERVICE_NAME%;$teamcity_agent_service_name;g" \
+				 -e "s;%TEAMCITY_AGENT_STARTUP_ITEM_FILE%;$teamcity_agent_startup_item_file;g" \
+				 -e "s;%TEAMCITY_AGENT_LOG_FILE%;$teamcity_agent_log_file;g" \
+				 ./Services/TeamCity/teamcity-agent-template.sh | tee $teamcity_agent_startup_item_file
+
+sudo chmod 0755 $teamcity_agent_startup_item_file
+sudo update-rc.d $teamcity_agent_service_name enable
+sudo $teamcity_agent_startup_item_file start && success "TeamCity Agent service successfully installed." || die "Unable to install TeamCity Agent service."
 
 #go back to initial dir
 cd $setup_dir || die "Unable to return to starting directory during TeamCity Setup."

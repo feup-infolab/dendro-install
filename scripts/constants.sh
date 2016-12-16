@@ -373,5 +373,12 @@ On_IWhite='\033[0;107m'   # White
 #teamcity
 teamcity_installation_path='/TeamCity'
 teamcity_service_name='teamcity'
-teamcity_startup_item_file="/etc/init.d/teamcity"
+teamcity_startup_item_file="/etc/init.d/$teamcity_service_name"
 teamcity_log_file="/var/log/$teamcity_service_name.log"
+
+teamcity_agent_installation_path="$teamcity_installation_path/buildAgent"
+teamcity_agent_service_name='teamcity_agent'
+teamcity_agent_startup_item_file="/etc/init.d/$teamcity_agent_service_name"
+teamcity_agent_log_file="/var/log/$teamcity_agent_service_name.log"
+
+teamcity_port=3001

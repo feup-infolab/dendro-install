@@ -5,7 +5,7 @@
 # Written by João Rocha da Silva <https://github.com/silvae86>.
 #
 ### BEGIN INIT INFO
-# Provides:          teamcity
+# Provides:          %TEAMCITY_SERVICE_NAME%
 # Required-Start:    $local_fs $network
 # Required-Stop:     $local_fs $network
 # Default-Start:     2 3 4 5
