@@ -17,10 +17,12 @@ setup_dir=$(pwd)
 sudo apt-get update
 sudo apt-get -y -f -qq install devscripts autoconf automake libtool flex bison gperf gawk m4 make libssl-dev git imagemagick subversion zip htop redis-server nodejs npm htop --fix-missing || die "Failed to install preliminary dependencies. Please check any prior error messages."
 
+#alias nodejs to node
+sudo ln -s "$(which nodejs)" /usr/bin/node
+
 #update npm
 sudo npm -g install npm@latest
 sudo npm cache clean
-
 
 #install vim plugins
 #http://vim.spf13.com/#install
@@ -28,9 +30,6 @@ sudo npm cache clean
 
 #install bower
 sudo npm install -g bower
-
-#alias nodejs to node
-sudo ln -s "$(which nodejs)" /usr/bin/node
 
 #go back to initial dir
 cd $setup_dir || die "Unable to return to setup directory while installing base dependencies"
