@@ -40,3 +40,8 @@ mongodb_dba_password="r00t"
 #svn users and passwords
 svn_user="user_for_dendro_svn_repo"
 svn_user_password="password_for_dendro_svn_repo"
+
+#teamcity credentials
+
+teamcity_admin_username="jrocha"
+teamcity_admin_password="bolachinhas_do_melhor_que_ha"

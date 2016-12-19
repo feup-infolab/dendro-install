@@ -22,11 +22,12 @@ source ./Programs/create_dendro_user.sh &&
 #install TeamCity
 sudo rm -rf ./TeamCity-10.0.3.tar.gz*
 #sudo wget --progress=bar:force https://download.jetbrains.com/teamcity/TeamCity-10.0.3.tar.gz || die "Unable to download TeamCity."
+sudo wget --progress=bar:force http://10.0.2.3/TeamCity-10.0.3.tar.gz || die "Unable to download TeamCity."
 tar xfz TeamCity-10.0.3.tar.gz || die "Unable to extract TeamCity package"
 sudo rm -rf $teamcity_installation_path
 sudo mkdir -p $teamcity_installation_path
 sudo mv TeamCity/* $teamcity_installation_path
-replace_text_in_file 	"$teamcity_installation_path/conf/server.xml" \'
+replace_text_in_file 	"$teamcity_installation_path/conf/server.xml" \
 											'<Connector port="8111" protocol="org.apache.coyote.http11.Http11NioProtocol"' \
 											'<Connector port="3001" protocol="org.apache.coyote.http11.Http11NioProtocol"' \
 											'teamcity_patch_dendro_build_server_port'
@@ -72,29 +73,22 @@ sudo chmod 0755 $teamcity_startup_item_file
 sudo update-rc.d $teamcity_service_name enable
 sudo $teamcity_startup_item_file start && success "TeamCity service successfully installed." || die "Unable to install TeamCity service."
 
-#install teamcity agent
+source ./Programs/TeamCity/configure_teamcity.sh
 
+#install teamcity agent
 cd $teamcity_installation_path || die "Unable to cd to TeamCity directory."
 
 info "Trying to fetch BuildAgent ZIP File from TeamCity server."
-n_tries=60
-counter=0
-wget "http://$host:$teamcity_port/update/buildAgent.zip"
-download_result=$?
-while [ "$download_result" -ne "0" ] && [ $counter -lt $n_tries ]
-do
-	sleep 1
-	counter=$( $counter + 1 )
-	info "Attempt to fetch file failed. Retry No. $counter. Will retry until the try No. $n_tries."
-	wget -q "http://$host:$teamcity_port/update/buildAgent.zip"
-	download_result=$?
-done
 
-if [ $counter -eq $n_tries ] && [ "$download_result" -ne "0" ]
+try_n_times_to_get_url \
+	60 \
+	"http://$host:$teamcity_port/update/buildAgent.zip" \
+
+if  [ "$?" -eq "1" ]
 then
 	die "Unable to install TeamCity agent. TeamCity did not boot up on time?"
 else
-	success "Fetched agent ZIP from the TeamCity Server..."
+	success "Fetched agent ZIP from the TeamCity Server!"
 fi
 
 rm -rf buildAgent &&

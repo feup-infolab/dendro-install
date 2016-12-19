@@ -380,5 +380,32 @@ teamcity_agent_installation_path="$teamcity_installation_path/buildAgent"
 teamcity_agent_service_name='teamcity_agent'
 teamcity_agent_startup_item_file="/etc/init.d/$teamcity_agent_service_name"
 teamcity_agent_log_file="/var/log/$teamcity_agent_service_name.log"
+teamcity_cookies_file="/tmp/teamcity_setup/teamcity_cookies.txt"
 
 teamcity_port=3001
+
+try_n_times_to_get_url()
+{
+	local n_tries=$1
+	local url=$2
+
+	local counter=0
+
+	wget $url
+	download_result=$?
+	while [ "$download_result" -ne "0" ] && [ $counter -lt $n_tries ]
+	do
+		sleep 1
+		counter=$(( $counter + 1 ))
+		info "Network request failed. Retry No. $counter. Will retry until the try No. $n_tries."
+		wget $url
+		download_result=$?
+	done
+
+	if [ $counter -eq $n_tries ] && [ "$download_result" -ne "0" ]
+	then
+		return 1
+	else
+		return 0
+	fi
+}
