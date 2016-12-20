@@ -33,37 +33,37 @@ info "Fetched TeamCity cookie..."
 
 #First configuration page...
 
-curl "http://$host:$teamcity_port/mnt/do/saveUserInputOnDBsettingsPage"
-	-H "Origin: http://$host:$teamcity_port"
-	-H 'Accept-Encoding: gzip, deflate'
-	-H 'Accept-Language: en-US,en;q=0.8,pt;q=0.6,es;q=0.4'
-	-H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36'
-	-H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8'
-	-H 'Accept: */*'
-	-H 'Cache-Control: max-age=0'
-	-H 'X-Requested-With: XMLHttpRequest'
-	-H 'Connection: keep-alive'
-	-H "Referer: http://$host:$teamcity_port/mnt"
-	-H 'DNT: 1'
-	--data 'dbType=HSQLDB2&connHost=&connInst=&connDB=&connIntegratedSecurity=-&connUser=&connPwd='
-	--compressed
+curl "http://$host:$teamcity_port/mnt/do/saveUserInputOnDBsettingsPage" \
+	-H "Origin: http://$host:$teamcity_port" \
+	-H 'Accept-Encoding: gzip, deflate' \
+	-H 'Accept-Language: en-US,en;q=0.8,pt;q=0.6,es;q=0.4' \
+	-H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36' \
+	-H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \
+	-H 'Accept: */*' \
+	-H 'Cache-Control: max-age=0' \
+	-H 'X-Requested-With: XMLHttpRequest' \
+	-H 'Connection: keep-alive' \
+	-H "Referer: http://$host:$teamcity_port/mnt" \
+	-H 'DNT: 1' \
+	--data 'dbType=HSQLDB2&connHost=&connInst=&connDB=&connIntegratedSecurity=-&connUser=&connPwd=' \
+	--compressed \
 	-b $teamcity_cookies_file || die "Unable to set the Data Directory of TeamCity"
 
 success "Successfully set the Data Directory of TeamCity."
 
 #Second configuration page...
 
-curl "http://$host:$teamcity_port/mnt"
-	-H 'DNT: 1'
-	-H 'Accept-Encoding: gzip, deflate, sdch'
-	-H 'Accept-Language: en-US,en;q=0.8,pt;q=0.6,es;q=0.4'
-	-H 'Upgrade-Insecure-Requests: 1'
-	-H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36'
-	-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
-	-H "Referer: http://$host:$teamcity_port/mnt"
-	-H 'Connection: keep-alive'
-	-H 'Cache-Control: max-age=0'
-	--compressed
+curl "http://$host:$teamcity_port/mnt" \
+	-H 'DNT: 1' \
+	-H 'Accept-Encoding: gzip, deflate, sdch' \
+	-H 'Accept-Language: en-US,en;q=0.8,pt;q=0.6,es;q=0.4' \
+	-H 'Upgrade-Insecure-Requests: 1' \
+	-H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36' \
+	-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8' \
+	-H "Referer: http://$host:$teamcity_port/mnt" \
+	-H 'Connection: keep-alive' \
+	-H 'Cache-Control: max-age=0' \
+	--compressed \
 	-b $teamcity_cookies_file || die "Unable to set the Database Type of TeamCity"
 
 success "Successfully set the Database Type of TeamCity."
@@ -71,20 +71,20 @@ success "Successfully set the Database Type of TeamCity."
 
 #Third configuration page...
 
-curl "http://$host:$teamcity_port/showAgreement.html"
-		-H "Origin: http://$host:$teamcity_port"
-		-H 'Accept-Encoding: gzip, deflate'
-		-H 'Accept-Language: en-US,en;q=0.8,pt;q=0.6,es;q=0.4'
-		-H 'Upgrade-Insecure-Requests: 1'
-		-H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36'
-		-H 'Content-Type: application/x-www-form-urlencoded'
-		-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
-		-H 'Cache-Control: max-age=0'
-		-H "Referer: http://$host:$teamcity_port/showAgreement.html"
-		-H 'Connection: keep-alive'
-		-H 'DNT: 1'
-		--data 'accept=true&_accept=&_sendUsageStatistics=&Continue=Continue+%C2%BB'
-		--compressed
+curl "http://$host:$teamcity_port/showAgreement.html" \
+		-H "Origin: http://$host:$teamcity_port" \
+		-H 'Accept-Encoding: gzip, deflate' \
+		-H 'Accept-Language: en-US,en;q=0.8,pt;q=0.6,es;q=0.4' \
+		-H 'Upgrade-Insecure-Requests: 1' \
+		-H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36' \
+		-H 'Content-Type: application/x-www-form-urlencoded' \
+		-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8' \
+		-H 'Cache-Control: max-age=0' \
+		-H "Referer: http://$host:$teamcity_port/showAgreement.html" \
+		-H 'Connection: keep-alive' \
+		-H 'DNT: 1' \
+		--data 'accept=true&_accept=&_sendUsageStatistics=&Continue=Continue+%C2%BB' \
+		--compressed \
 		-b $teamcity_cookies_file || die "Unable to accept the TeamCity license agreement programmatically."
 
 success "Successfully accepted the TeamCity license agreement programmatically."

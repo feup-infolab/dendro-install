@@ -103,19 +103,6 @@ recommender_installation_path='/dendro_recommender'
 
 	dendro_recommender_all_ontologies_url="${dendro_base_uri}/ontologies/all"
 
-	if [[ "${dr_stage1_active}" == "true" ]]
-	then
-		dendro_recommender_interactions_table="${interactions_table_stage1}"
-		printf "${Cyan}[INFO]${Color_Off} Stage 1 of recommender is set as active. Interactions table will be ${dendro_recommender_interactions_table}\n"
-	elif [[ "${dr_stage2_active}" == "true" ]]
-		then
-			dendro_recommender_interactions_table="${interactions_table_stage2}"
-			printf "${Cyan}[INFO]${Color_Off} Stage 2 of recommender is set as active. Interactions table will be ${dendro_recommender_interactions_table}\n"
-	else
-		printf "${Red}[ERROR]${Color_Off} Either stage 1 or stage 2 of dendro recommender must be active..."
-		exit
-	fi
-
 	#dependencies
 		#play framework
 		play_framework_install_path='/tmp/play'
@@ -372,14 +359,18 @@ On_IWhite='\033[0;107m'   # White
 
 #teamcity
 teamcity_installation_path='/TeamCity'
+teamcity_pids_folder="$teamcity_installation_path/pids"
 teamcity_service_name='teamcity'
 teamcity_startup_item_file="/etc/init.d/$teamcity_service_name"
 teamcity_log_file="/var/log/$teamcity_service_name.log"
+teamcity_pid_file="$teamcity_pids_folder/teamcity.pid"
 
 teamcity_agent_installation_path="$teamcity_installation_path/buildAgent"
 teamcity_agent_service_name='teamcity_agent'
 teamcity_agent_startup_item_file="/etc/init.d/$teamcity_agent_service_name"
 teamcity_agent_log_file="/var/log/$teamcity_agent_service_name.log"
+teamcity_agent_pid_file="$teamcity_pids_folder/teamcity_agent.pid"
+
 teamcity_cookies_file="/tmp/teamcity_setup/teamcity_cookies.txt"
 
 teamcity_port=3001

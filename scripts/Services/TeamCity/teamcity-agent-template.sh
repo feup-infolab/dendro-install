@@ -23,9 +23,11 @@ teamcity_agent_installation_path='%TEAMCITY_AGENT_INSTALLATION_PATH%'
 teamcity_agent_service_name='%TEAMCITY_AGENT_SERVICE_NAME%'
 teamcity_agent_startup_item_file='%TEAMCITY_AGENT_STARTUP_ITEM_FILE%'
 teamcity_agent_agent_log_file='%TEAMCITY_AGENT_LOG_FILE%'
+teamcity_agent_pid_file="%TEAMCITY_AGENT_PID_FILE%"
 
 start() {
-  su $dendro_username -c "(cd $teamcity_agent_installation_path && $teamcity_agent_installation_path/bin/agent.sh start >> $teamcity_agent_log_file 2>&1 )"
+  su $dendro_username -c "(cd $teamcity_agent_installation_path && $teamcity_agent_installation_path/bin/agent.sh start >> $teamcity_agent_log_file 2>&1 ) &"
+  sudo echo $! | tee $teamcity_pid_file
   return 0
 }
 

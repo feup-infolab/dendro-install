@@ -40,8 +40,11 @@ add_line_to_file_if_not_present () {
 refresh_code_only="false"
 set_dev_mode="false"
 
-while getopts 'ctjsdurb:' flag; do
+while getopts 'actjsdurb:' flag; do
   case $flag in
+		a)
+     	install_teamcity_agent="true"
+      ;;
 		c)
      	install_teamcity="true"
       ;;
@@ -81,7 +84,7 @@ info "Applying pre-installation fixes..."
 source ./Fixes/fix_dns.sh
 source ./Fixes/fix_locales.sh
 
-if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ] && [ "$install_jenkins" != "true" ] && [ "$install_teamcity" != "true" ]
+if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ] && [ "$install_jenkins" != "true" ] && [ "$install_teamcity" != "true" ] && [ "$install_teamcity_agent" != "true" ]
 then
 	info "Running the Dendro User Setup."
 
@@ -205,6 +208,10 @@ else
 		then
 			info "Running TeamCity Setup."
 			source ./Programs/TeamCity/install_teamcity.sh
+		elif [[ "$install_teamcity_agent" == "true" ]]
+		then
+			info "Running TeamCity Agent Setup."
+			source ./Programs/TeamCity/install_teamcity_agent.sh
 		fi
 fi
 
@@ -219,7 +226,11 @@ then
 	info "Visit http://${host}:${jenkins_port} for the Jenkins web interface."
 elif [ "$install_teamcity" == "true" ]
 then
-	info "TeamCity running at http://$host:8111"
+	info "TeamCity running at http://$host:$teamcity_port"
+elif [ "$install_teamcity_agent" == "true" ]
+then
+	info "TeamCity agent installed."
+	info "TeamCity running at http://$host:$teamcity_port"
 else
 	info "Visit ${dendro_base_uri} for the Dendro web interface."
 	info "Visit http://${dendro_recommender_host}:${dendro_recommender_port} for the Dendro Recommender web interface."
