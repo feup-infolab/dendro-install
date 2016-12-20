@@ -75,7 +75,7 @@ else
 	#enable auto-start on process exit
 	patch_file /etc/inittab \
 		"" \
-		"ta:2345:respawn:/bin/sh $teamcity_agent_startup_item_file start"
+		"ta:2345:respawn:/bin/sh $teamcity_agent_startup_item_file start" \
 		"auto_respawn_teamcity_agent"
 
 	sudo $teamcity_agent_startup_item_file start && success "TeamCity Agent service successfully installed." || die "Unable to install TeamCity Agent service."

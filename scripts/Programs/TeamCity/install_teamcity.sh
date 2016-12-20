@@ -79,7 +79,7 @@ sudo $teamcity_startup_item_file start && success "TeamCity service successfully
 
 patch_file /etc/inittab \
 	"" \
-	"tc:2345:respawn:/bin/sh $teamcity_startup_item_file start"
+	"tc:2345:respawn:/bin/sh $teamcity_startup_item_file start" \
 	"auto_respawn_teamcity_server"
 
 #go back to initial dir
