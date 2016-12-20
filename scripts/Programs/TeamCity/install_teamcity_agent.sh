@@ -62,6 +62,7 @@ else
 
 	sudo chmod 0777 $teamcity_agent_startup_item_file &&
 	sudo sed -e "s;%DENDRO_USERNAME%;$dendro_user_name;g" \
+					 -e "s;%TEAMCITY_AGENT_PID_FILE%;$teamcity_agent_pid_file;g" \
 					 -e "s;%TEAMCITY_AGENT_INSTALLATION_PATH%;$teamcity_agent_installation_path;g" \
 					 -e "s;%TEAMCITY_AGENT_SERVICE_NAME%;$teamcity_agent_service_name;g" \
 					 -e "s;%TEAMCITY_AGENT_STARTUP_ITEM_FILE%;$teamcity_agent_startup_item_file;g" \
@@ -71,12 +72,6 @@ else
 	sudo chmod 0755 $teamcity_agent_startup_item_file || die "Unable to configure TeamCity startup service."
 
 	sudo update-rc.d $teamcity_agent_service_name enable
-
-	#enable auto-start on process exit
-	patch_file /etc/inittab \
-		"" \
-		"ta:2345:respawn:/bin/sh $teamcity_agent_startup_item_file start" \
-		"auto_respawn_teamcity_agent"
 
 	sudo $teamcity_agent_startup_item_file start && success "TeamCity Agent service successfully installed." || die "Unable to install TeamCity Agent service."
 fi

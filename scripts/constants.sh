@@ -190,14 +190,38 @@ get_replacement_line()
 	local old_line=$2
 	local new_line=$3
 	local patch_tag=$4
+	local filename=$5
 
-	local replaced_line="#START_PATCH_TAG: $patch_tag\n"
-	replaced_line="$replaced_line###START REPLACEMENT by Dendro install scripts\n"
-	replaced_line="$replaced_line#OLD VALUE: $old_line\n"
-	replaced_line="$replaced_line#NEW VALUE\n"
-	replaced_line="$replaced_line$new_line\n"
-	replaced_line="$replaced_line###END REPLACEMENT by Dendro install scripts\n"
-	replaced_line="$replaced_line#END_PATCH_TAG: $patch_tag\n"
+	if [[ ! "$filename" == "" ]]
+	then
+		filename=$(basename "$filename")
+		local extension="${filename##*.}"
+	else
+		local extension="sh"
+	fi
+
+	case $extension in
+		'sh' )
+			local replaced_line="#START_PATCH_TAG: $patch_tag\n"
+			replaced_line="$replaced_line###START REPLACEMENT by Dendro install scripts\n"
+			replaced_line="$replaced_line#OLD VALUE: $old_line\n"
+			replaced_line="$replaced_line#NEW VALUE\n"
+			replaced_line="$replaced_line$new_line\n"
+			replaced_line="$replaced_line###END REPLACEMENT by Dendro install scripts\n"
+			replaced_line="$replaced_line#END_PATCH_TAG: $patch_tag\n"
+			;;
+		'xml|html' )
+			local replaced_line="<!-- START_PATCH_TAG: $patch_tag -->\n"
+			replaced_line="$replaced_line<!-- START REPLACEMENT by Dendro install scripts -->\n"
+			replaced_line="$replaced_line<!-- OLD VALUE: $old_line-->\n"
+			replaced_line="$replaced_line<!-- NEW VALUE-->\n"
+			replaced_line="$replaced_line$new_line\n"
+			replaced_line="$replaced_line<!-- END REPLACEMENT by Dendro install scripts -->\n"
+			replaced_line="$replaced_line<!-- END_PATCH_TAG: $patch_tag-->\n"
+			;;
+		*)
+			die "Unknown file extension: $extension"
+	esac
 
 	eval "$1=\$replaced_line"
 }
@@ -272,14 +296,14 @@ patch_file()
 	    error "File $file not found!"
 		return 1
 	else
-		get_replacement_line replacement_line "$old_line" "$new_line" "$patch_tag"
+		get_replacement_line replacement_line "$old_line" "$new_line" "$patch_tag" "$file"
 		file_is_patched_for_line file_is_patched "$file" "$old_line" "$new_line" "$patch_tag"
 
 		if [ "$file_is_patched" == "true" ]
 		then
 			warning "File $file is already patched."
 		else
-			if [ "$old_line" -eq  "" ]
+			if [ "$old_line" ==  "" ]
 			then
 				add_text_at_end_of_file "$file" "$replacement_line" "$patch_tag"
 			else
@@ -382,7 +406,7 @@ On_IWhite='\033[0;107m'   # White
 
 #teamcity
 teamcity_installation_path='/TeamCity'
-teamcity_pids_folder="$teamcity_installation_path/pids"
+teamcity_pids_folder="$teamcity_installation_path/service_pids"
 teamcity_service_name='teamcity'
 teamcity_startup_item_file="/etc/init.d/$teamcity_service_name"
 teamcity_log_file="/var/log/$teamcity_service_name.log"

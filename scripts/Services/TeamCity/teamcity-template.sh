@@ -26,17 +26,53 @@ teamcity_log_file='%TEAMCITY_LOG_FILE%'
 teamcity_pid_file='%TEAMCITY_PID_FILE%'
 teamcity_service_name='%TEAMCITY_SERVICE_NAME%'
 
+#su joaorocha "cd /Users/joaorocha/Desktop; /bin/bash -c "exec "echo $(pwd) >> /Users/joaorocha/Desktop/pwd.txt"  && exec "yes >> testes.txt > /dev/null 2>&1" & echo $! > /Users/joaorocha/Desktop/yes.pid""
+
+start_service_command()
+{
+  # su joaorocha \
+  # "cd /Users/joaorocha/Desktop; /bin/bash -c \
+  # "exec "echo $(pwd) >> /Users/joaorocha/Desktop/pwd.txt"  &&
+  # exec "yes >> testes.txt > /dev/null 2>&1" & echo $! > /Users/joaorocha/Desktop/yes.pid""
+
+  su $dendro_username \
+    "cd $teamcity_installation_path/bin; /bin/bash -c \
+    exec "$teamcity_installation_path/bin/teamcity-server.sh start" >> $teamcity_log_file 2>&1 & echo $! | tee $teamcity_pid_file"""
+}
+
 start() {
-  su $dendro_username -c "(cd $teamcity_installation_path && $teamcity_installation_path/bin/teamcity-server.sh start >> $teamcity_log_file 2>&1 ) &"
-  #echo the pid of the service to the file
-  sudo echo $! | tee $teamcity_pid_file
+  stopped="false"
+  start_service_command
+
+  pid=$(cat $teamcity_pid_file)
+
+  while [ "$stopped" = "false" ]
+  do
+    echo "Monitoring TeamCity Server... PId: $pid"
+    ps aux | grep $pid
+    if [ ! "$(kill -0 $pid)" ]
+    then
+      echo "ReStart of TeamCity Server..."
+      start_service_command
+      pid=$(cat $teamcity_pid_file)
+    fi
+    sleep 1
+  done
+
   return 0
 }
 
 #usar pgrep em outros casos
 
 stop() {
-  su $dendro_username -c "(cd $teamcity_installation_path && $teamcity_installation_path/bin/teamcity-server.sh stop >> $teamcity_log_file 2>&1 )"
+  stopped=true
+  pid=$(cat $teamcity_pid_file)
+
+  if [ ! "$(su $dendro_username -c "(cd $teamcity_installation_path && $teamcity_installation_path/bin/teamcity-server.sh stop >> $teamcity_log_file 2>&1 )")" ]
+  then
+    echo "Stopped TeamCity server."
+  fi
+
   ### Now, delete the pid file ###
   rm -f $teamcity_pid_file
   return 0
@@ -65,3 +101,27 @@ case "$1" in
 esac
 
 exit 0
+
+# start() {
+#   stopped="false"
+#
+#   cd $teamcity_installation_path; $teamcity_installation_path/bin/teamcity-server.sh start >> $teamcity_log_file 2>&1 &
+#   pid=$!
+#
+#         echo "First Start of TeamCity Server...2"
+#     echo "$pid"
+#
+#   echo "First Start of TeamCity Server..."
+#
+#   while [ "$stopped" = "false" ]
+#   do
+#     echo "First Start of TeamCity Server...1"
+#     if [ ! "$(kill -0 $pid)" ]
+#     then
+#       echo "First Start of TeamCity Server...2"
+#       su $dendro_username -c "(cd $teamcity_installation_path && $teamcity_installation_path/bin/teamcity-server.sh start >> $teamcity_log_file 2>&1 ) &"
+#       pid=$!
+#       #echo the pid of the service to the file
+#       sudo echo $pid | tee $teamcity_pid_file
+#     fi
+#     sleep 1

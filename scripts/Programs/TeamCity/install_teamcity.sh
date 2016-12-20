@@ -31,9 +31,10 @@ patch_file 	"$teamcity_installation_path/conf/server.xml" \
 											'<Connector port="8111" protocol="org.apache.coyote.http11.Http11NioProtocol"' \
 											'<Connector port="3001" protocol="org.apache.coyote.http11.Http11NioProtocol"' \
 											'teamcity_patch_dendro_build_server_port'
+
+sudo mkdir -p $teamcity_installation_path/logs
 sudo chown -R $dendro_user_name $teamcity_installation_path
 sudo chmod -R ug+w $teamcity_installation_path
-
 
 info "Setting up TeamCity service...\n"
 
@@ -71,16 +72,12 @@ sudo sed -e "s;%DENDRO_USERNAME%;$dendro_user_name;g" \
 				 -e "s;%TEAMCITY_SERVICE_NAME%;$teamcity_service_name;g" \
 				 -e "s;%TEAMCITY_STARTUP_ITEM_FILE%;$teamcity_startup_item_file;g" \
 				 -e "s;%TEAMCITY_LOG_FILE%;$teamcity_log_file;g" \
+				 -e "s;%TEAMCITY_PID_FILE%;$teamcity_pid_file;g" \
 				 ./Services/TeamCity/teamcity-template.sh | tee $teamcity_startup_item_file
 
 sudo chmod 0755 $teamcity_startup_item_file
 sudo update-rc.d $teamcity_service_name enable
 sudo $teamcity_startup_item_file start && success "TeamCity service successfully installed." || die "Unable to install TeamCity service."
-
-patch_file /etc/inittab \
-	"" \
-	"tc:2345:respawn:/bin/sh $teamcity_startup_item_file start" \
-	"auto_respawn_teamcity_server"
 
 #go back to initial dir
 cd $setup_dir || die "Unable to return to starting directory during TeamCity Setup."
