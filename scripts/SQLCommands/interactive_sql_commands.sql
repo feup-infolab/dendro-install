@@ -26,17 +26,17 @@ DB.DBA.XML_REMOVE_NS_BY_PREFIX('foaf', 2);
 DB.DBA.XML_SET_NS_DECL ('foaf', 'http://xmlns.com/foaf/0.1/', 2);
 
 SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/achem/>;
-SPARQL LOAD <http://dendro.fe.up.pt/ontologies/ACHEM/achem.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/achem/>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab-rdm/dendro-ontologies/master/ACHEM/achem.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/achem/>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('achem', 2);
 DB.DBA.XML_SET_NS_DECL ('achem', 'http://dendro.fe.up.pt/ontology/achem/', 2);
 
 SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/BIODIV/0.1#>;
-SPARQL LOAD <http://dendro.fe.up.pt/ontologies/BIODIV/BIODIV_17Jun_1557.owl> INTO <http://dendro.fe.up.pt/ontology/BIODIV/0.1#>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab-rdm/dendro-ontologies/master/BIODIV/BIODIV_17Jun_1557.owl> INTO <http://dendro.fe.up.pt/ontology/BIODIV/0.1#>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('bdv', 2);
 DB.DBA.XML_SET_NS_DECL ('bdv', 'http://dendro.fe.up.pt/ontology/BIODIV/0.1#', 2);
 
 SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/BioOc#>;
-SPARQL LOAD <http://dendro.fe.up.pt/ontologies/BIOOC/BioOc.owl> INTO <http://dendro.fe.up.pt/ontology/BioOc#>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab-rdm/dendro-ontologies/master/BIOOC/BioOc.owl> INTO <http://dendro.fe.up.pt/ontology/BioOc#>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('biooc', 2);
 DB.DBA.XML_SET_NS_DECL ('biooc', 'http://dendro.fe.up.pt/ontology/BioOc#', 2);
 
@@ -50,32 +50,32 @@ SPARQL LOAD <http://dendro.fe.up.pt/ontologies/CUTTING_PACKING/cep.owl> INTO GRA
 DB.DBA.XML_SET_NS_DECL ('cep', 'http://dendro.fe.up.pt/ontology/cep/', 2);
 
 SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/dcb/>;
-SPARQL LOAD <http://dendro.fe.up.pt/ontologies/DCB/dcb.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/dcb/>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab-rdm/dendro-ontologies/master/DCB/dcb.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/dcb/>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('dcb', 2);
 DB.DBA.XML_SET_NS_DECL ('dcb', 'http://dendro.fe.up.pt/ontology/dcb/', 2);
 
 SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/0.1/>;
-SPARQL LOAD <http://dendro.fe.up.pt/ontologies/DENDRO/dendro.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/0.1/>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab-rdm/dendro-ontologies/master/DENDRO/dendro.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/0.1/>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('ddr', 2);
 DB.DBA.XML_SET_NS_DECL ('ddr', 'http://dendro.fe.up.pt/ontology/0.1/', 2);
 
 SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/EcoGeorref/0.1#>;
-SPARQL LOAD <http://dendro.fe.up.pt/ontologies/ECOGEORREF/EcoGeorref.owl> INTO <http://dendro.fe.up.pt/ontology/EcoGeorref/0.1#>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab-rdm/dendro-ontologies/master/ECOGEORREF/EcoGeorref.owl> INTO <http://dendro.fe.up.pt/ontology/EcoGeorref/0.1#>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('ecogeorref', 2);
 DB.DBA.XML_SET_NS_DECL ('ecogeorref', 'http://dendro.fe.up.pt/ontology/achem/', 2);
 
 SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/gravimetry#>;
-SPARQL LOAD <http://dendro.fe.up.pt/ontologies/GRAVIMETRY/gravimetry.owl> INTO <http://dendro.fe.up.pt/ontology/gravimetry#>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab-rdm/dendro-ontologies/master/GRAVIMETRY/gravimetry.owl> INTO <http://dendro.fe.up.pt/ontology/gravimetry#>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('gravimetry', 2);
 DB.DBA.XML_SET_NS_DECL ('gravimetry', 'http://dendro.fe.up.pt/ontology/gravimetry#', 2);
 
 SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/hydrogen#>;
-SPARQL LOAD <http://dendro.fe.up.pt/ontologies/HYDROGEN/hydrogen_VC.owl> INTO <http://dendro.fe.up.pt/ontology/hydrogen#>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab-rdm/dendro-ontologies/master/HYDROGEN/hydrogen.owl> INTO <http://dendro.fe.up.pt/ontology/hydrogen#>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('hdg', 2);
 DB.DBA.XML_SET_NS_DECL ('hdg', 'http://dendro.fe.up.pt/ontology/hydrogen#', 2);
 
 SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/research/>;
-SPARQL LOAD <http://dendro.fe.up.pt/ontologies/RESEARCH/research.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/research/>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab-rdm/dendro-ontologies/master/RESEARCH/research.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/research/>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('research', 2);
 DB.DBA.XML_SET_NS_DECL ('research', 'http://dendro.fe.up.pt/ontology/research/', 2);
 
@@ -85,9 +85,14 @@ DB.DBA.XML_REMOVE_NS_BY_PREFIX('socialStudies', 2);
 DB.DBA.XML_SET_NS_DECL ('socialStudies', 'http://dendro.fe.up.pt/ontology/socialStudies#', 2);
 
 SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/trafficSim#>;
-SPARQL LOAD <http://dendro.fe.up.pt/ontologies/TRAFFIC_SIM/trafficSimDendro.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/trafficSim#>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab-rdm/dendro-ontologies/master/TRAFFIC_SIM/trafficSimDendro.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/trafficSim#>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('trafSim', 2);
 DB.DBA.XML_SET_NS_DECL ('trafSim', 'http://dendro.fe.up.pt/ontology/trafficSim#', 2);
+
+SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/game/>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab-rdm/dendro-ontologies/master/GAME/game.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/game/>;
+DB.DBA.XML_REMOVE_NS_BY_PREFIX('gm', 2);
+DB.DBA.XML_SET_NS_DECL ('gm', 'http://dendro.fe.up.pt/ontology/game/', 2);
 
 GRANT SPARQL_UPDATE to "SPARQL"; 
 GRANT execute ON SPARQL_INSERT_DICT_CONTENT TO "SPARQL";
