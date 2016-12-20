@@ -46,7 +46,7 @@ else
 		"serverUrl=http://localhost:$teamcity_port/" \
 		'teamcity_patch_dendro_build_server' &&
 
-	replace_text_in_file conf/buildAgent.properties \
+	patch_file conf/buildAgent.properties \
 		'name=' \
 		"name=teamcity_patch_dendro_build_server_agent" \
 		'teamcity_patch_dendro_build_server_agent_name' || die "Unable to patch the configuration file for TeamCity Build Agent."
@@ -71,6 +71,13 @@ else
 	sudo chmod 0755 $teamcity_agent_startup_item_file || die "Unable to configure TeamCity startup service."
 
 	sudo update-rc.d $teamcity_agent_service_name enable
+
+	#enable auto-start on process exit
+	patch_file /etc/inittab \
+		"" \
+		"ta:2345:respawn:/bin/sh $teamcity_agent_startup_item_file start"
+		"auto_respawn_teamcity_agent"
+
 	sudo $teamcity_agent_startup_item_file start && success "TeamCity Agent service successfully installed." || die "Unable to install TeamCity Agent service."
 fi
 

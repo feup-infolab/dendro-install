@@ -27,7 +27,7 @@ tar xfz TeamCity-10.0.3.tar.gz || die "Unable to extract TeamCity package"
 sudo rm -rf $teamcity_installation_path
 sudo mkdir -p $teamcity_installation_path
 sudo mv TeamCity/* $teamcity_installation_path
-replace_text_in_file 	"$teamcity_installation_path/conf/server.xml" \
+patch_file 	"$teamcity_installation_path/conf/server.xml" \
 											'<Connector port="8111" protocol="org.apache.coyote.http11.Http11NioProtocol"' \
 											'<Connector port="3001" protocol="org.apache.coyote.http11.Http11NioProtocol"' \
 											'teamcity_patch_dendro_build_server_port'
@@ -76,6 +76,11 @@ sudo sed -e "s;%DENDRO_USERNAME%;$dendro_user_name;g" \
 sudo chmod 0755 $teamcity_startup_item_file
 sudo update-rc.d $teamcity_service_name enable
 sudo $teamcity_startup_item_file start && success "TeamCity service successfully installed." || die "Unable to install TeamCity service."
+
+patch_file /etc/inittab \
+	"" \
+	"tc:2345:respawn:/bin/sh $teamcity_startup_item_file start"
+	"auto_respawn_teamcity_server"
 
 #go back to initial dir
 cd $setup_dir || die "Unable to return to starting directory during TeamCity Setup."

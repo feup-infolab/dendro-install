@@ -23,11 +23,13 @@ teamcity_agent_installation_path='%TEAMCITY_AGENT_INSTALLATION_PATH%'
 teamcity_agent_service_name='%TEAMCITY_AGENT_SERVICE_NAME%'
 teamcity_agent_startup_item_file='%TEAMCITY_AGENT_STARTUP_ITEM_FILE%'
 teamcity_agent_agent_log_file='%TEAMCITY_AGENT_LOG_FILE%'
-teamcity_agent_pid_file="%TEAMCITY_AGENT_PID_FILE%"
+teamcity_agent_pid_file='%TEAMCITY_AGENT_PID_FILE%'
+teamcity_agent_service_name='%TEAMCITY_AGENT_SERVICE_NAME%'
 
 start() {
   su $dendro_username -c "(cd $teamcity_agent_installation_path && $teamcity_agent_installation_path/bin/agent.sh start >> $teamcity_agent_log_file 2>&1 ) &"
-  sudo echo $! | tee $teamcity_pid_file
+  #echo the pid of the service to the file
+  sudo echo $! | tee $teamcity_agent_pid_file
   return 0
 }
 
@@ -35,6 +37,8 @@ start() {
 
 stop() {
   su $dendro_username -c "(cd $teamcity_agent_installation_path && $teamcity_agent_installation_path/buildAgent/bin/agent.sh stop >> $teamcity_agent_log_file 2>&1 )"
+  ### Now, delete the pid file ###
+  rm -f $teamcity_agent_pid_file
   return 0
 }
 
@@ -46,6 +50,9 @@ case "$1" in
   stop)
     echo "Stopping TeamCity Agent..."
     stop
+    ;;
+  status)
+    status $teamcity_agent_service_name
     ;;
   restart)
     echo "Restarting TeamCity Agent..."

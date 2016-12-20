@@ -24,9 +24,11 @@ teamcity_service_name='%TEAMCITY_SERVICE_NAME%'
 teamcity_startup_item_file='%TEAMCITY_STARTUP_ITEM_FILE%'
 teamcity_log_file='%TEAMCITY_LOG_FILE%'
 teamcity_pid_file='%TEAMCITY_PID_FILE%'
+teamcity_service_name='%TEAMCITY_SERVICE_NAME%'
 
 start() {
   su $dendro_username -c "(cd $teamcity_installation_path && $teamcity_installation_path/bin/teamcity-server.sh start >> $teamcity_log_file 2>&1 ) &"
+  #echo the pid of the service to the file
   sudo echo $! | tee $teamcity_pid_file
   return 0
 }
@@ -35,6 +37,8 @@ start() {
 
 stop() {
   su $dendro_username -c "(cd $teamcity_installation_path && $teamcity_installation_path/bin/teamcity-server.sh stop >> $teamcity_log_file 2>&1 )"
+  ### Now, delete the pid file ###
+  rm -f $teamcity_pid_file
   return 0
 }
 
@@ -46,6 +50,9 @@ case "$1" in
   stop)
     echo "Stopping TeamCity server..."
     stop
+    ;;
+  status)
+    status $teamcity_service_name
     ;;
   restart)
     echo "Restarting TeamCity server..."

@@ -202,6 +202,24 @@ get_replacement_line()
 	eval "$1=\$replaced_line"
 }
 
+add_text_at_end_of_file()
+{
+	local file=$1
+	local new_line=$2
+	local tmp_copy=""
+
+	#Create temporary file with new line in place
+	get_tmp_copy_of_file tmp_copy $file
+
+	cat file > $tmp_copy
+	echo '\n' > $tmp_copy
+	echo new_line > $tmp_copy
+
+	#Copy the new file over the original file
+	rm -rf $file
+	cp $tmp_copy $file
+}
+
 replace_text_in_file()
 {
 	local file=$1
@@ -261,7 +279,12 @@ patch_file()
 		then
 			warning "File $file is already patched."
 		else
-			replace_text_in_file "$file" "$old_line" "$replacement_line" "$patch_tag"
+			if [ "$old_line" -eq  "" ]
+			then
+				add_text_at_end_of_file "$file" "$replacement_line" "$patch_tag"
+			else
+				replace_text_in_file "$file" "$old_line" "$replacement_line" "$patch_tag"
+			fi
 		fi
 	fi
 }
