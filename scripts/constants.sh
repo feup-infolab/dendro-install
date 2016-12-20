@@ -191,17 +191,18 @@ get_replacement_line()
 	local new_line=$3
 	local patch_tag=$4
 	local filename=$5
+	local extension=""
 
 	if [[ ! "$filename" == "" ]]
 	then
 		filename=$(basename "$filename")
-		local extension="${filename##*.}"
+		extension="${filename##*.}"
 	else
-		local extension="sh"
+		extension="sh"
 	fi
 
-	case $extension in
-		'sh' )
+	case "$extension" in
+		"sh" )
 			local replaced_line="#START_PATCH_TAG: $patch_tag\n"
 			replaced_line="$replaced_line###START REPLACEMENT by Dendro install scripts\n"
 			replaced_line="$replaced_line#OLD VALUE: $old_line\n"
@@ -210,7 +211,7 @@ get_replacement_line()
 			replaced_line="$replaced_line###END REPLACEMENT by Dendro install scripts\n"
 			replaced_line="$replaced_line#END_PATCH_TAG: $patch_tag\n"
 			;;
-		'xml|html' )
+		"xml" )
 			local replaced_line="<!-- START_PATCH_TAG: $patch_tag -->\n"
 			replaced_line="$replaced_line<!-- START REPLACEMENT by Dendro install scripts -->\n"
 			replaced_line="$replaced_line<!-- OLD VALUE: $old_line-->\n"

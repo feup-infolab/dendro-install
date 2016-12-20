@@ -25,6 +25,11 @@ end
 puts "Configuring Vagrant VM #{ENV['VAGRANT_VM_NAME']} on IP #{ENV['VAGRANT_VM_IP']}."
 
 Vagrant.configure("2") do |config|
+  #shared folders
+
+  # other config here
+  config.vm.synced_folder "shared_folders/etc/init.d", "/etc/init.d"
+
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.

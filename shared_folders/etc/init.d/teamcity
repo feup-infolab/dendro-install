@@ -5,7 +5,7 @@
 # Written by João Rocha da Silva <https://github.com/silvae86>.
 #
 ### BEGIN INIT INFO
-# Provides:          %TEAMCITY_SERVICE_NAME%
+# Provides:          teamcity
 # Required-Start:    $local_fs $network
 # Required-Stop:     $local_fs $network
 # Default-Start:     2 3 4 5
@@ -16,15 +16,15 @@
 
 #./lib/lsb/init-functions
 
-dendro_username='%DENDRO_USERNAME%'
+dendro_username='dendro'
 
 #teamcity
-teamcity_installation_path='%TEAMCITY_INSTALLATION_PATH%'
-teamcity_service_name='%TEAMCITY_SERVICE_NAME%'
-teamcity_startup_item_file='%TEAMCITY_STARTUP_ITEM_FILE%'
-teamcity_log_file='%TEAMCITY_LOG_FILE%'
-teamcity_pid_file='%TEAMCITY_PID_FILE%'
-teamcity_service_name='%TEAMCITY_SERVICE_NAME%'
+teamcity_installation_path='/TeamCity'
+teamcity_service_name='teamcity'
+teamcity_startup_item_file='/etc/init.d/teamcity'
+teamcity_log_file='/var/log/teamcity.log'
+teamcity_pid_file='/TeamCity/service_pids/teamcity.pid'
+teamcity_service_name='teamcity'
 
 #su joaorocha "cd /Users/joaorocha/Desktop; /bin/bash -c "exec "echo $(pwd) >> /Users/joaorocha/Desktop/pwd.txt"  && exec "yes >> testes.txt > /dev/null 2>&1" & echo $! > /Users/joaorocha/Desktop/yes.pid""
 

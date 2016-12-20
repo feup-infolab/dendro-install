@@ -57,7 +57,7 @@ else
 	#teamcity agent bootup service
 
 	sudo mkdir $teamcity_pids_folder
-	sudo chown -R $dendro_user_name $teamcity_pids_folder
+	sudo chown -R $dendro_user_name:$dendro_user_group $teamcity_pids_folder
 	sudo chmod -R 0755 $teamcity_pids_folder
 
 	sudo chmod 0777 $teamcity_agent_startup_item_file &&

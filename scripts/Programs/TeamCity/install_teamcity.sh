@@ -33,7 +33,7 @@ patch_file 	"$teamcity_installation_path/conf/server.xml" \
 											'teamcity_patch_dendro_build_server_port'
 
 sudo mkdir -p $teamcity_installation_path/logs
-sudo chown -R $dendro_user_name $teamcity_installation_path
+sudo chown -R $dendro_user_name:$dendro_user_group $teamcity_installation_path
 sudo chmod -R ug+w $teamcity_installation_path
 
 info "Setting up TeamCity service...\n"
@@ -60,11 +60,11 @@ printf "\n"
 #create teamcity log file
 sudo touch $teamcity_log_file
 sudo chmod ugo+r $teamcity_log_file
-sudo chown $dendro_user_name $teamcity_log_file
+sudo chown $dendro_user_name:$dendro_user_group $teamcity_log_file
 sudo chmod 0777 $teamcity_startup_item_file
 
 sudo mkdir $teamcity_pids_folder
-sudo chown -R $dendro_user_name $teamcity_pids_folder
+sudo chown -R $dendro_user_name:$dendro_user_group $teamcity_pids_folder
 sudo chmod -R 0755 $teamcity_pids_folder
 
 sudo sed -e "s;%DENDRO_USERNAME%;$dendro_user_name;g" \
