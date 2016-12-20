@@ -56,8 +56,11 @@ else
 
 	#teamcity agent bootup service
 
-	sudo chmod 0777 $teamcity_agent_startup_item_file &&
+	sudo mkdir $teamcity_pids_folder
+	sudo chown -R $dendro_user_name $teamcity_pids_folder
+	sudo chmod -R 0755 $teamcity_pids_folder
 
+	sudo chmod 0777 $teamcity_agent_startup_item_file &&
 	sudo sed -e "s;%DENDRO_USERNAME%;$dendro_user_name;g" \
 					 -e "s;%TEAMCITY_AGENT_INSTALLATION_PATH%;$teamcity_agent_installation_path;g" \
 					 -e "s;%TEAMCITY_AGENT_SERVICE_NAME%;$teamcity_agent_service_name;g" \
