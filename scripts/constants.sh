@@ -252,21 +252,13 @@ replace_text_in_file()
 	local new_line=$3
 	local tmp_copy=""
 
-	#Create temporary file with new line in place
-	get_tmp_copy_of_file tmp_copy $file
+	#make file backup
+	sudo cp $file $file.bak
 
-	if [ "$(uname)" == "Darwin" ]; then
-		brew install gnu-sed
-		cat $file | gsed -e "s/$old_line/$new_line/" > $tmp_copy
-	elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-		cat $file | sed -e "s/$old_line/$new_line/" > $tmp_copy
-	elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
-		cat $file | sed -e "s/$old_line/$new_line/" > $tmp_copy
-	fi
-
-	#Copy the new file over the original file
-	rm -rf $file
-	cp $tmp_copy $file
+	#replace multi-line string in file
+	#from http://ask.xmodulo.com/search-and-replace-multi-line-string.html
+	echo "sudo perl -0pe -i "\'s/\Q$old_line\E/\Q$new_line\E/\'" $file"
+	sudo perl -0777pe "'s/\Q$old_line\E/\Q$new_line\E/gm'" $file
 }
 
 file_exists()
