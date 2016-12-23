@@ -37,13 +37,12 @@ start_service_command()
 
   if [ ! -f  $teamcity_pid_file ]
   then
-    su $dendro_username touch $teamcity_pid_file
+    su $dendro_username /bin/bash -c "touch $teamcity_pid_file"
   else
-    rm -f $teamcity_pid_file
+    su $dendro_username /bin/bash -c "rm -f $teamcity_pid_file"
   fi
 
-  su $dendro_username \
-    "cd $teamcity_installation_path/bin; /bin/bash -c "exec "$teamcity_installation_path/bin/teamcity-server.sh start" >> $teamcity_log_file 2>&1 & echo $! >> $teamcity_pid_file""
+  su $dendro_username "cd $teamcity_installation_path/bin; /bin/bash -c "$teamcity_installation_path/bin/teamcity-server.sh start" >> $teamcity_log_file 2>&1 & echo $! >> $teamcity_pid_file"
 }
 
 start() {

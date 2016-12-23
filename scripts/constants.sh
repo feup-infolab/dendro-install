@@ -203,25 +203,37 @@ get_replacement_line()
 
 	case "$extension" in
 		"sh" )
-			local replaced_line="#START_PATCH_TAG: $patch_tag\n"
-			replaced_line="$replaced_line###START REPLACEMENT by Dendro install scripts\n"
-			replaced_line="$replaced_line#OLD VALUE: $old_line\n"
-			replaced_line="$replaced_line#NEW VALUE\n"
-			replaced_line="$replaced_line$new_line\n"
-			replaced_line="$replaced_line###END REPLACEMENT by Dendro install scripts\n"
-			replaced_line="$replaced_line#END_PATCH_TAG: $patch_tag\n"
+			local replaced_line
+			IFS='%'
+			read -r -d '' replaced_line << LUCHI
+#START_PATCH_TAG: $patch_tag
+###START REPLACEMENT by Dendro install scripts
+#OLD VALUE: $old_line
+#NEW VALUE
+$new_line
+###END REPLACEMENT by Dendro install scripts
+#END_PATCH_TAG: $patch_tag
+LUCHI
+			unset IFS
 			;;
+
 		"xml" )
-			local replaced_line="<!-- START_PATCH_TAG: $patch_tag -->\n"
-			replaced_line="$replaced_line<!-- START REPLACEMENT by Dendro install scripts -->\n"
-			replaced_line="$replaced_line<!-- OLD VALUE: $old_line-->\n"
-			replaced_line="$replaced_line<!-- NEW VALUE-->\n"
-			replaced_line="$replaced_line$new_line\n"
-			replaced_line="$replaced_line<!-- END REPLACEMENT by Dendro install scripts -->\n"
-			replaced_line="$replaced_line<!-- END_PATCH_TAG: $patch_tag-->\n"
+			local replaced_line
+			IFS='%'
+			read -r -d '' replaced_line << LUCHI
+<!-- START_PATCH_TAG: $patch_tag -->
+<!-- START REPLACEMENT by Dendro install scripts -->
+<!-- OLD VALUE: $old_line-->
+<!-- NEW VALUE-->
+$new_line
+<!-- END REPLACEMENT by Dendro install scripts -->
+<!-- END_PATCH_TAG: $patch_tag-->
+LUCHI
+			unset IFS
 			;;
 		*)
 			die "Unknown file extension: $extension"
+			;;
 	esac
 
 	eval "$1=\$replaced_line"
@@ -245,6 +257,13 @@ add_text_at_end_of_file()
 	cp $tmp_copy $file
 }
 
+get_timestamp()
+{
+	local timestamp=""
+	timestamp=$(date "+%Y.%m.%d-%H.%M.%S")
+	eval "$1=\"$timestamp\""
+}
+
 replace_text_in_file()
 {
 	local file=$1
@@ -253,12 +272,28 @@ replace_text_in_file()
 	local tmp_copy=""
 
 	#make file backup
-	sudo cp $file $file.bak
+
+	local timestamp
+	get_timestamp timestamp
+	sudo cp $file $file'_'$timestamp.bak
 
 	#replace multi-line string in file
 	#from http://ask.xmodulo.com/search-and-replace-multi-line-string.html
-	echo "sudo perl -0pe -i "\'s/\Q$old_line\E/\Q$new_line\E/\'" $file"
-	sudo perl -0777pe "'s/\Q$old_line\E/\Q$new_line\E/gm'" $file
+
+	local node_exists=""
+	node_exists=$(which nodejs)
+
+	echo "Node Exits: $node_exists"
+
+	if [ "$?" = "1" ] || [ "$node_exists" = "" ]
+	then
+		info "NodeJS is not installed! Installing..."
+		sudo apt-get -y install nodejs
+	fi
+
+	replacement_text=$(nodejs ./Utils/replace.js "$old_line" "$new_line" "$file")
+	rm -rf $file
+	echo "$replacement_text" | sudo tee $file >> /dev/null
 }
 
 file_exists()

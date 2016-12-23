@@ -29,29 +29,37 @@ sudo rm -rf $teamcity_installation_path &&
 sudo mkdir -p $teamcity_installation_path &&
 sudo mv TeamCity/* $teamcity_installation_path &&
 
-old_line='<Connector port="8111" protocol="org.apache.coyote.http11.Http11NioProtocol\n'
-old_line=$old_line'               connectionTimeout="60000"\n'
-old_line=$old_line'               redirectPort="8543"\n'
-old_line=$old_line'               useBodyEncodingForURI="true"\n'
-old_line=$old_line'               socket.txBufSize="64000"\n'
-old_line=$old_line'               socket.rxBufSize="64000"\n'
-old_line=$old_line'               tcpNoDelay="1"\n'
-old_line=$old_line'        />\n'
+IFS='%'
+read -r -d '' old_line << LUCHI
+    <Connector port="8111" protocol="org.apache.coyote.http11.Http11NioProtocol"
+               connectionTimeout="60000"
+               redirectPort="8543"
+               useBodyEncodingForURI="true"
+               socket.txBufSize="64000"
+               socket.rxBufSize="64000"
+               tcpNoDelay="1"
+        />
+LUCHI
+unset IFS
 
-
-new_line='<Connector port="3111" protocol="org.apache.coyote.http11.Http11NioProtocol"\n'
-new_line=$new_line'               connectionTimeout="60000"\n'
-new_line=$new_line'               redirectPort="8543"\n'
-new_line=$new_line'               useBodyEncodingForURI="true"\n'
-new_line=$new_line'               socket.txBufSize="64000"\n'
-new_line=$new_line'               socket.rxBufSize="64000"\n'
-new_line=$new_line'               tcpNoDelay="1"\n'
-new_line=$new_line'        />\n'
+IFS='%'
+read -r -d '' new_line << LUCHI
+    <Connector port="3001" protocol="org.apache.coyote.http11.Http11NioProtocol"
+               connectionTimeout="60000"
+               redirectPort="8543"
+               useBodyEncodingForURI="true"
+               socket.txBufSize="64000"
+               socket.rxBufSize="64000"
+               tcpNoDelay="1"
+        />
+LUCHI
+unset IFS
 
 patch_file 	"$teamcity_installation_path/conf/server.xml" \
 				"$old_line" \
 				"$new_line" \
 				'teamcity_patch_dendro_build_server_port' &&
+
 sudo mkdir -p $teamcity_installation_path/logs &&
 sudo chown -R $dendro_user_name:$dendro_user_group $teamcity_installation_path &&
 sudo chmod -R ug+w $teamcity_installation_path || die "An error occurred while installing the TeamCity Server."
@@ -60,10 +68,6 @@ info "Setting up TeamCity service...\n"
 
 #save current dir
 setup_dir=$(pwd)
-
-#stop current recommender service if present
-info "Stopping $teamcity_service_name service..."
-sudo systemctl stop $teamcity_service_name
 
 #setup auto-start teamcity service
 sudo rm -rf $teamcity_startup_item_file
