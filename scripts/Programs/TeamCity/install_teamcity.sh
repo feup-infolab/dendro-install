@@ -61,47 +61,9 @@ patch_file 	"$teamcity_installation_path/conf/server.xml" \
 				'teamcity_patch_dendro_build_server_port' &&
 
 sudo mkdir -p $teamcity_installation_path/logs &&
+sudo cp -R Services/TeamCity/control_scripts $teamcity_installation_path &&
 sudo chown -R $dendro_user_name:$dendro_user_group $teamcity_installation_path &&
 sudo chmod -R ug+w $teamcity_installation_path || die "An error occurred while installing the TeamCity Server."
-
-info "Setting up TeamCity service...\n"
-
-#save current dir
-setup_dir=$(pwd)
-
-#setup auto-start teamcity service
-sudo rm -rf $teamcity_startup_item_file
-sudo touch $teamcity_startup_item_file
-
-#create pids folder...
-sudo mkdir -p $installation_path/service_pids
-
-printf "Teamcity Running Service Command:"
-printf "\n"
-printf "/bin/sh -c '$teamcity_installation_path/bin/teamcity-server.sh start >> ${teamcity_log_file} 2>&1'"
-printf "\n"
-
-#create teamcity log file
-sudo touch $teamcity_log_file
-sudo chmod ugo+r $teamcity_log_file
-sudo chown $dendro_user_name:$dendro_user_group $teamcity_log_file
-sudo chmod 0777 $teamcity_startup_item_file
-
-sudo mkdir $teamcity_pids_folder
-sudo chown -R $dendro_user_name:$dendro_user_group $teamcity_pids_folder
-sudo chmod -R 0755 $teamcity_pids_folder
-
-sudo sed -e "s;%DENDRO_USERNAME%;$dendro_user_name;g" \
-				 -e "s;%TEAMCITY_INSTALLATION_PATH%;$teamcity_installation_path;g" \
-				 -e "s;%TEAMCITY_SERVICE_NAME%;$teamcity_service_name;g" \
-				 -e "s;%TEAMCITY_STARTUP_ITEM_FILE%;$teamcity_startup_item_file;g" \
-				 -e "s;%TEAMCITY_LOG_FILE%;$teamcity_log_file;g" \
-				 -e "s;%TEAMCITY_PID_FILE%;$teamcity_pid_file;g" \
-				 ./Services/TeamCity/teamcity-template.sh | tee $teamcity_startup_item_file
-
-sudo chmod 0755 $teamcity_startup_item_file
-sudo update-rc.d $teamcity_service_name enable
-sudo $teamcity_startup_item_file start && success "TeamCity service successfully installed." || die "Unable to install TeamCity service."
 
 #go back to initial dir
 cd $setup_dir || die "Unable to return to starting directory during TeamCity Setup."

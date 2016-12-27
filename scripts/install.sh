@@ -208,10 +208,12 @@ else
 		then
 			info "Running TeamCity Setup."
 			source ./Programs/TeamCity/install_teamcity.sh
+			source ./Services/TeamCity/teamcity.sh
 		elif [[ "$install_teamcity_agent" == "true" ]]
 		then
 			info "Running TeamCity Agent Setup."
 			source ./Programs/TeamCity/install_teamcity_agent.sh
+			source ./Services/TeamCity/agent.sh
 		fi
 fi
 

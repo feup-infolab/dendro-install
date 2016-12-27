@@ -21,7 +21,9 @@ echo debconf shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/deb
 echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo /usr/bin/debconf-set-selections
 sudo apt-get install --yes oracle-java8-installer
 yes "" | sudo apt-get -f install
-sudo apt install oracle-java8-set-default
+
+info "Installing Oracle JDK 8. There is no output but the installation is working in the background. Please WAIT!"
+sudo apt install oracle-java8-set-default > /dev/null
 
 #go back to initial dir
 cd $setup_dir

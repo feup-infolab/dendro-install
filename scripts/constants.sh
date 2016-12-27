@@ -433,10 +433,17 @@ On_ICyan='\033[0;106m'    # Cyan
 On_IWhite='\033[0;107m'   # White
 
 #teamcity
+teamcity_control_scripts_folder="$teamcity_installation_path/control_scripts"
+
 teamcity_installation_path='/TeamCity'
 teamcity_pids_folder="$teamcity_installation_path/service_pids"
 teamcity_service_name='teamcity'
+
+teamcity_start_script_file="$teamcity_control_scripts_folder/start/teamcity.sh"
+teamcity_stop_script_file="$teamcity_control_scripts_folder/stop/teamcity.sh"
+
 teamcity_startup_item_file="/etc/init.d/$teamcity_service_name"
+teamcity_pids_folder="$teamcity_installation_path/service_pids"
 teamcity_log_file="/var/log/$teamcity_service_name.log"
 teamcity_pid_file="$teamcity_pids_folder/teamcity.pid"
 

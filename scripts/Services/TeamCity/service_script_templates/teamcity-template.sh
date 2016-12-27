@@ -21,29 +21,10 @@ dendro_username='%DENDRO_USERNAME%'
 #teamcity
 teamcity_installation_path='%TEAMCITY_INSTALLATION_PATH%'
 teamcity_service_name='%TEAMCITY_SERVICE_NAME%'
-teamcity_startup_item_file='%TEAMCITY_STARTUP_ITEM_FILE%'
 teamcity_log_file='%TEAMCITY_LOG_FILE%'
 teamcity_pid_file='%TEAMCITY_PID_FILE%'
 teamcity_service_name='%TEAMCITY_SERVICE_NAME%'
-
-#su joaorocha "cd /Users/joaorocha/Desktop; /bin/bash -c "exec "echo $(pwd) >> /Users/joaorocha/Desktop/pwd.txt"  && exec "yes >> testes.txt > /dev/null 2>&1" & echo $! > /Users/joaorocha/Desktop/yes.pid""
-
-start_service_command()
-{
-  # su joaorocha \
-  # "cd /Users/joaorocha/Desktop; /bin/bash -c \
-  # "exec "echo $(pwd) >> /Users/joaorocha/Desktop/pwd.txt"  &&
-  # exec "yes >> testes.txt > /dev/null 2>&1" & echo $! > /Users/joaorocha/Desktop/yes.pid""
-
-  if [ ! -f  $teamcity_pid_file ]
-  then
-    su $dendro_username /bin/bash -c "touch $teamcity_pid_file"
-  else
-    su $dendro_username /bin/bash -c "rm -f $teamcity_pid_file"
-  fi
-
-  su $dendro_username "cd $teamcity_installation_path/bin; /bin/bash -c "$teamcity_installation_path/bin/teamcity-server.sh start" >> $teamcity_log_file 2>&1 & echo $! >> $teamcity_pid_file"
-}
+teamcity_start_script_file='%TEAMCITY_START_SCRIPT_FILE%'
 
 start() {
   while [ ! "$stopped" = "false" ]
@@ -52,7 +33,7 @@ start() {
     if [ "$pid" = "" ] || [ ! "$(kill -0 $pid)" ]
     then
       echo "ReStart of TeamCity Server..."
-      start_service_command
+      su $dendro_username "/bin/sh -c \"$teamcity_start_script_file\""
       pid=$(cat $teamcity_pid_file)
       if [ ! "$pid" = "" ]
       then
