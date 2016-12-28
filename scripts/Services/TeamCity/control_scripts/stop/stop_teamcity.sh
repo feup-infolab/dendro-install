@@ -16,15 +16,11 @@ whoami >> /tmp/whoami.txt
 
 if [ ! -f  $teamcity_pid_file ]
 then
-  printf "Creating pid file for TeamCity..."
-  su $dendro_username /bin/bash -c "touch $teamcity_pid_file" || die "Unable to create pid file for TeamCity"
+  echo "Cannot stop TeamCity because it is not running. There is no PID file at $teamcity_pid_file?"
 else
-  printf "Truncating pid file for TeamCity..."
-  su $dendro_username /bin/bash -c "truncate $teamcity_pid_file -s 0" || die "Unable to truncate pid file for TeamCity"
+  pid=$(cat $teamcity_pid_file)
+  su $dendro_username /bin/bash -c "$teamcity_installation_path/bin/teamcity-server.sh stop >> $teamcity_log_file > /dev/null 2>&1 & echo $! > $teamcity_pid_file" || die "Unable to stop TeamCity."
 fi
-
-su $dendro_username /bin/bash -c
-  "$teamcity_installation_path/bin/teamcity-server.sh start >> $teamcity_log_file > /dev/null 2>&1 & echo $! > $teamcity_pid_file" || die "Unable to launch TeamCity."
 
 # su joaorocha \
 # "cd /Users/joaorocha/Desktop; /bin/bash -c \

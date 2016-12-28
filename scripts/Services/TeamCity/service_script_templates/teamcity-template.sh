@@ -33,7 +33,8 @@ start() {
     if [ "$pid" = "" ] || [ ! "$(kill -0 $pid)" ]
     then
       echo "ReStart of TeamCity Server..."
-      su $dendro_username "/bin/sh -c \"$teamcity_start_script_file\""
+      sudo su $dendro_username /bin/sh -c "$teamcity_start_script_file" &
+
       pid=$(cat $teamcity_pid_file)
       if [ ! "$pid" = "" ]
       then
