@@ -24,7 +24,7 @@ sudo mkdir -p $installation_path/service_pids
 sudo touch $teamcity_log_file
 sudo chmod ugo+r $teamcity_log_file
 sudo chown $dendro_user_name:$dendro_user_group $teamcity_log_file
-sudo chmod 0777 $teamcity_startup_item_file
+sudo chmod 0755 $teamcity_startup_item_file
 
 sudo mkdir $teamcity_pids_folder
 sudo chown -R $dendro_user_name:$dendro_user_group $teamcity_pids_folder
@@ -36,24 +36,35 @@ if [[ ! -d $teamcity_installation_path/control_scripts ]]; then
   cp -r ./Services/control_scripts $teamcity_installation_path
 fi
 
-sudo truncate $teamcity_startup_script_file -s 0
+if [[ -f $teamcity_start_script_file ]]
+then
+	sudo truncate $teamcity_start_script_file -s 0
+fi
+
 sudo sed -e "s;%DENDRO_USERNAME%;$dendro_user_name;g" \
 				 -e "s;%TEAMCITY_INSTALLATION_PATH%;$teamcity_installation_path;g" \
 				 -e "s;%TEAMCITY_LOG_FILE%;$teamcity_log_file;g" \
 				 -e "s;%TEAMCITY_PID_FILE%;$teamcity_pid_file;g" \
          -e "s;%TEAMCITY_START_SCRIPT_FILE%;$teamcity_start_script_file;g" \
-				 ./Services/TeamCity/control_scripts/start/teamcity.sh | tee $teamcity_startup_script_file
+				 ./Services/TeamCity/control_scripts/start/teamcity.sh | sudo tee $teamcity_start_script_file &&
+sudo chmod 0755 $teamcity_start_script_file || die "Unable to create TeamCity startup script."
 
-chmod ugo+x $teamcity_startup_script_file
+if [[ -f $teamcity_stop_script_file ]]
+then
+	sudo truncate $teamcity_stop_script_file -s 0
+fi
 
-sudo truncate $teamcity_stop_script_file -s 0
 sudo sed -e "s;%DENDRO_USERNAME%;$dendro_user_name;g" \
 				 -e "s;%TEAMCITY_INSTALLATION_PATH%;$teamcity_installation_path;g" \
 				 -e "s;%TEAMCITY_LOG_FILE%;$teamcity_log_file;g" \
 				 -e "s;%TEAMCITY_PID_FILE%;$teamcity_pid_file;g" \
-				 ./Services/TeamCity/control_scripts/stop/teamcity.sh | tee $teamcity_stop_script_file
+				 ./Services/TeamCity/control_scripts/stop/teamcity.sh | sudo tee $teamcity_stop_script_file &&
+sudo chmod 0755 $teamcity_stop_script_file || die "Unable to create TeamCity stop script."
 
-chmod ugo+x $teamcity_stop_script_file
+if [[ -f $teamcity_startup_item_file ]]
+then
+	sudo truncate $teamcity_startup_item_file -s 0
+fi
 
 #build startup System V script (/etc/init.d)
 sudo sed -e "s;%DENDRO_USERNAME%;$dendro_user_name;g" \
@@ -62,8 +73,11 @@ sudo sed -e "s;%DENDRO_USERNAME%;$dendro_user_name;g" \
          -e "s;%TEAMCITY_START_SCRIPT_FILE%;$teamcity_start_script_file;g" \
 				 -e "s;%TEAMCITY_LOG_FILE%;$teamcity_log_file;g" \
 				 -e "s;%TEAMCITY_PID_FILE%;$teamcity_pid_file;g" \
-				 ./Services/TeamCity/service_script_templates/teamcity-template.sh | tee $teamcity_startup_item_file
+				 ./Services/TeamCity/service_script_templates/teamcity-template.sh | sudo tee $teamcity_startup_item_file &&
+sudo chmod 0755 $teamcity_startup_item_file || die "Unable to create TeamCity startup item (System V startup script file)."
 
-sudo chmod 0755 $teamcity_startup_item_file
+#restore ownership of the folder to the dendro user
+sudo chown -R $dendro_user_name:$dendro_user_group $teamcity_installation_path
+
 sudo update-rc.d $teamcity_service_name enable
 sudo $teamcity_startup_item_file start && success "TeamCity service successfully installed." || die "Unable to install TeamCity service."

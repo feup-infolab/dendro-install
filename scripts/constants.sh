@@ -439,6 +439,10 @@ teamcity_installation_path='/TeamCity'
 teamcity_pids_folder="$teamcity_installation_path/service_pids"
 teamcity_service_name='teamcity'
 
+#teamcity_url="https://download.jetbrains.com/teamcity/TeamCity-10.0.3.tar.gz"
+teamcity_url="http://192.168.1.92/TeamCity-10.0.4.tar.gz"
+teamcity_md5="30aa7af265e8e68d12002308d80f62ef"
+
 teamcity_start_script_file="$teamcity_control_scripts_folder/start/teamcity.sh"
 teamcity_stop_script_file="$teamcity_control_scripts_folder/stop/teamcity.sh"
 

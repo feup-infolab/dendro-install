@@ -20,14 +20,33 @@ source ./Dependencies/oracle_jdk8.sh &&
 source ./Programs/create_dendro_user.sh &&
 
 #install TeamCity
-sudo rm -rf ./TeamCity-10.0.4.tar.gz*
-#sudo wget --progress=bar:force https://download.jetbrains.com/teamcity/TeamCity-10.0.3.tar.gz || die "Unable to download TeamCity."
-sudo wget --progress=bar:force http://10.0.2.3/TeamCity-10.0.4.tar.gz || die "Unable to download TeamCity."
-tar xfz TeamCity-10.0.4.tar.gz || die "Unable to extract TeamCity package"
+
+teamcity_package="$HOME/TeamCity.tar.gz"
+teamcity_unpackage_destination="$HOME"
+
+if [ ! -f $teamcity_package ]
+then
+	info "TeamCity download has not been done before. Starting download..."
+	sudo wget --progress=bar:force $teamcity_url -O $teamcity_package || die "Unable to download TeamCity."
+else
+	info "TeamCity download present. Performing MD5 check..."
+	md5=$(md5sum < $teamcity_package | cut -f1 -d' ')
+
+	if [[ ! "$md5" == "$teamcity_md5" ]]
+	then
+		warning "MD5 incorrect! Need to re-download the TeamCity setup package."
+		sudo rm -rf $teamcity_package
+		sudo wget --progress=bar:force $teamcity_url -O $teamcity_package || die "Unable to download TeamCity."
+	else
+		info "MD5 correct, continuing setup without downloading."
+	fi
+fi
+
+sudo tar xfz $teamcity_package -C $teamcity_unpackage_destination|| die "Unable to extract TeamCity package"
 
 sudo rm -rf $teamcity_installation_path &&
 sudo mkdir -p $teamcity_installation_path &&
-sudo mv TeamCity/* $teamcity_installation_path &&
+sudo mv $teamcity_unpackage_destination/TeamCity/* $teamcity_installation_path &&
 
 IFS='%'
 read -r -d '' old_line << LUCHI

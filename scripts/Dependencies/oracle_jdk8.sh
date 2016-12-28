@@ -19,8 +19,8 @@ sudo add-apt-repository -y ppa:webupd8team/java
 sudo apt-get update -qq
 echo debconf shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
 echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo /usr/bin/debconf-set-selections
-sudo apt-get install --yes oracle-java8-installer
-yes "" | sudo apt-get -f install
+sudo apt-get install -qq --yes oracle-java8-installer > /dev/null
+yes "" | sudo apt-get -f install > /dev/null || die "There was an error installing Oracle JDK 8."
 
 info "Installing Oracle JDK 8. There is no output but the installation is working in the background. Please WAIT!"
 sudo apt install oracle-java8-set-default > /dev/null
