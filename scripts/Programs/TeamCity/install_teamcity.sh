@@ -80,7 +80,6 @@ patch_file 	"$teamcity_installation_path/conf/server.xml" \
 				'teamcity_patch_dendro_build_server_port' &&
 
 sudo mkdir -p $teamcity_installation_path/logs &&
-sudo cp -R Services/TeamCity/control_scripts $teamcity_installation_path &&
 sudo chown -R $dendro_user_name:$dendro_user_group $teamcity_installation_path &&
 sudo chmod -R ug+w $teamcity_installation_path || die "An error occurred while installing the TeamCity Server."
 

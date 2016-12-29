@@ -432,34 +432,28 @@ On_IPurple='\033[0;105m'  # Purple
 On_ICyan='\033[0;106m'    # Cyan
 On_IWhite='\033[0;107m'   # White
 
-#teamcity
-teamcity_control_scripts_folder="$teamcity_installation_path/control_scripts"
+#teamcity (General)
+	teamcity_pids_folder="$teamcity_installation_path/service_pids"
+	teamcity_cookies_file="/tmp/teamcity_setup/teamcity_cookies.txt"
 
-teamcity_installation_path='/TeamCity'
-teamcity_pids_folder="$teamcity_installation_path/service_pids"
-teamcity_service_name='teamcity'
+	#teamcity_url="https://download.jetbrains.com/teamcity/TeamCity-10.0.3.tar.gz"
+	teamcity_url="http://192.168.1.92/TeamCity-10.0.4.tar.gz"
+	teamcity_md5="30aa7af265e8e68d12002308d80f62ef"
 
-#teamcity_url="https://download.jetbrains.com/teamcity/TeamCity-10.0.3.tar.gz"
-teamcity_url="http://192.168.1.92/TeamCity-10.0.4.tar.gz"
-teamcity_md5="30aa7af265e8e68d12002308d80f62ef"
+#Teamcity Server
+	teamcity_installation_path='/TeamCity'
+	teamcity_service_name='teamcity'
+	teamcity_startup_item_file="/etc/init.d/$teamcity_service_name"
+	teamcity_log_file="/var/log/$teamcity_service_name.log"
+	teamcity_pid_file="$teamcity_pids_folder/teamcity.pid"
+	teamcity_port=3001
 
-teamcity_start_script_file="$teamcity_control_scripts_folder/start/start_teamcity.sh"
-teamcity_stop_script_file="$teamcity_control_scripts_folder/stop/start_teamcity.sh"
-
-teamcity_startup_item_file="/etc/init.d/$teamcity_service_name"
-teamcity_pids_folder="$teamcity_installation_path/service_pids"
-teamcity_log_file="/var/log/$teamcity_service_name.log"
-teamcity_pid_file="$teamcity_pids_folder/teamcity.pid"
-
-teamcity_agent_installation_path="$teamcity_installation_path/buildAgent"
-teamcity_agent_service_name='teamcity_agent'
-teamcity_agent_startup_item_file="/etc/init.d/$teamcity_agent_service_name"
-teamcity_agent_log_file="/var/log/$teamcity_agent_service_name.log"
-teamcity_agent_pid_file="$teamcity_pids_folder/teamcity_agent.pid"
-
-teamcity_cookies_file="/tmp/teamcity_setup/teamcity_cookies.txt"
-
-teamcity_port=3001
+#Teamcity Agent
+	teamcity_agent_installation_path="$teamcity_installation_path/buildAgent"
+	teamcity_agent_service_name='teamcity_agent'
+	teamcity_agent_startup_item_file="/etc/init.d/$teamcity_agent_service_name"
+	teamcity_agent_log_file="/var/log/$teamcity_agent_service_name.log"
+	teamcity_agent_pid_file="$teamcity_pids_folder/teamcity_agent.pid"
 
 try_n_times_to_get_url()
 {

@@ -21,7 +21,6 @@ dendro_username='%DENDRO_USERNAME%'
 #teamcity
 teamcity_agent_installation_path='%TEAMCITY_AGENT_INSTALLATION_PATH%'
 teamcity_agent_service_name='%TEAMCITY_AGENT_SERVICE_NAME%'
-teamcity_agent_startup_item_file='%TEAMCITY_AGENT_STARTUP_ITEM_FILE%'
 teamcity_agent_agent_log_file='%TEAMCITY_AGENT_LOG_FILE%'
 teamcity_agent_pid_file='%TEAMCITY_AGENT_PID_FILE%'
 teamcity_agent_service_name='%TEAMCITY_AGENT_SERVICE_NAME%'
