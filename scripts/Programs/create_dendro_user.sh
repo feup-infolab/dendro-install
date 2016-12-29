@@ -12,7 +12,7 @@ fi
 setup_dir=$(pwd) &&
 
 #user exists?
-id -u $dendro_user_name
+id -u $dendro_user_name > /dev/null
 
 if [[ "$?" -eq "1" ]]; then
 	sudo useradd $dendro_user_name || die "Failed to create user ${dendro_user_name}."

@@ -283,8 +283,6 @@ replace_text_in_file()
 	local node_exists=""
 	node_exists=$(which nodejs)
 
-	echo "Node Exits: $node_exists"
-
 	if [ "$?" = "1" ] || [ "$node_exists" = "" ]
 	then
 		info "NodeJS is not installed! Installing..."
@@ -433,6 +431,9 @@ On_ICyan='\033[0;106m'    # Cyan
 On_IWhite='\033[0;107m'   # White
 
 #teamcity (General)
+	teamcity_installation_path='/TeamCity'
+	teamcity_control_scripts_path="$teamcity_installation_path/control_scripts"
+	teamcity_agent_installation_path="$teamcity_installation_path/buildAgent"
 	teamcity_pids_folder="$teamcity_installation_path/service_pids"
 	teamcity_cookies_file="/tmp/teamcity_setup/teamcity_cookies.txt"
 
@@ -441,17 +442,19 @@ On_IWhite='\033[0;107m'   # White
 	teamcity_md5="30aa7af265e8e68d12002308d80f62ef"
 
 #Teamcity Server
-	teamcity_installation_path='/TeamCity'
 	teamcity_service_name='teamcity'
-	teamcity_startup_item_file="/etc/init.d/$teamcity_service_name"
+	teamcity_startup_item_file="/etc/systemd/system/$teamcity_service_name.service"
+	teamcity_start_script="$teamcity_control_scripts_path/teamcity_start.sh"
+	teamcity_stop_script="$teamcity_control_scripts_path/teamcity_stop.sh"
 	teamcity_log_file="/var/log/$teamcity_service_name.log"
 	teamcity_pid_file="$teamcity_pids_folder/teamcity.pid"
 	teamcity_port=3001
 
 #Teamcity Agent
-	teamcity_agent_installation_path="$teamcity_installation_path/buildAgent"
 	teamcity_agent_service_name='teamcity_agent'
-	teamcity_agent_startup_item_file="/etc/init.d/$teamcity_agent_service_name"
+	teamcity_agent_startup_item_file="/etc/systemd/system/$teamcity_agent_service_name.service"
+	teamcity_agent_start_script="$teamcity_installation_path/control_scripts/teamcity_agent_start.sh"
+	teamcity_agent_stop_script="$teamcity_installation_path/control_scripts/teamcity_agent_stop.sh"
 	teamcity_agent_log_file="/var/log/$teamcity_agent_service_name.log"
 	teamcity_agent_pid_file="$teamcity_pids_folder/teamcity_agent.pid"
 
@@ -462,14 +465,14 @@ try_n_times_to_get_url()
 
 	local counter=0
 
-	wget $url
+	wget --progress=bar:force $url
 	download_result=$?
 	while [ "$download_result" -ne "0" ] && [ $counter -lt $n_tries ]
 	do
 		sleep 1
 		counter=$(( $counter + 1 ))
-		info "Network request failed. Retry No. $counter. Will retry until the try No. $n_tries."
-		wget $url
+		info "Network request failed. Retry No. $counter. Will retry until the try No. $n_tries. This is NORMAL as the TeamCity Server may be booting up!"
+		wget --progress=bar:force $url
 		download_result=$?
 	done
 
