@@ -72,7 +72,7 @@ while getopts 'actjsdurb:' flag; do
    	 	dendro_branch=$OPTARG
     	;;
     *)
-			error "Unexpected option ${flag}"
+			error "Unexpected option $flag"
 		  ;;
   esac
 done

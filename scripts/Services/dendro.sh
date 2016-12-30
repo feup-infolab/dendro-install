@@ -33,7 +33,7 @@ printf "/usr/local/bin/nodejs ${dendro_installation_path}/app.js | tee ${dendro_
 printf "\n"
 
 printf "[Unit]
-Description=Dendro recommender daemon ${active_deployment_setting}
+Description=Dendro ${active_deployment_setting}  daemon
 [Service]
 Type=simple
 Restart=on-failure

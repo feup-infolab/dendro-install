@@ -41,7 +41,7 @@ while getopts 'atcjusdrb:' flag; do
 		  VAGRANT_SHELL_ARGS="$VAGRANT_SHELL_ARGS-b $OPTARG "
 		  ;;
     *)
-		  error "Unexpected option ${flag}"
+		  error "Unexpected option $flag"
 		  ;;
   esac
 
