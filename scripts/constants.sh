@@ -201,8 +201,8 @@ get_replacement_line()
 		extension="sh"
 	fi
 
-	case "$extension" in
-		"sh" )
+	case $extension in
+		sh|properties|yaml)
 			local replaced_line
 			IFS='%'
 			read -r -d '' replaced_line << LUCHI
@@ -216,8 +216,7 @@ $new_line
 LUCHI
 			unset IFS
 			;;
-
-		"xml" )
+		xml)
 			local replaced_line
 			IFS='%'
 			read -r -d '' replaced_line << LUCHI
@@ -289,7 +288,7 @@ replace_text_in_file()
 		sudo apt-get -y install nodejs
 	fi
 
-	replacement_text=$(nodejs ./Utils/replace.js "$old_line" "$new_line" "$file")
+	replacement_text=$(nodejs $installation_scripts_dir/Utils/replace.js "$old_line" "$new_line" "$file")
 	rm -rf $file
 	echo "$replacement_text" | sudo tee $file >> /dev/null
 }

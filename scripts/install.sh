@@ -19,6 +19,8 @@ get_script_dir  () {
 	echo $DIR
 }
 
+installation_scripts_dir="$(get_script_dir)"
+
 cd_to_current_dir () {
 	DIR="$(get_script_dir)"
 	info "CD'ing to ${DIR}"

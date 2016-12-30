@@ -33,17 +33,21 @@ else
 		success "Fetched agent ZIP from the TeamCity Server!"
 	fi
 
-	cd - || die "Unable to cd to previous directory after fetching Teamcity Agent ZIP."
+	sudo rm -rf buildAgent &&
+	sudo mkdir buildAgent &&
+	sudo mv buildAgent.zip buildAgent &&
+	cd buildAgent || die "Unable to cd to TeamCity BuildAgent directory."
 
 	sudo apt-get install unzip
+	sudo unzip buildAgent.zip &&
+	sudo rm -f buildAgent.zip &&
+	sudo chown -R $dendro_user_name:$dendro_user_group .
 
-	rm -rf buildAgent &&
-	mkdir buildAgent &&
-	mv buildAgent.zip buildAgent &&
-	cd buildAgent || die "Unable to cd to TeamCity BuildAgent directory."
-	unzip buildAgent.zip &&
-	chown -R $dendro_user_name:$dendro_user_group $teamcity_agent_installation_path/buildAgent &&
-	cp $teamcity_agent_installation_path/conf/buildAgent.dist.properties \
+	cd - || die "Unable to cd to initial directory after fetching Teamcity Agent ZIP."
+
+#configure teamcity agent installation
+
+	sudo cp $teamcity_agent_installation_path/conf/buildAgent.dist.properties \
 		$teamcity_agent_installation_path/conf/buildAgent.properties \
 		|| die "Unable to copy default configuration file for TeamCity Build Agent."
 
