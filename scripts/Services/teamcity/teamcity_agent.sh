@@ -43,12 +43,12 @@ fi
 #build startup and stop scripts from templates
 sudo sed -e "s;%TEAMCITY_AGENT_INSTALLATION_PATH%;$teamcity_agent_installation_path;g" \
 				 -e "s;%TEAMCITY_AGENT_LOG_FILE%;$teamcity_agent_log_file;g" \
-				 ./Services/teamcity/control_scripts/teamcity_agent_start_template.sh | sudo tee $teamcity_agent_start_script &&
+				 ./Services/TeamCity/control_scripts/teamcity_agent_start_template.sh | sudo tee $teamcity_agent_start_script &&
 sudo chmod 0755 $teamcity_agent_start_script || die "Unable to create TeamCity Agent startup script at $teamcity_agent_start_script."
 
 sudo sed -e "s;%TEAMCITY_AGENT_INSTALLATION_PATH%;$teamcity_agent_installation_path;g" \
 				 -e "s;%TEAMCITY_AGENT_LOG_FILE%;$teamcity_agent_log_file;g" \
-				 ./Services/teamcity/control_scripts/teamcity_agent_stop_template.sh | sudo tee $teamcity_agent_stop_script &&
+				 ./Services/TeamCity/control_scripts/teamcity_agent_stop_template.sh | sudo tee $teamcity_agent_stop_script &&
 sudo chmod 0755 $teamcity_agent_stop_script || die "Unable to create TeamCity Agent stop script at $teamcity_agent_stop_script."
 
 #restore ownership of scripts folder to dendro user and set exec permissions
@@ -58,7 +58,7 @@ sudo chmod -R 0755 $teamcity_control_scripts_path
 #build systemd service file that will call the scripts
 
 printf "[Unit]
-Description=TeamCity Server Service
+Description=TeamCity Agent Service
 [Service]
 Type=simple
 Restart=always
