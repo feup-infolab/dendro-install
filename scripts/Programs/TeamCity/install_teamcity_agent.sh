@@ -48,16 +48,16 @@ else
 		|| die "Unable to copy default configuration file for TeamCity Build Agent."
 
 	replace_text_in_file $teamcity_agent_installation_path/conf/buildAgent.properties \
-		'serverUrl=http://localhost:8111/' \
-		"serverUrl=http://localhost:$teamcity_port/" \
-		'teamcity_patch_dendro_build_server' &&
+		"serverUrl=http://localhost:8111/" \
+		"serverUrl=http://$host:$teamcity_port/" \
+		"teamcity_patch_dendro_build_server" &&
 
 	patch_file $teamcity_agent_installation_path/conf/buildAgent.properties \
 		'name=' \
 		"name=teamcity_patch_dendro_build_server_agent" \
 		'teamcity_patch_dendro_build_server_agent_name' || die "Unable to patch the configuration file for TeamCity Build Agent."
 
-	chmod u+x $teamcity_agent_installation_path/bin/*.sh || die "Unable to set permissions on the TeamCity Scripts."
+	chmod 0755 $teamcity_agent_installation_path/bin/*.sh || die "Unable to set permissions on the TeamCity Scripts."
 	cd - || die "Unable to return to previous directory during TeamCity Setup."
 fi
 
