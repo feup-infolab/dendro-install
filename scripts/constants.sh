@@ -201,7 +201,7 @@ get_replacement_line()
 	fi
 
 	case $extension in
-		sh|properties|yaml)
+		sh|properties|yaml|yml|conf|cnf)
 			local replaced_line
 			IFS='%'
 			read -r -d '' replaced_line << LUCHI

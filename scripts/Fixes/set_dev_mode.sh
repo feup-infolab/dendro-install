@@ -25,14 +25,15 @@ file_exists_flag="true"
 # 	die "File $mongodb_conf_file does not exist."
 # fi
 
+npm install stylus -g
 
 ##ElasticSearch
 info "Trying to open ElasticSearch to ANY remote connection."
 file_exists file_exists_flag $elasticsearch_conf_file
 if [[ "$file_exists_flag" == "true" ]]; then
 	info "File $elasticsearch_conf_file exists and will be edited."
-	patch_file $elasticsearch_conf_file "^# network.host: 192.168.0.1" "network.host: 0.0.0.0" "elasticsearch_dendro_dev_patch_network_host" && success "Opened ElasticSearch." || die "Unable to patch ElasticSearch configuration file (hostname)."
-		patch_file $elasticsearch_conf_file "^# http.port: 9200" "http.port: 9200" "elasticsearch_dendro_dev_patch_network_port" && success "Opened ElasticSearch." || die "Unable to patch ElasticSearch configuration file (port)."
+	patch_file $elasticsearch_conf_file "# network.host: 192.168.0.1" "network.host: 0.0.0.0" "elasticsearch_dendro_dev_patch_network_host" && success "Opened ElasticSearch." || die "Unable to patch ElasticSearch configuration file (hostname)."
+	patch_file $elasticsearch_conf_file "^# http.port: 9200" "http.port: 9200" "elasticsearch_dendro_dev_patch_network_port" && success "Opened ElasticSearch." || die "Unable to patch ElasticSearch configuration file (port)."
 	sudo service elasticsearch restart || die "Unable to restart ElasticSearch service."
 else
 	die "File $elasticsearch_conf_file does not exist."
@@ -43,7 +44,7 @@ info "Trying to open Redis to ANY remote connection."
 file_exists file_exists_flag $redis_conf_file
 if [[ "$file_exists_flag" == "true" ]]; then
 	info "File $redis_conf_file exists and will be edited."
-	patch_file $redis_conf_file "^bind 127.0.0.1" "bind 0.0.0.0" "redis_dendro_dev_patch"  && success "Opened Redis." || die "Unable to patch Redis configuration file."
+	patch_file $redis_conf_file "bind 127.0.0.1" "bind 0.0.0.0" "redis_dendro_dev_patch"  && success "Opened Redis." || die "Unable to patch Redis configuration file."
 	sudo service redis restart || die "Unable to restart Redis service."
 else
 	die "File $redis_conf_file does not exist."
@@ -55,7 +56,20 @@ info "Trying to open MySQL to ANY remote connection."
 file_exists file_exists_flag $mysql_conf_file
 if [[ "$file_exists_flag" == "true" ]]; then
 	info "File $mysql_conf_file exists and will be edited."
-	patch_file $mysql_conf_file "^bind-address.*127.0.0.1" "#bind-address            = 127.0.0.1" "mysql_dendro_dev_patch"  && success "Patched MySQL $mysql_conf_file file." || die "Unable to patch MySQL configuration file: $mysql_conf_file."
+
+	IFS='%'
+	read -r -d '' old_line << LUCHI
+bind-address            = 127.0.0.1
+LUCHI
+	unset IFS
+
+	IFS='%'
+	read -r -d '' new_line << LUCHI
+#bind-address            = 127.0.0.1
+LUCHI
+	unset IFS
+
+	patch_file $mysql_conf_file $old_line $new_line "mysql_dendro_dev_patch"  && success "Patched MySQL $mysql_conf_file file." || die "Unable to patch MySQL configuration file: $mysql_conf_file."
 
 	mysql -u"${mysql_username}" \
 	 -p"${mysql_root_password}" \
@@ -63,7 +77,7 @@ if [[ "$file_exists_flag" == "true" ]]; then
 
  	sudo service mysql restart || die "Unable to enable MySQL remote access."
 else
-	die "File $mongodb_conf_file does not exist."
+	die "File $mysql_conf_file does not exist."
 fi
 
 #go back to initial dir
