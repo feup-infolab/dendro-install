@@ -103,6 +103,7 @@ then
 	#install dependencies
 		if [ "${refresh_code_only}" == "true" ]; then
 			warning "Bypassing dependency installation"
+			source ./SQLCommands/grant_commands.sh
 		else
 			warning "Installing dependencies"
 			source ./Dependencies/misc.sh
@@ -121,6 +122,14 @@ then
 				# info "Installing OpenLink Virtuoso Database from PPA (Binary)"
 				# source ./Dependencies/virtuoso_from_ppa.sh
 			fi
+
+			timeout=30
+			info "Waiting for virtuoso service to start. Installing base ontologies in virtuoso in $timeout seconds..."
+			for (( i = 0; i < $timeout; i++ )); do
+				echo -ne $[$timeout-i]...
+				sleep 1s
+			done
+			echo
 
 			source ./SQLCommands/grant_commands.sh
 			source ./Checks/check_services_status.sh
