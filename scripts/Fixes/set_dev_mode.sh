@@ -56,15 +56,15 @@ file_exists file_exists_flag $mysql_conf_file
 if [[ "$file_exists_flag" == "true" ]]; then
 	info "File $mysql_conf_file exists..."
 
-	IFS='%'
-	read -r -d '' old_line << LUCHI
-bind-address		= 127.0.0.1
-LUCHI
-	unset IFS
-
 IFS='%'
 read -r -d '' old_line << LUCHI
-# bind-address		= 127.0.0.1
+bind-address		= 127.0.0.1
+LUCHI
+unset IFS
+
+IFS='%'
+read -r -d '' new_line << LUCHI
+#bind-address		= 127.0.0.1
 LUCHI
 unset IFS
 

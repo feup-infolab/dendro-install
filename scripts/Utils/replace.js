@@ -11,9 +11,9 @@
 
 if(!process.argv[2] || !process.argv[3] || !process.argv[4])
 {
-
   process.exit("1");
 }
+
 function toUnicode(theString) {
   var unicodeString = '';
   for (var i=0; i < theString.length; i++) {
