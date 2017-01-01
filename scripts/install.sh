@@ -173,7 +173,7 @@ then
 		sudo dpkg-reconfigure -f noninteractive locales
 
 	#check services are up
-		#source ./Checks/check_services_status.sh	
+		#source ./Checks/check_services_status.sh
 
 	#reload all services to start dendro and dendro recommender
 		sudo systemctl reload
@@ -235,4 +235,7 @@ then
 else
 	info "Visit ${dendro_base_uri} for the Dendro web interface."
 	info "Visit http://${dendro_recommender_host}:${dendro_recommender_port} for the Dendro Recommender web interface."
+	if [[ "$dendro_branch" != "" ]]; then
+		info "Development branch $dendro_branch now active."
+	fi
 fi

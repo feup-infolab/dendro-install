@@ -10,8 +10,6 @@ fi
 
 info "Setting up Dendro service...\n"
 
-#printf "/usr/local/bin/node ${dendro_installation_path}/app.js >> ${dendro_log_file} 2>&1"
-
 #save current dir
 setup_dir=$(pwd)
 
