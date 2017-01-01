@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-if [ -z ${DIR+x} ]; then 
+if [ -z ${DIR+x} ]; then
 	#running by itself
 	source ../constants.sh
 	script_dir=$(get_script_dir)
 	running_folder='.'
-else 
+else
 	#running from dendro_full_setup_ubuntu_server_ubuntu_16.sh
 	source ./constants.sh
 	script_dir=$(get_script_dir)
@@ -14,7 +14,20 @@ fi
 
 info "Generating Configuration Files..."
 
-node $running_folder/build_configuration_files.js \
+if [[ "${dr_stage1_active}" == "true" ]]
+then
+	dendro_recommender_interactions_table="${interactions_table_stage1}"
+	printf "${Cyan}[INFO]${Color_Off} Stage 1 of recommender is set as active. Interactions table will be ${dendro_recommender_interactions_table}\n"
+elif [[ "${dr_stage2_active}" == "true" ]]
+	then
+		dendro_recommender_interactions_table="${interactions_table_stage2}"
+		printf "${Cyan}[INFO]${Color_Off} Stage 2 of recommender is set as active. Interactions table will be ${dendro_recommender_interactions_table}\n"
+else
+	printf "${Red}[ERROR]${Color_Off} Either stage 1 or stage 2 of dendro recommender must be active..."
+	exit
+fi
+
+nodejs $running_folder/build_configuration_files.js \
 	--dr_config_output_folder_location "${running_folder}/generated_configurations" \
 	--dendro_config_output_folder_location "${running_folder}/generated_configurations" \
 	--dr_config_template_abs_path "${running_folder}/DendroRecommender/application.conf.template" \
@@ -66,6 +79,6 @@ node $running_folder/build_configuration_files.js \
 	--dr_stage2_active $dr_stage2_active \
 	--gmaps_api_key $gmaps_api_key \
 	--gmaps_map_height $gmaps_map_height || die "Failure generating configuration files."
-	
-	
+
+
 success "Generated configuration files."

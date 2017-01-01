@@ -17,13 +17,13 @@ if ($confirmation -eq 'y') {
   cd ..
   cd ..
 
-  vagrant halt -f "dendroVagrantDemo"
+  vagrant halt -f $VM_NAME
   if ($? -ne 1)
   {
   	echo "Unable to power off VM "﻿$VM_NAME
   }
 
-  vagrant destroy -f "﻿dendroVagrantDemo"
+  vagrant destroy -f $VM_NAME
   if ($? -ne 1)
   {
   	echo "Unable to destroy VM "﻿$VM_NAME
@@ -41,7 +41,7 @@ if ($confirmation -eq 'y') {
 
   #delete .vagrant folder (purge logs and junk)
   Remove-Item .\.vagrant -recurse
-  rmdir .\.vagrant -r -f
+  rmdir .\.vagrant -r -Force
 }
 else
 {

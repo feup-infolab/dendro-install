@@ -10,14 +10,12 @@ fi
 
 info "Setting up Dendro service...\n"
 
-#printf "/usr/local/bin/node ${dendro_installation_path}/app.js >> ${dendro_log_file} 2>&1"
-
 #save current dir
 setup_dir=$(pwd)
 
 #stop current recommender service if present
 info "Stopping $dendro_service_name service..."
-sudo systemctl stop $dendro_service_name
+sudo systemctl stop $dendro_service_name > /dev/null
 
 #setup auto-start dendro service
 sudo rm -rf $dendro_startup_item_file
@@ -33,7 +31,7 @@ printf "/usr/local/bin/nodejs ${dendro_installation_path}/app.js | tee ${dendro_
 printf "\n"
 
 printf "[Unit]
-Description=Dendro recommender daemon ${active_deployment_setting}
+Description=Dendro ${active_deployment_setting}  daemon
 [Service]
 Type=simple
 Restart=on-failure

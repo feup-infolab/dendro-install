@@ -46,12 +46,11 @@ WantedBy=multi-user.target\n" | sudo tee $dendro_recommender_startup_item_file
 
 sudo chmod 0655 $dendro_recommender_startup_item_file
 sudo systemctl daemon-reload
-sudo systemctl reload
 sudo systemctl enable $dendro_recommender_service_name
 sudo systemctl start $dendro_recommender_service_name
 
 #go back to initial dir
-cd $setup_dir
+cd $setup_dir || die "Unable to cd to setup dir after installing Dendro Recommender service."
 
 success "Finished setting up Dendro Recommender service."
 

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 source ./scripts/constants.sh
 
 export VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS
