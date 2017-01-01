@@ -15,7 +15,7 @@ setup_dir=$(pwd)
 
 #stop current teamcity service if present
 info "Stopping $teamcity_service_name service..."
-sudo systemctl stop $teamcity_service_name
+sudo systemctl stop $teamcity_service_name > /dev/null
 
 #setup auto-start teamcity service
 sudo rm -rf $teamcity_startup_item_file

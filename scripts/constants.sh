@@ -156,8 +156,12 @@ file_is_patched_for_line()
 	local patch_tag=$5
 
 	#printf "grep -q \"$patch_tag\" $file"
+	local patched
+	info "GREP'ing for \"$patch_tag\"...:"
+	grep "$patch_tag" $file
+	patched="$?"
 
-	if grep -q "$patch_tag" $file
+	if [ "$patched" == "0" ]
 	then
     	eval "$1=\"true\""
 	else
@@ -257,9 +261,7 @@ add_text_at_end_of_file()
 
 get_timestamp()
 {
-	local timestamp=""
-	timestamp=$(date "+%Y.%m.%d-%H.%M.%S")
-	eval "$1=\"$timestamp\""
+	eval "$1=\"$(date "+%Y_%m_%d-%H_%M_%S")\""
 }
 
 replace_text_in_file()
@@ -271,7 +273,7 @@ replace_text_in_file()
 
 	#make file backup
 
-	local timestamp
+	timestamp=""
 	get_timestamp timestamp
 	sudo cp $file $file'_'$timestamp.bak
 
@@ -288,7 +290,7 @@ replace_text_in_file()
 	fi
 
 	replacement_text=$(nodejs $installation_scripts_dir/Utils/replace.js "$old_line" "$new_line" "$file")
-	rm -rf $file
+	sudo rm -rf $file
 	echo "$replacement_text" | sudo tee $file >> /dev/null
 }
 
@@ -325,13 +327,15 @@ patch_file()
 
 		if [ "$file_is_patched" == "true" ]
 		then
-			warning "File $file is already patched."
+			warning "File $file is already patched for patch $patch_tag."
 		else
 			if [ "$old_line" ==  "" ]
 			then
 				add_text_at_end_of_file "$file" "$replacement_line" "$patch_tag"
 			else
 				replace_text_in_file "$file" "$old_line" "$replacement_line" "$patch_tag"
+				info "Visual check if patch was applied:"
+				file_is_patched_for_line file_is_patched "$file" "$old_line" "$new_line" "$patch_tag"
 			fi
 		fi
 	fi
@@ -340,6 +344,20 @@ patch_file()
 unpatch_file()
 {
 	echo 1
+}
+
+#take snapshot of VM
+take_vm_snapshot()
+{
+	local vm_name=$1
+	local operation=$2
+
+	timestamp=""
+	get_timestamp timestamp
+	local snapshot_name=$vm_name'_'$timestamp'_'$operation
+
+	info "Taking a snapshot of VM $vm_name with name $snapshot_name"
+  VBoxManage snapshot $vm_name take $snapshot_name
 }
 
 #configuration files for servers

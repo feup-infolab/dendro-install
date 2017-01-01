@@ -42,7 +42,7 @@ add_line_to_file_if_not_present () {
 refresh_code_only="false"
 set_dev_mode="false"
 
-while getopts 'actjsdurb:' flag; do
+while getopts 'actjdurb:' flag; do
   case $flag in
 		a)
      	install_teamcity_agent="true"
@@ -53,9 +53,6 @@ while getopts 'actjsdurb:' flag; do
     t)
      	run_tests="true"
       ;;
-    s)
-  		install_virtuoso_from_source="true"
-  		;;
     r)
 			refresh_code_only="true"
 		  ;;
@@ -132,8 +129,8 @@ then
 			source ./Dependencies/play_framework.sh
 
 			source ./Dependencies/mysql.sh
-			source ./Dependencies/mongodb.sh
-			source ./Services/mongodb.sh
+			#source ./Dependencies/mongodb.sh
+			#source ./Services/mongodb.sh
 
 			source ./Dependencies/elasticsearch.sh
 			source ./Services/elasticsearch.sh
@@ -176,7 +173,7 @@ then
 		sudo dpkg-reconfigure -f noninteractive locales
 
 	#check services are up
-		#source ./Checks/check_services_status.sh
+		#source ./Checks/check_services_status.sh	
 
 	#reload all services to start dendro and dendro recommender
 		sudo systemctl reload

@@ -17,7 +17,7 @@ setup_dir=$(pwd)
 
 #stop current recommender service if present
 info "Stopping $dendro_service_name service..."
-sudo systemctl stop $dendro_service_name
+sudo systemctl stop $dendro_service_name > /dev/null
 
 #setup auto-start dendro service
 sudo rm -rf $dendro_startup_item_file

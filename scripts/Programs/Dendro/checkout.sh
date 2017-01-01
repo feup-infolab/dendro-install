@@ -12,7 +12,7 @@ fi
 setup_dir=$(pwd)
 
 info "Stopping ${dendro_service_name} service..."
-sudo systemctl stop $dendro_service_name
+sudo systemctl stop $dendro_service_name > /dev/null
 
 if [[ "${dr_stage1_active}" == "true" ]]
 then

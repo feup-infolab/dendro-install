@@ -47,7 +47,7 @@ else
 		$teamcity_agent_installation_path/conf/buildAgent.properties \
 		|| die "Unable to copy default configuration file for TeamCity Build Agent."
 
-	replace_text_in_file $teamcity_agent_installation_path/conf/buildAgent.properties \
+	patch_file $teamcity_agent_installation_path/conf/buildAgent.properties \
 		"serverUrl=http://localhost:8111/" \
 		"serverUrl=http://$host:$teamcity_port/" \
 		"teamcity_patch_dendro_build_server" &&
