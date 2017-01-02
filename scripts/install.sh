@@ -19,6 +19,8 @@ get_script_dir  () {
 	echo $DIR
 }
 
+installation_scripts_dir="$(get_script_dir)"
+
 cd_to_current_dir () {
 	DIR="$(get_script_dir)"
 	info "CD'ing to ${DIR}"
@@ -40,26 +42,35 @@ add_line_to_file_if_not_present () {
 refresh_code_only="false"
 set_dev_mode="false"
 
-while getopts 'sdurb:' flag; do
+while getopts 'actjdurb:' flag; do
   case $flag in
-    s)
-  		install_virtuoso_from_source="true"
-  		;;
+		a)
+     	install_teamcity_agent="true"
+      ;;
+		c)
+     	install_teamcity="true"
+      ;;
+    t)
+     	run_tests="true"
+      ;;
     r)
 			refresh_code_only="true"
-			;;
+		  ;;
 		d)
 			set_dev_mode="true"
-		;;
+		  ;;
 		u)
 			unset_dev_mode="true"
-			;;
+		  ;;
+		j)
+			install_jenkins="true"
+		  ;;
     b)
    	 	dendro_branch=$OPTARG
     	;;
     *)
-		error "Unexpected option ${flag}"
-		;;
+			error "Unexpected option $flag"
+		  ;;
   esac
 done
 
@@ -67,14 +78,14 @@ cd_to_current_dir
 source ./constants.sh
 source ./secrets.sh
 
-if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ]; then
-	info "Running the Dendro User Setup."
-	info "NOTE: To setup this Virtual Machine for Development, use the -d flag. Example: ./install.sh -d"
+#apply pre-installation fixes such as DNS fixes (thank you bugged Vagrant Ubuntu boxes)
+info "Applying pre-installation fixes..."
+source ./Fixes/fix_dns.sh
+source ./Fixes/fix_locales.sh
 
-	#apply pre-installation fixes such as DNS fixes (thank you bugged Vagrant Ubuntu boxes)
-	info "Applying pre-installation fixes..."
-	source ./Fixes/fix_dns.sh
-	source ./Fixes/fix_locales.sh
+if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ] && [ "$install_jenkins" != "true" ] && [ "$install_teamcity" != "true" ] && [ "$install_teamcity_agent" != "true" ]
+then
+	info "Running the Dendro User Setup."
 
 	#fix any unfinished installations
 		info "Preparing setup..."
@@ -92,6 +103,7 @@ if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ]; then
 	#install dependencies
 		if [ "${refresh_code_only}" == "true" ]; then
 			warning "Bypassing dependency installation"
+			source ./SQLCommands/grant_commands.sh
 		else
 			warning "Installing dependencies"
 			source ./Dependencies/misc.sh
@@ -111,6 +123,14 @@ if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ]; then
 				# source ./Dependencies/virtuoso_from_ppa.sh
 			fi
 
+			timeout=30
+			info "Waiting for virtuoso service to start. Installing base ontologies in virtuoso in $timeout seconds..."
+			for (( i = 0; i < $timeout; i++ )); do
+				echo -ne $[$timeout-i]...
+				sleep 1s
+			done
+			echo
+
 			source ./SQLCommands/grant_commands.sh
 			source ./Checks/check_services_status.sh
 
@@ -118,8 +138,8 @@ if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ]; then
 			source ./Dependencies/play_framework.sh
 
 			source ./Dependencies/mysql.sh
-			source ./Dependencies/mongodb.sh
-			source ./Services/mongodb.sh
+			#source ./Dependencies/mongodb.sh
+			#source ./Services/mongodb.sh
 
 			source ./Dependencies/elasticsearch.sh
 			source ./Services/elasticsearch.sh
@@ -173,26 +193,58 @@ if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ]; then
 			info "Development branch $dendro_branch now active."
 		fi
 else
-	info "Running the Dendro Developer Setup."
-	if [[ "${set_dev_mode}" == "true" ]]
-	then
-		info "NOTE: To disable Development mode, use the -u flag. Example: ./install.sh -u"
-		source ./Fixes/set_dev_mode.sh
-		info "This Dendro instance has been set to Development mode."
-		warning "DO NOT use this in a production environment. Having all your databases accepting remote connections can represent a serious security risk."
-	fi
-	if [[ "${unset_dev_mode}" == "true" ]]
-	then
-		info "NOTE: To enable Development mode, use the -d flag. Example: ./install.sh -d"
-		source ./Fixes/unset_dev_mode.sh
-		info "This Dendro instance has been reverted to User mode."
-	fi
+		if [[ "${set_dev_mode}" == "true" ]]
+		then
+			info "Running the Dendro Developer Setup."
+			info "NOTE: To disable Development mode, use the -u flag. Example: ./install.sh -u"
+			source ./Fixes/set_dev_mode.sh
+			info "This Dendro instance has been set to Development mode."
+			warning "DO NOT use this in a production environment. Having all your databases accepting remote connections can represent a serious security risk."
+		fi
+		if [[ "${unset_dev_mode}" == "true" ]]
+		then
+			info "NOTE: To enable Development mode, use the -d flag. Example: ./install.sh -d"
+			source ./Fixes/unset_dev_mode.sh
+			info "This Dendro instance has been reverted to User mode."
+		fi
+		if [[ "$install_jenkins" == "true" ]]
+		then
+			info "Running Jenkins Setup."
+			source ./Programs/Jenkins/install_jenkins.sh
+		fi
+		if [[ "$install_teamcity" == "true" ]]
+		then
+			info "Running TeamCity Setup."
+			source ./Programs/TeamCity/install_teamcity.sh
+			source ./Services/TeamCity/teamcity.sh
+		elif [[ "$install_teamcity_agent" == "true" ]]
+		then
+			info "Running TeamCity Agent Setup."
+			source ./Programs/TeamCity/install_teamcity_agent.sh
+			source ./Services/TeamCity/teamcity_agent.sh
+		fi
 fi
 
 #go back to whatever was the directory at the start of this script
 cd "${starting_dir}" || warning "Unable to go back to the starting directory."
 
 #all ok.
-success "Dendro setup complete."
-info "Visit ${dendro_base_uri} for the Dendro web interface."
-info "Visit http://${dendro_recommender_host}:${dendro_recommender_port} for the Dendro Recommender web interface."
+success "Setup operations complete."
+
+if [ "$install_jenkins" == "true" ]
+then
+	info "Visit http://${host}:${jenkins_port} for the Jenkins web interface."
+elif [ "$install_teamcity" == "true" ]
+then
+	info "TeamCity running at http://$host:$teamcity_port"
+elif [ "$install_teamcity_agent" == "true" ]
+then
+	info "TeamCity agent installed."
+	info "TeamCity running at http://$host:$teamcity_port"
+else
+	info "Visit ${dendro_base_uri} for the Dendro web interface."
+	info "Visit http://${dendro_recommender_host}:${dendro_recommender_port} for the Dendro Recommender web interface."
+	if [[ "$dendro_branch" != "" ]]; then
+		info "Development branch $dendro_branch now active."
+	fi
+fi

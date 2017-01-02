@@ -24,7 +24,7 @@ source ./constants.sh
 
 	#dendro
 	warning "Stopping Dendro service ${dendro_service_name}..."
-	sudo systemctl stop $dendro_service_name
+	sudo systemctl stop $dendro_service_name > /dev/null
 	success "Stopped Dendro service ${dendro_service_name}"
 
 	warning "Disabling Dendro service ${dendro_service_name}..."
@@ -37,7 +37,7 @@ source ./constants.sh
 
 	#dendro recommender
 	warning "Stopping Dendro Recommender service ${dendro_recommender_service_name}..."
-	sudo systemctl stop $dendro_recommender_service_name
+	sudo systemctl stop $dendro_recommender_service_name > /dev/null
 	success "Stopped Dendro Recommender service ${dendro_recommender_service_name}."
 
 	warning "Disabling Dendro Recommender service ${dendro_recommender_service_name}..."

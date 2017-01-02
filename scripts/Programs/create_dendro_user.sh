@@ -12,16 +12,22 @@ fi
 setup_dir=$(pwd) &&
 
 #user exists?
-id -u $dendro_user_name
+id -u $dendro_user_name > /dev/null
 
-if [[ $? -eq 1 ]]; then
+if [[ "$?" -eq "1" ]]; then
 	sudo useradd $dendro_user_name || die "Failed to create user ${dendro_user_name}."
 else
 	info "User ${dendro_user_name} already exists, no need to create it again."
 fi
 
+if [[ ! -d $dendro_user_home_folder ]]
+then
+	sudo mkdir -p $dendro_user_home_folder
+	sudo chown -R $dendro_user_name $dendro_user_home_folder
+fi
+
 #group exists?
-if [ $(getent group ${dendro_user_group}) ]; then
+if [ "$(getent group ${dendro_user_group})" ]; then
   info "Group ${dendro_user_group} exists. It is not necessary to create it again."
 else
   info "Group $dendro_user_group does not exist. Creating..."

@@ -14,7 +14,7 @@ info "Installing OpenLink Virtuoso 7......"
 setup_dir=$(pwd) &&
 
 #stop virtuoso server if running
-sudo systemctl stop virtuoso
+sudo systemctl stop virtuoso > /dev/null
 
 #install virtuoso opensource 7
 cd $temp_downloads_folder

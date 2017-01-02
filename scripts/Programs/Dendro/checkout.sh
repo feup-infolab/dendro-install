@@ -12,7 +12,20 @@ fi
 setup_dir=$(pwd)
 
 info "Stopping ${dendro_service_name} service..."
-sudo systemctl stop $dendro_service_name
+sudo systemctl stop $dendro_service_name > /dev/null
+
+if [[ "${dr_stage1_active}" == "true" ]]
+then
+	dendro_recommender_interactions_table="${interactions_table_stage1}"
+	printf "${Cyan}[INFO]${Color_Off} Stage 1 of recommender is set as active. Interactions table will be ${dendro_recommender_interactions_table}\n"
+elif [[ "${dr_stage2_active}" == "true" ]]
+	then
+		dendro_recommender_interactions_table="${interactions_table_stage2}"
+		printf "${Cyan}[INFO]${Color_Off} Stage 2 of recommender is set as active. Interactions table will be ${dendro_recommender_interactions_table}\n"
+else
+	printf "${Red}[ERROR]${Color_Off} Either stage 1 or stage 2 of dendro recommender must be active..."
+	exit
+fi
 
 #check out dendro code from svn repo
 info "Installing Dendro to path : ${dendro_installation_path}\n"

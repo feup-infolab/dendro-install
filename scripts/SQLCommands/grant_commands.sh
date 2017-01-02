@@ -15,14 +15,6 @@ else
 	running_folder=$script_dir/SQLCommands
 fi
 
-timeout=30
-info "Waiting for virtuoso service to start. Installing base ontologies in virtuoso in $timeout seconds..."
-for (( i = 0; i < $timeout; i++ )); do
-	echo -ne $[$timeout-i]...
-	sleep 1s
-done
-echo
-
 /usr/local/virtuoso-opensource/bin/isql < $running_folder/interactive_sql_commands.sql ||
 die "Unable to load ontologies into Virtuoso."
 

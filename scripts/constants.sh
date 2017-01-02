@@ -85,6 +85,9 @@ recommender_installation_path='/dendro_recommender'
 		redis_host="127.0.0.1"
 		redis_database=1
 
+		#jenkins
+		jenkins_port=8080
+
 #dendro recommender
 	dendro_recommender_service_name=$active_deployment_setting-recommender
 	dendro_recommender_startup_item_file=/etc/systemd/system/$dendro_recommender_service_name.service
@@ -100,23 +103,9 @@ recommender_installation_path='/dendro_recommender'
 
 	dendro_recommender_all_ontologies_url="${dendro_base_uri}/ontologies/all"
 
-	if [[ "${dr_stage1_active}" == "true" ]]
-	then
-		dendro_recommender_interactions_table="${interactions_table_stage1}"
-		printf "${Cyan}[INFO]${Color_Off} Stage 1 of recommender is set as active. Interactions table will be ${dendro_recommender_interactions_table}\n"
-	elif [[ "${dr_stage2_active}" == "true" ]]
-		then
-			dendro_recommender_interactions_table="${interactions_table_stage2}"
-			printf "${Cyan}[INFO]${Color_Off} Stage 2 of recommender is set as active. Interactions table will be ${dendro_recommender_interactions_table}\n"
-	else
-		printf "${Red}[ERROR]${Color_Off} Either stage 1 or stage 2 of dendro recommender must be active..."
-		exit
-	fi
-
 	#dependencies
 		#play framework
-		play_framework_install_path='/tmp/play'
-
+		play_framework_install_path='/etc/play'
 
 #running variables help
 
@@ -136,7 +125,7 @@ get_script_dir  () {
 cd_to_current_dir () {
 	DIR="$(get_script_dir)"
 	printf "${Cyan}[INFO]${Color_Off} CD'ing to ${DIR}\n"
-	cd "${DIR}"
+	cd "${DIR}" || die "Unable to return to the current directory"
 }
 
 info () {
@@ -159,7 +148,6 @@ die () {
 	printf "${On_IRed}[FATAL ERROR]${Color_Off} $1\n${Red}Please check any prior error messages.${Color_Off}\n"
 	exit 1
 }
-
 file_is_patched_for_line()
 {
 	local file=$2
@@ -168,8 +156,12 @@ file_is_patched_for_line()
 	local patch_tag=$5
 
 	#printf "grep -q \"$patch_tag\" $file"
-	
-	if grep -q "$patch_tag" $file
+	local patched
+	info "GREP'ing for \"$patch_tag\"...:"
+	grep "$patch_tag" $file
+	patched="$?"
+
+	if [ "$patched" == "0" ]
 	then
     	eval "$1=\"true\""
 	else
@@ -180,7 +172,7 @@ file_is_patched_for_line()
 get_tmp_copy_of_file()
 {
 	local full_path=$2
-	
+
 	local filename=$(basename "$full_path")
 	local extension="${filename##*.}"
 	local name_only="${filename%.*}"
@@ -188,11 +180,11 @@ get_tmp_copy_of_file()
 	local date="$(date +"%m_%d_%Y_%hh_%mm_%ss")"
 	local tmp_folder_path="/tmp/dendro_file_patches/$date"
 	local tmp_file_path="$tmp_folder_path/$filename"
-	
+
 	mkdir -p $tmp_folder_path
-	
+
 	touch "$tmp_file_path"
-	
+
 	eval "$1=\$tmp_file_path"
 }
 
@@ -201,16 +193,75 @@ get_replacement_line()
 	local old_line=$2
 	local new_line=$3
 	local patch_tag=$4
+	local filename=$5
+	local extension=""
 
-	local replaced_line="#START_PATCH_TAG: $patch_tag\n"
-	replaced_line="$replaced_line###START REPLACEMENT by Dendro install scripts\n"
-	replaced_line="$replaced_line#OLD VALUE: $old_line\n"
-	replaced_line="$replaced_line#NEW VALUE\n"
-	replaced_line="$replaced_line$new_line\n"
-	replaced_line="$replaced_line###END REPLACEMENT by Dendro install scripts\n"
-	replaced_line="$replaced_line#END_PATCH_TAG: $patch_tag\n"
+	if [[ ! "$filename" == "" ]]
+	then
+		filename=$(basename "$filename")
+		extension="${filename##*.}"
+	else
+		extension="sh"
+	fi
+
+	case $extension in
+		sh|properties|yaml|yml|conf|cnf)
+			local replaced_line
+			IFS='%'
+			read -r -d '' replaced_line << LUCHI
+#START_PATCH_TAG: $patch_tag
+###START REPLACEMENT by Dendro install scripts
+#OLD VALUE: $old_line
+#NEW VALUE
+$new_line
+###END REPLACEMENT by Dendro install scripts
+#END_PATCH_TAG: $patch_tag
+LUCHI
+			unset IFS
+			;;
+		xml)
+			local replaced_line
+			IFS='%'
+			read -r -d '' replaced_line << LUCHI
+<!-- START_PATCH_TAG: $patch_tag -->
+<!-- START REPLACEMENT by Dendro install scripts -->
+<!-- OLD VALUE: $old_line-->
+<!-- NEW VALUE-->
+$new_line
+<!-- END REPLACEMENT by Dendro install scripts -->
+<!-- END_PATCH_TAG: $patch_tag-->
+LUCHI
+			unset IFS
+			;;
+		*)
+			die "Unknown file extension: $extension"
+			;;
+	esac
 
 	eval "$1=\$replaced_line"
+}
+
+add_text_at_end_of_file()
+{
+	local file=$1
+	local new_line=$2
+	local tmp_copy=""
+
+	#Create temporary file with new line in place
+	get_tmp_copy_of_file tmp_copy $file
+
+	cat file > $tmp_copy
+	echo '\n' > $tmp_copy
+	echo new_line > $tmp_copy
+
+	#Copy the new file over the original file
+	rm -rf $file
+	cp $tmp_copy $file
+}
+
+get_timestamp()
+{
+	eval "$1=\"$(date "+%Y_%m_%d-%H_%M_%S")\""
 }
 
 replace_text_in_file()
@@ -220,21 +271,27 @@ replace_text_in_file()
 	local new_line=$3
 	local tmp_copy=""
 
-	#Create temporary file with new line in place
-	get_tmp_copy_of_file tmp_copy $file
-	
-	if [ "$(uname)" == "Darwin" ]; then
-		brew install gnu-sed
-		cat $file | gsed -e "s/$old_line/$new_line/" > $tmp_copy
-	elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-		cat $file | sed -e "s/$old_line/$new_line/" > $tmp_copy
-	elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
-		cat $file | sed -e "s/$old_line/$new_line/" > $tmp_copy
+	#make file backup
+
+	timestamp=""
+	get_timestamp timestamp
+	sudo cp $file $file'_'$timestamp.bak
+
+	#replace multi-line string in file
+	#from http://ask.xmodulo.com/search-and-replace-multi-line-string.html
+
+	local node_exists=""
+	node_exists=$(which nodejs)
+
+	if [ "$?" = "1" ] || [ "$node_exists" = "" ]
+	then
+		info "NodeJS is not installed! Installing..."
+		sudo apt-get -y install nodejs
 	fi
-	
-	#Copy the new file over the original file
-	rm -rf $file
-	cp $tmp_copy $file
+
+	replacement_text=$(nodejs $installation_scripts_dir/Utils/replace.js "$old_line" "$new_line" "$file")
+	sudo rm -rf $file
+	echo "$replacement_text" | sudo tee $file >> /dev/null
 }
 
 file_exists()
@@ -243,7 +300,7 @@ file_exists()
 	if [ ! -f $file ]; then
 		eval "$1=\"false\""
 	else
-		eval "$1=\"true\""		
+		eval "$1=\"true\""
 	fi
 }
 
@@ -253,26 +310,33 @@ patch_file()
 	local old_line=$2
 	local new_line=$3
 	local patch_tag=$4
-	
+
 	local replacement_line
 	local file_is_patched=""
 	local file_exists_flag
-	
+
 	file_exists file_exists_flag $file
-	
+
 	if [ "$file_exists_flag" == "false" ]
 	then
 	    error "File $file not found!"
 		return 1
 	else
-		get_replacement_line replacement_line "$old_line" "$new_line" "$patch_tag"
+		get_replacement_line replacement_line "$old_line" "$new_line" "$patch_tag" "$file"
 		file_is_patched_for_line file_is_patched "$file" "$old_line" "$new_line" "$patch_tag"
-		
-		if [ "$file_is_patched" == "true" ] 
+
+		if [ "$file_is_patched" == "true" ]
 		then
-			warning "File $file is already patched."
+			warning "File $file is already patched for patch $patch_tag."
 		else
-			replace_text_in_file "$file" "$old_line" "$replacement_line" "$patch_tag"
+			if [ "$old_line" ==  "" ]
+			then
+				add_text_at_end_of_file "$file" "$replacement_line" "$patch_tag"
+			else
+				replace_text_in_file "$file" "$old_line" "$replacement_line" "$patch_tag"
+				info "Visual check if patch was applied:"
+				file_is_patched_for_line file_is_patched "$file" "$old_line" "$new_line" "$patch_tag"
+			fi
 		fi
 	fi
 }
@@ -280,6 +344,20 @@ patch_file()
 unpatch_file()
 {
 	echo 1
+}
+
+#take snapshot of VM
+take_vm_snapshot()
+{
+	local vm_name=$1
+	local operation=$2
+
+	timestamp=""
+	get_timestamp timestamp
+	local snapshot_name=$vm_name'_'$timestamp'_'$operation
+
+	info "Taking a snapshot of VM $vm_name with name $snapshot_name"
+  VBoxManage snapshot $vm_name take $snapshot_name
 }
 
 #configuration files for servers
@@ -367,3 +445,57 @@ On_IBlue='\033[0;104m'    # Blue
 On_IPurple='\033[0;105m'  # Purple
 On_ICyan='\033[0;106m'    # Cyan
 On_IWhite='\033[0;107m'   # White
+
+#teamcity (General)
+	teamcity_installation_path='/TeamCity'
+	teamcity_control_scripts_path="$teamcity_installation_path/control_scripts"
+	teamcity_agent_installation_path="$teamcity_installation_path/buildAgent"
+	teamcity_pids_folder="$teamcity_installation_path/service_pids"
+	teamcity_cookies_file="/tmp/teamcity_setup/teamcity_cookies.txt"
+
+	#teamcity_url="https://download.jetbrains.com/teamcity/TeamCity-10.0.3.tar.gz"
+	teamcity_url="http://10.0.2.3/TeamCity-10.0.4.tar.gz" #macbook pro
+	teamcity_md5="30aa7af265e8e68d12002308d80f62ef"
+
+#Teamcity Server
+	teamcity_service_name='teamcity'
+	teamcity_startup_item_file="/etc/systemd/system/$teamcity_service_name.service"
+	teamcity_start_script="$teamcity_control_scripts_path/teamcity_start.sh"
+	teamcity_stop_script="$teamcity_control_scripts_path/teamcity_stop.sh"
+	teamcity_log_file="/var/log/$teamcity_service_name.log"
+	teamcity_pid_file="$teamcity_pids_folder/teamcity.pid"
+	teamcity_port=3001
+
+#Teamcity Agent
+	teamcity_agent_service_name='teamcity_agent'
+	teamcity_agent_startup_item_file="/etc/systemd/system/$teamcity_agent_service_name.service"
+	teamcity_agent_start_script="$teamcity_installation_path/control_scripts/teamcity_agent_start.sh"
+	teamcity_agent_stop_script="$teamcity_installation_path/control_scripts/teamcity_agent_stop.sh"
+	teamcity_agent_log_file="/var/log/$teamcity_agent_service_name.log"
+	teamcity_agent_pid_file="$teamcity_pids_folder/teamcity_agent.pid"
+
+try_n_times_to_get_url()
+{
+	local n_tries=$1
+	local url=$2
+
+	local counter=0
+
+	wget --progress=bar:force $url
+	download_result=$?
+	while [ "$download_result" -ne "0" ] && [ $counter -lt $n_tries ]
+	do
+		sleep 1
+		counter=$(( $counter + 1 ))
+		info "Network request failed. Retry No. $counter. Will retry until the try No. $n_tries. This is NORMAL as the TeamCity Server may be booting up!"
+		wget --progress=bar:force $url
+		download_result=$?
+	done
+
+	if [ $counter -eq $n_tries ] && [ "$download_result" -ne "0" ]
+	then
+		return 1
+	else
+		return 0
+	fi
+}

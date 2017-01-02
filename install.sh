@@ -11,34 +11,53 @@ chmod -R 0777 ~/.vagrant.d
 
 SHELL_ARGS=''
 
-while getopts 'usdrb:' flag; do
+while getopts 'atcjudrb:' flag; do
   case $flag in
-    s)
-  		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-s '
-  		;;
+    a)
+      take_vm_snapshot $active_deployment_setting "install_teamcity_agent"
+    	VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-a '
+    	;;
+    c)
+      take_vm_snapshot $active_deployment_setting "install_teamcity"
+    	VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-c '
+    	;;
+    t)
+      take_vm_snapshot $active_deployment_setting "run_tests"
+    	VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-t '
+    	;;
     r)
-		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-r '
-		;;
-	d)
-		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-d '
-		;;
-	u)
-		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-u '
-		;;
-	b)
-		VAGRANT_SHELL_ARGS="$VAGRANT_SHELL_ARGS-b $OPTARG "
-		;;
+      take_vm_snapshot $active_deployment_setting "refresh_code_only"
+		  VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-r '
+		  ;;
+    d)
+      take_vm_snapshot $active_deployment_setting "set_dev_mode"
+		  VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-d '
+		  ;;
+    u)
+      take_vm_snapshot $active_deployment_setting "unset_dev_mode"
+		  VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-u '
+	    ;;
+    j)
+      take_vm_snapshot $active_deployment_setting "install_jenkins"
+  		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-j '
+  		;;
+	  b)
+      take_vm_snapshot $active_deployment_setting "install_with_branch_$OPTARG"
+		  VAGRANT_SHELL_ARGS="$VAGRANT_SHELL_ARGS-b $OPTARG "
+		  ;;
     *)
-		error "Unexpected option ${flag}"
-		;;
+		  error "Unexpected option $flag"
+		  ;;
   esac
-
 done
 
 source ./define_env_vars.sh
 export VAGRANT_VM_INSTALL='true'
 
-vagrant halt
+info "Running vagrant halt..."
+vagrant halt -f
+
+info "Running vagrant up..."
 #vagrant box update
 vagrant up --provider virtualbox --provision ||
 die "There were errors installing Dendro."

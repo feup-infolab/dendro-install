@@ -9,19 +9,29 @@ else
 fi
 
 info "Installing Preliminary Dependencies....PLEASE WAIT, as this will take several minutes."
+info "NOTE: To setup this Virtual Machine for Development, use the -d flag. Example: ./install.sh -d"
 
 #save current dir
 setup_dir=$(pwd)
 
-sudo apt-get -y -f -qq install devscripts autoconf automake libtool flex bison gperf gawk m4 make libssl-dev git imagemagick subversion zip htop redis-server nodejs npm --fix-missing || die "Failed to install preliminary dependencies. Please check any prior error messages."
+sudo apt-get update
+sudo apt-get -y -f -qq install unzip devscripts autoconf automake libtool flex bison gperf gawk m4 make libssl-dev git imagemagick subversion zip htop redis-server nodejs npm htop mongodb --fix-missing || die "Failed to install preliminary dependencies. Please check any prior error messages."
+
+#alias nodejs to node
+sudo ln -s "$(which nodejs)" /usr/bin/node
+
+#update npm
+sudo npm -g install npm@latest
+sudo npm cache clean
+
+#install vim plugins
+#http://vim.spf13.com/#install
+	#curl http://j.mp/spf13-vim3 -L -o - | sh
 
 #install bower
 sudo npm install -g bower
 
-#alias nodejs to node
-sudo ln -s `which nodejs` /usr/bin/node
-
 #go back to initial dir
-cd $setup_dir
+cd $setup_dir || die "Unable to return to setup directory while installing base dependencies"
 
 success "Installed Preliminary Dependencies."

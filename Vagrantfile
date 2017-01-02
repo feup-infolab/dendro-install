@@ -25,6 +25,11 @@ end
 puts "Configuring Vagrant VM #{ENV['VAGRANT_VM_NAME']} on IP #{ENV['VAGRANT_VM_IP']}."
 
 Vagrant.configure("2") do |config|
+  #shared folders
+
+  # other config here
+  # config.vm.synced_folder "shared_folders/etc/init.d", "/etc/init.d"
+
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
@@ -32,9 +37,11 @@ Vagrant.configure("2") do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = "ubuntu/xenial64"
-  config.vm.box_version = "20160606.1.0"
+  config.vm.box_version = "20161214.0.1"
 
   if ENV['VAGRANT_VM_SSH_USERNAME'] != nil && ENV['VAGRANT_VM_SSH_PASSWORD'] != nil
+    config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+
     config.ssh.username=ENV['VAGRANT_VM_SSH_USERNAME']
     puts "SSH username to connect to the VM will be " + config.ssh.username
 
@@ -50,6 +57,7 @@ Vagrant.configure("2") do |config|
     subconfig.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}"
     subconfig.vm.network :forwarded_port, :guest => 22, :host => 7665
     subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
+    config.vm.boot_timeout= 600
   end
 
   config.vm.provider "virtualbox" do |vb|
@@ -57,7 +65,7 @@ Vagrant.configure("2") do |config|
      # vb.gui = true
      # Customize the amount of memory on the VM:
      vb.memory = "2048"
-     vb.cpus = "1"
+     vb.cpus = "2"
      vb.name = "#{ENV['VAGRANT_VM_NAME']}"
 
      vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]

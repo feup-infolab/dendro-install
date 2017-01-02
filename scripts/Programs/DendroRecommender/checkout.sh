@@ -13,7 +13,7 @@ setup_dir=$(pwd)
 
 #stop current recommender service if present
 info "Stopping ${dendro_recommender_service_name} service..."
-sudo systemctl stop $dendro_recommender_service_name
+sudo systemctl stop $dendro_recommender_service_name > /dev/null
 
 #check out dendro recommender code from svn repo
 info "Installing Dendro Recommender to path : ${dendro_recommender_install_path}"

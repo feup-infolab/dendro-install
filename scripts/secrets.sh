@@ -7,6 +7,7 @@ secret="app_secretttttt192818923782364781263486712384761528764512asldkfjak"
 dendro_user_name='dendro'
 dendro_user_group='dendro'
 dendro_user_password='dendr0'
+dendro_user_home_folder="/home/$dendro_user_name"
 
 #mysql
 mysql_username='root'
@@ -39,3 +40,8 @@ mongodb_dba_password="r00t"
 #svn users and passwords
 svn_user="user_for_dendro_svn_repo"
 svn_user_password="password_for_dendro_svn_repo"
+
+#teamcity credentials
+
+teamcity_admin_username="jrocha"
+teamcity_admin_password="bolachinhas_do_melhor_que_ha"
