@@ -41,12 +41,12 @@ DB.DBA.XML_REMOVE_NS_BY_PREFIX('biooc', 2);
 DB.DBA.XML_SET_NS_DECL ('biooc', 'http://dendro.fe.up.pt/ontology/BioOc#', 2);
 
 SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/cfd#>;
-SPARQL LOAD <http://dendro.fe.up.pt/ontologies/COMPUTATIONAL_FLUID_DYNAMICS/cfd.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/cfd#>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab-rdm/dendro-ontologies/master/COMPUTATIONAL_FLUID_DYNAMICS/cfd.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/cfd#>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('cfd', 2);
 DB.DBA.XML_SET_NS_DECL ('cfd', 'http://dendro.fe.up.pt/ontology/cfd#', 2);
 
 SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/cep/>;
-SPARQL LOAD <http://dendro.fe.up.pt/ontologies/CUTTING_PACKING/cep.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/cep/>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab-rdm/dendro-ontologies/master/CUTTING_PACKING/cep.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/cep/>;
 DB.DBA.XML_SET_NS_DECL ('cep', 'http://dendro.fe.up.pt/ontology/cep/', 2);
 
 SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/dcb/>;
@@ -94,7 +94,8 @@ SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab-rdm/dendro-ontologie
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('gm', 2);
 DB.DBA.XML_SET_NS_DECL ('gm', 'http://dendro.fe.up.pt/ontology/game/', 2);
 
-GRANT SPARQL_UPDATE to "SPARQL"; 
+GRANT SPARQL_UPDATE to "SPARQL";
+
 GRANT execute ON SPARQL_INSERT_DICT_CONTENT TO "SPARQL";
 GRANT execute ON SPARQL_INSERT_DICT_CONTENT TO SPARQL_UPDATE;
 GRANT execute ON DB.DBA.SPARQL_MODIFY_BY_DICT_CONTENTS TO "SPARQL";
