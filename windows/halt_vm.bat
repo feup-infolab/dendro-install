@@ -1,1 +1,1 @@
-powershell -ExecutionPolicy ByPass -File scripts/restart.ps1
+powershell -ExecutionPolicy ByPass -File scripts/halt_vm.ps1
