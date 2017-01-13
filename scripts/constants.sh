@@ -80,11 +80,6 @@ recommender_installation_path='/dendro_recommender'
 		mongodb_port=27017
 		mongodb_collection_name="${active_deployment_setting}_data"
 
-		#redis
-		redis_port=6379
-		redis_host="127.0.0.1"
-		redis_database=1
-
 		#jenkins
 		jenkins_port=8080
 

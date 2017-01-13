@@ -49,9 +49,6 @@ nodejs $running_folder/build_configuration_files.js \
 	--mongodb_dba_user $mongodb_dba_user \
 	--mongodb_dba_password $mongodb_dba_password \
 	--mongodb_collection_name $mongodb_collection_name \
-	--redis_host $redis_host \
-	--redis_port $redis_port \
-	--redis_database $redis_database \
 	--mysql_host $mysql_host \
 	--mysql_port $mysql_port \
 	--mysql_dba_user $mysql_username \
