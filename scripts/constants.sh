@@ -361,7 +361,10 @@ take_vm_snapshot()
 # mongodb_conf_file=/Users/joaorocha/Desktop/confs/mongodb.conf
 # mysql_conf_file=/Users/joaorocha/Desktop/confs/mysqld.cnf
 
-redis_conf_file=/etc/redis/redis.conf
+redis_conf_folder="/etc/redis"
+redis_conf_file="$redis_conf_folder/redis.conf"
+redis_init_script_file="/etc/init.d/redis-server"
+
 elasticsearch_conf_file=/etc/elasticsearch/elasticsearch.yml
 mongodb_conf_file=/etc/mongodb.conf
 mysql_conf_file=/etc/mysql/mysql.conf.d/mysqld.cnf

@@ -1,1 +1,102 @@
 #!/usr/bin/env bash
+
+#changes to service file
+IFS='%'
+read -r -d '' old_service_script_section << LUCHI
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/bin/redis-server
+DAEMON_ARGS=/etc/redis/redis.conf
+NAME=redis-server
+DESC=redis-server
+LUCHI
+unset IFS
+
+#changes to conf file
+IFS='%'
+read -r -d '' old_conf_file_pid_section << LUCHI
+pidfile /var/run/redis/redis-server.pid
+LUCHI
+unset IFS
+
+IFS='%'
+read -r -d '' old_conf_file_port_section << LUCHI
+port 6379
+LUCHI
+unset IFS
+
+IFS='%'
+read -r -d '' old_conf_file_logfile_section << LUCHI
+logfile /var/log/redis/redis-server.log
+LUCHI
+unset IFS
+
+IFS='%'
+read -r -d '' old_conf_file_dir_section << LUCHI
+dir /var/lib/redis
+LUCHI
+unset IFS
+
+
+setup_redis_instance()
+{
+  local id=$1
+  local host=$2
+  local port=$3
+
+  local new_conf_file="$redis_conf_folder/redis-$id-$port.conf"
+  local new_init_script_file="/etc/init.d/redis-$id-$port"
+
+  #patch configuration file
+  sudo cp "$redis_conf_file" "$new_conf_file" &&
+  patch_file $new_conf_file	 \
+          "$old_conf_file_pid_section" \
+          "$new_conf_file_pid_section" \
+          "redis-$id-$port-patch-pid" &&
+  patch_file $new_conf_file	 \
+          "$old_conf_file_port_section" \
+          "$new_conf_file_port_section" \
+          "redis-$id-$port-patch-logfile" &&
+  patch_file $new_conf_file	 \
+          "$old_conf_file_logfile_section" \
+          "$new_conf_file_logfile_section" \
+          "redis-$id-$port-patch-pid" &&
+  patch_file $new_conf_file	 \
+          "$old_conf_file_dir_section" \
+          "$new_conf_file_dir_section" \
+          "redis-$id-$port-patch-pid" || die "Unable to patch Redis $id's configuration file at $new_conf_file"
+
+  #patch init script for new redis instance
+
+#TODO CHANGE PARAMETERS
+IFS='%'
+read -r -d '' new_conf_file_logfile_section << LUCHI
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/bin/redis-server
+DAEMON_ARGS=/etc/redis/redis.conf
+NAME=redis-server
+DESC=redis-server
+LUCHI
+unset IFS
+
+  sudo cp "$redis_init_script_file" "$new_init_script_file" &&
+  patch_file $new_conf_file	 \
+          "$old_conf_file_logfile_section" \
+          "$new_conf_file_logfile_section" \
+          "redis-$id-$port-patch-configuration-file" || die "Unable to patch the Configuration file for Redis $id"
+
+
+}
+
+id=$1
+host=$2
+port=$3
+
+sudo nc "$host" "$port" < /dev/null;
+server_listening=[! $1]
+
+if [[ ! $server_listening ]]
+then
+  setup_redis_instance $id $host $port
+else
+  warning "There is already a program listening on $host:$port. Aborting configuration of Redis $id."
+fi
