@@ -369,6 +369,16 @@ elasticsearch_conf_file=/etc/elasticsearch/elasticsearch.yml
 mongodb_conf_file=/etc/mongodb.conf
 mysql_conf_file=/etc/mysql/mysql.conf.d/mysqld.cnf
 
+#redis instances (one per dendro graph to separate cached resources)
+
+redis_default_id="default"
+redis_default_host="127.0.0.1"
+redis_default_port="6780"
+
+redis_social_id="social"
+redis_social_host="127.0.0.1"
+redis_social_port="6781"
+
 #console colors
 
 # Reset

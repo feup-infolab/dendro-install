@@ -1,5 +1,21 @@
 #!/usr/bin/env bash
 
+if [ -z ${DIR+x} ]; then
+	#running by itself
+	source ../../constants.sh
+else
+	#running from dendro_full_setup_ubuntu_server_ubuntu_16.sh
+	source ./constants.sh
+fi
+
+id=$1
+host=$2
+port=$3
+
+info "Setting up Redis Instance $id on host $host:$port..."
+#save current dir
+setup_dir=$(pwd)
+
 #section to replace in redis service file
 IFS='%'
 read -r -d '' old_service_script_section << LUCHI
@@ -94,7 +110,7 @@ unset IFS
   patch_file $new_conf_file	 \
           "$old_conf_file_logfile_section" \
           "$new_conf_file_logfile_section" \
-          "redis-$id-$port-patch-configuration-file" || die "Unable to patch the Configuration file for Redis $id"
+          "redis-$id-$port-patch-configuration-file" || die "Unable to patch the Configuration file for Redis Redis instance $id on $host:$port."
 
   #create symlink
   ln -s $redis_init_script_file $new_init_script_file
@@ -104,10 +120,6 @@ unset IFS
   $new_init_script_file start
 }
 
-id=$1
-host=$2
-port=$3
-
 sudo nc "$host" "$port" < /dev/null;
 server_listening=[! $1]
 
@@ -115,5 +127,8 @@ if [[ ! $server_listening ]]
 then
   setup_redis_instance $id $host $port
 else
-  warning "There is already a program listening on $host:$port. Aborting configuration of Redis $id."
+  warning "There is already a program listening on $host:$port. Aborting configuration of Redis instance $id on $host:$port."
 fi
+
+#return to previous dir
+cd $setup_dir || die "Unable to return to previous directory while settting up Redis Instance Redis instance $id on $host:$port."
