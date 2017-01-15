@@ -121,13 +121,13 @@ unset IFS
 }
 
 sudo nc "$host" "$port" < /dev/null;
-server_listening=! $?
+server_not_listening=$?
 
-if [[ ! $server_listening ]]
+if [[ "$server_not_listening" -ne "0" ]]
 then
   setup_redis_instance $id $host $port
 else
-  warning "There is already a program listening on $host:$port. Aborting configuration of Redis instance $id on $host:$port."
+  warning "There is already a program listening on $host:$port. Stopping configuration of Redis instance $id on $host:$port."
 fi
 
 #return to previous dir

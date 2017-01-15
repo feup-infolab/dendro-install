@@ -152,14 +152,16 @@ file_is_patched_for_line()
 
 	#printf "grep -q \"$patch_tag\" $file"
 	local patched
-	info "GREP'ing for \"$patch_tag\"...:"
-	grep "$patch_tag" $file
+	#info "GREP'ing for \"$patch_tag\"...:"
+	grep "$patch_tag" $file > /dev/null
 	patched="$?"
 
 	if [ "$patched" == "0" ]
 	then
+			info "File $file has patch tag \"$patch_tag\"!"
     	eval "$1=\"true\""
 	else
+			info "File $file does not have patch tag \"$patch_tag\"!"
     	eval "$1=\"false\""
 	fi
 }
