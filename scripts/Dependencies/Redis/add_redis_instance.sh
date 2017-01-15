@@ -113,7 +113,7 @@ unset IFS
           "redis-$id-$port-patch-configuration-file" || die "Unable to patch the Configuration file for Redis Redis instance $id on $host:$port."
 
   #create symlink
-  ln -s $redis_init_script_file $new_init_script_file
+  sudo ln -s $redis_init_script_file $new_init_script_file
 
   #start new service
 
@@ -121,7 +121,7 @@ unset IFS
 }
 
 sudo nc "$host" "$port" < /dev/null;
-server_listening=[! $1]
+server_listening=! $?
 
 if [[ ! $server_listening ]]
 then

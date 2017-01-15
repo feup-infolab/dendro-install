@@ -19,8 +19,6 @@ get_script_dir  () {
 	echo $DIR
 }
 
-installation_scripts_dir="$(get_script_dir)"
-
 cd_to_current_dir () {
 	DIR="$(get_script_dir)"
 	info "CD'ing to ${DIR}"
@@ -83,6 +81,9 @@ info "Applying pre-installation fixes..."
 source ./Fixes/fix_dns.sh
 source ./Fixes/fix_locales.sh
 
+source ./Dependencies/Redis/setup_redis_instances.sh
+exit 0
+
 if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ] && [ "$install_jenkins" != "true" ] && [ "$install_teamcity" != "true" ] && [ "$install_teamcity_agent" != "true" ]
 then
 	info "Running the Dendro User Setup."
@@ -129,8 +130,6 @@ then
 				echo -ne $[$timeout-i]...
 				sleep 1s
 			done
-			echo
-
 			source ./SQLCommands/grant_commands.sh
 			source ./Checks/check_services_status.sh
 

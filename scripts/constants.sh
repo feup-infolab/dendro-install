@@ -284,6 +284,7 @@ replace_text_in_file()
 		sudo apt-get -y install nodejs
 	fi
 
+	installation_scripts_dir="$(get_script_dir)"
 	replacement_text=$(nodejs $installation_scripts_dir/Utils/replace.js "$old_line" "$new_line" "$file")
 	sudo rm -rf $file
 	echo "$replacement_text" | sudo tee $file >> /dev/null

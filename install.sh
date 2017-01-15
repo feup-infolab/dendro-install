@@ -24,7 +24,7 @@ append_to_snapshot_name()
   fi
 }
 
-while getopts 'atcjudrbs:' flag; do
+while getopts 'satcjudrb:' flag; do
   case $flag in
     s)
       revert_to_last_snapshot="true"
@@ -79,7 +79,8 @@ if [[ "$revert_to_last_snapshot" -eq "true" ]]
 then
   #revert to last snapshot
   info "Reverting to last snapshot before proceeding with operations."
-  snapshot_id=VBoxManage snapshot $active_deployment_setting list | tail -n 1 | grep -o "UUID.*" | cut -c 7-42
+  snapshot_id=$(VBoxManage snapshot $active_deployment_setting list | tail -n 1 | grep -o "UUID.*" | cut -c 7-42)
+  source ./halt_vm.sh
   VBoxManage snapshot $active_deployment_setting restore $snapshot_id
 else
   take_vm_snapshot $active_deployment_setting $snapshot_name
