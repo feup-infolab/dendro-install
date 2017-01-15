@@ -24,6 +24,9 @@ DAEMON=/usr/bin/redis-server
 DAEMON_ARGS=/etc/redis/redis.conf
 NAME=redis-server
 DESC=redis-server
+
+RUNDIR=/var/run/redis
+PIDFILE=\$RUNDIR/redis-server.pid
 LUCHI
 unset IFS
 
@@ -60,8 +63,8 @@ setup_redis_instance()
   local port=$3
 
   local new_conf_file="$redis_conf_folder/redis-$id-$port.conf"
-  local new_workdir="/var/lib/redis-$id-$port"
-  local new_pidfile="/var/run/redis/redis-$id-$port.pid"
+  local new_workdir="/var/run/redis-$id-$port"
+  local new_pidfile="/var/run/redis-$id-$port/redis-$id-$port.pid"
   local new_logfile="/var/log/redis/redis-$id-$port.log"
   local new_init_script_file="/etc/init.d/redis-$id-$port"
 
@@ -97,14 +100,22 @@ setup_redis_instance()
 
   #patch init script for new redis instance
 IFS='%'
-read -r -d '' new_conf_file_logfile_section << LUCHI
+read -r -d '' new_service_script_section << LUCHI
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON=$new_init_script_file
 DAEMON_ARGS=$new_conf_file
 NAME=$id
 DESC=$id
+
+RUNDIR=$new_workdir
+PIDFILE=$new_pidfile
 LUCHI
 unset IFS
+
+
+echo $old_service_script_section
+echo "\n\n"
+echo $new_service_script_section
 
   sudo cp "$redis_init_script_file" "$new_init_script_file" &&
   patch_file $new_conf_file	 \
@@ -112,12 +123,8 @@ unset IFS
           "$new_conf_file_logfile_section" \
           "redis-$id-$port-patch-configuration-file" || die "Unable to patch the Configuration file for Redis Redis instance $id on $host:$port."
 
-  #create symlink
-  sudo ln -s $redis_init_script_file $new_init_script_file
-
   #start new service
-
-  $new_init_script_file start
+  echo "$new_init_script_file start"
 }
 
 sudo nc "$host" "$port" < /dev/null;

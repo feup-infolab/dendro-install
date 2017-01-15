@@ -78,7 +78,7 @@ done
 if [[ "$revert_to_last_snapshot" -eq "true" ]]
 then
   #revert to last snapshot
-  info "Reverting to last snapshot before proceeding with operations."
+  warning "Reverting to last snapshot before proceeding with operations...."
   snapshot_id=$(VBoxManage snapshot $active_deployment_setting list | tail -n 1 | grep -o "UUID.*" | cut -c 7-42)
   source ./halt_vm.sh
   VBoxManage snapshot $active_deployment_setting restore $snapshot_id

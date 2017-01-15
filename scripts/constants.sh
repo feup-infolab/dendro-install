@@ -332,7 +332,7 @@ patch_file()
 				add_text_at_end_of_file "$file" "$replacement_line" "$patch_tag"
 			else
 				replace_text_in_file "$file" "$old_line" "$replacement_line" "$patch_tag"
-				info "Visual check if patch was applied:"
+				#info "Visual check if patch was applied:"
 				file_is_patched_for_line file_is_patched "$file" "$old_line" "$new_line" "$patch_tag"
 			fi
 		fi
