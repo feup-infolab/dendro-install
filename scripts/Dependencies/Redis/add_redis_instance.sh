@@ -77,10 +77,11 @@ setup_redis_instance()
 	local redis_instance_name="redis_$id_$port"
 
   local new_conf_file="$redis_conf_folder/$redis_instance_name.conf"
-  local new_workdir="/var/run/r$redis_instance_name"
+  local new_workdir="/var/run/$redis_instance_name"
   local new_pidfile="/var/run/$redis_instance_name/$redis_instance_name.pid"
   local new_logfile="/var/log/redis/$redis_instance_name.log"
   local new_init_script_file="/etc/init.d/$redis_instance_name"
+	local new_service_file="/etc/systemd/system/$redis_instance_name.service"
 
   if [ ! -d $new_workdir ]
   then
@@ -112,7 +113,65 @@ setup_redis_instance()
           "$new_conf_file_dir_section" \
           "$redis_instance_name-patch-pid" || die "Unable to patch Redis $id's configuration file at $new_conf_file"
 
-  #patch init script for new redis instance
+  #create service file
+
+IFS='%'
+read -r -d '' new_service_contents << LUCHI
+[Unit]
+Description=Advanced key-value store ($redis_instance_name)
+After=network.target
+Documentation=http://redis.io/documentation, man:redis-server(1)
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/redis-server $new_conf_file
+PIDFile=$new_pidfile
+TimeoutStopSec=0
+Restart=always
+User=redis
+Group=redis
+
+ExecStartPre=-/bin/run-parts --verbose /etc/redis/redis-server.pre-up.d
+ExecStartPost=-/bin/run-parts --verbose /etc/redis/redis-server.post-up.d
+ExecStop=-/bin/run-parts --verbose /etc/redis/redis-server.pre-down.d
+ExecStop=/bin/kill -s TERM $MAINPID
+ExecStopPost=-/bin/run-parts --verbose /etc/redis/redis-server.post-down.d
+
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectHome=yes
+ReadOnlyDirectories=/
+ReadWriteDirectories=-/var/lib/redis
+ReadWriteDirectories=-/var/log/redis
+ReadWriteDirectories=-$new_workdir
+CapabilityBoundingSet=~CAP_SYS_PTRACE
+
+# redis-server writes its own config file when in cluster mode so we allow
+# writing there (NB. ProtectSystem=true over ProtectSystem=full)
+ProtectSystem=true
+ReadWriteDirectories=-/etc/redis
+
+[Install]
+WantedBy=multi-user.target
+Alias=redis.service
+LUCHI
+unset IFS
+
+if [[ -f $new_service_file ]]
+then
+	sudo truncate -s 0 $new_service_file
+else
+	sudo touch $new_service_file
+fi
+
+printf "%s" "$new_service_service_file" | sudo tee $new_service_service_file >> /dev/null
+
+#reload systemctl and start service
+sudo systemctl daemon-reload
+sudo systemctl enable $redis_instance_name
+sudo systemctl start $redis_instance_name
+
+#patch init script for new redis instance
 IFS='%'
 read -r -d '' new_service_script_section << LUCHI
 ### BEGIN INIT INFO
@@ -155,7 +214,7 @@ unset IFS
   echo "$new_init_script_file start"
 
 	#fix the line endings
-	sudo apt-get --yes install dos2unix &&
+	sudo apt-get install --yes dos2unix
 	sudo dos2unix $new_init_script_file || die "Unable to convert the file into Unix Line endings."
 
 	#mark file as executable and run it
