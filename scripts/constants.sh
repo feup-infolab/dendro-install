@@ -345,11 +345,11 @@ unpatch_file()
 take_vm_snapshot()
 {
 	local vm_name=$1
-	local operation=$2
+	local operations=$2
 
 	timestamp=""
 	get_timestamp timestamp
-	local snapshot_name=$vm_name'_'$timestamp'_'$operation
+	local snapshot_name=$vm_name'_'$timestamp'_'$operations
 
 	info "Taking a snapshot of VM $vm_name with name $snapshot_name"
   VBoxManage snapshot $vm_name take $snapshot_name
