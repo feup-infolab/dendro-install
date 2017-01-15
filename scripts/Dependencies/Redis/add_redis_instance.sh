@@ -124,6 +124,7 @@ echo $new_service_script_section
           "redis-$id-$port-patch-configuration-file" || die "Unable to patch the Configuration file for Redis Redis instance $id on $host:$port."
 
   #start new service
+	#TODO SERVICE SCRIPT STILL NOT BEING PATCHED CORRECTLY
   echo "$new_init_script_file start"
 }
 
