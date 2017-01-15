@@ -19,27 +19,11 @@ setup_dir=$(pwd)
 #section to replace in redis service file
 IFS='%'
 read -r -d '' old_service_script_section << LUCHI
-### BEGIN INIT INFO
-# Provides:		redis-server
-# Required-Start:	\$syslog \$remote_fs
-# Required-Stop:	\$syslog \$remote_fs
-# Should-Start:		\$local_fs
-# Should-Stop:		\$local_fs
-# Default-Start:	2 3 4 5
-# Default-Stop:		0 1 6
-# Short-Description:	redis-server - Persistent key-value db
-# Description:		redis-server - Persistent key-value db
-### END INIT INFO
-
-
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON=/usr/bin/redis-server
 DAEMON_ARGS=/etc/redis/redis.conf
 NAME=redis-server
 DESC=redis-server
-
-RUNDIR=/var/run/redis
-PIDFILE=\$RUNDIR/redis-server.pid
 LUCHI
 unset IFS
 
@@ -74,13 +58,12 @@ setup_redis_instance()
   local id=$1
   local host=$2
   local port=$3
-	local redis_instance_name="redis_$id_$port"
 
-  local new_conf_file="$redis_conf_folder/$redis_instance_name.conf"
-  local new_workdir="/var/run/r$redis_instance_name"
-  local new_pidfile="/var/run/$redis_instance_name/$redis_instance_name.pid"
-  local new_logfile="/var/log/redis/$redis_instance_name.log"
-  local new_init_script_file="/etc/init.d/$redis_instance_name"
+  local new_conf_file="$redis_conf_folder/redis-$id-$port.conf"
+  local new_workdir="/var/lib/redis-$id-$port"
+  local new_pidfile="/var/run/redis/redis-$id-$port.pid"
+  local new_logfile="/var/log/redis/redis-$id-$port.log"
+  local new_init_script_file="/etc/init.d/redis-$id-$port"
 
   if [ ! -d $new_workdir ]
   then
@@ -98,79 +81,53 @@ setup_redis_instance()
   patch_file $new_conf_file	 \
           "$old_conf_file_pid_section" \
           "$new_conf_file_pid_section" \
-          "$redis_instance_name-patch-pid" &&
+          "redis-$id-$port-patch-pid" &&
   patch_file $new_conf_file	 \
           "$old_conf_file_port_section" \
           "$new_conf_file_port_section" \
-          "$redis_instance_name-patch-logfile" &&
+          "redis-$id-$port-patch-logfile" &&
   patch_file $new_conf_file	 \
           "$old_conf_file_logfile_section" \
           "$new_conf_file_logfile_section" \
-          "$redis_instance_name-patch-pid" &&
+          "redis-$id-$port-patch-pid" &&
   patch_file $new_conf_file	 \
           "$old_conf_file_dir_section" \
           "$new_conf_file_dir_section" \
-          "$redis_instance_name-patch-pid" || die "Unable to patch Redis $id's configuration file at $new_conf_file"
+          "redis-$id-$port-patch-pid" || die "Unable to patch Redis $id's configuration file at $new_conf_file"
 
   #patch init script for new redis instance
 IFS='%'
-read -r -d '' new_service_script_section << LUCHI
-### BEGIN INIT INFO
-# Provides:		$redis_instance_name
-# Required-Start:	\$syslog \$remote_fs
-# Required-Stop:	\$syslog \$remote_fs
-# Should-Start:		\$local_fs
-# Should-Stop:		\$local_fs
-# Default-Start:	2 3 4 5
-# Default-Stop:		0 1 6
-# Short-Description:	$redis_instance_name - Persistent key-value db
-# Description:		$redis_instance_name - Persistent key-value db
-### END INIT INFO
-
-
+read -r -d '' new_conf_file_logfile_section << LUCHI
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON=$new_init_script_file
 DAEMON_ARGS=$new_conf_file
 NAME=$id
 DESC=$id
-
-RUNDIR=$new_workdir
-PIDFILE=$new_pidfile
 LUCHI
 unset IFS
 
-  printf "$old_service_script_section"
-  printf "\n\n"
-  printf "$new_service_script_section"
-
   sudo cp "$redis_init_script_file" "$new_init_script_file" &&
-  patch_file $new_init_script_file	 \
-          "$old_service_script_section" \
-          "$new_service_script_section" \
-          "$redis_instance_name-patch-service-file" \
-					"sh" \
-	|| die "Unable to patch the Configuration file for Redis instance $id on $host:$port."
+  patch_file $new_conf_file	 \
+          "$old_conf_file_logfile_section" \
+          "$new_conf_file_logfile_section" \
+          "redis-$id-$port-patch-configuration-file" || die "Unable to patch the Configuration file for Redis Redis instance $id on $host:$port."
+
+  #create symlink
+  ln -s $redis_init_script_file $new_init_script_file
 
   #start new service
-  echo "$new_init_script_file start"
 
-	#fix the line endings
-	sudo apt-get --yes install dos2unix &&
-	sudo dos2unix $new_init_script_file || die "Unable to convert the file into Unix Line endings."
-
-	#mark file as executable and run it
-	chmod +x $new_init_script_file
-  sudo /bin/sh -c "$new_init_script_file start"
+  $new_init_script_file start
 }
 
 sudo nc "$host" "$port" < /dev/null;
-server_not_listening=$?
+server_listening=[! $1]
 
-if [[ "$server_not_listening" -ne "0" ]]
+if [[ ! $server_listening ]]
 then
   setup_redis_instance $id $host $port
 else
-  warning "There is already a program listening on $host:$port. Stopping configuration of Redis instance $id on $host:$port."
+  warning "There is already a program listening on $host:$port. Aborting configuration of Redis instance $id on $host:$port."
 fi
 
 #return to previous dir

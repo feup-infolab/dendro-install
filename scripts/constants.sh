@@ -191,15 +191,23 @@ get_replacement_line()
 	local new_line=$3
 	local patch_tag=$4
 	local filename=$5
+	local forced_extension=$6
 	local extension=""
 
-	if [[ ! "$filename" == "" ]]
+	if [[ "$forced_extension" == "" ]]
 	then
-		filename=$(basename "$filename")
-		extension="${filename##*.}"
+		if [[ ! "$filename" == "" ]]
+		then
+			filename=$(basename "$filename")
+			extension="${filename##*.}"
+		else
+			extension="sh"
+		fi
 	else
-		extension="sh"
+		extension="$forced_extension"
 	fi
+
+	#info "Getting replacement for extension $extension"
 
 	case $extension in
 		sh|properties|yaml|yml|conf|cnf)
@@ -308,7 +316,9 @@ patch_file()
 	local old_line=$2
 	local new_line=$3
 	local patch_tag=$4
+	local forced_extension=$5
 
+	#info "Forcing patch of $file with extension $forced_extension"
 	local replacement_line
 	local file_is_patched=""
 	local file_exists_flag
@@ -320,13 +330,13 @@ patch_file()
 	    error "File $file not found!"
 		return 1
 	else
-		get_replacement_line replacement_line "$old_line" "$new_line" "$patch_tag" "$file"
 		file_is_patched_for_line file_is_patched "$file" "$old_line" "$new_line" "$patch_tag"
 
 		if [ "$file_is_patched" == "true" ]
 		then
 			warning "File $file is already patched for patch $patch_tag."
 		else
+			get_replacement_line replacement_line "$old_line" "$new_line" "$patch_tag" "$file" "$forced_extension"
 			if [ "$old_line" ==  "" ]
 			then
 				add_text_at_end_of_file "$file" "$replacement_line" "$patch_tag"
