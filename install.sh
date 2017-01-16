@@ -75,7 +75,7 @@ while getopts 'satcjudrb:' flag; do
   esac
 done
 
-if [[ "$revert_to_last_snapshot" -eq "true" ]]
+if [[ "$revert_to_last_snapshot" = "true" ]]
 then
   #revert to last snapshot
   warning "Reverting to last snapshot before proceeding with operations...."

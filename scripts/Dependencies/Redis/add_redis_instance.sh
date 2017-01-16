@@ -167,6 +167,21 @@ unset IFS
 
 	printf "%s" "$new_service_contents" | sudo tee $new_service_file
 
+
+	#open this redis instance to outside connections if this VM is in dev mode...
+
+	if [[ $set_dev_mode = "true" ]]
+	then
+		info "Trying to open Redis instance $redis_instance_name to ANY remote connection."
+		file_exists file_exists_flag $new_conf_file
+		if [[ "$file_exists_flag" == "true" ]]; then
+			info "File $new_conf_file exists..."
+			patch_file $new_conf_file "bind 127.0.0.1" "bind 0.0.0.0" "redis_$redis_instance_name-dendro_dev_patch"  && success "Opened Redis." || die "Unable to patch Redis $redis_instance_name configuration file at $new_conf_file."
+		else
+			die "File $new_conf_file does not exist."
+		fi
+	fi
+
 	#reload systemctl and start service
 	sudo systemctl daemon-reload
 	#sudo systemctl enable $redis_instance_name
@@ -177,8 +192,9 @@ unset IFS
 sudo nc "$host" "$port" < /dev/null;
 server_not_listening=$?
 
-if [[ "$server_not_listening" -ne "0" ]]
+if [[ ! "$server_not_listening" = "0" ]]
 then
+	sudo systemctl stop $redis_instance_name > /dev/null
   setup_redis_instance $id $host $port
 else
   warning "There is already a program listening on $host:$port. Stopping configuration of Redis instance $id on $host:$port."

@@ -50,6 +50,8 @@ else
 	die "File $redis_conf_file does not exist."
 fi
 
+./Dependencies/Redis/setup_redis_instances.sh
+
 #MySQL
 info "Trying to open MySQL to ANY remote connection."
 file_exists file_exists_flag $mysql_conf_file
