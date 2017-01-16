@@ -11,38 +11,62 @@ chmod -R 0777 ~/.vagrant.d
 
 SHELL_ARGS=''
 
-while getopts 'atcjudrb:' flag; do
+snapshot_name=""
+
+append_to_snapshot_name()
+{
+  new_name=$1
+  if [[ "$snapshot_name" -eq "" ]]
+  then
+    snapshot_name=$new_name
+  else
+    snapshot_name="$snapshot_name-$new_name"
+  fi
+}
+
+while getopts 'satcjudrb:' flag; do
   case $flag in
+    s)
+      revert_to_last_snapshot="true"
+      ;;
     a)
-      take_vm_snapshot $active_deployment_setting "install_teamcity_agent"
+      #install TeamCity
+      append_to_snapshot_name "install_teamcity_agent"
     	VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-a '
     	;;
     c)
-      take_vm_snapshot $active_deployment_setting "install_teamcity"
+      #install TeamCity Agent
+      append_to_snapshot_name "install_teamcity"
     	VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-c '
     	;;
     t)
-      take_vm_snapshot $active_deployment_setting "run_tests"
+      #Run Tests on Dendro after checkout
+      append_to_snapshot_name "run_tests"
     	VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-t '
     	;;
     r)
-      take_vm_snapshot $active_deployment_setting "refresh_code_only"
+      #refresh only the code of Dendro without installing dependencies
+      append_to_snapshot_name "refresh_code_only"
 		  VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-r '
 		  ;;
     d)
-      take_vm_snapshot $active_deployment_setting "set_dev_mode"
+      #enable development mode
+      append_to_snapshot_name "set_dev_mode"
 		  VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-d '
 		  ;;
     u)
-      take_vm_snapshot $active_deployment_setting "unset_dev_mode"
+      #disable development mode
+      append_to_snapshot_name "unset_dev_mode"
 		  VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-u '
 	    ;;
     j)
-      take_vm_snapshot $active_deployment_setting "install_jenkins"
+      #Install Jenkins
+      append_to_snapshot_name "install_jenkins"
   		VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-j '
   		;;
 	  b)
-      take_vm_snapshot $active_deployment_setting "install_with_branch_$OPTARG"
+      #Checkout Dendro branch specified as argument
+      append_to_snapshot_name "install_with_branch_$OPTARG"
 		  VAGRANT_SHELL_ARGS="$VAGRANT_SHELL_ARGS-b $OPTARG "
 		  ;;
     *)
@@ -50,6 +74,17 @@ while getopts 'atcjudrb:' flag; do
 		  ;;
   esac
 done
+
+if [[ "$revert_to_last_snapshot" -eq "true" ]]
+then
+  #revert to last snapshot
+  warning "Reverting to last snapshot before proceeding with operations...."
+  snapshot_id=$(VBoxManage snapshot $active_deployment_setting list | tail -n 1 | grep -o "UUID.*" | cut -c 7-42)
+  source ./halt_vm.sh
+  VBoxManage snapshot $active_deployment_setting restore $snapshot_id
+else
+  take_vm_snapshot $active_deployment_setting $snapshot_name
+fi
 
 source ./define_env_vars.sh
 export VAGRANT_VM_INSTALL='true'

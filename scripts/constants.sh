@@ -80,11 +80,6 @@ recommender_installation_path='/dendro_recommender'
 		mongodb_port=27017
 		mongodb_collection_name="${active_deployment_setting}_data"
 
-		#redis
-		redis_port=6379
-		redis_host="127.0.0.1"
-		redis_database=1
-
 		#jenkins
 		jenkins_port=8080
 
@@ -157,14 +152,16 @@ file_is_patched_for_line()
 
 	#printf "grep -q \"$patch_tag\" $file"
 	local patched
-	info "GREP'ing for \"$patch_tag\"...:"
-	grep "$patch_tag" $file
+	#info "GREP'ing for \"$patch_tag\"...:"
+	grep "$patch_tag" $file > /dev/null
 	patched="$?"
 
 	if [ "$patched" == "0" ]
 	then
+			info "File $file has patch tag \"$patch_tag\"!"
     	eval "$1=\"true\""
 	else
+			info "File $file does not have patch tag \"$patch_tag\"!"
     	eval "$1=\"false\""
 	fi
 }
@@ -194,15 +191,23 @@ get_replacement_line()
 	local new_line=$3
 	local patch_tag=$4
 	local filename=$5
+	local forced_extension=$6
 	local extension=""
 
-	if [[ ! "$filename" == "" ]]
+	if [[ "$forced_extension" == "" ]]
 	then
-		filename=$(basename "$filename")
-		extension="${filename##*.}"
+		if [[ ! "$filename" == "" ]]
+		then
+			filename=$(basename "$filename")
+			extension="${filename##*.}"
+		else
+			extension="sh"
+		fi
 	else
-		extension="sh"
+		extension="$forced_extension"
 	fi
+
+	#info "Getting replacement for extension $extension"
 
 	case $extension in
 		sh|properties|yaml|yml|conf|cnf)
@@ -289,6 +294,7 @@ replace_text_in_file()
 		sudo apt-get -y install nodejs
 	fi
 
+	installation_scripts_dir="$(get_script_dir)"
 	replacement_text=$(nodejs $installation_scripts_dir/Utils/replace.js "$old_line" "$new_line" "$file")
 	sudo rm -rf $file
 	echo "$replacement_text" | sudo tee $file >> /dev/null
@@ -310,7 +316,9 @@ patch_file()
 	local old_line=$2
 	local new_line=$3
 	local patch_tag=$4
+	local forced_extension=$5
 
+	#info "Forcing patch of $file with extension $forced_extension"
 	local replacement_line
 	local file_is_patched=""
 	local file_exists_flag
@@ -322,19 +330,19 @@ patch_file()
 	    error "File $file not found!"
 		return 1
 	else
-		get_replacement_line replacement_line "$old_line" "$new_line" "$patch_tag" "$file"
 		file_is_patched_for_line file_is_patched "$file" "$old_line" "$new_line" "$patch_tag"
 
 		if [ "$file_is_patched" == "true" ]
 		then
 			warning "File $file is already patched for patch $patch_tag."
 		else
+			get_replacement_line replacement_line "$old_line" "$new_line" "$patch_tag" "$file" "$forced_extension"
 			if [ "$old_line" ==  "" ]
 			then
 				add_text_at_end_of_file "$file" "$replacement_line" "$patch_tag"
 			else
 				replace_text_in_file "$file" "$old_line" "$replacement_line" "$patch_tag"
-				info "Visual check if patch was applied:"
+				#info "Visual check if patch was applied:"
 				file_is_patched_for_line file_is_patched "$file" "$old_line" "$new_line" "$patch_tag"
 			fi
 		fi
@@ -350,11 +358,11 @@ unpatch_file()
 take_vm_snapshot()
 {
 	local vm_name=$1
-	local operation=$2
+	local operations=$2
 
 	timestamp=""
 	get_timestamp timestamp
-	local snapshot_name=$vm_name'_'$timestamp'_'$operation
+	local snapshot_name=$vm_name'_'$timestamp'_'$operations
 
 	info "Taking a snapshot of VM $vm_name with name $snapshot_name"
   VBoxManage snapshot $vm_name take $snapshot_name
@@ -366,10 +374,23 @@ take_vm_snapshot()
 # mongodb_conf_file=/Users/joaorocha/Desktop/confs/mongodb.conf
 # mysql_conf_file=/Users/joaorocha/Desktop/confs/mysqld.cnf
 
-redis_conf_file=/etc/redis/redis.conf
+redis_conf_folder="/etc/redis"
+redis_conf_file="$redis_conf_folder/redis.conf"
+redis_init_script_file="/etc/init.d/redis-server"
+
 elasticsearch_conf_file=/etc/elasticsearch/elasticsearch.yml
 mongodb_conf_file=/etc/mongodb.conf
 mysql_conf_file=/etc/mysql/mysql.conf.d/mysqld.cnf
+
+#redis instances (one per dendro graph to separate cached resources)
+
+redis_default_id="default"
+redis_default_host="127.0.0.1"
+redis_default_port="6780"
+
+redis_social_id="social"
+redis_social_host="127.0.0.1"
+redis_social_port="6781"
 
 #console colors
 

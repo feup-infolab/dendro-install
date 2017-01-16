@@ -3,44 +3,44 @@ var fs = require('fs');
 var path = require('path');
 
 var arguments = {
-	
+
 	//target folders for the generated configuration files
-	"dr_config_output_folder_location" : 
+	"dr_config_output_folder_location" :
 	{
 		type: "string",
 		example : "./generated_configuration_files",
 		tip : "Coming soon"
 	},
-	
-	"eudat_token" : 
+
+	"eudat_token" :
 	{
 		type: "string",
 		example : "veryLONGNADCOMPLICATEDSTRING",
 		tip : "Coming soon"
 	},
-	
-	"dr_config_template_abs_path" : 
+
+	"dr_config_template_abs_path" :
 	{
 		type: "string",
 		example : "/usr/home/test/scripts/Programs/DendroRecommender/application.conf.template",
 		tip : "Coming soon"
 	},
-	
-	"dendro_config_output_folder_location" : 
+
+	"dendro_config_output_folder_location" :
 	{
 		type: "string",
 		example : "./generated_configuration_files",
 		tip : "Coming soon"
 	},
-	
+
 	//dendro instance
-	"config_identifier" : 
+	"config_identifier" :
 	{
 		type: "string",
 		example : "dendro_dev_feup",
 		tip : "Coming soon"
 	},
-	"port" : 
+	"port" :
 	{
 		type: "integer",
 		example : "3001",
@@ -58,134 +58,113 @@ var arguments = {
 		example : "http://192.168.56.101:3001 or http://dendro.fe.up.pt",
 		tip : "Coming soon"
 	},
-	
+
 	//elasticsearch
-	"elasticsearch_port" : 
+	"elasticsearch_port" :
 	{
 		type: "integer",
 		example : "9200",
 		tip : "Coming soon"
 	},
-	"elasticsearch_host" : 
+	"elasticsearch_host" :
 	{
 		type: "string",
 		example : "127.0.0.1",
 		tip : "Coming soon"
 	},
-	
+
 	//virtuoso
-	"virtuoso_host" : 
+	"virtuoso_host" :
 	{
 		type: "integer",
 		example : "127.0.0.1",
 		tip : "Coming soon"
 	},
-	"virtuoso_port" : 
+	"virtuoso_port" :
 	{
 		type: "integer",
 		example : "8890",
 		tip : "Coming soon"
 	},
-	"virtuoso_dba_user" : 
+	"virtuoso_dba_user" :
 	{
 		type: "string",
 		example : "dba",
 		tip : "Coming soon"
 	},
-	"virtuoso_dba_password" : 
+	"virtuoso_dba_password" :
 	{
 		type: "string",
 		example : "dba",
 		tip : "Coming soon"
 	},
-	
-	//mongodb	
-	"mongodb_host" : 
+
+	//mongodb
+	"mongodb_host" :
 	{
 		type: "string",
 		example : "dba",
 		tip : "Coming soon"
-	},	
-	"mongodb_port" : 
+	},
+	"mongodb_port" :
 	{
 		type: "integer",
 		example : "9200",
 		tip : "Coming soon"
 	},
-	"mongodb_dba_user" : 
+	"mongodb_dba_user" :
 	{
 		type: "string",
 		example : "mongodb",
 		tip : "Coming soon"
 	},
-	"mongodb_dba_password" : 
+	"mongodb_dba_password" :
 	{
 		type: "string",
 		example : "mong0db",
 		tip : "Coming soon"
 	},
-	
-	//redis
-	
-	"redis_host" : 
-	{
-		type: "string",
-		example : "127.0.0.1",
-		tip : "Coming soon"
-	},
-	"redis_port" : 
-	{
-		type: "integer",
-		example : "6379",
-		tip : "Coming soon"
-	},
-	"redis_database" : 
-	{
-		type: "integer",
-		example : "1",
-		tip : "Coming soon"
-	},
-	
+
 	//mysql
-	"mysql_host" : 
+	"mysql_host" :
 	{
 		type: "string",
 		example : "mong0db",
 		tip : "Coming soon"
 	},
-	"mysql_port" : 
+	"mysql_port" :
 	{
 		type: "integer",
 		example : 3306,
 		tip : "Coming soon"
 	},
-	"mysql_dba_user" : 
+	"mysql_dba_user" :
 	{
 		type: "string",
 		example : "root",
 		tip : "Coming soon"
 	},
-	"mysql_password" : 
+	"mysql_password" :
 	{
 		type: "string",
 		example : "root",
 		tip : "Coming soon"
 	},
-	"mysql_db_name" : 
+	"mysql_db_name" :
 	{
 		type: "string",
 		example : "mong0db",
 		tip : "Coming soon"
 	},
-	
+
 	//dendro file storage
-	"temp_files_directory" : 
+	"temp_files_directory" :
 	{
 		type: "string",
 		example : "/tmp/dendro_files",
 		tip : "Coming soon"
 	},
-	
+
 	//demo mode
 	"demo_mode_active" :
 	{
@@ -193,24 +172,24 @@ var arguments = {
 		example : "\"true\" | \"false\"",
 		tip : "Coming soon"
 	},
-	
+
 	//dendro theme
-	"dendro_theme" : 
+	"dendro_theme" :
 	{
 		type: "string",
 		example : "lumen | default | ....",
 		tip : "See Bootstrap theme names."
 	},
-	
-	//startup 
-	
-	"reload_administrators_on_startup" : 
+
+	//startup
+
+	"reload_administrators_on_startup" :
 	{
 		type: "boolean",
 		example : "\"true\" | \"false\"",
 		tip : "Coming soon"
 	},
-	
+
 	"reload_demo_users_on_startup" :
 	{
 		type: "string",
@@ -230,9 +209,9 @@ var arguments = {
 		example : "FEUP Demo Dendro",
 		tip : "Coming soon"
 	},
-	
+
 	//dendro recommender
-	"dendro_recommender_active" : 
+	"dendro_recommender_active" :
 	{
 		type: "boolean",
 		example : "\"true\" | \"false\"",
@@ -250,23 +229,23 @@ var arguments = {
 		example : "9001",
 		tip : "Coming soon"
 	},
-	
+
 	//gmail mailing account for password resets, etc...
-	
+
 	"emailing_account_gmail_user" :
 	{
 		type: "string",
 		example : "gmail_user",
 		tip : "Coming soon"
 	},
-	
+
 	"emailing_account_gmail_password" :
 	{
 		type: "string",
 		example : "gmail_user_password",
 		tip : "Coming soon"
 	},
-	
+
 	//caching of static content
 	"last_modified_caching" :
 	{
@@ -280,66 +259,66 @@ var arguments = {
 		example : "true",
 		tip : "Coming soon"
 	},
-	
+
 	/**
 	 * Dendro Recommender arguments
 	 **/
-	 
-	"dr_all_ontologies_uri" : 
+
+	"dr_all_ontologies_uri" :
 	{
 		type: "string",
 		example : "http://dendro-dev.fe.up.pt:3009/ontologies/all",
 		tip : "Coming soon"
 	},
-	"mysql_host" : 
+	"mysql_host" :
 	{
 		type: "string",
 		example : "127.0.0.1",
 		tip : "Coming soon"
 	},
-	"mysql_port" : 
+	"mysql_port" :
 	{
 		type: "integer",
 		example : 3306,
 		tip : "Coming soon"
 	},
-	"dr_interactions_table" : 
+	"dr_interactions_table" :
 	{
 		type: "string",
 		example : "interactions",
 		tip : "Coming soon"
 	},
-	"mysql_password" : 
+	"mysql_password" :
 	{
 		type: "string",
 		example : "root",
 		tip : "Coming soon"
 	},
-	"dr_stage1_active" : 
+	"dr_stage1_active" :
 	{
 		type: "boolean",
 		example : "interactions_stage1",
 		tip : "Coming soon"
 	},
-	"dr_stage2_active" : 
+	"dr_stage2_active" :
 	{
 		type: "boolean",
 		example : "interactions_stage2",
 		tip : "Coming soon"
 	},
-	"gmaps_api_key" : 
+	"gmaps_api_key" :
 	{
 		type: "string",
 		example : "Get it from Google Maps website",
 		tip : "Coming soon"
 	},
-	"gmaps_map_height" : 
+	"gmaps_map_height" :
 	{
 		type: "integer",
 		example : "Map height for the control in metadata editor",
 		tip : "for example 500"
 	},
-	"secret" : 
+	"secret" :
 	{
 		type: "string",
 		example : "Crypto secret of the app",
@@ -350,10 +329,10 @@ var arguments = {
 var get_argument_by_name = function(argument)
 {
 	var argumentValue = null;
-	
+
 	if(process.argv.indexOf("--"+argument) != -1){ //does our flag exist?
 		argumentValue = process.argv[process.argv.indexOf("--"+argument) + 1]; //grab the next item
-		if (arguments[argument] != null && arguments[argument].type === "boolean") 
+		if (arguments[argument] != null && arguments[argument].type === "boolean")
 		{
 			try{
 				argumentValue = Boolean.parse(argumentValue);
@@ -362,7 +341,7 @@ var get_argument_by_name = function(argument)
 				console.log("[ERROR] Unable to parse flag " + argument + ". It must be a boolean (true/false). " + e.message);
 			}
 		}
-		if (arguments[argument] != null && arguments[argument].type === "integer") 
+		if (arguments[argument] != null && arguments[argument].type === "integer")
 		{
 			try{
 				argumentValue = parseInt(argumentValue);
@@ -371,23 +350,23 @@ var get_argument_by_name = function(argument)
 				console.log("[ERROR] Unable to parse flag " + argument + ". It must be an integer. " + e.message);
 			}
 		}
-	
+
 		if(argumentValue[0] == "-" && argumentValue[1] == "-")
 		{
-			console.error("Got value " + colors.red(argumentValue) + " for argument " + colors.yellow(argument) + ". This is likely due to an invalid parameter value!! Review the " + colors.blue("constants.sh") + " file and the "+colors.blue("generate_configuration_files.sh")+" file to make sure the parameter names match.");		
+			console.error("Got value " + colors.red(argumentValue) + " for argument " + colors.yellow(argument) + ". This is likely due to an invalid parameter value!! Review the " + colors.blue("constants.sh") + " file and the "+colors.blue("generate_configuration_files.sh")+" file to make sure the parameter names match.");
 			process.exit(1);
 		}
 	}
-	
+
 	//console.log("Got value " + argumentValue + " for argument " + argument);
-	return argumentValue;	
+	return argumentValue;
 }
 
 var detect_missing_arguments = function(arguments)
 {
 	var missing_arguments = [];
 	var keys = Object.keys(arguments);
-	
+
 	for (var i = 0; i < keys.length; i++) {
 		var key = keys[i];
 		if(get_argument_by_name(key) == null)
@@ -395,21 +374,21 @@ var detect_missing_arguments = function(arguments)
 			missing_arguments.push(key);
 		}
 	}
-	
+
 	return missing_arguments;
 }
 
 var print_usage = function(arguments)
 {
 	var missing_arguments = detect_missing_arguments(arguments);
-	
+
 	var output = "USAGE: " + colors.bold("build_configurations.sh") + " \n";
 	var keys = Object.keys(arguments);
-	
+
 	for (var i = 0; i < keys.length; i++) {
 		var key = keys[i];
 		output += "	--" + key + " << " + colors.cyan(arguments[key].type) + " >>";
-		
+
 		if(missing_arguments.indexOf(key) >= 0)
 		{
 			output += colors.red(" [ MISSING ]\n");
@@ -419,7 +398,7 @@ var print_usage = function(arguments)
 			output += colors.green(" [ OK ]\n");
 		}
 	}
-	
+
 	console.log(output);
 }
 
@@ -427,9 +406,9 @@ var write_dendro_configuration_file = function ()
 {
 	var config_id = get_argument_by_name('config_identifier');
 	var dendro_config_template = {};
-	
-	dendro_config_template[config_id] = 
-	{  
+
+	dendro_config_template[config_id] =
+	{
 		"port" : get_argument_by_name('port'),
 		"host" : get_argument_by_name('host'),
 		"crypto" :
@@ -446,19 +425,33 @@ var write_dendro_configuration_file = function ()
 		"cache": {
 			"active": true,
 			"redis" :
-			{
-				"options":
-				{
-					"host" : get_argument_by_name('redis_host'),
-					"port" : get_argument_by_name('redis_port')
-				},
-				"database_number" : get_argument_by_name('redis_database')
-			},
-	  	  	"static" :
-	        {
-	          "last_modified_caching" : get_argument_by_name('last_modified_caching'),
-	          "cache_period_in_seconds" : get_argument_by_name('cache_period_in_seconds')
-	        }
+      {
+        "instances": [
+          {
+            "id" : "default",
+            "options":
+            {
+              "host" : "127.",
+              "port" : "6379"
+            },
+            "database_number" : 1
+          },
+          {
+            "id" : "social",
+            "options":
+            {
+              "host" : "192.168.56.249",
+              "port" : "6380"
+            },
+            "database_number" : 1
+          }
+        ]
+      },
+	  	"static" :
+      {
+        "last_modified_caching" : get_argument_by_name('last_modified_caching'),
+        "cache_period_in_seconds" : get_argument_by_name('cache_period_in_seconds')
+      }
 		},
 		"virtuosoHost" : get_argument_by_name('virtuoso_host'),
 		"virtuosoPort" : get_argument_by_name('virtuoso_port'),
@@ -557,7 +550,7 @@ var write_dendro_configuration_file = function ()
 				"show_all_buttons_in_recommendations" : false,
 				"prefill_text_boxes" : false
 			},
-			"cache" : 
+			"cache" :
 			{
 				"log_cache_hits" : true,
 				"log_cache_writes" : true,
@@ -674,25 +667,25 @@ var write_dendro_configuration_file = function ()
 	      },
 	      "ckan" :
 	      {
-	    
+
 	      }
 	    }
 	}
-	
+
 	var util = require('util');
-	
+
 	var destinationFolder = get_argument_by_name('dendro_config_output_folder_location');
 	if(!fs.existsSync(destinationFolder))
 	{
-		fs.mkdirSync(destinationFolder);		
+		fs.mkdirSync(destinationFolder);
 	}
-	
+
 	var destinationFile = path.join(destinationFolder, 'deployment_configs.json');
 	fs.writeFileSync(destinationFile, JSON.stringify(dendro_config_template, null, 2) , 'utf-8');
 	return destinationFile;
 }
 
-var write_dendro_recommender_configuration_file = function () 
+var write_dendro_recommender_configuration_file = function ()
 {
 	var dr_parameters = [
 		{
@@ -728,28 +721,28 @@ var write_dendro_recommender_configuration_file = function ()
 			value : get_argument_by_name("dendro_recommender_port")
 		}
 	];
-	
+
 	var contents_of_current_file = fs.readFileSync(get_argument_by_name('dr_config_template_abs_path'), 'utf-8');
-	
+
 	var output = contents_of_current_file.replace(/\n# BEGIN_AUTO_GENERATED_BY_BUILD_CONFIGURATIONS_JS.*#END_AUTO_GENERATED_BY_BUILD_CONFIGURATIONS_JS/gm, "");
-	
+
 	output += "\n# BEGIN_AUTO_GENERATED_BY_BUILD_CONFIGURATIONS_JS\n";
 	output += "# auto-generated parameters DO NOT CHANGE.\n";
 	output += "# Edit the configuration generation script (build_configuration_files.js) instead!\n";
-	
+
 	for (var i = 0; i < dr_parameters.length; i++) {
 		var dr_parameter = dr_parameters[i];
 		output += dr_parameter.key + "=\"" + dr_parameter.value+"\"\n";
 	}
-	
-	output += "#END_AUTO_GENERATED_BY_BUILD_CONFIGURATIONS_JS\n";	
-	
+
+	output += "#END_AUTO_GENERATED_BY_BUILD_CONFIGURATIONS_JS\n";
+
 	var destinationFolder = get_argument_by_name('dr_config_output_folder_location');
 	if(!fs.existsSync(destinationFolder))
 	{
-		fs.mkdirSync(destinationFolder);		
+		fs.mkdirSync(destinationFolder);
 	}
-	
+
 	var destinationFile = path.join(destinationFolder, 'application.conf');
 	fs.writeFileSync(destinationFile, output , 'utf-8');
 	return destinationFile;
@@ -769,7 +762,7 @@ if(missing_arguments.length == 0)
 	console.log(colors.cyan("[INFO] ") + "Creating new configuration file for Dendro with name " + colors.yellow(config_identifier) + "...");
 	var dendroConfigurationLocation = write_dendro_configuration_file();
 	console.log(colors.green("[OK] ") + "Configuration file for Dendro with name \"" + colors.yellow(config_identifier) + " created at " + dendroConfigurationLocation);
-	
+
 	console.log(colors.cyan("[INFO] ") + "Creating new configuration file for Dendro Recommender...");
 	var dendroRecommenderConfigurationLocation = write_dendro_recommender_configuration_file();
 	console.log(colors.green("[OK] ") + "Created new configuration file for Dendro Recommender at " + dendroRecommenderConfigurationLocation);
