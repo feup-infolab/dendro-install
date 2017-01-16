@@ -78,15 +78,18 @@ setup_redis_instance()
 
   local new_conf_file="$redis_conf_folder/$redis_instance_name.conf"
   local new_workdir="/var/run/$redis_instance_name"
-  local new_pidfile="/var/run/$redis_instance_name/$redis_instance_name.pid"
+  local new_pidfile="$new_workdir/$redis_instance_name.pid"
   local new_logfile="/var/log/redis/$redis_instance_name.log"
   local new_init_script_file="/etc/init.d/$redis_instance_name"
 	local new_service_file="/etc/systemd/system/$redis_instance_name.service"
 
+	#create working directory for this new instance
   if [ ! -d $new_workdir ]
   then
-    mkdir -p $new_workdir
+    sudo mkdir -p $new_workdir
   fi
+
+	sudo chown -R redis:redis $new_workdir
 
   #changes to conf file
   new_conf_file_pid_section="pidfile $new_pidfile"
@@ -153,73 +156,22 @@ ReadWriteDirectories=-/etc/redis
 
 [Install]
 WantedBy=multi-user.target
-Alias=redis.service
+Alias=$redis_instance_name.service
 LUCHI
 unset IFS
 
-if [[ -f $new_service_file ]]
-then
-	sudo truncate -s 0 $new_service_file
-else
-	sudo touch $new_service_file
-fi
+	if [[ -f $new_service_file ]]
+	then
+		sudo rm $new_service_file
+	fi
 
-printf "%s" "$new_service_service_file" | sudo tee $new_service_service_file >> /dev/null
+	printf "%s" "$new_service_contents" | sudo tee $new_service_file
 
-#reload systemctl and start service
-sudo systemctl daemon-reload
-sudo systemctl enable $redis_instance_name
-sudo systemctl start $redis_instance_name
-
-#patch init script for new redis instance
-IFS='%'
-read -r -d '' new_service_script_section << LUCHI
-### BEGIN INIT INFO
-# Provides:		$redis_instance_name
-# Required-Start:	\$syslog \$remote_fs
-# Required-Stop:	\$syslog \$remote_fs
-# Should-Start:		\$local_fs
-# Should-Stop:		\$local_fs
-# Default-Start:	2 3 4 5
-# Default-Stop:		0 1 6
-# Short-Description:	$redis_instance_name - Persistent key-value db
-# Description:		$redis_instance_name - Persistent key-value db
-### END INIT INFO
-
-
-PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-DAEMON=$new_init_script_file
-DAEMON_ARGS=$new_conf_file
-NAME=$id
-DESC=$id
-
-RUNDIR=$new_workdir
-PIDFILE=$new_pidfile
-LUCHI
-unset IFS
-
-  printf "$old_service_script_section"
-  printf "\n\n"
-  printf "$new_service_script_section"
-
-  sudo cp "$redis_init_script_file" "$new_init_script_file" &&
-  patch_file $new_init_script_file	 \
-          "$old_service_script_section" \
-          "$new_service_script_section" \
-          "$redis_instance_name-patch-service-file" \
-					"sh" \
-	|| die "Unable to patch the Configuration file for Redis instance $id on $host:$port."
-
-  #start new service
-  echo "$new_init_script_file start"
-
-	#fix the line endings
-	sudo apt-get install --yes dos2unix
-	sudo dos2unix $new_init_script_file || die "Unable to convert the file into Unix Line endings."
-
-	#mark file as executable and run it
-	chmod +x $new_init_script_file
-  sudo /bin/sh -c "$new_init_script_file start"
+	#reload systemctl and start service
+	sudo systemctl daemon-reload
+	#sudo systemctl enable $redis_instance_name
+	sudo systemctl unmask $redis_instance_name
+	sudo systemctl start $redis_instance_name
 }
 
 sudo nc "$host" "$port" < /dev/null;
