@@ -18,6 +18,6 @@ info "Setting up Redis instances..."
 
 chmod +x ./add_redis_instance.sh
 
-./add_redis_instance.sh $redis_default_id $redis_default_host $redis_default_port &&
-./add_redis_instance.sh $redis_social_id $redis_social_host $redis_social_port ||
+./add_redis_instance.sh $redis_default_id $redis_default_host $redis_default_port $set_dev_mode &&
+./add_redis_instance.sh $redis_social_id $redis_social_host $redis_social_port $set_dev_mode ||
   die "Unable to setup Redis instances."
