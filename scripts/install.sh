@@ -86,9 +86,6 @@ source ./Fixes/fix_locales.sh
 	sudo dpkg --configure -a
 	sudo apt-get -qq update
 
-source ./Dependencies/Redis/setup_redis_instances.sh
-exit 0
-
 if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ] && [ "$install_jenkins" != "true" ] && [ "$install_teamcity" != "true" ] && [ "$install_teamcity_agent" != "true" ]
 then
 	info "Running the Dendro User Setup."
@@ -108,6 +105,7 @@ then
 		else
 			warning "Installing dependencies"
 			source ./Dependencies/misc.sh
+			source ./Dependencies/Redis/setup_redis_instances.sh
 			#source ./Dependencies/node.sh
 
 			#install virtuoso
