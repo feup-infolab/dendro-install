@@ -22,3 +22,5 @@ chmod +x ./add_redis_instance.sh
 ./add_redis_instance.sh $redis_social_id $redis_social_host $redis_social_port $set_dev_mode &&
 ./add_redis_instance.sh $redis_notification_id $redis_notification_host $redis_notification_port $set_dev_mode||
   die "Unable to setup Redis instances."
+
+cd $setup_dir || die "Unable to return to base folder after setting up Redis instances."
