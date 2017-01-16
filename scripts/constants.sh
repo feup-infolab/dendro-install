@@ -392,6 +392,10 @@ redis_social_id="social"
 redis_social_host="127.0.0.1"
 redis_social_port="6781"
 
+redis_notification_id="notification"
+redis_notification_host="127.0.0.1"
+redis_notification_port="6782"
+
 #console colors
 
 # Reset
