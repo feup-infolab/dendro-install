@@ -192,8 +192,9 @@ unset IFS
 sudo nc "$host" "$port" < /dev/null;
 server_not_listening=$?
 
-if [[ "$server_not_listening" -ne "0" ]]
+if [[ ! "$server_not_listening" = "0" ]]
 then
+	sudo systemctl stop $redis_instance_name > /dev/null
   setup_redis_instance $id $host $port
 else
   warning "There is already a program listening on $host:$port. Stopping configuration of Redis instance $id on $host:$port."
