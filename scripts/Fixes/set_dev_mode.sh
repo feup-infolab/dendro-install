@@ -81,5 +81,11 @@ else
 	die "File $mysql_conf_file does not exist."
 fi
 
+#give all permissions to all files in the dendro installation (for remote editing)
+
+info "Giving all permissions to all users in dendro installation path at $installation_path..."
+sudo chmod -R ugo+rw $installation_path
+info "Done."
+
 #go back to initial dir
 cd $setup_dir
