@@ -92,6 +92,17 @@ export VAGRANT_VM_INSTALL='true'
 info "Running vagrant halt..."
 vagrant halt -f
 
+#create shared folders if they dont exist already
+if [[ ! -d "shared_folders/dendro" ]]
+then
+	mkdir -p "shared_folders/dendro"
+fi
+
+if [[ ! -d "shared_folders/etc/init.d" ]]
+then
+	mkdir -p "shared_folders/etc/init.d"
+fi
+
 info "Running vagrant up..."
 #vagrant box update
 vagrant up --provider virtualbox --provision ||
