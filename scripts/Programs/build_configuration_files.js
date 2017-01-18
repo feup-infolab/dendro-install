@@ -432,7 +432,7 @@ var write_dendro_configuration_file = function ()
             "options":
             {
               "host" : "127.0.0.1",
-              "port" : "6370"
+              "port" : "6380"
             },
             "database_number" : 1
           },
