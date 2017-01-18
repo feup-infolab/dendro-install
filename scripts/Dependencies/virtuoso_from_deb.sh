@@ -15,10 +15,9 @@ setup_dir=$(pwd)
 
 #install Virtuoso 7.1.1 from PPA
 
-echo "deb http://packages.comsode.eu/debian wheezy main" | sudo tee -a /etc/apt/sources.list.d/odn.list
-wget -O - http://packages.comsode.eu/key/odn.gpg.key | sudo apt-key add -
-sudo apt-get update
-sudo apt-get install -y virtuoso-opensource=7.2
+git clone https://github.com/feup-infolab/virtuoso7-debs.git virtuoso7
+cd virtuoso7/debs-ubuntu-16-04
+sudo dpkg -i virtuoso-opensource7_7.2.4-1_amd64.deb
 
 #go back to initial dir
 cd $setup_dir
