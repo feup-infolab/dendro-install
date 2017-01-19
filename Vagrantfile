@@ -56,7 +56,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "#{ENV['VAGRANT_VM_NAME']}" do |subconfig|
     subconfig.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}"
-    subconfig.vm.network :forwarded_port, :guest => 22, :host => 7666
+    subconfig.vm.network :forwarded_port, :guest => 22, :host => 7665
     subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
     config.vm.boot_timeout= 600
   end
