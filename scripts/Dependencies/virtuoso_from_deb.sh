@@ -8,12 +8,12 @@ else
 	source ./constants.sh
 fi
 
-info "Installing Virtuoso 7.2.4 from PPA @feup-infolab/virtuoso7-debs."
+info "Installing Virtuoso 7.2.4 from .deb @feup-infolab/virtuoso7-debs."
 
 #save current dir
 setup_dir=$(pwd)
 
-#install Virtuoso 7.2.4 from PPA
+#install Virtuoso 7.2.4 from .deb
 
 git clone https://github.com/feup-infolab/virtuoso7-debs.git virtuoso7
 cd virtuoso7/debs-ubuntu-16-04
@@ -55,4 +55,4 @@ die "Failed to set Virtuoso OpenSource crontab"
 #go back to initial dir
 cd $setup_dir
 
-success "Installed Virtuoso 7.2.4 from PPA @feup-infolab/virtuoso7-debs."
+success "Installed Virtuoso 7.2.4 from .deb @feup-infolab/virtuoso7-debs."
