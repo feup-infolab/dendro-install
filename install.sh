@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+#reset seconds variable
+SECONDS=0
+
 source ./scripts/constants.sh
 
 #install plugin to keep all the VBox Guest Additions updated.
@@ -114,6 +117,10 @@ die "There were errors installing Dendro."
 info "Cleaning up..."
 rm ./scripts.tar.gz
 success "Deleted temporary scripts package."
+
+#print time elapsed
+duration=$SECONDS
+info "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
 
 #clean list of VMs
 #sudo vagrant global-status --prune
