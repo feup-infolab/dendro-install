@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 #global
-active_deployment_setting='dendroVagrantDemo'
+active_deployment_setting='dendroVagrantDemoTestDeb'
 #will be used to generate URLs relative to a base address, so set it wisely
-	host="192.168.56.249"
+	host="192.168.56.248"
 installation_path='/dendro'
 recommender_installation_path='/dendro_recommender'
 

@@ -115,11 +115,9 @@ then
 				source ./Dependencies/virtuoso_from_source.sh
 				source ./Services/virtuoso.sh
 			else
-				info "Installing OpenLink Virtuoso Database from source, as PPA is not yet available."
-				source ./Dependencies/virtuoso_from_source.sh
+				info "Installing OpenLink Virtuoso Database from .deb GitHub package @feup-infolab/virtuoso7-debs."
+				source ./Dependencies/virtuoso_from_deb.sh
 				source ./Services/virtuoso.sh
-				# info "Installing OpenLink Virtuoso Database from PPA (Binary)"
-				# source ./Dependencies/virtuoso_from_ppa.sh
 			fi
 
 			timeout=30
