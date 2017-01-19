@@ -5,9 +5,6 @@ SECONDS=0
 
 source ./scripts/constants.sh
 
-#install plugin to keep all the VBox Guest Additions updated.
-vagrant plugin install vagrant-vbguest
-
 #compress scripts folder
 rm -rf scripts.tar.gz
 tar -zcf scripts.tar.gz ./scripts
