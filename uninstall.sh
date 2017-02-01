@@ -37,6 +37,8 @@ vbox_exists="false"
 vbox_id=""
 machine_exists vbox_exists vbox_id ${active_deployment_setting}
 
+vm_folder="$HOME/Virtualbox\ VMs/${active_deployment_setting}"
+
 if [ "$vbox_exists" == "true" ] && [ $vbox_id != "" ]
 then
   info "Virtualbox ${active_deployment_setting} was found and has ID: $vbox_id"
@@ -54,9 +56,9 @@ then
   then
     VBoxManage controlvm $vbox_id poweroff || warning "Unable to power off VM ${active_deployment_setting}. Does it exist?"
     VBoxManage unregistervm $vbox_id -delete || warning "Unable to delete VM ${active_deployment_setting}."
-    rm -rf "$HOME/Virtualbox\ VMs\\${active_deployment_setting}"
-    vagrant global-status --prune || true
   fi
+
+  vagrant global-status --prune || true
 
   vbox_exists="false"
   vbox_id=""
@@ -68,6 +70,11 @@ then
   fi
 
   rm -rf .\.vagrant
+elif [ ! -d "$vm_folder" ]
+  then
+  info "VM folder at $vm_folder... EXISTS!"
+  warning "Deleting $vm_folder"
+  rm -rf "$vm_folder" && success "Deleted folder $vm_folder" || die "Unable to delete the folder $vm_folder!"
 else
   warning "Virtualbox does not exist, there is nothing to delete."
 fi
