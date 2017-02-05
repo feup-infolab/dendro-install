@@ -35,8 +35,8 @@ while getopts 'satcjudrb:' flag; do
     a)
       #install TeamCity
       append_to_snapshot_name "install_teamcity_agent"
-    	VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-a '
-    	;;
+      VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-a '
+      ;;
     c)
       #install TeamCity Agent
       append_to_snapshot_name "install_teamcity"

@@ -74,22 +74,19 @@ setup_redis_instance()
   local id=$1
   local host=$2
   local port=$3
-	local redis_instance_name="redis_$id_$port"
+  local redis_instance_name="redis_$id_$port"
+  local redis_instance_name_filename="$redis_instance_name.service"
 
   local new_conf_file="$redis_conf_folder/$redis_instance_name.conf"
   local new_workdir="/var/run/$redis_instance_name"
   local new_pidfile="$new_workdir/$redis_instance_name.pid"
   local new_logfile="/var/log/redis/$redis_instance_name.log"
   local new_init_script_file="/etc/init.d/$redis_instance_name"
-	local new_service_file="/etc/systemd/system/$redis_instance_name.service"
+  local new_service_file="/etc/systemd/system/$redis_instance_name_filename"
 
-	#create working directory for this new instance
-  if [ ! -d $new_workdir ]
-  then
-    sudo mkdir -p $new_workdir
-  fi
-
-	sudo chown -R redis:redis $new_workdir
+  info "Creating Redis work directory at $new_workdir."
+  sudo mkdir -p $new_workdir  
+  sudo chown -R redis:redis $new_workdir
 
   #changes to conf file
   new_conf_file_pid_section="pidfile $new_pidfile"
@@ -167,7 +164,6 @@ unset IFS
 
 	printf "%s" "$new_service_contents" | sudo tee $new_service_file
 
-
 	#open this redis instance to outside connections if this VM is in dev mode...
 
 	if [[ $set_dev_mode = "true" ]]
@@ -184,9 +180,9 @@ unset IFS
 
 	#reload systemctl and start service
 	sudo systemctl daemon-reload
-	#sudo systemctl enable $redis_instance_name
-	sudo systemctl unmask $redis_instance_name
-	sudo systemctl start $redis_instance_name
+	sudo systemctl unmask $redis_instance_name_filename
+	sudo systemctl enable $redis_instance_name
+	sudo systemctl start $redis_instance_name_filename
 }
 
 sudo nc "$host" "$port" < /dev/null;
@@ -195,9 +191,9 @@ server_not_listening=$?
 if [[ ! "$server_not_listening" = "0" ]]
 then
 	sudo systemctl stop $redis_instance_name > /dev/null
-  setup_redis_instance $id $host $port
+	setup_redis_instance $id $host $port
 else
-  warning "There is already a program listening on $host:$port. Stopping configuration of Redis instance $id on $host:$port."
+  	warning "There is already a program listening on $host:$port. Stopping configuration of Redis instance $id on $host:$port."
 fi
 
 #return to previous dir

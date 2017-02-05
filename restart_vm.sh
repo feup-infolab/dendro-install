@@ -1,5 +1,3 @@
 #!/usr/bin/env bash
-
-source ./define_env_vars.sh
-
-vagrant reload
+source ./halt_vm.sh
+source ./up_vm.sh

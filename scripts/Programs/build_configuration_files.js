@@ -424,43 +424,42 @@ var write_dendro_configuration_file = function ()
 		"elasticSearchPort" : get_argument_by_name('elasticsearch_port'),
 		"cache": {
 			"active": true,
-			"redis" :
-      {
-        "instances": [
-          {
-            "id" : "default",
-            "options":
-            {
-              "host" : "127.0.0.1",
-              "port" : "6780"
-            },
-            "database_number" : 1
-          },
-          {
-            "id" : "social",
-            "options":
-            {
-              "host" : "127.0.0.1",
-              "port" : "6781"
-            },
-            "database_number" : 1
-          },
-          {
-            "id" : "notifications",
-            "options":
-            {
-              "host" : "127.0.0.1",
-              "port" : "6782"
-            },
-            "database_number" : 1
-          }
-        ]
+			"redis" : {
+	        "instances": [
+	          {
+	            "id" : "default",
+	            "options":
+	            {
+	              "host" : "127.0.0.1",
+	              "port" : "6780"
+	            },
+	            "database_number" : 1
+	          },
+	          {
+	            "id" : "social",
+	            "options":
+	            {
+	              "host" : "127.0.0.1",
+	              "port" : "6781"
+	            },
+	            "database_number" : 1
+	          },
+	          {
+	            "id" : "notifications",
+	            "options":
+	            {
+	              "host" : "127.0.0.1",
+	              "port" : "6782"
+	            },
+	            "database_number" : 1
+	          }
+    		]
       },
-	  	"static" :
-      {
-        "last_modified_caching" : get_argument_by_name('last_modified_caching'),
-        "cache_period_in_seconds" : get_argument_by_name('cache_period_in_seconds')
-      }
+	  		"static" :
+      		{
+        		"last_modified_caching" : get_argument_by_name('last_modified_caching'),
+        		"cache_period_in_seconds" : get_argument_by_name('cache_period_in_seconds')
+      	  }
 		},
 		"virtuosoHost" : get_argument_by_name('virtuoso_host'),
 		"virtuosoPort" : get_argument_by_name('virtuoso_port'),
@@ -757,6 +756,25 @@ var write_dendro_recommender_configuration_file = function ()
 	return destinationFile;
 }
 
+var write_active_deployment_config_file = function()
+{
+	var util = require('util');
+
+	var destinationFolder = get_argument_by_name('dendro_config_output_folder_location');
+	if(!fs.existsSync(destinationFolder))
+	{
+		fs.mkdirSync(destinationFolder);
+	};
+
+	var activeConfigTemplate = {
+		"key" : get_argument_by_name('config_identifier')
+	};
+
+	var destinationFile = path.join(destinationFolder, 'active_deployment_config.json');
+	fs.writeFileSync(destinationFile, JSON.stringify(activeConfigTemplate, null, 2) , 'utf-8');
+	return destinationFile;
+}
+
 /**
  * Start the program!
  **/
@@ -770,6 +788,7 @@ if(missing_arguments.length == 0)
 	var config_identifier = get_argument_by_name("config_identifier");
 	console.log(colors.cyan("[INFO] ") + "Creating new configuration file for Dendro with name " + colors.yellow(config_identifier) + "...");
 	var dendroConfigurationLocation = write_dendro_configuration_file();
+	var dendroActiveDeploymentConfigLocation = write_active_deployment_config_file();
 	console.log(colors.green("[OK] ") + "Configuration file for Dendro with name \"" + colors.yellow(config_identifier) + " created at " + dendroConfigurationLocation);
 
 	console.log(colors.cyan("[INFO] ") + "Creating new configuration file for Dendro Recommender...");
