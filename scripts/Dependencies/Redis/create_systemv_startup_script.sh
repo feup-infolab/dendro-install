@@ -22,6 +22,9 @@ DAEMON_ARGS=$new_conf_file
 NAME=$new_init_script_file
 DESC=$new_init_script_file
 
+mkdir -p $new_workdir  
+chown -R redis:redis $new_workdir
+
 RUNDIR=$new_workdir
 PIDFILE=$new_pidfile
 LUCHI
