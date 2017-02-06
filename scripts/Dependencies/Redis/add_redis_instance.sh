@@ -16,33 +16,6 @@ info "Setting up Redis Instance $id on host $host:$port..."
 #save current dir
 setup_dir=$(pwd)
 
-#section to replace in redis service file
-IFS='%'
-read -r -d '' old_service_script_section << LUCHI
-### BEGIN INIT INFO
-# Provides:		redis-server
-# Required-Start:	\$syslog \$remote_fs
-# Required-Stop:	\$syslog \$remote_fs
-# Should-Start:		\$local_fs
-# Should-Stop:		\$local_fs
-# Default-Start:	2 3 4 5
-# Default-Stop:		0 1 6
-# Short-Description:	redis-server - Persistent key-value db
-# Description:		redis-server - Persistent key-value db
-### END INIT INFO
-
-
-PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-DAEMON=/usr/bin/redis-server
-DAEMON_ARGS=/etc/redis/redis.conf
-NAME=redis-server
-DESC=redis-server
-
-RUNDIR=/var/run/redis
-PIDFILE=\$RUNDIR/redis-server.pid
-LUCHI
-unset IFS
-
 #sections to replace in redis configuration file
 IFS='%'
 read -r -d '' old_conf_file_pid_section << LUCHI
@@ -81,12 +54,12 @@ setup_redis_instance()
   local new_workdir="/var/run/$redis_instance_name"
   local new_pidfile="$new_workdir/$redis_instance_name.pid"
   local new_logfile="/var/log/redis/$redis_instance_name.log"
-  local new_init_script_file="/etc/init.d/$redis_instance_name"
   local new_service_file="/etc/systemd/system/$redis_instance_name_filename"
 
   info "Creating Redis work directory at $new_workdir."
-  sudo mkdir -p $new_workdir  
-  sudo chown -R redis:redis $new_workdir
+
+	sudo mkdir -p $new_workdir
+	sudo chown -R redis:redis $new_workdir
 
   #changes to conf file
   new_conf_file_pid_section="pidfile $new_pidfile"
@@ -115,8 +88,9 @@ setup_redis_instance()
 
   #create service file
 
-IFS='%'
-read -r -d '' new_service_contents << LUCHI
+
+	IFS='%'
+	read -r -d '' new_service_contents << LUCHI
 [Unit]
 Description=Advanced key-value store ($redis_instance_name)
 After=network.target
@@ -131,7 +105,10 @@ Restart=always
 User=redis
 Group=redis
 
+PermissionsStartOnly=true
 ExecStartPre=-/bin/run-parts --verbose /etc/redis/redis-server.pre-up.d
+ExecStartPre=-/bin/mkdir -p $new_workdir
+ExecStartPre=-/bin/chown -R redis:redis $new_workdir
 ExecStartPost=-/bin/run-parts --verbose /etc/redis/redis-server.post-up.d
 ExecStop=-/bin/run-parts --verbose /etc/redis/redis-server.pre-down.d
 ExecStop=/bin/kill -s TERM $MAINPID
@@ -141,6 +118,7 @@ PrivateTmp=yes
 PrivateDevices=yes
 ProtectHome=yes
 ReadOnlyDirectories=/
+ReadWriteDirectories=-/var/run
 ReadWriteDirectories=-/var/lib/redis
 ReadWriteDirectories=-/var/log/redis
 ReadWriteDirectories=-$new_workdir
@@ -155,7 +133,7 @@ ReadWriteDirectories=-/etc/redis
 WantedBy=multi-user.target
 Alias=$redis_instance_name.service
 LUCHI
-unset IFS
+	unset IFS
 
 	if [[ -f $new_service_file ]]
 	then
@@ -163,9 +141,9 @@ unset IFS
 	fi
 
 	printf "%s" "$new_service_contents" | sudo tee $new_service_file
+	sudo chmod 0644 $new_service_file
 
 	#open this redis instance to outside connections if this VM is in dev mode...
-
 	if [[ $set_dev_mode = "true" ]]
 	then
 		info "Trying to open Redis instance $redis_instance_name to ANY remote connection."

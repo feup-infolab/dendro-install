@@ -40,7 +40,7 @@ PIDFile=${installation_path}/service_pids/virtuoso.pid
 WantedBy=multi-user.target
 Alias=virtuoso.service" | sudo tee $virtuoso_startup_item_file
 
-sudo chmod 0744 $virtuoso_startup_item_file
+sudo chmod 0644 $virtuoso_startup_item_file
 sudo systemctl daemon-reload
 sudo systemctl enable virtuoso
 sudo systemctl unmask virtuoso
