@@ -1,9 +1,14 @@
 SPARQL LOAD <http://www.w3.org/ns/auth/cert#> INTO graph <http://www.w3.org/ns/auth/cert#>;
 
 SPARQL CLEAR GRAPH <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>;
-SPARQL LOAD <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo> INTO graph <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>;
+SPARQL LOAD <http://lov.okfn.org/dataset/lov/vocabs/nfo/versions/2012-06-10.n3> INTO graph <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('nfo', 2);
 DB.DBA.XML_SET_NS_DECL ('nfo', 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#', 2);
+
+SPARQL CLEAR GRAPH <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#>;
+SPARQL LOAD <http://lov.okfn.org/dataset/lov/vocabs/nie/versions/2012-10-03.n3> INTO graph <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#>;
+DB.DBA.XML_REMOVE_NS_BY_PREFIX('nie', 2);
+DB.DBA.XML_SET_NS_DECL ('nie', 'http://www.semanticdesktop.org/ontologies/2007/01/19/nie#', 2);
 
 SPARQL CLEAR GRAPH <http://purl.org/dc/elements/1.1/>;
 SPARQL LOAD <http://dublincore.org/2012/06/14/dcelements.rdf>  INTO graph <http://purl.org/dc/elements/1.1/>;
@@ -14,11 +19,6 @@ SPARQL CLEAR GRAPH <http://purl.org/dc/terms/>;
 SPARQL LOAD <http://dublincore.org/2012/06/14/dcterms.rdf> INTO GRAPH <http://purl.org/dc/terms/>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('dcterms', 2);
 DB.DBA.XML_SET_NS_DECL ('dcterms', 'http://purl.org/dc/terms/', 2);
-
-SPARQL CLEAR GRAPH <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#>;
-SPARQL LOAD <http://www.semanticdesktop.org/ontologies/2007/01/19/nie> INTO graph <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#>;
-DB.DBA.XML_REMOVE_NS_BY_PREFIX('nie', 2);
-DB.DBA.XML_SET_NS_DECL ('nie', 'http://www.semanticdesktop.org/ontologies/2007/01/19/nie#', 2);
 
 SPARQL CLEAR GRAPH <http://xmlns.com/foaf/0.1/>;
 SPARQL LOAD <http://xmlns.com/foaf/spec/INDEX.rdf> INTO GRAPH <http://xmlns.com/foaf/0.1/>;

@@ -42,27 +42,27 @@ set_dev_mode="false"
 
 while getopts 'actjdurb:' flag; do
   case $flag in
-		a)
+	a)
      	install_teamcity_agent="true"
-      ;;
-		c)
+      	;;
+	c)
      	install_teamcity="true"
-      ;;
+      	;;
     t)
      	run_tests="true"
-      ;;
+      	;;
     r)
-			refresh_code_only="true"
-		  ;;
-		d)
-			set_dev_mode="true"
-		  ;;
-		u)
-			unset_dev_mode="true"
-		  ;;
-		j)
-			install_jenkins="true"
-		  ;;
+		refresh_code_only="true"
+	  	;;
+	d)
+		set_dev_mode="true"
+	  	;;
+	u)
+		unset_dev_mode="true"
+		;;
+	j)
+		install_jenkins="true"
+		;;
     b)
    	 	dendro_branch=$OPTARG
     	;;

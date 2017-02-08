@@ -11,6 +11,7 @@ fi
 id=$1
 host=$2
 port=$3
+set_dev_mode=$4
 
 info "Setting up Redis Instance $id on host $host:$port..."
 #save current dir
@@ -144,7 +145,7 @@ LUCHI
 	sudo chmod 0644 $new_service_file
 
 	#open this redis instance to outside connections if this VM is in dev mode...
-	if [[ $set_dev_mode == "true" ]]
+	if [[ "$set_dev_mode" == "true" ]]
 	then
 		info "Trying to open Redis instance $redis_instance_name to ANY remote connection."
 		file_exists file_exists_flag $new_conf_file
@@ -159,8 +160,10 @@ LUCHI
 	#reload systemctl and start service
 	sudo systemctl daemon-reload
 	sudo systemctl unmask $redis_instance_name_filename
-	sudo systemctl enable $redis_instance_name
+	sudo systemctl enable $redis_instance_name_filename
+	sudo systemctl daemon-reload
 	sudo systemctl start $redis_instance_name_filename
+	sudo systemctl restart $redis_instance_name_filename
 }
 
 sudo nc "$host" "$port" < /dev/null;
@@ -171,9 +174,9 @@ then
 	sudo systemctl stop $redis_instance_name > /dev/null
 	setup_redis_instance $id $host $port
 else
-		if [ ! $set_dev_mode == "true" ]
+		if [ ! "$set_dev_mode" == "true" ]
 		then
-			warning "There is already a program listening on $host:$port. Stopping configuration of Redis instance $id on $host:$port."
+			warning "There is already a program listening on $host:$port. Stopping configuration of Redis instance $id on $host:$port. Set Dev Mode : $set_dev_mode"
 		else
 			info "Redis instance running at $host:$port. Trying to open it to external connections..."
 			sudo systemctl stop $redis_instance_name > /dev/null
