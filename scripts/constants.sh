@@ -478,8 +478,8 @@ On_IWhite='\033[0;107m'   # White
 	teamcity_pids_folder="$teamcity_installation_path/service_pids"
 	teamcity_cookies_file="/tmp/teamcity_setup/teamcity_cookies.txt"
 
-	#teamcity_url="https://download.jetbrains.com/teamcity/TeamCity-10.0.3.tar.gz"
-	teamcity_url="http://10.0.2.3/TeamCity-10.0.4.tar.gz" #macbook pro
+	teamcity_url="https://download.jetbrains.com/teamcity/TeamCity-10.0.3.tar.gz"
+	#teamcity_url="http://10.0.2.3/TeamCity-10.0.4.tar.gz" #macbook pro
 	teamcity_md5="30aa7af265e8e68d12002308d80f62ef"
 
 #Teamcity Server
