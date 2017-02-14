@@ -44,12 +44,12 @@ fi
 #build startup and stop scripts from templates
 sudo sed -e "s;%TEAMCITY_INSTALLATION_PATH%;$teamcity_installation_path;g" \
 				 -e "s;%TEAMCITY_LOG_FILE%;$teamcity_log_file;g" \
-				 ./Services/TeamCity/control_scripts/teamcity_start_template.sh | sudo tee $teamcity_start_script &&
+				 ./Services/teamcity/control_scripts/teamcity_start_template.sh | sudo tee $teamcity_start_script &&
 sudo chmod 0755 $teamcity_start_script || die "Unable to create TeamCity startup script at $teamcity_start_script."
 
 sudo sed -e "s;%TEAMCITY_INSTALLATION_PATH%;$teamcity_installation_path;g" \
 				 -e "s;%TEAMCITY_LOG_FILE%;$teamcity_log_file;g" \
-				 ./Services/TeamCity/control_scripts/teamcity_stop_template.sh | sudo tee $teamcity_stop_script &&
+				 ./Services/teamcity/control_scripts/teamcity_stop_template.sh | sudo tee $teamcity_stop_script &&
 sudo chmod 0755 $teamcity_stop_script || die "Unable to create TeamCity stop script at $teamcity_stop_script."
 
 #restore ownership of scripts folder to dendro user and set exec permissions
