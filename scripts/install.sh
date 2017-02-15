@@ -127,7 +127,7 @@ then
 				sleep 1s
 			done
 			source ./SQLCommands/grant_commands.sh
-			source ./Checks/check_services_status.sh
+			#source ./Checks/check_services_status.sh
 
 			source ./Programs/create_dendro_user.sh
 			source ./Dependencies/play_framework.sh

@@ -63,7 +63,7 @@ source ./constants.sh
 	success "Deleted temporary folder for downloads at : ${setup_dir}."
 
 #check services are up
-	source ./Checks/check_services_status.sh
+	#source ./Checks/check_services_status.sh
 
 #go back to whatever was the directory at the start of this script
 	cd $starting_dir
