@@ -101,6 +101,7 @@ recommender_installation_path='/dendro_recommender'
 	#dependencies
 		#play framework
 		play_framework_install_path='/etc/play'
+		play_framework_md5="cd59d02e49fce42bc87d230274c5701c"
 
 #running variables help
 

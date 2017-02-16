@@ -19,7 +19,10 @@ source ./Dependencies/oracle_jdk8.sh &&
 #install play framework
 cd $temp_downloads_folder &&
 
-if [ ! -f ./play-2.2.3.zip ]; then
+md5=$(md5sum < ./play-2.2.3.zip | cut -f1 -d' ')
+
+if [ -f ./play-2.2.3.zip ]  || [ "$md5" != "$play_framework_md5" ]  
+then
 	info "Downloading Play Framework archive to ${temp_downloads_folder}...PLEASE STAND BY!"
 	sudo wget --progress=bar:force http://downloads.typesafe.com/play/2.2.3/play-2.2.3.zip
 	sudo unzip -qq -o play-2.2.3.zip &&
