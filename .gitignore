@@ -4,7 +4,6 @@
 ubuntu-xenial-16.04-cloudimg-console.log
 scripts/secrets.sh
 .DS_Store
-shared_folders/
 
 
 scripts/secrets.sh
