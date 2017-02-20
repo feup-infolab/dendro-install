@@ -1,0 +1,2 @@
+TARGETS = mongodb redis-server
+INTERACTIVE =
