@@ -156,19 +156,19 @@ active_deployment_setting='TESTSdendroVagrantDemo'
 
 If you want to run tests, run the program or generate test coverage reports, these are the configuration screens on a Mac (slight changes will be needed for the Windows counterparts, such as changing the location of the `node` executable). There are three tasks:
 
-[![configs](https://github.com/feup-infolab/dendro-install/blob/master/images/edit_configs.png?raw=true)]
+![configs](https://github.com/feup-infolab/dendro-install/blob/master/images/edit_configs.png?raw=true)
 
 **Mocha (run tests with live results in the IDE** 
 
-[![mocha](https://github.com/feup-infolab/dendro-install/blob/master/images/mocha.png?raw=true]
+![mocha](https://github.com/feup-infolab/dendro-install/blob/master/images/mocha.png?raw=true]
 
 **Node (Runs the program for manual testing and debugging)**
 
-[![node](https://github.com/feup-infolab/dendro-install/blob/master/images/run.png?raw=true]
+![node](https://github.com/feup-infolab/dendro-install/blob/master/images/run.png?raw=true]
 
 **NPM Test task (runs tests, generates coverage reports)**
 
-[![npm](https://github.com/feup-infolab/dendro-install/blob/master/images/npm-codecoverage.png?raw=true]
+![npm](https://github.com/feup-infolab/dendro-install/blob/master/images/npm-codecoverage.png?raw=true]
 
 ### Watch mode (run tests on any file modification)
 
