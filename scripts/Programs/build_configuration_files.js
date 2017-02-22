@@ -536,7 +536,8 @@ var write_dendro_configuration_file = function ()
 				"log_delete_operations" : true
 			},
 			"resources": {
-				"log_all_type_checks": false
+				"log_all_type_checks": false,
+				"log_missing_resources": false
 			},
 			"permissions" : {
 				"enable_permissions_system" : true,
