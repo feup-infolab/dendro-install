@@ -160,15 +160,15 @@ If you want to run tests, run the program or generate test coverage reports, the
 
 **Mocha (run tests with live results in the IDE** 
 
-![mocha](https://github.com/feup-infolab/dendro-install/blob/master/images/mocha.png?raw=true]
+![mocha](https://github.com/feup-infolab/dendro-install/blob/master/images/mocha.png?raw=true)
 
 **Node (Runs the program for manual testing and debugging)**
 
-![node](https://github.com/feup-infolab/dendro-install/blob/master/images/run.png?raw=true]
+![node](https://github.com/feup-infolab/dendro-install/blob/master/images/run.png?raw=true)
 
 **NPM Test task (runs tests, generates coverage reports)**
 
-![npm](https://github.com/feup-infolab/dendro-install/blob/master/images/npm-codecoverage.png?raw=true]
+![npm](https://github.com/feup-infolab/dendro-install/blob/master/images/npm-codecoverage.png?raw=true)
 
 ### Watch mode (run tests on any file modification)
 
