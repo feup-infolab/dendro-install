@@ -173,6 +173,7 @@ If you want to run tests, run the program or generate test coverage reports, the
 ### Watch mode (run tests on any file modification)
 
 Open a terminal and run `npm run watch`. All tests will be run whenever you save a file.
+![watch](https://github.com/feup-infolab/dendro-install/blob/master/images/watch.png?raw=true)
 
 # Acknowledgements
 
