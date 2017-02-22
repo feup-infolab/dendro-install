@@ -133,6 +133,47 @@ If you want to know what the `./install.sh -d` command does, see the video below
 
 [![YouTube Development setup tutorial for Dendro](http://i.imgur.com/Z7I9B98.png)](https://www.youtube.com/watch?v=baEsv-KTK8w).
 
+### IMPORTANT! Setting up a VM for tests
+
+Since we do not want to destroy our graphs in the development VM every time we run the tests, we have created a separate test setting in the deployment_configs.js file. This connects to a different VM, with IP 192.168.56.24**8** instead of 192.168.56.249. 
+
+This means that to run your tests continuously, you have a second VM running, with that IP. 
+
+To do that, you must:
+
+- clone this repository again to another folder
+- edit the `scripts/constants.sh` file, changing the IP to 192.168.56.24**8** and the config name to something different. Example:
+
+```bash
+#!/usr/bin/env bash
+
+#global
+active_deployment_setting='TESTSdendroVagrantDemo'
+#will be used to generate URLs relative to a base address, so set it wisely
+	host="192.168.56.248"
+```
+### Developing with WebStorm IDEA
+
+If you want to run tests, run the program or generate test coverage reports, these are the configuration screens on a Mac (slight changes will be needed for the Windows counterparts, such as changing the location of the `node` executable). There are three tasks:
+
+https://github.com/feup-infolab/dendro-install/blob/master/images/edit_configs.png?raw=true
+
+**Mocha (run tests with live results in the IDE** 
+
+https://github.com/feup-infolab/dendro-install/blob/master/images/mocha.png?raw=true
+
+**Node (Runs the program for manual testing and debugging)**
+
+https://github.com/feup-infolab/dendro-install/blob/master/images/run.png?raw=true
+
+**NPM Test task (runs tests, generates coverage reports)**
+
+https://github.com/feup-infolab/dendro-install/blob/master/images/npm-codecoverage.png?raw=true
+
+### Watch mode (run tests on any file modification)
+
+Open a terminal and run `npm run watch`. All tests will be run whenever you save a file.
+
 # Acknowledgements
 
 This work was supported by project NORTE-07-0124-FEDER-000059, financed by the North Portugal Regional Operational Programme (ON.2-O Novo Norte), under the National Strategic Reference Framework (NSRF), through the European Regional Development Fund (ERDF), and by national funds, through the Portuguese funding agency, Fundação para a Ciência e a Tecnologia (FCT). João Rocha da Silva was also supported by research grant SFRH/BD/77092/2011, provided by the Portuguese funding agency, Fundação para a Ciência e a Tecnologia (FCT).
