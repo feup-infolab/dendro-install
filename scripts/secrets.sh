@@ -19,6 +19,9 @@ eudat_token="veryLongAndComplicatedString"
 emailing_account_gmail_user="gmail_user_to_send_emails"
 emailing_account_gmail_password="password_for_gmail_user_to_send_emails"
 
+#google analytics token (if you want Google Analytics on the Dendro instance)
+google_analytics_tracking_code="GOOGLE_ANALYTICS_DEVELOPMENT_ANALYTICS_TRACKING_CODE"
+
 #gmaps API key
 gmaps_api_key="VERY_LONG_AND_COMPLICATED_STRING"
 
