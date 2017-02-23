@@ -318,6 +318,12 @@ var arguments = {
 		example : "Map height for the control in metadata editor",
 		tip : "for example 500"
 	},
+	"google_analytics_tracking_code" :
+	{
+		type: "string",
+		example : "Google analytics tracking code (if you want google analytics on this Dendro)",
+		tip : "Get it from the Google Analytics website"
+	},
 	"secret" :
 	{
 		type: "string",
@@ -638,46 +644,47 @@ var write_dendro_configuration_file = function ()
 	    {
 	      "generated_files_metadata" :
 	      {
-	    	"bagit" :
-	    	{
-	    	  "dcterms" : {
-	    		"title" : "Full contents of the dataset in ZIP format (Bagit Specification)",
-	    		"description" : "This file contains all the files and corresponding metadata in a ZIP arghive that follows the BagIt (https://tools.ietf.org/html/draft-kunze-bagit-08) specification. Exported by the Dendro platform."
-	    	  }
-	    	},
-	    	"zip" :
-	    	{
-	    	  "dcterms" : {
-	    		"title" : "Full contents of the dataset in ZIP format",
-	    		"description" : "This file contains all the files and corresponding metadata in a ZIP archive. Exported by the Dendro platform."
-	    	  }
-	    	},
-	    	"json" :
-	    	{
-	    	  "dcterms" : {
-	    		"title" : "Dataset metadata in JSON format",
-	    		"description" : "This file contains all the metadata in JSON format. Exported by the Dendro platform."
-	    	  }
-	    	},
-	    	"rdf" :
-	    	{
-	    	  "dcterms" : {
-	    		"title" : "Dataset metadata in RDF format",
-	    		"description" : "This file contains all the metadata in RDF (Resource Description Framework) format. Exported by the Dendro platform."
-	    	  }
-	    	},
-	    	"txt" :
-	    	{
-	    	  "dcterms" : {
-	    		"title" : "Dataset metadata in human-readable TXT format",
-	    		"description" : "This file contains all the metadata in Plain text for human reading. Exported by the Dendro platform."
-	    	  }
-	    	}
+			    	"bagit" :
+			    	{
+			    	  "dcterms" : {
+			    		"title" : "Full contents of the dataset in ZIP format (Bagit Specification)",
+			    		"description" : "This file contains all the files and corresponding metadata in a ZIP arghive that follows the BagIt (https://tools.ietf.org/html/draft-kunze-bagit-08) specification. Exported by the Dendro platform."
+			    	  }
+			    	},
+			    	"zip" :
+			    	{
+			    	  "dcterms" : {
+			    		"title" : "Full contents of the dataset in ZIP format",
+			    		"description" : "This file contains all the files and corresponding metadata in a ZIP archive. Exported by the Dendro platform."
+			    	  }
+			    	},
+			    	"json" :
+			    	{
+			    	  "dcterms" : {
+			    		"title" : "Dataset metadata in JSON format",
+			    		"description" : "This file contains all the metadata in JSON format. Exported by the Dendro platform."
+			    	  }
+			    	},
+			    	"rdf" :
+			    	{
+			    	  "dcterms" : {
+			    		"title" : "Dataset metadata in RDF format",
+			    		"description" : "This file contains all the metadata in RDF (Resource Description Framework) format. Exported by the Dendro platform."
+			    	  }
+			    	},
+			    	"txt" :
+			    	{
+			    	  "dcterms" : {
+			    		"title" : "Dataset metadata in human-readable TXT format",
+			    		"description" : "This file contains all the metadata in Plain text for human reading. Exported by the Dendro platform."
+			    	  }
+			    	}
 	      },
 	      "ckan" :
 	      {
 
-	      }
+	      },
+				"analytics_tracking_code" : get_argument_by_name("google_analytics_tracking_code")
 	    }
 	}
 
