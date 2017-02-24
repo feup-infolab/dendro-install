@@ -216,7 +216,7 @@ else
 		then
 			info "Running TeamCity Agent Setup."
 			source ./Programs/TeamCity/install_teamcity_agent.sh
-			source ./Services/TeamCity/teamcity_agent.sh
+			source ./Services/teamcity/teamcity_agent.sh
 		fi
 fi
 

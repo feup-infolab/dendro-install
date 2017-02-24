@@ -478,7 +478,7 @@ On_IWhite='\033[0;107m'   # White
 	teamcity_installation_path='/TeamCity'
 	teamcity_control_scripts_path="$teamcity_installation_path/control_scripts"
 	teamcity_agent_installation_path="$teamcity_installation_path/buildAgent"
-	teamcity_pids_folder="$teamcity_installation_path/service_pids"
+	teamcity_pids_folder="$teamcity_installation_path/logs"
 	teamcity_cookies_file="/tmp/teamcity_setup/teamcity_cookies.txt"
 
 	teamcity_url="https://download.jetbrains.com/teamcity/TeamCity-10.0.4.tar.gz"
@@ -492,7 +492,7 @@ On_IWhite='\033[0;107m'   # White
 	teamcity_stop_script="$teamcity_control_scripts_path/teamcity_stop.sh"
 	teamcity_log_file="/var/log/$teamcity_service_name.log"
 	teamcity_pid_file="$teamcity_pids_folder/teamcity.pid"
-	teamcity_port=3001
+	teamcity_port=8111
 
 #Teamcity Agent
 	teamcity_agent_service_name='teamcity_agent'
@@ -500,7 +500,7 @@ On_IWhite='\033[0;107m'   # White
 	teamcity_agent_start_script="$teamcity_installation_path/control_scripts/teamcity_agent_start.sh"
 	teamcity_agent_stop_script="$teamcity_installation_path/control_scripts/teamcity_agent_stop.sh"
 	teamcity_agent_log_file="/var/log/$teamcity_agent_service_name.log"
-	teamcity_agent_pid_file="$teamcity_pids_folder/teamcity_agent.pid"
+	teamcity_agent_pid_file="$teamcity_agent_installation_path/logs/buildAgent.pid"
 
 try_n_times_to_get_url()
 {

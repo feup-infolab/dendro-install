@@ -57,7 +57,7 @@ else
 		"name=teamcity_patch_dendro_build_server_agent" \
 		'teamcity_patch_dendro_build_server_agent_name' || die "Unable to patch the configuration file for TeamCity Build Agent."
 
-	chmod 0755 $teamcity_agent_installation_path/bin/*.sh || die "Unable to set permissions on the TeamCity Scripts."
+	sudo chmod 0755 $teamcity_agent_installation_path/bin/*.sh || die "Unable to set permissions on the TeamCity Scripts."
 	cd - || die "Unable to return to previous directory during TeamCity Setup."
 fi
 
