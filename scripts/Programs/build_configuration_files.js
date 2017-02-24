@@ -704,10 +704,10 @@ var write_dendro_configuration_file = function ()
 	      "ckan" :
 	      {
 
-	      },
-				"analytics_tracking_code" : get_argument_by_name("google_analytics_tracking_code"),
-				"public_ontologies" : get_argument_by_name("public_ontologies")
-	    }
+	      }
+	    },
+			"analytics_tracking_code" : get_argument_by_name("google_analytics_tracking_code"),
+			"public_ontologies" : get_argument_by_name("public_ontologies")
 	}
 
 	var util = require('util');
