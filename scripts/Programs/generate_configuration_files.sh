@@ -76,7 +76,9 @@ nodejs $running_folder/build_configuration_files.js \
 	--dr_stage2_active $dr_stage2_active \
 	--gmaps_api_key $gmaps_api_key \
 	--gmaps_map_height $gmaps_map_height\
-	--google_analytics_tracking_code $google_analytics_tracking_code || die "Failure generating configuration files."
+	--google_analytics_tracking_code $google_analytics_tracking_code
+	--project_descriptors_recommender_active $project_descriptors_recommender_active
+	--public_ontologies $public_ontologies || die "Failure generating configuration files."
 
 
 success "Generated configuration files."

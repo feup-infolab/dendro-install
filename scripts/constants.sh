@@ -87,7 +87,9 @@ recommender_installation_path='/dendro_recommender'
 	dendro_recommender_service_name=$active_deployment_setting-recommender
 	dendro_recommender_startup_item_file=/etc/systemd/system/$dendro_recommender_service_name.service
 	dendro_recommender_install_path=$recommender_installation_path/$active_deployment_setting
-	dendro_recommender_active="true"
+	dendro_recommender_active="false"
+	project_descriptors_recommender_active="true"
+	public_ontologies="[\"foaf\",\"dcterms\",\"bdv\",\"research\"]"
 
 	dendro_recommender_svn_url='http://dendro-dev.fe.up.pt/svn/dendro_recommender/NewDendroRecommender/'
 	dendro_recommender_git_url='https://github.com/feup-infolab-rdm/dendro-recommender.git'

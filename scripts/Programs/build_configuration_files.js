@@ -329,6 +329,18 @@ var arguments = {
 		type: "string",
 		example : "Crypto secret of the app",
 		tip : "VERY LONG AND COMPLICATED STRING"
+	},
+	"project_descriptors_recommender_active" :
+	{
+		type: "boolean",
+		example : "true or false",
+		tip : "Is the project-level descriptor recommendation active?"
+	},
+	"public_ontologies" :
+	{
+		type: "boolean",
+		example : "[\"dcterms\", \"dcb\", \"foaf\"]",
+		tip : "Is the project-level descriptor recommendation active?"
 	}
 };
 
@@ -586,8 +598,14 @@ var write_dendro_configuration_file = function ()
 		},
 		"logging" :
 		{
-			"config" : null
-		},
+      "pipe_console_to_logfile" : true,
+      "format" : "dev",
+      "app_logs_folder" : "logs/app",
+      "log_request_times" : true,
+      "request_times_log_folder" : "logs/request_times",
+      "log_requests_in_apache_format" : true,
+      "requests_in_apache_format_log_folder" : "logs/requests_apache_format"
+    },
 		"version" :
 		{
 			"number" : 0.2,
@@ -614,6 +632,9 @@ var write_dendro_configuration_file = function ()
 						}
 					}
 				},
+				"project_descriptors" : {
+          "active" : get_argument_by_name('project_descriptors_recommender_active')
+        },
 				"standalone" : {
 					"active" : false
 				},
@@ -684,7 +705,8 @@ var write_dendro_configuration_file = function ()
 	      {
 
 	      },
-				"analytics_tracking_code" : get_argument_by_name("google_analytics_tracking_code")
+				"analytics_tracking_code" : get_argument_by_name("google_analytics_tracking_code"),
+				"public_ontologies" : get_argument_by_name("public_ontologies")
 	    }
 	}
 
