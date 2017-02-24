@@ -63,7 +63,7 @@ unset IFS
 
 IFS='%'
 read -r -d '' new_line << LUCHI
-    <Connector port="3001" protocol="org.apache.coyote.http11.Http11NioProtocol"
+    <Connector port="$teamcity_port" protocol="org.apache.coyote.http11.Http11NioProtocol"
                connectionTimeout="60000"
                redirectPort="8543"
                useBodyEncodingForURI="true"
@@ -81,7 +81,7 @@ patch_file 	"$teamcity_installation_path/conf/server.xml" \
 
 sudo mkdir -p $teamcity_installation_path/logs &&
 sudo chown -R $dendro_user_name:$dendro_user_group $teamcity_installation_path &&
-sudo chmod -R ug+w $teamcity_installation_path || die "An error occurred while installing the TeamCity Server."
+sudo chmod -R 0755 $teamcity_installation_path || die "An error occurred while installing the TeamCity Server."
 
 #go back to initial dir
 cd $setup_dir || die "Unable to return to starting directory during TeamCity Setup."

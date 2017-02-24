@@ -28,49 +28,49 @@ sudo chmod ugo+r $teamcity_log_file
 sudo chown $dendro_user_name:$dendro_user_group $teamcity_log_file
 
 #create teamcity pids folder
-sudo mkdir -p $teamcity_pids_folder
-sudo touch $teamcity_pid_file
-sudo touch $teamcity_agent_pid_file
 
-sudo chown -R $dendro_user_name:$dendro_user_group $teamcity_pids_folder
-sudo chmod -R 0655 $teamcity_pids_folder
-
-#create control_scripts folder
-if [[ ! -d $teamcity_control_scripts_path ]]
+if [[ -d $teamcity_pids_folder ]]
 then
-	sudo mkdir -p $teamcity_control_scripts_path
+	sudo mkdir -p $teamcity_pids_folder
+	sudo chown -R $dendro_user_name:$dendro_user_group $teamcity_pids_folder
+	sudo chmod -R 0655 $teamcity_pids_folder
 fi
 
-#build startup and stop scripts from templates
-sudo sed -e "s;%TEAMCITY_INSTALLATION_PATH%;$teamcity_installation_path;g" \
-				 -e "s;%TEAMCITY_LOG_FILE%;$teamcity_log_file;g" \
-				 ./Services/teamcity/control_scripts/teamcity_start_template.sh | sudo tee $teamcity_start_script &&
-sudo chmod 0755 $teamcity_start_script || die "Unable to create TeamCity startup script at $teamcity_start_script."
+# #create control_scripts folder
+# if [[ -d $teamcity_control_scripts_path ]]
+# then
+# 	sudo mkdir -p $teamcity_control_scripts_path
+# fi
+#
+# #build startup and stop scripts from templates
+# sudo sed -e "s;%TEAMCITY_INSTALLATION_PATH%;$teamcity_installation_path;g" \
+# 				 -e "s;%TEAMCITY_LOG_FILE%;$teamcity_log_file;g" \
+# 				 ./Services/teamcity/control_scripts/teamcity_start_template.sh | sudo tee $teamcity_start_script &&
+# sudo chmod 0755 $teamcity_start_script || die "Unable to create TeamCity startup script at $teamcity_start_script."
+#
+# sudo sed -e "s;%TEAMCITY_INSTALLATION_PATH%;$teamcity_installation_path;g" \
+# 				 -e "s;%TEAMCITY_LOG_FILE%;$teamcity_log_file;g" \
+# 				 ./Services/teamcity/control_scripts/teamcity_stop_template.sh | sudo tee $teamcity_stop_script &&
+# sudo chmod 0755 $teamcity_stop_script || die "Unable to create TeamCity stop script at $teamcity_stop_script."
+#
+# #restore ownership of scripts folder to dendro user and set exec permissions
+# sudo chown -R $dendro_user_name:$dendro_user_group $teamcity_control_scripts_path
+# sudo chmod -R 0755 $teamcity_control_scripts_path
 
-sudo sed -e "s;%TEAMCITY_INSTALLATION_PATH%;$teamcity_installation_path;g" \
-				 -e "s;%TEAMCITY_LOG_FILE%;$teamcity_log_file;g" \
-				 ./Services/teamcity/control_scripts/teamcity_stop_template.sh | sudo tee $teamcity_stop_script &&
-sudo chmod 0755 $teamcity_stop_script || die "Unable to create TeamCity stop script at $teamcity_stop_script."
-
-#restore ownership of scripts folder to dendro user and set exec permissions
-sudo chown -R $dendro_user_name:$dendro_user_group $teamcity_control_scripts_path
-sudo chmod -R 0755 $teamcity_control_scripts_path
+sudo chown -R $dendro_user_name:$dendro_user_group $teamcity_installation_path
+sudo chmod -R 0755 $teamcity_installation_path
 
 #build systemd service file that will call the scripts
 
 printf "[Unit]
 Description=TeamCity Server Service
+After=network.target
 [Service]
-Type=simple
-Restart=always
-RestartSec=5s
-TimeoutStartSec=infinity
+Type=forking
 User=$dendro_user_name
 Group=$dendro_user_group
-RuntimeMaxSec=infinity
-KillMode=control-group
-ExecStart=$teamcity_start_script
-ExecStop=$teamcity_stop_script
+ExecStart=$teamcity_installation_path/bin/teamcity-server.sh start
+ExecStop=$teamcity_installation_path/bin/teamcity-server.sh stop
 PIDFile=$teamcity_pid_file
 [Install]
 WantedBy=multi-user.target
