@@ -597,13 +597,13 @@ var write_dendro_configuration_file = function ()
 			"dublin_core_only" : false
 		},
 		"logging" :
-		{
+    {
       "pipe_console_to_logfile" : true,
-      "format" : "dev",
+      "format" : "combined",
       "app_logs_folder" : "logs/app",
       "log_request_times" : true,
       "request_times_log_folder" : "logs/request_times",
-      "log_requests_in_apache_format" : true,
+      "log_requests_in_apache_format" : false,
       "requests_in_apache_format_log_folder" : "logs/requests_apache_format"
     },
 		"version" :
