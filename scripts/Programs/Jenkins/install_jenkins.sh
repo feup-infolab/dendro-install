@@ -52,6 +52,13 @@ sudo chown -R $jenkins_user:$jenkins_user_group /var/log/jenkins
 sudo sed -i "s/JENKINS_USER=jenkins/JENKINS_USER=$jenkins_user/g" $jenkins_config_file &&
 sudo sed -i "s/HTTP_PORT=8080/HTTP_PORT=$jenkins_port/g" $jenkins_config_file && success "Set jenkins user and group." || die "Unable to patch Jenkins file at $jenkins_config_file."
 
+#dispense password for sudo in jenkins
+LINE="$jenkins_user ALL= NOPASSWD: ALL"
+FILE=/etc/sudoers
+sudo grep -q "$LINE" "$FILE" || echo "$LINE" | sudo tee "$FILE" > /dev/null
+
+sudo cat /etc/sudoers
+
 #restart jenkins
 sudo /etc/init.d/jenkins restart
 sudo ps -ef | grep jenkins
