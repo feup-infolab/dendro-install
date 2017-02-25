@@ -68,8 +68,8 @@ unset IFS
 patch_file $jenkins_config_file "$old_section" "$new_section" "jenkins_user_and_group_patch" "sh" && success "Set jenkins user and group." || die "Unable to patch Jenkins file at $jenkins_config_file."
 
 #restart jenkins
-/etc/init.d/jenkins restart
-ps -ef | grep jenkins
+sudo /etc/init.d/jenkins restart
+sudo ps -ef | grep jenkins
 
 #echo initial password
 password=$(sudo cat /var/lib/jenkins/secrets/initialAdminPassword)
