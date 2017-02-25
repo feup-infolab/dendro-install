@@ -25,6 +25,21 @@ sudo apt-get update &&
 sudo apt-get -y install jenkins ||
 die "Failed to install Jenkins."
 
+IFS='%'
+read -r -d '' old_line << LUCHI
+HTTP_PORT=8080
+LUCHI
+unset IFS
+
+IFS='%'
+read -r -d '' new_line << LUCHI
+HTTP_PORT=$jenkins_port
+LUCHI
+unset IFS
+
+patch_file $jenkins_conf_file "$old_line" "$new_line" "jenkins_port_patch" "sh" && success "Patched hostname $host to 127.0.0.1." || die "Unable to patch Jenkins port at "
+
+sudo service jenkins restart
 password=$(sudo cat /var/lib/jenkins/secrets/initialAdminPassword)
 success "Installed Jenkins. Your initial Admin password is $password. "
 
