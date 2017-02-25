@@ -36,6 +36,11 @@ virtuoso_user='virtuoso'
 virtuoso_group='virtuoso'
 virtuoso_user_password='virtu0s0'
 
+#jenkins linux user (owner of the jenkins installation and process)
+jenkins_user="jenkins"
+jenkins_user_group="jenkins"
+jenkins_user_password="jenkins______PASSSSWORD_COMPLICA4ted"
+
 #mongodb
 mongodb_dba_user="root"
 mongodb_dba_password="r00t"
