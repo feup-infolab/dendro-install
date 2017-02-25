@@ -49,23 +49,8 @@ sudo chown -R $jenkins_user:$jenkins_user_group /var/log/jenkins
 
 #patch Jenkins config to run as our user
 
-IFS='%'
-read -r -d '' old_section << LUCHI
-# user and group to be invoked as (default to jenkins)
-JENKINS_USER=$NAME
-JENKINS_GROUP=$NAME
-LUCHI
-unset IFS
-
-IFS='%'
-read -r -d '' new_section << LUCHI
-# user and group to be invoked as (default to jenkins)
-JENKINS_USER=$jenkins_user
-JENKINS_GROUP=$jenkins_user_group
-LUCHI
-unset IFS
-
-patch_file $jenkins_config_file "$old_section" "$new_section" "jenkins_user_and_group_patch" "sh" && success "Set jenkins user and group." || die "Unable to patch Jenkins file at $jenkins_config_file."
+sudo sed -i "s/JENKINS_USER=jenkins/JENKINS_USER=$jenkins_user/g" $jenkins_config_file &&
+sudo sed -i "s/HTTP_PORT=8080/HTTP_PORT=$jenkins_port/g" $jenkins_config_file && success "Set jenkins user and group." || die "Unable to patch Jenkins file at $jenkins_config_file."
 
 #restart jenkins
 sudo /etc/init.d/jenkins restart
