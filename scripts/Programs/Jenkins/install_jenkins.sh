@@ -43,9 +43,9 @@ sudo apt-get -y install jenkins ||
 die "Failed to install Jenkins."
 
 #change ownership of jenkins to the user we want it to run Underline
-chown -R $jenkins_user:$jenkins_user_group /var/lib/jenkins
-chown -R $jenkins_user:$jenkins_user_group /var/cache/jenkins
-chown -R $jenkins_user:$jenkins_user_group /var/log/jenkins
+sudo chown -R $jenkins_user:$jenkins_user_group /var/lib/jenkins
+sudo chown -R $jenkins_user:$jenkins_user_group /var/cache/jenkins
+sudo chown -R $jenkins_user:$jenkins_user_group /var/log/jenkins
 
 #patch Jenkins config to run as our user
 
@@ -65,7 +65,7 @@ JENKINS_GROUP=$jenkins_user_group
 LUCHI
 unset IFS
 
-patch_file $jenkins_config_file "$old_section" "$new_section" "jenkins_user_and_group_patch" && success "Set jenkins user and group." || die "Unable to patch Jenkins file at $jenkins_config_file."
+patch_file $jenkins_config_file "$old_section" "$new_section" "jenkins_user_and_group_patch" "sh" && success "Set jenkins user and group." || die "Unable to patch Jenkins file at $jenkins_config_file."
 
 #restart jenkins
 /etc/init.d/jenkins restart
