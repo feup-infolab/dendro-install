@@ -82,7 +82,7 @@ recommender_installation_path='/dendro_recommender'
 
 		#jenkins
 		jenkins_port=8080
-		jenkins_conf_file="/etc/default/jenkins"
+		jenkins_config_file="/etc/default/jenkins"
 
 #dendro recommender
 	dendro_recommender_service_name=$active_deployment_setting-recommender

@@ -18,6 +18,23 @@ echo $(pwd)
 #install oracle jdk 8
 source ./Dependencies/oracle_jdk8.sh &&
 
+#user exists?
+id -u $jenkins_user > /dev/null
+
+if [[ "$?" -eq "1" ]]; then
+	sudo useradd $jenkins_user || die "Failed to create user ${dendro_user_name}."
+else
+	info "User ${jenkins_user} already exists, no need to create it again."
+fi
+
+#create jenkins user
+sudo addgroup $jenkins_user_group
+sudo usermod $jenkins_user -g $jenkins_user_group
+echo "${jenkins_user}:${jenkins_user_password}" | sudo chpasswd
+
+#add jenkins to sudoers
+sudo usermod -aG sudo "${jenkins_user}"
+
 #install jenkins
 sudo wget -q -O - https://pkg.jenkins.io/debian/jenkins-ci.org.key | sudo apt-key add - &&
 sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list' &&
@@ -25,21 +42,36 @@ sudo apt-get update &&
 sudo apt-get -y install jenkins ||
 die "Failed to install Jenkins."
 
+#change ownership of jenkins to the user we want it to run Underline
+chown -R $jenkins_user:$jenkins_user_group /var/lib/jenkins
+chown -R $jenkins_user:$jenkins_user_group /var/cache/jenkins
+chown -R $jenkins_user:$jenkins_user_group /var/log/jenkins
+
+#patch Jenkins config to run as our user
+
 IFS='%'
-read -r -d '' old_line << LUCHI
-HTTP_PORT=8080
+read -r -d '' old_section << LUCHI
+# user and group to be invoked as (default to jenkins)
+JENKINS_USER=$NAME
+JENKINS_GROUP=$NAME
 LUCHI
 unset IFS
 
 IFS='%'
-read -r -d '' new_line << LUCHI
-HTTP_PORT=$jenkins_port
+read -r -d '' new_section << LUCHI
+# user and group to be invoked as (default to jenkins)
+JENKINS_USER=$jenkins_user
+JENKINS_GROUP=$jenkins_user_group
 LUCHI
 unset IFS
 
-patch_file $jenkins_conf_file "$old_line" "$new_line" "jenkins_port_patch" "sh" && success "Patched hostname $host to 127.0.0.1." || die "Unable to patch Jenkins port at "
+patch_file $jenkins_config_file "$old_section" "$new_section" "jenkins_user_and_group_patch" && success "Set jenkins user and group." || die "Unable to patch Jenkins file at $jenkins_config_file."
 
-sudo service jenkins restart
+#restart jenkins
+/etc/init.d/jenkins restart
+ps -ef | grep jenkins
+
+#echo initial password
 password=$(sudo cat /var/lib/jenkins/secrets/initialAdminPassword)
 success "Installed Jenkins. Your initial Admin password is $password. "
 
