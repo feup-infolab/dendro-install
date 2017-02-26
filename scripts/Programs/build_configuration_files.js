@@ -338,7 +338,7 @@ var arguments = {
 	},
 	"public_ontologies" :
 	{
-		type: "boolean",
+		type: "string",
 		example : "[\"dcterms\", \"dcb\", \"foaf\"]",
 		tip : "Is the project-level descriptor recommendation active?"
 	}
