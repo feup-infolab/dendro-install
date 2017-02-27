@@ -352,20 +352,25 @@ var get_argument_by_name = function(argument)
 		argumentValue = process.argv[process.argv.indexOf("--"+argument) + 1]; //grab the next item
 		if (arguments[argument] != null && arguments[argument].type === "boolean")
 		{
-			try{
-				argumentValue = Boolean.parse(argumentValue);
+			//from http://stackoverflow.com/questions/263965/how-can-i-convert-a-string-to-boolean-in-javascript 
+			if(argumentValue ==="true" || argumentValue ==="false")
+			{
+				argumentValue = (argumentValue == "true");
 			}
-			catch (e) {
+			else
+			{
 				console.log("[ERROR] Unable to parse flag " + argument + ". It must be a boolean (true/false). " + e.message);
+				process.exit(1);
 			}
 		}
-		if (arguments[argument] != null && arguments[argument].type === "integer")
+		else if (arguments[argument] != null && arguments[argument].type === "integer")
 		{
 			try{
 				argumentValue = parseInt(argumentValue);
 			}
 			catch (e) {
 				console.log("[ERROR] Unable to parse flag " + argument + ". It must be an integer. " + e.message);
+				process.exit(1);
 			}
 		}
 
