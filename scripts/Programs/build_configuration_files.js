@@ -76,7 +76,7 @@ var possible_arguments = {
 	//virtuoso
 	"virtuoso_host" :
 	{
-		type: "integer",
+		type: "string",
 		example : "127.0.0.1",
 		tip : "Coming soon"
 	},
@@ -192,13 +192,13 @@ var possible_arguments = {
 
 	"reload_demo_users_on_startup" :
 	{
-		type: "string",
+		type: "boolean",
 		example : "\"true\" | \"false\"",
 		tip : "Coming soon"
 	},
 	"reload_ontologies_on_startup" :
 	{
-		type: "string",
+		type: "boolean",
 		example : "\"true\" | \"false\"",
 		tip : "Coming soon"
 	},
@@ -338,7 +338,7 @@ var possible_arguments = {
 	},
 	"public_ontologies" :
 	{
-		type: "string",
+		type: "array",
 		example : "[\"dcterms\", \"dcb\", \"foaf\"]",
 		tip : "Is the project-level descriptor recommendation active?"
 	}
@@ -367,6 +367,16 @@ var get_argument_by_name = function(argument)
 			else
 			{
 				console.log("[ERROR] Unable to parse flag " + argument + ". It must be a boolean (true/false). " + e.message);
+				process.exit(1);
+			}
+		}
+		else if (possible_arguments[argument] != null && possible_arguments[argument].type == "array")
+		{
+			try{
+				argumentValue = JSON.parse(argumentValue);
+			}
+			catch (e) {
+				console.log("[ERROR] Unable to parse flag " + argument + ". It must be an array. " + e.message);
 				process.exit(1);
 			}
 		}
