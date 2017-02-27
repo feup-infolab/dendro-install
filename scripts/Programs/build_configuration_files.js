@@ -2,7 +2,7 @@ var colors = require('colors/safe');
 var fs = require('fs');
 var path = require('path');
 
-var arguments = {
+var possible_arguments = {
 
 	//target folders for the generated configuration files
 	"dr_config_output_folder_location" :
@@ -261,7 +261,7 @@ var arguments = {
 	},
 
 	/**
-	 * Dendro Recommender arguments
+	 * Dendro Recommender possible_arguments
 	 **/
 
 	"dr_all_ontologies_uri" :
@@ -350,12 +350,19 @@ var get_argument_by_name = function(argument)
 
 	if(process.argv.indexOf("--"+argument) != -1){ //does our flag exist?
 		argumentValue = process.argv[process.argv.indexOf("--"+argument) + 1]; //grab the next item
-		if (arguments[argument] != null && arguments[argument].type === "boolean")
+
+		//console.log("RAW ARGUMENT " + argument);
+		//console.log("VALUE PARAMETRIZATION " + JSON.stringify(possible_arguments[argument]));
+
+		if (possible_arguments[argument] != null && possible_arguments[argument].type == "boolean")
 		{
-			//from http://stackoverflow.com/questions/263965/how-can-i-convert-a-string-to-boolean-in-javascript 
-			if(argumentValue ==="true" || argumentValue ==="false")
+			//console.log("PARSING BOOLEAN " + argumentValue);
+
+			//from http://stackoverflow.com/questions/263965/how-can-i-convert-a-string-to-boolean-in-javascript
+			if(argumentValue == "true" || argumentValue == "false")
 			{
 				argumentValue = (argumentValue == "true");
+				//console.log("PARSED BOOLEAN " + argumentValue)
 			}
 			else
 			{
@@ -363,7 +370,7 @@ var get_argument_by_name = function(argument)
 				process.exit(1);
 			}
 		}
-		else if (arguments[argument] != null && arguments[argument].type === "integer")
+		else if (possible_arguments[argument] != null && possible_arguments[argument].type == "integer")
 		{
 			try{
 				argumentValue = parseInt(argumentValue);
@@ -385,34 +392,34 @@ var get_argument_by_name = function(argument)
 	return argumentValue;
 }
 
-var detect_missing_arguments = function(arguments)
+var detect_missing_possible_arguments = function(possible_arguments)
 {
-	var missing_arguments = [];
-	var keys = Object.keys(arguments);
+	var missing_possible_arguments = [];
+	var keys = Object.keys(possible_arguments);
 
 	for (var i = 0; i < keys.length; i++) {
 		var key = keys[i];
 		if(get_argument_by_name(key) == null)
 		{
-			missing_arguments.push(key);
+			missing_possible_arguments.push(key);
 		}
 	}
 
-	return missing_arguments;
+	return missing_possible_arguments;
 }
 
-var print_usage = function(arguments)
+var print_usage = function(possible_arguments)
 {
-	var missing_arguments = detect_missing_arguments(arguments);
+	var missing_possible_arguments = detect_missing_possible_arguments(possible_arguments);
 
 	var output = "USAGE: " + colors.bold("build_configurations.sh") + " \n";
-	var keys = Object.keys(arguments);
+	var keys = Object.keys(possible_arguments);
 
 	for (var i = 0; i < keys.length; i++) {
 		var key = keys[i];
-		output += "	--" + key + " << " + colors.cyan(arguments[key].type) + " >>";
+		output += "	--" + key + " << " + colors.cyan(possible_arguments[key].type) + " >>";
 
-		if(missing_arguments.indexOf(key) >= 0)
+		if(missing_possible_arguments.indexOf(key) >= 0)
 		{
 			output += colors.red(" [ MISSING ]\n");
 		}
@@ -715,6 +722,9 @@ var write_dendro_configuration_file = function ()
 			"public_ontologies" : get_argument_by_name("public_ontologies")
 	}
 
+	//console.log("FINISHED CONFIGURATION"));
+	//console.log(JSON.stringify(dendro_config_template, null, 2));
+
 	var util = require('util');
 
 	var destinationFolder = get_argument_by_name('dendro_config_output_folder_location');
@@ -816,9 +826,9 @@ var write_active_deployment_config_file = function()
 
 // console.log(JSON.stringify(process.argv));
 
-var missing_arguments = detect_missing_arguments(arguments);
+var missing_possible_arguments = detect_missing_possible_arguments(possible_arguments);
 
-if(missing_arguments.length == 0)
+if(missing_possible_arguments.length == 0)
 {
 	var config_identifier = get_argument_by_name("config_identifier");
 	console.log(colors.cyan("[INFO] ") + "Creating new configuration file for Dendro with name " + colors.yellow(config_identifier) + "...");
@@ -832,7 +842,7 @@ if(missing_arguments.length == 0)
 }
 else
 {
-	//console.log("Missing arguments ", JSON.stringify(missing_arguments));
-	print_usage(arguments);
+	//console.log("Missing possible_arguments ", JSON.stringify(missing_possible_arguments));
+	print_usage(possible_arguments);
 	process.exit(1);
 }
