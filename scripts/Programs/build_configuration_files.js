@@ -510,6 +510,7 @@ var write_dendro_configuration_file = function ()
 		"mongoDBHost" : get_argument_by_name('mongodb_host'),
 		"mongoDbPort" : get_argument_by_name('mongodb_port'),
 		"mongoDbCollectionName" : get_argument_by_name('mongodb_collection_name'),
+		"mongoDBSessionStoreCollection" : get_argument_by_name('mongodb_collection_name') + "_sessions",
 		"mongoDbVersion" : "",
 		"mongoDBAuth" : {
 			"user" : get_argument_by_name('mongodb_dba_user'),
