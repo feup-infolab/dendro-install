@@ -18,7 +18,8 @@ sudo apt-get update &&
 sudo apt-get -y -f -qq install unzip devscripts autoconf automake libtool flex bison gperf gawk m4 make libssl-dev git imagemagick subversion zip htop redis-server htop mongodb --fix-missing || die "Failed to install preliminary dependencies. Please check any prior error messages."
 
 #install node 6.x
-curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - || die "Unable to install NodeJS 6.x."
+sudo apt-get install nodejs
 
 #alias nodejs to node
 sudo ln -s "$(which nodejs)" /usr/bin/node
