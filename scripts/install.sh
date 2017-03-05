@@ -105,6 +105,7 @@ then
 		else
 			warning "Installing dependencies"
 			source ./Dependencies/misc.sh
+			#source ./Dependencies/drawing_to_text.sh #TODO this crashes still with GCC 5.8+. Commenting
 			source ./Dependencies/Redis/setup_redis_instances.sh
 			#source ./Dependencies/node.sh
 

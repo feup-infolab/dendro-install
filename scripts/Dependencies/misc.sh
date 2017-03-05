@@ -21,6 +21,11 @@ sudo apt-get -y -f -qq install unzip devscripts autoconf automake libtool flex b
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - || die "Unable to install NodeJS 6.x."
 sudo apt-get install nodejs
 
+info "Installing text extraction tools..."
+#install text extraction stuff
+# (needed for https://github.com/dbashford/textract)
+sudo apt-get -y -f install poppler-utils antiword unrtf tesseract-ocr
+
 #alias nodejs to node
 sudo ln -s "$(which nodejs)" /usr/bin/node
 

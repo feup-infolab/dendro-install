@@ -33,7 +33,7 @@ sudo rm -rf $dendro_installation_path
 cd $temp_downloads_folder
 info "Exporting Dendro from GIT at : ${dendro_git_url} to $dendro_installation_path. PLEASE STAND BY!\n"
 #sudo svn -q --no-auth-cache export $dendro_svn_url $dendro_installation_path --username $svn_user --password $svn_user_password --force
-sudo git clone $dendro_git_url $dendro_installation_path
+sudo git clone $dendro_git_url $dendro_installation_path || die "Unable to fetch Dendro source code"
 
 if [[ ! -z "$dendro_branch" ]]
 then

@@ -22,7 +22,7 @@ cd $temp_downloads_folder
 
 info "Checking out Dendro Recommender from GIT to path : ${dendro_recommender_install_path}. PLEASE STAND BY!"
 #sudo svn -q --no-auth-cache export $dendro_recommender_svn_url $dendro_recommender_install_path --username $svn_user --password $svn_user_password --force
-sudo git clone $dendro_recommender_git_url $dendro_recommender_install_path
+sudo git clone $dendro_recommender_git_url $dendro_recommender_install_path || die "Unable to fetch dendro recommender source code"
 
 #compile program
 info "Compiling Dendro Recommender at "$dendro_recommender_install_path
