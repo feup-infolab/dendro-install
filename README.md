@@ -168,6 +168,9 @@ cd dendro
 #install dependencies. Will also run bower install whenever needed
 sudo npm install --unsafe-perm #this is needed when running npm install with sudo to install global modules
 
+#if you have permissions issues installing bower or your bower_components folder becomes read-only
+sudo chown -R <<user>> ~/.npm ~/.cache ~/.config #REPLACE <<user>> with your username.
+
 #start app
 node src/app.js
 ```
