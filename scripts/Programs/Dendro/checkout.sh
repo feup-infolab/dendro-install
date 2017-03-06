@@ -64,7 +64,7 @@ echo "{\"key\" : \"${active_deployment_setting}\"}" | sudo tee $dendro_installat
 
 #give "dendro" user ownership of the installation
 sudo chown -R $dendro_user_name:$dendro_user_group $installation_path
-sudo chmod -R 0755 $installation_path
+sudo chmod -R 0644 $installation_path
 
 success "Installed Dendro into ${dendro_installation_path}"
 
