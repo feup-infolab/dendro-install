@@ -152,9 +152,8 @@ active_deployment_setting='TESTSdendroVagrantDemo'
 #will be used to generate URLs relative to a base address, so set it wisely
 	host="192.168.56.248"
 ```
-### Developing with WebStorm IDEA
 
-##Cloning the dendro repository, initial setup and starting up the app
+### Cloning the dendro repository, initial setup and starting up the app
 
 ```bash
 
@@ -169,7 +168,7 @@ sudo npm install --unsafe-perm #this is needed when running npm install with sud
 node src/app.js
 ```
 
-##Configuring Webstorm
+### Configuring Webstorm
 
 If you want to run tests, run the program or generate test coverage reports, these are the configuration screens on a Mac (slight changes will be needed for the Windows counterparts, such as changing the location of the `node` executable). There are three tasks:
 
@@ -187,7 +186,7 @@ If you want to run tests, run the program or generate test coverage reports, the
 
 ![npm](https://github.com/feup-infolab/dendro-install/blob/master/images/npm-codecoverage.png?raw=true)
 
-### Watch mode (run tests on any file modification)
+#### Watch mode (run tests on any file modification)
 
 Open a terminal and run `npm run watch`. All tests will be run whenever you save a file.
 ![watch](https://github.com/feup-infolab/dendro-install/blob/master/images/watch.png?raw=true)
