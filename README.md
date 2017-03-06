@@ -154,6 +154,23 @@ active_deployment_setting='TESTSdendroVagrantDemo'
 ```
 ### Developing with WebStorm IDEA
 
+##Cloning the dendro repository, initial setup and starting up the app
+
+```bash
+
+#clone repo
+git clone https://github.com/feup-infolab/dendro.git
+cd dendro
+
+#install dependencies. Will also run bower install whenever needed
+sudo npm install --unsafe-perm #this is needed when running npm install with sudo to install global modules
+
+#start app
+node src/app.js
+```
+
+##Configuring Webstorm
+
 If you want to run tests, run the program or generate test coverage reports, these are the configuration screens on a Mac (slight changes will be needed for the Windows counterparts, such as changing the location of the `node` executable). There are three tasks:
 
 ![configs](https://github.com/feup-infolab/dendro-install/blob/master/images/edit_configs.png?raw=true)
