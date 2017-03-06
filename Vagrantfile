@@ -42,8 +42,8 @@ Vagrant.configure("2") do |config|
   #shared folders
 
   # other config here
-  config.vm.synced_folder "shared_folders/etc/init.d", "/etc/init.d"
-  config.vm.synced_folder "shared_folders/dendro", "/dendro"
+  #config.vm.synced_folder "shared_folders/etc/init.d", "/etc/init.d"
+  #config.vm.synced_folder "shared_folders/dendro", "/dendro"
 
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
