@@ -17,7 +17,7 @@ setup_dir=$(pwd)
 
 git clone https://github.com/feup-infolab/virtuoso7-debs.git virtuoso7 &&
 cd virtuoso7/debs-ubuntu-16-04 &&
-sudo dpkg -i virtuoso-opensource*.deb || die "Unable to install Virtuoso 7.2.4."
+sudo dpkg -i virtuoso-opensource*.deb
 
 #setup default configuration .ini file
 sudo cp /usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini.sample /usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini
