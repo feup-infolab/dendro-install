@@ -157,6 +157,10 @@ active_deployment_setting='TESTSdendroVagrantDemo'
 
 ```bash
 
+#install nodejs 6.x in ubuntu (for Mac check out the installer)
+curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
 #clone repo
 git clone https://github.com/feup-infolab/dendro.git
 cd dendro
