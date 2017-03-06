@@ -160,15 +160,18 @@ then
 		source ./Services/dendro.sh #??
 
 	#install dendro recommender
-		source ./Programs/DendroRecommender/create_log.sh
-		source ./Programs/DendroRecommender/checkout.sh
+		if [[ "$dendro_recommender_active" == "true" ]]
+		then
+			source ./Programs/DendroRecommender/create_log.sh
+			source ./Programs/DendroRecommender/checkout.sh
 
-		#place configuration file in dendro recommender's config folder
-		sudo cp "./Programs/generated_configurations/application.conf" "$dendro_recommender_install_path/conf"
+			#place configuration file in dendro recommender's config folder
+			sudo cp "./Programs/generated_configurations/application.conf" "$dendro_recommender_install_path/conf"
 
-		#stage dendro recommender service
-		source ./Services/recommender.sh #??
-
+			#stage dendro recommender service
+			source ./Services/recommender.sh #??
+		fi
+		
 	#cleanup
 		sudo apt-get -qq autoremove
 		sudo rm -rf Programs/generated_configurations
