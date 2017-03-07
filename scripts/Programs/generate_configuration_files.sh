@@ -78,7 +78,8 @@ nodejs $running_folder/build_configuration_files.js \
 	--gmaps_map_height $gmaps_map_height \
 	--google_analytics_tracking_code $google_analytics_tracking_code \
 	--project_descriptors_recommender_active $project_descriptors_recommender_active \
-	--public_ontologies $public_ontologies || die "Failure generating configuration files."
+	--public_ontologies $public_ontologies \
+	--pipe_console_to_logfile $pipe_console_to_logfile || die "Failure generating configuration files."
 
 
 success "Generated configuration files."
