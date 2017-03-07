@@ -44,6 +44,8 @@ recommender_installation_path='/dendro_recommender'
  	logging_request_times_log_folder="logs/request_times"
  	logging_log_requests_in_apache_format="true"
  	logging_requests_in_apache_format_log_folder="logs/requests_apache_format"
+	pipe_console_to_logfile="false"
+
  	#version
  	config_human_readable_name='Dendro RDM Demo @ UPorto'
 

@@ -341,6 +341,12 @@ var possible_arguments = {
 		type: "array",
 		example : "[\"dcterms\", \"dcb\", \"foaf\"]",
 		tip : "Is the project-level descriptor recommendation active?"
+	},
+	"pipe_console_to_logfile" :
+	{
+		type: "boolean",
+		example : "true",
+		tip : "Pipe all logging to dedicated logfile at logs/app"
 	}
 };
 
@@ -621,7 +627,7 @@ var write_dendro_configuration_file = function ()
 		},
 		"logging" :
     {
-      "pipe_console_to_logfile" : true,
+      "pipe_console_to_logfile" : get_argument_by_name('pipe_console_to_logfile'),
       "format" : "combined",
       "app_logs_folder" : "logs/app",
       "log_request_times" : true,
