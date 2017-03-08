@@ -18,7 +18,7 @@ var possible_arguments = {
 		example : "veryLONGNADCOMPLICATEDSTRING",
 		tip : "Coming soon"
 	},
-	"eudat_community_id :
+	"eudat_community_id" :
 	{
 		type: "string",
 		example : "e9b9792e-79fb-4b07-b6b4-b9c2bd06d095",
