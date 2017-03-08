@@ -18,7 +18,12 @@ var possible_arguments = {
 		example : "veryLONGNADCOMPLICATEDSTRING",
 		tip : "Coming soon"
 	},
-
+	"eudat_community_id" :
+	{
+		type: "string",
+		example : "e9b9792e-79fb-4b07-b6b4-b9c2bd06d095",
+		tip : "Coming soon"
+	},
 	"dr_config_template_abs_path" :
 	{
 		type: "string",
@@ -464,6 +469,7 @@ var write_dendro_configuration_file = function ()
 		"baseUri" : get_argument_by_name('base_uri'),
 	    "eudatBaseUrl" : get_argument_by_name('eudat_base_url'),
 	    "eudatToken" : get_argument_by_name('eudat_token'),
+	    "eudatCommunityId" : get_argument_by_name('eudat_community_id'),
 	    "sendGridUser" : get_argument_by_name('emailing_account_gmail_user'),
 	    "sendGridPassword" : get_argument_by_name('emailing_account_gmail_user'),
 		"elasticSearchHost" : get_argument_by_name('elasticsearch_host'),

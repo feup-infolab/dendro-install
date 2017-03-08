@@ -14,6 +14,7 @@ mysql_username='root'
 mysql_root_password='r00t_p4ssw0rd'
 
 eudat_token="veryLongAndComplicatedString"
+eudat_community_id="e9b9792e-79fb-4b07-b6b4-b9c2bd06d095"
 
 #email account for messages and password recovery messaging
 emailing_account_gmail_user="gmail_user_to_send_emails"
