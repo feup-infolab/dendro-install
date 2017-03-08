@@ -38,6 +38,7 @@ nodejs $running_folder/build_configuration_files.js \
 	--base_uri $dendro_base_uri \
 	--eudat_base_url $eudat_base_url \
 	--eudat_token $eudat_token \
+	--eudat_community_id $eudat_community_id \
 	--elasticsearch_port $elasticsearch_port \
 	--elasticsearch_host $elasticsearch_host \
 	--virtuoso_host $virtuoso_host \
