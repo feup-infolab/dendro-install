@@ -54,8 +54,13 @@ sudo sed -i "s/HTTP_PORT=8080/HTTP_PORT=$jenkins_port/g" $jenkins_config_file &&
 
 #dispense password for sudo in jenkins
 LINE="$jenkins_user ALL= NOPASSWD: ALL"
-FILE=/etc/sudoers
-sudo grep -q "$LINE" "$FILE" || echo "$LINE" | sudo tee -a "$FILE"
+SUDOERS_FILE=/etc/sudoers
+
+DATE=$(date +"%Y%m%d%H%M")
+SUDOERS_FILE_BAK="/etc/sudoers.$DATE.bak"
+sudo cp "$SUDOERS_FILE" "$SUDOERS_FILE_BAK"
+
+sudo grep -q "$LINE" "$SUDOERS_FILE_BAK" || echo "$LINE" | sudo tee -a "$SUDOERS_FILE_BAK"
 
 #restart jenkins
 sudo /etc/init.d/jenkins restart
