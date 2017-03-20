@@ -104,7 +104,7 @@ then
 			source ./SQLCommands/grant_commands.sh
 		else
 			warning "Installing dependencies"
-			#source ./Dependencies/misc.sh
+			source ./Dependencies/misc.sh
 
 			#install nvm as $dendro_user_name to have node to run the dendro service as that user
 			info "Installing NVM as $dendro_user_name"
