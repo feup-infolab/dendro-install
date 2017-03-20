@@ -30,6 +30,9 @@ printf "\n"
 printf "nvm use $node_version && $(which node) ${dendro_installation_path}/src/app.js >> ${dendro_log_file} 2>&1"
 printf "\n"
 
+nvm_location=$(sudo su - $dendro_user_name -c "which nvm")
+node_location=$(sudo su - $dendro_user_name -c "which node")
+
 printf "[Unit]
 Description=Dendro ${active_deployment_setting}  daemon
 [Service]
@@ -41,7 +44,7 @@ User=$dendro_user_name
 Group=$dendro_user_group
 RuntimeMaxSec=infinity
 KillMode=control-group
-ExecStart=/bin/sh -c 'nvm use $node_version && $(which node) ${dendro_installation_path}/src/app.js >> ${dendro_log_file} 2>&1'
+ExecStart=/bin/sh -c '$nvm_location use $node_version && $node_location ${dendro_installation_path}/src/app.js >> ${dendro_log_file} 2>&1'
 PIDFile=$installation_path/service_pids/${dendro_service_name}
 [Install]
 WantedBy=multi-user.target\n" | sudo tee $dendro_startup_item_file
