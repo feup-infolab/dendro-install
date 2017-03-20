@@ -48,16 +48,10 @@ sudo chown -R $dendro_user_name:$dendro_user_group $installation_path
 sudo chmod -R 0755 $installation_path
 
 #install npm dependencies
-cd $dendro_installation_path
-sudo npm update && sudo npm install
-cd -
-
-#install bower dependencies
-cd $dendro_installation_path/public
-sudo mkdir bower_components
-sudo chmod 0777 bower_components/
-sudo bower install --allow-root
-cd -
+cd $dendro_installation_path || die "Unable to go back to dendro installation path at $dendro_installation_path"
+sudo su - "$dendro_user_name" -c 'npm update && npm install'
+sudo su - "$dendro_user_name" -c 'grunt'
+cd - || die "Unable to go back to previous installation dir"
 
 #set active deployment configuration
 echo "{\"key\" : \"${active_deployment_setting}\"}" | sudo tee $dendro_installation_path/conf/active_deployment_config.json

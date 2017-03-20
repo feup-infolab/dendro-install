@@ -68,6 +68,9 @@ recommender_installation_path='/dendro_recommender'
 	gmaps_map_height=500
 
 	#dependencies
+		#nodejs version
+		node_version="6.10"
+
 		#elasticsearch
 		elasticsearch_port=9200
 		elasticsearch_host="127.0.0.1"
