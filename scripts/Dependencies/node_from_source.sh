@@ -22,7 +22,7 @@ cd node &&
 sudo ./configure &&
 sudo make --silent > /dev/null &&
 sudo make install --silent &&
-sudo npm install -g bower ||
+npm install -g bower ||
 die "Failed to install NodeJS."
 #sudo git checkout -b v4.5.0 &&
 

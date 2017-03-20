@@ -20,6 +20,6 @@ unset IFS
 
 file="/Users/joaorocha/Desktop/mysqld.cnf"
 
-replacement_text=$(/usr/local/bin/node replace.js "$old_line" "$new_line" "$file")
+replacement_text=$(/usr/local/bin/nodejs replace.js "$old_line" "$new_line" "$file")
 
 echo "$replacement_text"

@@ -104,10 +104,19 @@ then
 			source ./SQLCommands/grant_commands.sh
 		else
 			warning "Installing dependencies"
-			source ./Dependencies/misc.sh
+			#source ./Dependencies/misc.sh
+
+			#install nvm as $dendro_user_name to have node to run the dendro service as that user
+			info "Installing NVM as $dendro_user_name"
+			sudo chmod +x "$setup_dir/Dependencies/nvm.sh"
+			sudo su - "$dendro_user_name" -c "$setup_dir/Dependencies/nvm.sh $node_version"
+
+			#install nvm as current user to have node in the default environment
+			info "Installing NVM as $(whoami)"
+			./Dependencies/nvm.sh "$node_version"
+
 			#source ./Dependencies/drawing_to_text.sh #TODO this crashes still with GCC 5.8+. Commenting
 			source ./Dependencies/Redis/setup_redis_instances.sh
-			#source ./Dependencies/node.sh
 
 			#install virtuoso
 			if [[ "${install_virtuoso_from_source}" == "true" ]]
@@ -131,7 +140,11 @@ then
 			#source ./Checks/check_services_status.sh
 
 			source ./Programs/create_dendro_user.sh
-			source ./Dependencies/play_framework.sh
+
+			if [[ "$dendro_recommender_active" == "true" ]]
+			then
+				source ./Dependencies/play_framework.sh
+			fi
 
 			source ./Dependencies/mysql.sh
 			#source ./Dependencies/mongodb.sh
@@ -171,7 +184,7 @@ then
 			#stage dendro recommender service
 			source ./Services/recommender.sh #??
 		fi
-		
+
 	#cleanup
 		sudo apt-get -qq autoremove
 		sudo rm -rf Programs/generated_configurations
