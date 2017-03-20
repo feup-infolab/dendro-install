@@ -49,8 +49,8 @@ sudo chmod -R 0755 $installation_path
 
 #install npm dependencies
 cd $dendro_installation_path || die "Unable to go back to dendro installation path at $dendro_installation_path"
-sudo su - "$dendro_user_name" -c 'npm update && npm install'
-sudo su - "$dendro_user_name" -c 'grunt'
+npm update &&
+npm install 
 cd - || die "Unable to go back to previous installation dir"
 
 #set active deployment configuration

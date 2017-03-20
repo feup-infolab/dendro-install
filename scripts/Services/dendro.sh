@@ -22,19 +22,26 @@ sudo rm -rf $dendro_startup_item_file
 sudo touch $dendro_startup_item_file
 sudo chmod 0655 $dendro_startup_item_file
 
-#create pids folder...
-sudo mkdir -p $installation_path/service_pids
+#create startup scripts folder...
+sudo mkdir -p "$dendro_startup_scripts_path"
 
 printf "Dendro Running Service Command:"
 printf "\n"
-printf "nvm use $node_version && $(which node) ${dendro_installation_path}/src/app.js >> ${dendro_log_file} 2>&1"
+printf "$dendro_startup_script"
 printf "\n"
 
-nvm_location=$(sudo su - $dendro_user_name -c "which nvm")
-node_location=$(sudo su - $dendro_user_name -c "which node")
+#build startup script file
+sudo rm -rf $dendro_startup_script &&
+sudo cp $setup_dir/Services/dendro_startup_script_template.sh $dendro_startup_script &&
+sudo sed -i "s;DENDRO_INSTALLATION_PATH;$dendro_installation_path;g" $dendro_startup_script &&
+sudo sed -i "s;DENDRO_LOG_FILE;$dendro_log_file;g" $dendro_startup_script &&
+
+#restore ownership of the startup files to dendro user
+sudo chown -R $dendro_user_name:$dendro_user_group $dendro_startup_scripts_path
+sudo chmod +x $dendro_startup_script
 
 printf "[Unit]
-Description=Dendro ${active_deployment_setting}  daemon
+Description=Dendro ${active_deployment_setting} daemon
 [Service]
 Type=simple
 Restart=on-failure
@@ -44,8 +51,8 @@ User=$dendro_user_name
 Group=$dendro_user_group
 RuntimeMaxSec=infinity
 KillMode=control-group
-ExecStart=/bin/sh -c '$nvm_location use $node_version && $node_location ${dendro_installation_path}/src/app.js >> ${dendro_log_file} 2>&1'
-PIDFile=$installation_path/service_pids/${dendro_service_name}
+ExecStart=$dendro_startup_script
+PIDFile=${dendro_installation_path}/running.pid
 [Install]
 WantedBy=multi-user.target\n" | sudo tee $dendro_startup_item_file
 
@@ -56,6 +63,6 @@ sudo systemctl enable $dendro_service_name
 sudo systemctl start $dendro_service_name
 
 #go back to initial dir
-cd $setup_dir
+cd $setup_dir || die "Error returning to setup folder"
 
 success "Finished setting up Dendro service.\n"
