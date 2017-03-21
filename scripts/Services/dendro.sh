@@ -33,12 +33,13 @@ printf "\n"
 #build startup script file
 sudo rm -rf $dendro_startup_script &&
 sudo cp $setup_dir/Services/dendro_startup_script_template.sh $dendro_startup_script &&
-sudo sed -i "s;DENDRO_INSTALLATION_PATH;$dendro_installation_path;g" $dendro_startup_script &&
-sudo sed -i "s;DENDRO_LOG_FILE;$dendro_log_file;g" $dendro_startup_script &&
+sudo sed -i "s;%DENDRO_INSTALLATION_PATH%;$dendro_installation_path;g" $dendro_startup_script &&
+sudo sed -i "s;%DENDRO_LOG_FILE%;$dendro_log_file;g" $dendro_startup_script &&
+sudo sed -i "s;%NODE_VERSION%;$node_version;g" $dendro_startup_script || die "Unable to build the startup script at $dendro_startup_scripts_path"
 
 #restore ownership of the startup files to dendro user
-sudo chown -R $dendro_user_name:$dendro_user_group $dendro_startup_scripts_path
-sudo chmod +x $dendro_startup_script
+sudo chown -R $dendro_user_name:$dendro_user_group $dendro_startup_scripts_path &&
+sudo chmod +x $dendro_startup_script || die "Unable to change permissions of the startup script at $dendro_startup_scripts_path"
 
 printf "[Unit]
 Description=Dendro ${active_deployment_setting} daemon

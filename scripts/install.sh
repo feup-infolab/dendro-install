@@ -111,9 +111,18 @@ then
 			sudo chmod +x "$setup_dir/Dependencies/nvm.sh"
 			sudo su - "$dendro_user_name" -c "$setup_dir/Dependencies/nvm.sh $node_version"
 
-			#install nvm as current user to have node in the default environment
-			info "Installing NVM as $(whoami)"
-			./Dependencies/nvm.sh "$node_version"
+			#install NVM as current user
+			#info "Installing NVM as $(whoami)"
+			#./Dependencies/nvm.sh "$node_version" || die "Failed to install NVM as user $(whoami)"
+
+			#install nvm as ubuntu (only runs in vagrant)
+			#user exists?
+			id -u "ubuntu" > /dev/null
+
+			if [[ "$?" -eq "0" ]]; then #user exists
+				info "Installing NVM as ubuntu"
+				sudo su - "ubuntu" -c "$setup_dir/Dependencies/nvm.sh $node_version" || die "Failed to install NVM as user ubuntu"
+			fi
 
 			#source ./Dependencies/drawing_to_text.sh #TODO this crashes still with GCC 5.8+. Commenting
 			source ./Dependencies/Redis/setup_redis_instances.sh
