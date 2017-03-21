@@ -106,6 +106,9 @@ then
 			warning "Installing dependencies"
 			source ./Dependencies/misc.sh
 
+			warning "Creating $dendro_user_name if necessary and adding to $dendro_user_group if necessary"
+			source ./Programs/create_dendro_user.sh
+
 			#install nvm as $dendro_user_name to have node to run the dendro service as that user
 			info "Installing NVM as $dendro_user_name"
 			sudo chmod +x "$setup_dir/Dependencies/nvm.sh"
@@ -147,8 +150,6 @@ then
 			done
 			source ./SQLCommands/grant_commands.sh
 			#source ./Checks/check_services_status.sh
-
-			source ./Programs/create_dendro_user.sh
 
 			if [[ "$dendro_recommender_active" == "true" ]]
 			then
