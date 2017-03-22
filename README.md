@@ -165,7 +165,7 @@ active_deployment_setting='TESTSdendroVagrantDemo'
 
 Follow the installer [https://github.com/coreybutler/nvm-windows/releases](HERE).
 
-###Install NVM on Mac / Linux
+### Install NVM on Mac / Linux
 
 ```bash
 #install NVM, Node 6.10, Node Automatic Version switcher
@@ -174,7 +174,7 @@ export NVM_DIR="$HOME/.nvm" &&
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 ```
 
-###Installing NodeJS and Automatic Version Manager
+### Installing NodeJS and Automatic Version Manager
 
 ```bash
 nvm install 6.10
@@ -182,7 +182,7 @@ npm install -g avn avn-nvm avn-n
 avn setup
 ```
 
-###Installing Dendro
+### Installing Dendro
 
 ```bash
 #clone repo
