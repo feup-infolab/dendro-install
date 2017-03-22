@@ -12,10 +12,12 @@ fi
 setup_dir=$(pwd) &&
 
 #user exists?
-id -u $dendro_user_name > /dev/null
+id -u $dendro_user_name > /dev/null 2>&-
 
 if [[ "$?" -eq "1" ]]; then
-	sudo useradd $dendro_user_name || die "Failed to create user ${dendro_user_name}."
+	info "Creating user $dendro_user_name"
+	sudo useradd $dendro_user_name &&
+	success "Created user $dendro_user_name" || die "Failed to create user ${dendro_user_name}."
 else
 	info "User ${dendro_user_name} already exists, no need to create it again."
 fi

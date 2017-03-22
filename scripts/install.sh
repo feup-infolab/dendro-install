@@ -86,6 +86,23 @@ source ./Fixes/fix_locales.sh
 	sudo dpkg --configure -a
 	sudo apt-get -qq update
 
+#create dendro user is necessary
+warning "Creating $dendro_user_name if necessary and adding to $dendro_user_group if necessary"
+source ./Programs/create_dendro_user.sh
+
+#install or load nvm
+warning "Starting NVM setup in order to install node version $node_version..."
+sudo chmod +x "$setup_dir/Checks/load_nvm.sh"
+
+#install nvm as dendro_user
+sudo su - "$dendro_user_name" -c "$setup_dir/Checks/load_nvm.sh $node_version" || die "Unable to install/load NVM as $dendro_user_name"
+#install nvm as current user
+./Checks/load_nvm.sh $node_version || die "Unable to install/load NVM as $dendro_user_name" || die "Unable to install/load NVM as $(whoami)"
+
+#install nvm as ubuntu (vm user).
+#This can fail without dying because not always we have a 'ubuntu' user
+sudo su - "ubuntu" -c "$setup_dir/Checks/load_nvm.sh $node_version"
+
 if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ] && [ "$install_jenkins" != "true" ] && [ "$install_teamcity" != "true" ] && [ "$install_teamcity_agent" != "true" ]
 then
 	info "Running the Dendro User Setup."
@@ -104,24 +121,7 @@ then
 			source ./SQLCommands/grant_commands.sh
 		else
 			warning "Installing dependencies"
-			#source ./Dependencies/misc.sh
-
-			warning "Creating $dendro_user_name if necessary and adding to $dendro_user_group if necessary"
-			source ./Programs/create_dendro_user.sh
-
-			#install nvm as $dendro_user_name to have node to run the dendro service as that user
-			info "Installing NVM as $dendro_user_name"
-			sudo chmod +x "$setup_dir/Dependencies/nvm.sh"
-			sudo su - "$dendro_user_name" -c "$setup_dir/Dependencies/nvm.sh $node_version"
-
-			#install nvm as ubuntu (for vagrant boxes)
-			#user exists?
-			id -u "ubuntu" > /dev/null
-
-			if [[ "$?" -eq "0" ]]; then #user exists
-				info "Installing NVM as ubuntu"
-				sudo su - "ubuntu" -c "$setup_dir/Dependencies/nvm.sh $node_version" || die "Failed to install NVM as user ubuntu"
-			fi
+			source ./Dependencies/misc.sh
 
 			#source ./Dependencies/drawing_to_text.sh #TODO this crashes still with GCC 5.8+. Commenting
 			source ./Dependencies/Redis/setup_redis_instances.sh

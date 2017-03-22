@@ -7,7 +7,7 @@ echo "nvm is at: $NVM_DIR"
 
 nvm use %NODE_VERSION% &&
 
-echo "nodejs is at: $(which node)"
-echo "nodejs version: $(node -v)"
+echo "node is at: $(which node)"
+echo "node version: $(node -v)"
 
 node %DENDRO_INSTALLATION_PATH%/src/app.js >> %DENDRO_LOG_FILE% 2>&1

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 #global
-active_deployment_setting='dendroVagrantDemo'
+active_deployment_setting='TESTSdendroVagrantDemo'
 #will be used to generate URLs relative to a base address, so set it wisely
-	host="192.168.56.249"
+	host="192.168.56.248"
 installation_path='/dendro'
 recommender_installation_path='/dendro_recommender'
 
@@ -301,7 +301,7 @@ replace_text_in_file()
 	local node_exists=""
 	node_exists=$(which nodejs)
 
-	if [ "$?" = "1" ] || [ "$node_exists" = "" ]
+	if [ "$?" == "1" ] || [ "$node_exists" == "" ]
 	then
 		info "NodeJS is not installed! Installing..."
 		sudo apt-get -y install nodejs
