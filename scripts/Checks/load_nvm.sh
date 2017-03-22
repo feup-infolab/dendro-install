@@ -36,18 +36,35 @@ install_node()
 
   echo "Installed NVM and Node version $node_version successfully as $(whoami)."
 
-  #update npm
-
-  npm -g install npm@latest || exit 1
-  echo "Installed NPM as $(whoami)"
+  #install npm
+  npm > /dev/null 2>&1
+  if [ "$?" != "0" ]
+  then
+    npm -g install npm@latest || exit 1
+    echo "Installed NPM as $(whoami)"
+  else
+    echo "User $(whoami) already has NPM installed."
+  fi
 
   #install bower
-  npm install -g bower stylus || exit 1
-  echo "Installed Bower as $(whoami)"
+  bower > /dev/null 2>&1
+  if [ "$?" != "0" ]
+  then
+    npm install -g bower || exit 1
+    echo "Installed Bower as $(whoami)"
+  else
+    echo "User $(whoami) already has Bower installed."
+  fi
 
   #install automatic version switching
-  npm install -g avn avn-nvm avn-n && avn setup || exit 1
-  echo "Installed AVN as $(whoami)"
+  avn > /dev/null 2>&1
+  if [ "$?" != "0" ]
+  then
+    npm install -g avn avn-nvm avn-n && avn setup || exit 1
+    echo "Installed AVN as $(whoami)"
+  else
+    echo "User $(whoami) already has AVN installed."
+  fi
 }
 
 echo "Starting NVM setup as $(whoami)..."
