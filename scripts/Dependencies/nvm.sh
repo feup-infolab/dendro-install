@@ -12,7 +12,7 @@ export NVM_DIR="$HOME/.nvm" > /dev/null &&
 nvm install "$node_version" > /dev/null &&
 nvm use "$node_version" > /dev/null &&
 
-echo "LOL"
+#echo "LOL"
 
 #update npm
 npm -g install npm@latest &&

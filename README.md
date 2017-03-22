@@ -84,8 +84,14 @@ Dendro relies on
 		git clone https://github.com/feup-infolab-rdm/dendro-install.git;
 		cd dendro-install;
 		chmod +x ./install.sh;
-		exec ./install.sh
+		./install.sh
+    ./install.sh -r
 		```
+      *
+      ```bash
+      ./install.sh -d #for developing only! This will open all ports of all the servers DO NOT USE IN PRODUCTION ENVIRONMENTS!!
+      ```
+
 	* Cloning using Powershell (Windows)
 
 		Press Windows+R, type `powershell.exe`, press Enter and paste the following:
@@ -188,7 +194,7 @@ npm install #this is needed when running npm install with sudo to install global
 grunt #use grunt to put everything in place
 
 #start app
-nodejs src/app.js
+node src/app.js
 ```
 
 ### NPM Commands available at the project root
