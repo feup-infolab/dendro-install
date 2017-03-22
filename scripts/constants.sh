@@ -73,7 +73,7 @@ recommender_installation_path='/dendro_recommender'
 
 	#dependencies
 		#nodejs version
-		node_version="7.7.3"
+		node_version="6.10.1"
 
 		#elasticsearch
 		elasticsearch_port=9200
