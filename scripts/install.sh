@@ -104,18 +104,14 @@ then
 			source ./SQLCommands/grant_commands.sh
 		else
 			warning "Installing dependencies"
-			source ./Dependencies/misc.sh
+			#source ./Dependencies/misc.sh
 
 			#install nvm as $dendro_user_name to have node to run the dendro service as that user
 			info "Installing NVM as $dendro_user_name"
 			sudo chmod +x "$setup_dir/Dependencies/nvm.sh"
 			sudo su - "$dendro_user_name" -c "$setup_dir/Dependencies/nvm.sh $node_version"
 
-			#install NVM as current user
-			#info "Installing NVM as $(whoami)"
-			#./Dependencies/nvm.sh "$node_version" || die "Failed to install NVM as user $(whoami)"
-
-			#install nvm as ubuntu (only runs in vagrant)
+			#install nvm as ubuntu (for vagrant boxes)
 			#user exists?
 			id -u "ubuntu" > /dev/null
 
