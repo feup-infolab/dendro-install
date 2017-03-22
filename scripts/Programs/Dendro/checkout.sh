@@ -47,8 +47,9 @@ fi
 sudo chown -R $dendro_user_name:$dendro_user_group $installation_path
 sudo chmod -R 0755 $installation_path
 
-#install npm dependencies
+#install dependencies
 cd $dendro_installation_path || die "Unable to go back to dendro installation path at $dendro_installation_path"
+sudo su - "$dendro_user_name" -c "source ~/.bashrc; npm install" || die "Unable to install npm dependencies at $dendro_installation_path as $dendro_user_name"
 cd - || die "Unable to go back to previous installation dir"
 
 #set active deployment configuration

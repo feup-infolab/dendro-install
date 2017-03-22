@@ -12,9 +12,10 @@ install_nvm()
 {
   echo "Installing NVM as $(whoami) and Node version $node_version..."
 
-  for file in "$HOME/.bash_profile" "$HOME/.zshrc" "$HOME/.profile" "$HOME/.bashrc"
+  declare -a files=("$HOME/.bash_profile" "$HOME/.zshrc" "$HOME/.profile" "$HOME/.bashrc")
+  for file in "${files[@]}"
   do
-    if [ -f $file ]
+    if [ ! -f $file ]
     then
       echo "Touching $file..."
       touch "$file"
@@ -33,20 +34,20 @@ install_node()
   nvm install "$node_version" &&
   nvm use "$node_version" || exit 1
 
-  echo "Installed NVM and Node version $node_version successfully."
+  echo "Installed NVM and Node version $node_version successfully as $(whoami)."
 
   #update npm
-  npm -g install npm@latest &&
-  npm cache clean || exit 1
-  echo "Installed NPM"
+
+  npm -g install npm@latest || exit 1
+  echo "Installed NPM as $(whoami)"
 
   #install bower
   npm install -g bower stylus || exit 1
-  echo "Installed Bower"
+  echo "Installed Bower as $(whoami)"
 
   #install automatic version switching
   npm install -g avn avn-nvm avn-n && avn setup || exit 1
-  echo "Installed AVN"
+  echo "Installed AVN as $(whoami)"
 }
 
 echo "Starting NVM setup as $(whoami)..."
@@ -74,8 +75,8 @@ if [ "$?" == "0" ]
 then
   install_node
 else
-  echo "[FATAL ERROR] NVM is not present even after trying to install it. Something serious happened."
+  echo "[FATAL ERROR] NVM is not present even after trying to install it as $(whoami). Something serious happened."
   exit 1
 fi
 
-echo "NVM Setup/Activation complete!"
+echo "NVM Setup/Activation complete as $(whoami)."
