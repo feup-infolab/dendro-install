@@ -154,9 +154,9 @@ To do that, you must:
 #!/usr/bin/env bash
 
 #global
-active_deployment_setting='TESTSdendroVagrantDemo'
+active_deployment_setting='dendroVagrantDemo'
 #will be used to generate URLs relative to a base address, so set it wisely
-	host="192.168.56.248"
+	host="192.168.56.249"
 ```
 
 ### Cloning the dendro repository, initial setup and starting up the app
