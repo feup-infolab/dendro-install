@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 #global
-active_deployment_setting='dendroVagrantDemo'
+active_deployment_setting='TESTSdendroVagrantDemo'
 #will be used to generate URLs relative to a base address, so set it wisely
-	host="192.168.56.249"
+	host="192.168.56.248"
 installation_path='/dendro'
 recommender_installation_path='/dendro_recommender'
 
@@ -20,6 +20,10 @@ recommender_installation_path='/dendro_recommender'
 
 	#installation
 	dendro_installation_path=$installation_path/$active_deployment_setting
+
+	dendro_startup_scripts_path="$installation_path/startup_scripts"
+	dendro_startup_script="$dendro_startup_scripts_path/$active_deployment_setting.sh"
+
 	temp_downloads_folder='/tmp/dendro_setup'
 	dendro_svn_url='http://dendro-dev.fe.up.pt/svn/dendro/'
 	dendro_git_url='https://github.com/feup-infolab-rdm/dendro.git'
@@ -68,6 +72,9 @@ recommender_installation_path='/dendro_recommender'
 	gmaps_map_height=500
 
 	#dependencies
+		#nodejs version
+		node_version="6.10.1"
+
 		#elasticsearch
 		elasticsearch_port=9200
 		elasticsearch_host="127.0.0.1"
@@ -294,7 +301,7 @@ replace_text_in_file()
 	local node_exists=""
 	node_exists=$(which nodejs)
 
-	if [ "$?" = "1" ] || [ "$node_exists" = "" ]
+	if [ "$?" == "1" ] || [ "$node_exists" == "" ]
 	then
 		info "NodeJS is not installed! Installing..."
 		sudo apt-get -y install nodejs

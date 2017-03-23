@@ -25,8 +25,6 @@ else
 	die "File $mongodb_conf_file does not exist."
 fi
 
-sudo npm install stylus -g > /dev/null
-
 ##ElasticSearch
 info "Trying to open ElasticSearch to ANY remote connection."
 file_exists file_exists_flag $elasticsearch_conf_file
@@ -46,7 +44,7 @@ if [[ "$file_exists_flag" == "true" ]]; then
 	info "File $redis_conf_file exists..."
 	patch_file $redis_conf_file "bind 127.0.0.1" "bind 0.0.0.0" "redis_dendro_dev_patch"  && success "Opened Redis." || die "Unable to patch Redis configuration file."
 	sudo service redis restart || die "Unable to restart Redis service."
-	#setup multiple redis instances 
+	#setup multiple redis instances
 	source ./Dependencies/Redis/setup_redis_instances.sh
 else
 	die "File $redis_conf_file does not exist."

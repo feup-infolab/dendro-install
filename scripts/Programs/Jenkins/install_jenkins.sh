@@ -19,7 +19,7 @@ echo $(pwd)
 source ./Dependencies/oracle_jdk8.sh &&
 
 #user exists?
-id -u $jenkins_user > /dev/null
+id -u $jenkins_user > /dev/null 2>&-
 
 if [[ "$?" -eq "1" ]]; then
 	sudo useradd $jenkins_user || die "Failed to create user ${dendro_user_name}."
