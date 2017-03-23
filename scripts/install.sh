@@ -216,6 +216,7 @@ else
 			info "Running the Dendro Developer Setup."
 			info "NOTE: To disable Development mode, use the -u flag. Example: ./install.sh -u"
 			source ./Fixes/set_dev_mode.sh
+			source ./SQLCommands/interactive_sql_commands.sh
 			info "This Dendro instance has been set to Development mode."
 			warning "DO NOT use this in a production environment. Having all your databases accepting remote connections can represent a serious security risk."
 		fi
@@ -223,6 +224,7 @@ else
 		then
 			info "NOTE: To enable Development mode, use the -d flag. Example: ./install.sh -d"
 			source ./Fixes/unset_dev_mode.sh
+			source ./SQLCommands/interactive_sql_commands.sh
 			info "This Dendro instance has been reverted to User mode."
 		fi
 		if [[ "$install_jenkins" == "true" ]]
