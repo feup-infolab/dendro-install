@@ -18,6 +18,9 @@ sudo systemctl daemon-reload
 sudo systemctl enable elasticsearch
 sudo systemctl start elasticsearch
 
+#install elasticsearch gui client
+sudo /usr/share/elasticsearch/bin/plugin install jettro/elasticsearch-gui
+
 #go back to initial dir
 cd $setup_dir
 
