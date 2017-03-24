@@ -621,7 +621,11 @@ var write_dendro_configuration_file = function ()
 			"diagnostics" :
 			{
 				"ram_usage_report" : true
-			}
+			},
+			"index" :
+      {
+        "elasticsearch_connection_log_type" : ""
+      }
 		},
 		"startup" : {
 			"reload_administrators_on_startup" : get_argument_by_name('reload_administrators_on_startup'),
