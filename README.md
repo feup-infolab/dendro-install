@@ -172,6 +172,12 @@ Follow the installer [https://github.com/coreybutler/nvm-windows/releases](HERE)
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash &&
 export NVM_DIR="$HOME/.nvm" &&
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# Want NVM to be loaded on every terminal you open? Add to ~/.bash_profile this:
+
+export NVM_DIR="$HOME/.nvm" &&
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
 ```
 
 ### Installing NodeJS and Automatic Version Manager
