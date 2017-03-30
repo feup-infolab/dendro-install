@@ -161,7 +161,7 @@ active_deployment_setting='dendroVagrantDemo'
 
 ### Cloning the dendro repository, initial setup and starting up the app
 
-###Install NVM on Windows
+### Install NVM on Windows
 
 Follow the installer [https://github.com/coreybutler/nvm-windows/releases](HERE).
 
