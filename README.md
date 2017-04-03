@@ -150,6 +150,8 @@ To do that, you must:
 - clone this repository again to another folder
 - edit the `scripts/constants.sh` file, changing the IP to 192.168.56.24**8** and the config name to something different. Example:
 
+#### Before
+
 ```bash
 #!/usr/bin/env bash
 
@@ -157,6 +159,16 @@ To do that, you must:
 active_deployment_setting='dendroVagrantDemo'
 #will be used to generate URLs relative to a base address, so set it wisely
 	host="192.168.56.249"
+```
+#### After
+
+```bash
+#!/usr/bin/env bash
+
+#global
+active_deployment_setting='dendroVagrantDemoTESTS'
+#will be used to generate URLs relative to a base address, so set it wisely
+	host="192.168.56.248"
 ```
 
 ### Cloning the dendro repository, initial setup and starting up the app
