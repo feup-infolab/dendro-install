@@ -53,7 +53,7 @@ Dendro relies on
 | Users            | Developers                                                                              |
 |--------------------|------------------------------------------------------------------------------------------|
 | Want to try Dendro? Watch the video below. It is intended to get you up and running with a fully configured Virtual Machine that you can destroy after you are done. | Interested in developing for the Dendro platform? You should follow the video for Regular Users before setting up the VM for development. |
-| [![YouTube installation tutorial for Dendro](http://i.imgur.com/3r1lfot.png)](https://www.youtube.com/watch?v=YEKQ1InfmOE) | Run `./install.sh -d` on the `dendro-install/` after following the normal tutorial. |
+| [![YouTube installation tutorial for Dendro](http://i.imgur.com/3r1lfot.png)](https://www.youtube.com/watch?v=YEKQ1InfmOE) | Run `./conf/scripts/install.sh -d` on the `dendro-install/` after following the normal tutorial. |
 
 # Step by step instructions
 
