@@ -95,8 +95,11 @@ warning "Starting NVM setup in order to install node version $node_version..."
 sudo chmod +x "$setup_dir/Checks/load_nvm.sh"
 
 #install nvm as dendro_user
+warning "Installing NVM as $dendro_user_name in order to install node version $node_version..."
 sudo su - "$dendro_user_name" -c "$setup_dir/Checks/load_nvm.sh $node_version" || die "Unable to install/load NVM as $dendro_user_name"
+
 #install nvm as current user
+warning "Installing NVM as $(whoami) in order to install node version $node_version..."
 ./Checks/load_nvm.sh $node_version || die "Unable to install/load NVM as $dendro_user_name" || die "Unable to install/load NVM as $(whoami)"
 
 #install nvm as ubuntu (vm user).
