@@ -172,6 +172,7 @@ then
 	#install dendro
 		source ./Programs/Dendro/create_log.sh
 		source ./Programs/Dendro/checkout.sh
+		sudo su $dendro_user_name ./Programs/Dendro/install.sh || die "Unable to install Dendro."
 
 		#place configuration file in dendro's deployment configs folder
 		wd=$(pwd)
@@ -250,6 +251,9 @@ fi
 
 #go back to whatever was the directory at the start of this script
 cd "${starting_dir}" || warning "Unable to go back to the starting directory."
+
+#install vm tools to prevent crashes
+sudo apt-get install open-vm-tools
 
 #all ok.
 success "Setup operations complete."

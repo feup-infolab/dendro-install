@@ -39,7 +39,7 @@ if [[ ! -z "$dendro_branch" ]]
 then
   info "Checking out Dendro branch $dendro_branch..."
 	cd $dendro_installation_path
-  	sudo git checkout "$dendro_branch"
+  sudo git checkout "$dendro_branch"
 	cd -
 fi
 
@@ -47,18 +47,7 @@ fi
 sudo chown -R $dendro_user_name:$dendro_user_group $installation_path
 sudo chmod -R 0755 $installation_path
 
-#install dependencies
-cd $dendro_installation_path || die "Unable to go back to dendro installation path at $dendro_installation_path"
-sudo su - "$dendro_user_name" -c "source ~/.bashrc; cd $dendro_installation_path && npm install && grunt" || die "Unable to install npm dependencies at $dendro_installation_path as $dendro_user_name"
-cd - || die "Unable to go back to previous installation dir"
-
-#set active deployment configuration
-echo "{\"key\" : \"${active_deployment_setting}\"}" | sudo tee $dendro_installation_path/conf/active_deployment_config.json
-
-#give "dendro" user ownership of the installation
-sudo chown -R $dendro_user_name:$dendro_user_group $installation_path
-
-success "Installed Dendro into ${dendro_installation_path}"
+success "Checked out Dendro into ${dendro_installation_path}."
 
 #go back to initial dir
 cd $setup_dir
