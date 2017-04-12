@@ -23,8 +23,11 @@ def sanitize_filename(filename)
 end
 
 puts "Configuring Vagrant VM #{ENV['VAGRANT_VM_NAME']} on IP #{ENV['VAGRANT_VM_IP']}."
+if "#{ENV['JENKINS_BUILD']}" == '1'
+  puts "JENKINS build detected."
+end
 
-if "#{ENV['JENKINS_BUILD']}" == nil
+if "#{ENV['JENKINS_BUILD']}" != '1'
   #install plugin to keep all the VBox Guest Additions updated.
   required_plugins = %w(vagrant-share vagrant-vbguest)
 
