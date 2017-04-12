@@ -63,7 +63,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "#{ENV['VAGRANT_VM_NAME']}" do |subconfig|
     subconfig.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}"
 	if "#{ENV['JENKINS_BUILD']}" == '1'
-		subconfig.vm.network :forwarded_port, :guest => 22, :host => 7665
+		subconfig.vm.network :forwarded_port, :guest => 22, :host => 8665
 	end
     subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
     config.vm.boot_timeout= 600
@@ -72,7 +72,7 @@ Vagrant.configure("2") do |config|
   if "#{ENV['JENKINS_BUILD']}" == "1"
     puts "[JENKINS] Configuring SSH settings...."
 	config.ssh.host="127.0.0.1"
-	config.ssh.port="7665"
+	config.ssh.port="8665"
 	config.ssh.keys_only=true
 	config.ssh.keep_alive=true
     config.ssh.username = 'vagrant'
