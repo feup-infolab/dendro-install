@@ -24,17 +24,18 @@ end
 
 puts "Configuring Vagrant VM #{ENV['VAGRANT_VM_NAME']} on IP #{ENV['VAGRANT_VM_IP']}."
 
+if "#{ENV['JENKINS_BUILD']}" == nil
+  #install plugin to keep all the VBox Guest Additions updated.
+  required_plugins = %w(vagrant-share vagrant-vbguest)
 
-#install plugin to keep all the VBox Guest Additions updated.
-required_plugins = %w(vagrant-share vagrant-vbguest)
-
-plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
-if not plugins_to_install.empty?
-  puts "Installing plugins: #{plugins_to_install.join(' ')}"
-  if system "vagrant plugin install #{plugins_to_install.join(' ')}"
-    exec "vagrant #{ARGV.join(' ')}"
-  else
-    abort "Installation of one or more plugins has failed. Aborting."
+  plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
+  if not plugins_to_install.empty?
+    puts "Installing plugins: #{plugins_to_install.join(' ')}"
+    if system "vagrant plugin install #{plugins_to_install.join(' ')}"
+      exec "vagrant #{ARGV.join(' ')}"
+    else
+      abort "Installation of one or more plugins has failed. Aborting."
+    end
   end
 end
 
@@ -71,12 +72,13 @@ Vagrant.configure("2") do |config|
   config.vm.define "#{ENV['VAGRANT_VM_NAME']}" do |subconfig|
     #subconfig.vm.network :forwarded_port, :guest => 22, :host => 7665
     subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
+    config.vm.boot_timeout= 600
 
     if "#{ENV['JENKINS_BUILD']}" == '1'
       subconfig.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}", nic_type: "virtio"
+    else
+      subconfig.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}"
     end
-
-    config.vm.boot_timeout= 600
   end
 
   config.vm.provider "virtualbox" do |vb|
@@ -84,14 +86,14 @@ Vagrant.configure("2") do |config|
      # vb.gui = true
      # Customize the amount of memory on the VM:
      vb.memory = "2048"
-     vb.cpus = "2"
      vb.name = "#{ENV['VAGRANT_VM_NAME']}"
-
-     vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
 
      if "#{ENV['JENKINS_BUILD']}" == '1'
        vb.customize ["modifyvm", :id, "--hwvirtex", "off"]
        vb.cpus = 1
+     else
+      vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+      vb.cpus = "2"
      end
   end
 
