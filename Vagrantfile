@@ -69,9 +69,13 @@ Vagrant.configure("2") do |config|
   puts "IP of Virtualbox: #{ENV['VAGRANT_VM_IP']}"
 
   config.vm.define "#{ENV['VAGRANT_VM_NAME']}" do |subconfig|
-    subconfig.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}"
     #subconfig.vm.network :forwarded_port, :guest => 22, :host => 7665
     subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
+
+    if "#{ENV['JENKINS_BUILD']}" == '1'
+      subconfig.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}", nic_type: "virtio"
+    end
+
     config.vm.boot_timeout= 600
   end
 
@@ -86,7 +90,6 @@ Vagrant.configure("2") do |config|
      vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
 
      if "#{ENV['JENKINS_BUILD']}" == '1'
-       puts "Building in JENKINS DETECTED. VT-x is going to be disabled for this build."
        vb.customize ["modifyvm", :id, "--hwvirtex", "off"]
        vb.cpus = 1
      end
