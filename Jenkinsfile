@@ -10,9 +10,9 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh "export $JENKINS_BUILD=1"
-                sh "set $JENKINS_BUILD=1 $WORKSPACE/uninstall.sh"
-                sh "set $JENKINS_BUILD=1 $WORKSPACE/install.sh"
+                sh "export JENKINS_BUILD=1"
+                sh "set JENKINS_BUILD=1 $WORKSPACE/uninstall.sh"
+                sh "set JENKINS_BUILD=1 $WORKSPACE/install.sh"
             }
         }
         stage('Ping') {
@@ -25,7 +25,7 @@ pipeline {
 
     post {
       always {
-        sh "set $JENKINS_BUILD=1 $WORKSPACE/uninstall.sh"
+        sh "set JENKINS_BUILD=1 $WORKSPACE/uninstall.sh"
       }
     }
 }
