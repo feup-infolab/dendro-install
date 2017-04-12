@@ -68,7 +68,7 @@ Vagrant.configure("2") do |config|
 
   if "#{ENV['JENKINS_BUILD']}" == "1"
     puts "[JENKINS] Configuring SSH settings...."
-    config.ssh.insert_key = false
+    config.ssh.insert_key = true
     config.ssh.username = 'vagrant'
     config.ssh.password = 'vagrant'
   else
