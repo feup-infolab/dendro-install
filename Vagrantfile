@@ -78,8 +78,17 @@ Vagrant.configure("2") do |config|
     config.vm.boot_timeout= 120
 
     if "#{ENV['JENKINS_BUILD']}" == '1'
-      #subconfig.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}", nic_type: "virtio"
-      subconfig.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}"
+      subconfig.vm.network "public_network", auto_config: false
+
+      config.vm.provision "shell",
+        run: "always",
+        inline: "echo 'tou a configurar a rede'"
+
+      # manual ip
+      config.vm.provision "shell",
+        run: "always",
+        inline: "ifconfig eth1 #{ENV['VAGRANT_VM_IP']} netmask 255.255.255.0 up"
+
     else
       subconfig.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}"
     end
@@ -95,8 +104,6 @@ Vagrant.configure("2") do |config|
 
      if "#{ENV['JENKINS_BUILD']}" == '1'
        vb.memory = "1536"
-       vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-       #vb.customize ["modifyvm", :id, "--natnet1", "192.168.56.0/24"]
        vb.customize ["modifyvm", :id, "--hwvirtex", "off"]
        vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
        vb.cpus = 1
