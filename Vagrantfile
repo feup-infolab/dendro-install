@@ -56,7 +56,7 @@ Vagrant.configure("2") do |config|
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = "ubuntu/xenial64"
   config.vm.box_version = "20161214.0.1"
-  config.vm.boot_timeout= 180
+  config.vm.boot_timeout= 600
   config.vm.network "private_network", ip: "#{ENV['VAGRANT_VM_IP']}"
 
   puts "IP of Virtualbox: #{ENV['VAGRANT_VM_IP']}"
@@ -100,6 +100,7 @@ Vagrant.configure("2") do |config|
        vb.customize ["modifyvm", :id, "--cableconnected2", "on"]
        vb.cpus = 1
      else
+		vb.memory = "2048"
        vb.cpus = 2
      end
   end
