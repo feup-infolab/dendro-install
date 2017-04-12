@@ -79,7 +79,9 @@ Vagrant.configure("2") do |config|
   end
 
   puts "AAAAAAA"
+  puts "AAAAAAA JENKINS #{ENV['JENKINS_BUILD']}"
   if "#{ENV['JENKINS_BUILD']}" == "1"
+
 
     config.vm.network "public_network", auto_config: false
 
@@ -97,6 +99,7 @@ Vagrant.configure("2") do |config|
 
   puts "BBBBB12897361287637182637812"
   config.vm.provider "virtualbox" do |vb|
+    puts "BBBBB12897361287637182637812 BOXXXXXXXXXXXXXXXXX"
      # Display the VirtualBox GUI when booting the machine
      # vb.gui = true
      # Customize the amount of memory on the VM:
@@ -104,7 +107,8 @@ Vagrant.configure("2") do |config|
 
      vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
 
-     if "#{ENV['JENKINS_BUILD']}" == '1'
+     if "#{ENV['JENKINS_BUILD']}" == "1"
+       puts "JENKINS IN DA BOX"
        vb.memory = "1536"
        vb.customize ["modifyvm", :id, "--hwvirtex", "off"]
        vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
