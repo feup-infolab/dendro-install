@@ -84,6 +84,10 @@ Vagrant.configure("2") do |config|
      vb.name = "#{ENV['VAGRANT_VM_NAME']}"
 
      vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+     if "#{ENV['BUILDING_IN_JENKINS']}" == 1
+       puts "Building in JENKINS DETECTED"
+       vb.customize ["modifyvm", :id, "--hwvirtex", "off"]
+     end
   end
 
   time = sanitize_filename(Time.new.inspect)
