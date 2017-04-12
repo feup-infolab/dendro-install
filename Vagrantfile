@@ -60,11 +60,11 @@ Vagrant.configure("2") do |config|
   
   if "#{ENV['JENKINS_BUILD']}" == '1'
     config.vm.network "private_network", name: 'vbox0', adapter: 1
-	config.vm.network "private_network", type: 'dhcp', ip: "#{ENV['VAGRANT_VM_IP']}", adapter: 2
-	config.vm.network "forwarded_port", guest: 22, host: 7665, ip: "10.10.10.10/24", adapter: 3
+	#config.vm.network "private_network", type: 'dhcp', ip: "#{ENV['VAGRANT_VM_IP']}", adapter: 2
+	config.vm.network "forwarded_port", guest: 22, host: 7665, ip: "10.10.10.10", adapter: 2
   else
 	config.vm.network "private_network", adapter: 1
-	config.vm.network "private_network", type: 'dhcp', ip: "#{ENV['VAGRANT_VM_IP']}", adapter: 2
+	#config.vm.network "private_network", type: 'dhcp', ip: "#{ENV['VAGRANT_VM_IP']}", adapter: 2
   end
   
   puts "IP of Virtualbox: #{ENV['VAGRANT_VM_IP']}"
