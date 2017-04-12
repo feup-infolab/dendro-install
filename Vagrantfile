@@ -28,16 +28,18 @@ if "#{ENV['JENKINS_BUILD']}" == '1'
   puts "[JENKINS] JENKINS build detected."
 end
 
-#install plugin to keep all the VBox Guest Additions updated.
-required_plugins = %w(vagrant-share vagrant-vbguest)
+if "#{ENV['JENKINS_BUILD']}" != '1'
+  #install plugin to keep all the VBox Guest Additions updated.
+  required_plugins = %w(vagrant-share vagrant-vbguest)
 
-plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
-if not plugins_to_install.empty?
-  puts "Installing plugins: #{plugins_to_install.join(' ')}"
-  if system "vagrant plugin install #{plugins_to_install.join(' ')}"
-    exec "vagrant #{ARGV.join(' ')}"
-  else
-    abort "Installation of one or more plugins has failed. Aborting."
+  plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
+  if not plugins_to_install.empty?
+    puts "Installing plugins: #{plugins_to_install.join(' ')}"
+    if system "vagrant plugin install #{plugins_to_install.join(' ')}"
+      exec "vagrant #{ARGV.join(' ')}"
+    else
+      abort "Installation of one or more plugins has failed. Aborting."
+    end
   end
 end
 
