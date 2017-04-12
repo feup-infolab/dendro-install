@@ -61,7 +61,7 @@ Vagrant.configure("2") do |config|
   if "#{ENV['JENKINS_BUILD']}" == '1'
     config.vm.network "private_network", name: 'vbox0', adapter: 1
 	config.vm.network "private_network", type: 'dhcp', ip: "#{ENV['VAGRANT_VM_IP']}", adapter: 2
-	config.vm.network "forwarded_port", guest: 22, host: 7665, adapter: 2, ip: "10.10.10.10"
+	config.vm.network "forwarded_port", guest: 22, host: 7665, adapter: 2, ip: "10.10.10.10/24"
   else
 	config.vm.network "private_network", adapter: 1
 	config.vm.network "private_network", type: 'dhcp', ip: "#{ENV['VAGRANT_VM_IP']}", adapter: 2
@@ -76,6 +76,8 @@ Vagrant.configure("2") do |config|
   if "#{ENV['JENKINS_BUILD']}" == "1"
     puts "[JENKINS] Configuring SSH settings...."
     config.ssh.insert_key = true
+	config.ssh.host="127.0.0.1"
+	config.ssh.host="7665"
     config.ssh.username = 'vagrant'
     config.ssh.password = 'vagrant'
   else
