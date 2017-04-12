@@ -57,24 +57,23 @@ Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/xenial64"
   config.vm.box_version = "20161214.0.1"
   config.vm.boot_timeout= 600
-  
+
   puts "IP of Virtualbox: #{ENV['VAGRANT_VM_IP']}"
 
   config.vm.define "#{ENV['VAGRANT_VM_NAME']}" do |subconfig|
-    subconfig.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}"
-	if "#{ENV['JENKINS_BUILD']}" == '1'
-		subconfig.vm.network :forwarded_port, :guest => 22, :host => 8665
-	end
-    subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
-    config.vm.boot_timeout= 600
+    subconfig.vm.network "private_network", ip: "#{ENV['VAGRANT_VM_IP']}"
+	   if "#{ENV['JENKINS_BUILD']}" == '1'
+		     subconfig.vm.network :forwarded_port, :guest => 22, :host => 8665
+     end
+     subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
   end
 
   if "#{ENV['JENKINS_BUILD']}" == "1"
     puts "[JENKINS] Configuring SSH settings...."
-	config.ssh.host="127.0.0.1"
-	config.ssh.port="8665"
-	config.ssh.keys_only=true
-	config.ssh.keep_alive=true
+    config.ssh.host="127.0.0.1"
+    config.ssh.port="8665"
+    config.ssh.keys_only=true
+    config.ssh.keep_alive=true
     config.ssh.username = 'vagrant'
     config.ssh.password = 'vagrant'
   else
@@ -85,7 +84,7 @@ Vagrant.configure("2") do |config|
       config.ssh.password=ENV['VAGRANT_VM_SSH_PASSWORD']
       puts "SSH password to connect to the VM will be " + config.ssh.password
     end
-	
+
 	config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
     config.ssh.insert_key = true
   end
@@ -100,15 +99,15 @@ Vagrant.configure("2") do |config|
 
      if "#{ENV['JENKINS_BUILD']}" == "1"
        puts "[JENKINS] Configuring VM for build..."
-       vb.memory = "1536"
        vb.customize ["modifyvm", :id, "--hwvirtex", "off"]
        vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
        vb.customize ["modifyvm", :id, "--cableconnected2", "on"]
        vb.cpus = 1
      else
-		vb.memory = "2048"
        vb.cpus = 2
      end
+
+     vb.memory = "2048"
   end
 
   time = sanitize_filename(Time.new.inspect)
