@@ -10,8 +10,9 @@ pipeline {
     stages {
         stage('Build VM') {
             steps {
-                sh "$WORKSPACE/uninstall.sh"
-                sh "$WORKSPACE/install.sh"
+                sh "export $JENKINS_BUILD=1"
+                sh "set $JENKINS_BUILD=1 $WORKSPACE/uninstall.sh"
+                sh "set $JENKINS_BUILD=1 $WORKSPACE/install.sh"
             }
         }
         stage('Ping Dendro in VM') {
@@ -24,7 +25,7 @@ pipeline {
 
     post {
       always {
-        sh "$WORKSPACE/uninstall.sh"
+        sh "set $JENKINS_BUILD=1 $WORKSPACE/uninstall.sh"
       }
     }
 }

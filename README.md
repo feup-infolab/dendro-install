@@ -1,6 +1,6 @@
 # Contents
 
-
+[![Build Status](http://buildserver-rdm.up.pt:8111/job/Dendro%20Install/job/dendro-install/job/master/badge/icon)](http://buildserver-rdm.up.pt:8111/job/Dendro%20Install/job/dendro-install/job/master/)
 
 # What is Dendro?
 
