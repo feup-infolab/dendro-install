@@ -75,7 +75,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "#{ENV['VAGRANT_VM_NAME']}" do |subconfig|
     #subconfig.vm.network :forwarded_port, :guest => 22, :host => 7665
     subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
-    config.vm.boot_timeout= 600
+    config.vm.boot_timeout= 120
 
     if "#{ENV['JENKINS_BUILD']}" == '1'
       subconfig.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}", nic_type: "virtio"
@@ -91,12 +91,16 @@ Vagrant.configure("2") do |config|
      vb.memory = "2048"
      vb.name = "#{ENV['VAGRANT_VM_NAME']}"
 
+     vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+
      if "#{ENV['JENKINS_BUILD']}" == '1'
+       vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+       vb.customize ["modifyvm", :id, "--natnet1", "192.168.56.0/24"]
        vb.customize ["modifyvm", :id, "--hwvirtex", "off"]
+       vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
        vb.cpus = 1
      else
-      vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
-      vb.cpus = 2
+       vb.cpus = 2
      end
   end
 
