@@ -58,19 +58,15 @@ Vagrant.configure("2") do |config|
   config.vm.box_version = "20161214.0.1"
   config.vm.boot_timeout= 600
   
-  if "#{ENV['JENKINS_BUILD']}" == '1'
-    config.vm.network "private_network", name: 'vbox0', adapter: 1
-	#config.vm.network "private_network", type: 'dhcp', ip: "#{ENV['VAGRANT_VM_IP']}", adapter: 2
-	config.vm.network "forwarded_port", guest: 22, host: 7665, ip: "10.10.10.10", adapter: 2
-  else
-	config.vm.network "private_network", adapter: 1
-	#config.vm.network "private_network", type: 'dhcp', ip: "#{ENV['VAGRANT_VM_IP']}", adapter: 2
-  end
-  
   puts "IP of Virtualbox: #{ENV['VAGRANT_VM_IP']}"
 
   config.vm.define "#{ENV['VAGRANT_VM_NAME']}" do |subconfig|
+    subconfig.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}"
+	if "#{ENV['JENKINS_BUILD']}" == '1'
+		subconfig.vm.network :forwarded_port, :guest => 22, :host => 7665
+	end
     subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
+    config.vm.boot_timeout= 600
   end
 
   if "#{ENV['JENKINS_BUILD']}" == "1"
