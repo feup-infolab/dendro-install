@@ -56,19 +56,7 @@ Vagrant.configure("2") do |config|
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = "ubuntu/xenial64"
   config.vm.box_version = "20161214.0.1"
-  config.vm.boot_timeout= 120
-
-  if ENV['VAGRANT_VM_SSH_USERNAME'] != nil && ENV['VAGRANT_VM_SSH_PASSWORD'] != nil
-    config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
-
-    config.ssh.username=ENV['VAGRANT_VM_SSH_USERNAME']
-    puts "SSH username to connect to the VM will be " + config.ssh.username
-
-    config.ssh.password=ENV['VAGRANT_VM_SSH_PASSWORD']
-    puts "SSH password to connect to the VM will be " + config.ssh.password
-
-    config.ssh.insert_key = true
-  end
+  config.vm.boot_timeout= 180
 
   puts "IP of Virtualbox: #{ENV['VAGRANT_VM_IP']}"
 
@@ -79,10 +67,28 @@ Vagrant.configure("2") do |config|
 
   if "#{ENV['JENKINS_BUILD']}" == "1"
     puts "[JENKINS] Configuring Network adapters...."
-    #config.vm.network "private_network", :name => 'vboxnet0', :adapter => 1, ip: "#{ENV['VAGRANT_VM_IP']}"
+    config.vm.network "private_network", :name => 'vboxnet0', :adapter => 0, ip: "#{ENV['VAGRANT_VM_IP']}"
     #config.vm.network "private_network", :name => 'vboxnet0', :adapter => 2, ip: "10.10.10.10"
   else
     config.vm.network "private_network", ip: "#{ENV['VAGRANT_VM_IP']}"
+  end
+
+  if "#{ENV['JENKINS_BUILD']}" == "1"
+    puts "[JENKINS] Configuring SSH settings...."
+    config.ssh.insert_key = false
+    config.ssh.username = 'vagrant'
+    config.ssh.password = 'vagrant'
+  else
+    if ENV['VAGRANT_VM_SSH_USERNAME'] != nil && ENV['VAGRANT_VM_SSH_PASSWORD'] != nil
+      config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+
+      config.ssh.username=ENV['VAGRANT_VM_SSH_USERNAME']
+      puts "SSH username to connect to the VM will be " + config.ssh.username
+
+      config.ssh.password=ENV['VAGRANT_VM_SSH_PASSWORD']
+      puts "SSH password to connect to the VM will be " + config.ssh.password
+    end
+    config.ssh.insert_key = true
   end
 
   config.vm.provider "virtualbox" do |vb|
