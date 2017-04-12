@@ -80,19 +80,10 @@ Vagrant.configure("2") do |config|
 
   puts "AAAAAAA"
   puts "AAAAAAA JENKINS #{ENV['JENKINS_BUILD']}"
+
   if "#{ENV['JENKINS_BUILD']}" == "1"
-
-
+    puts "Turning off automatic network configuration because we are building on Jenkins"
     config.vm.network "public_network", auto_config: false
-
-    config.vm.provision "shell",
-      run: "always",
-      inline: "echo 'tou a configurar a rede!'"
-
-    # manual ip
-    config.vm.provision "shell",
-      run: "always",
-      inline: "ifconfig eth1 #{ENV['VAGRANT_VM_IP']} netmask 255.255.255.0 up"
   else
     config.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}"
   end
@@ -123,6 +114,24 @@ Vagrant.configure("2") do |config|
   destination_folder = destination_folder
 
   if(ENV['VAGRANT_VM_INSTALL']=="true") then
+
+    if "#{ENV['JENKINS_BUILD']}" == "1"
+      puts 'tou a configurar a rede! no VAGRANTFILE'
+      
+      config.vm.provision "shell",
+        run: "always",
+        inline: "echo 'tou a configurar a rede!'"
+
+      # manual ip
+      config.vm.provision "shell",
+        run: "always",
+        inline: "ifconfig eth1 #{ENV['VAGRANT_VM_IP']} netmask 255.255.255.0 up"
+
+      config.vm.provision "shell",
+        run: "always",
+        inline: "sudo service network-manager restart"
+    end
+
     puts "Vagrant File starting installation..."
     #send compressed scripts folder
     if File.file?("./scripts.tar.gz") then
