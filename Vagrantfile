@@ -80,7 +80,6 @@ Vagrant.configure("2") do |config|
   if "#{ENV['JENKINS_BUILD']}" == "1"
     puts "[JENKINS] Configuring Network adapters...."
     config.vm.network "private_network", :type => 'forwarded_port', :name => 'vboxnet0', :adapter => 1, ip: "#{ENV['VAGRANT_VM_IP']}"
-    config.vm.network "private_network", :type => 'forwarded_port', :name => 'vboxnet1', :adapter => 2, ip: "10.10.10.1"
   else
     config.vm.network "private_network", ip: "#{ENV['VAGRANT_VM_IP']}"
   end
