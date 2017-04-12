@@ -71,8 +71,8 @@ Vagrant.configure("2") do |config|
 
   if "#{ENV['JENKINS_BUILD']}" == "1"
     puts "[JENKINS] Configuring SSH settings...."
-	config.ssh.host="#{ENV['VAGRANT_VM_IP']}"
-	config.ssh.port="22"
+	config.ssh.host="127.0.0.1"
+	config.ssh.port="7665"
 	config.ssh.keys_only=true
 	config.ssh.keep_alive=true
     config.ssh.username = 'vagrant'
