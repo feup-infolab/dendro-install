@@ -67,23 +67,16 @@ Vagrant.configure("2") do |config|
     subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
   end
 
-  if "#{ENV['JENKINS_BUILD']}" == "1"
-    puts "[JENKINS] Configuring SSH settings...."
-    config.ssh.insert_key = false
-    config.ssh.username = 'vagrant'
-    config.ssh.password = 'vagrant'
-  else
-    if ENV['VAGRANT_VM_SSH_USERNAME'] != nil && ENV['VAGRANT_VM_SSH_PASSWORD'] != nil
-      config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+  if ENV['VAGRANT_VM_SSH_USERNAME'] != nil && ENV['VAGRANT_VM_SSH_PASSWORD'] != nil
+    config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
-      config.ssh.username=ENV['VAGRANT_VM_SSH_USERNAME']
-      puts "SSH username to connect to the VM will be " + config.ssh.username
+    config.ssh.username=ENV['VAGRANT_VM_SSH_USERNAME']
+    puts "SSH username to connect to the VM will be " + config.ssh.username
 
-      config.ssh.password=ENV['VAGRANT_VM_SSH_PASSWORD']
-      puts "SSH password to connect to the VM will be " + config.ssh.password
-    end
-    config.ssh.insert_key = true
+    config.ssh.password=ENV['VAGRANT_VM_SSH_PASSWORD']
+    puts "SSH password to connect to the VM will be " + config.ssh.password
   end
+  config.ssh.insert_key = true
 
   config.vm.provider "virtualbox" do |vb|
      # Display the VirtualBox GUI when booting the machine
