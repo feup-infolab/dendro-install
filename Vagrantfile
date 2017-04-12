@@ -80,6 +80,7 @@ Vagrant.configure("2") do |config|
   if "#{ENV['JENKINS_BUILD']}" == "1"
     puts "[JENKINS] Configuring Network adapters...."
     config.vm.network "private_network", :type => 'forwarded_port', :name => 'vboxnet0', :adapter => 1, ip: "#{ENV['VAGRANT_VM_IP']}"
+    config.vm.network "private_network", :type => 'forwarded_port', :name => 'vboxnet0', :adapter => 2, ip: 10.10.10.10
   else
     config.vm.network "private_network", ip: "#{ENV['VAGRANT_VM_IP']}"
   end
@@ -93,10 +94,11 @@ Vagrant.configure("2") do |config|
      vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
 
      if "#{ENV['JENKINS_BUILD']}" == "1"
-       puts "[JENKINS] IN DA BOX"
+       puts "[JENKINS] Configuring VM for build..."
        vb.memory = "1536"
        vb.customize ["modifyvm", :id, "--hwvirtex", "off"]
        vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
+       vb.customize ["modifyvm", :id, "--cableconnected2", "on"]
        vb.cpus = 1
      else
        vb.cpus = 2
