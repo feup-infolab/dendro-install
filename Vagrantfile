@@ -57,6 +57,7 @@ Vagrant.configure("2") do |config|
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = "ubuntu/xenial64"
   config.vm.box_version = "20161214.0.1"
+  config.vm.boot_timeout= 120
 
   if ENV['VAGRANT_VM_SSH_USERNAME'] != nil && ENV['VAGRANT_VM_SSH_PASSWORD'] != nil
     config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
@@ -75,17 +76,16 @@ Vagrant.configure("2") do |config|
   config.vm.define "#{ENV['VAGRANT_VM_NAME']}" do |subconfig|
     #subconfig.vm.network :forwarded_port, :guest => 22, :host => 7665
     subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
-    config.vm.boot_timeout= 120
 
     if "#{ENV['JENKINS_BUILD']}" == '1'
       subconfig.vm.network "public_network", auto_config: false
 
-      config.vm.provision "shell",
+      subconfig.vm.provision "shell",
         run: "always",
-        inline: "echo 'tou a configurar a rede'"
+        inline: "echo 'tou a configurar a rede!'"
 
       # manual ip
-      config.vm.provision "shell",
+      subconfig.vm.provision "shell",
         run: "always",
         inline: "ifconfig eth1 #{ENV['VAGRANT_VM_IP']} netmask 255.255.255.0 up"
 
