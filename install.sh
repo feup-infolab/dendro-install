@@ -108,8 +108,16 @@ fi
 
 info "Running vagrant up..."
 #vagrant box update
-vagrant up --provider virtualbox --provision ||
-die "There were errors installing Dendro."
+if [ "$JENKINS_BUILD" == "1" ]
+then
+  export VAGRANT_LOG="info"
+  vagrant up --provider virtualbox --provision ||
+  die "There were errors installing Dendro."
+  unset VAGRANT_LOG
+else
+  vagrant up --provider virtualbox --provision ||
+  die "There were errors installing Dendro."
+fi
 
 info "Cleaning up..."
 rm ./scripts.tar.gz
