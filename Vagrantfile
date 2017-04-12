@@ -96,7 +96,7 @@ Vagrant.configure("2") do |config|
        vb.cpus = 1
      else
       vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
-      vb.cpus = "2"
+      vb.cpus = 2
      end
   end
 
