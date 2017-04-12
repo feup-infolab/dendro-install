@@ -76,22 +76,22 @@ Vagrant.configure("2") do |config|
   config.vm.define "#{ENV['VAGRANT_VM_NAME']}" do |subconfig|
     #subconfig.vm.network :forwarded_port, :guest => 22, :host => 7665
     subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
+  end
 
-    if "#{ENV['JENKINS_BUILD']}" == '1'
-      subconfig.vm.network "public_network", auto_config: false
+  if "#{ENV['JENKINS_BUILD']}" == '1'
+    config.vm.network "public_network", auto_config: false
 
-      subconfig.vm.provision "shell",
-        run: "always",
-        inline: "echo 'tou a configurar a rede!'"
+    config.vm.provision "shell",
+      run: "always",
+      inline: "echo 'tou a configurar a rede!'"
 
-      # manual ip
-      subconfig.vm.provision "shell",
-        run: "always",
-        inline: "ifconfig eth1 #{ENV['VAGRANT_VM_IP']} netmask 255.255.255.0 up"
+    # manual ip
+    config.vm.provision "shell",
+      run: "always",
+      inline: "ifconfig eth1 #{ENV['VAGRANT_VM_IP']} netmask 255.255.255.0 up"
 
-    else
-      subconfig.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}"
-    end
+  else
+    config.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}"
   end
 
   config.vm.provider "virtualbox" do |vb|
