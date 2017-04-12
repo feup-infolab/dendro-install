@@ -28,18 +28,16 @@ if "#{ENV['JENKINS_BUILD']}" == '1'
   puts "[JENKINS] JENKINS build detected."
 end
 
-if "#{ENV['JENKINS_BUILD']}" != '1'
-  #install plugin to keep all the VBox Guest Additions updated.
-  required_plugins = %w(vagrant-share vagrant-vbguest)
+#install plugin to keep all the VBox Guest Additions updated.
+required_plugins = %w(vagrant-share vagrant-vbguest)
 
-  plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
-  if not plugins_to_install.empty?
-    puts "Installing plugins: #{plugins_to_install.join(' ')}"
-    if system "vagrant plugin install #{plugins_to_install.join(' ')}"
-      exec "vagrant #{ARGV.join(' ')}"
-    else
-      abort "Installation of one or more plugins has failed. Aborting."
-    end
+plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
+if not plugins_to_install.empty?
+  puts "Installing plugins: #{plugins_to_install.join(' ')}"
+  if system "vagrant plugin install #{plugins_to_install.join(' ')}"
+    exec "vagrant #{ARGV.join(' ')}"
+  else
+    abort "Installation of one or more plugins has failed. Aborting."
   end
 end
 
@@ -59,6 +57,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/xenial64"
   config.vm.box_version = "20161214.0.1"
   config.vm.boot_timeout= 180
+  config.vm.network "private_network", ip: "#{ENV['VAGRANT_VM_IP']}"
 
   puts "IP of Virtualbox: #{ENV['VAGRANT_VM_IP']}"
 
@@ -67,16 +66,23 @@ Vagrant.configure("2") do |config|
     subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
   end
 
-  if ENV['VAGRANT_VM_SSH_USERNAME'] != nil && ENV['VAGRANT_VM_SSH_PASSWORD'] != nil
-    config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+  if "#{ENV['JENKINS_BUILD']}" == "1"
+    puts "[JENKINS] Configuring SSH settings...."
+    config.ssh.insert_key = false
+    config.ssh.username = 'vagrant'
+    config.ssh.password = 'vagrant'
+  else
+    if ENV['VAGRANT_VM_SSH_USERNAME'] != nil && ENV['VAGRANT_VM_SSH_PASSWORD'] != nil
+      config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
-    config.ssh.username=ENV['VAGRANT_VM_SSH_USERNAME']
-    puts "SSH username to connect to the VM will be " + config.ssh.username
+      config.ssh.username=ENV['VAGRANT_VM_SSH_USERNAME']
+      puts "SSH username to connect to the VM will be " + config.ssh.username
 
-    config.ssh.password=ENV['VAGRANT_VM_SSH_PASSWORD']
-    puts "SSH password to connect to the VM will be " + config.ssh.password
+      config.ssh.password=ENV['VAGRANT_VM_SSH_PASSWORD']
+      puts "SSH password to connect to the VM will be " + config.ssh.password
+    end
+    config.ssh.insert_key = true
   end
-  config.ssh.insert_key = true
 
   config.vm.provider "virtualbox" do |vb|
      # Display the VirtualBox GUI when booting the machine
