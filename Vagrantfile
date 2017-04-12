@@ -27,7 +27,7 @@ if "#{ENV['JENKINS_BUILD']}" == '1'
   puts "JENKINS build detected."
 end
 
-if "#{ENV['JENKINS_BUILD']}" != '1'
+if "#{ENV['JENKINS_BUILD']}" != "1"
   #install plugin to keep all the VBox Guest Additions updated.
   required_plugins = %w(vagrant-share vagrant-vbguest)
 
@@ -78,7 +78,9 @@ Vagrant.configure("2") do |config|
     subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
   end
 
-  if "#{ENV['JENKINS_BUILD']}" == '1'
+  puts "AAAAAAA"
+  if "#{ENV['JENKINS_BUILD']}" == "1"
+
     config.vm.network "public_network", auto_config: false
 
     config.vm.provision "shell",
@@ -89,11 +91,11 @@ Vagrant.configure("2") do |config|
     config.vm.provision "shell",
       run: "always",
       inline: "ifconfig eth1 #{ENV['VAGRANT_VM_IP']} netmask 255.255.255.0 up"
-
   else
     config.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}"
   end
 
+  puts "BBBBB12897361287637182637812"
   config.vm.provider "virtualbox" do |vb|
      # Display the VirtualBox GUI when booting the machine
      # vb.gui = true
