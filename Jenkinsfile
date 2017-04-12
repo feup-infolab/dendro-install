@@ -34,7 +34,11 @@ pipeline {
     }
 
     post {
-      always {
+      success {
+        sh "chmod +x $WORKSPACE/uninstall.sh"
+        sh "set JENKINS_BUILD='1' $WORKSPACE/uninstall.sh"
+      }
+      failure {
         sh "chmod +x $WORKSPACE/uninstall.sh"
         sh "set JENKINS_BUILD='1' $WORKSPACE/uninstall.sh"
       }
