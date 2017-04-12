@@ -1,3 +1,4 @@
+    ]
 properties(
     [
         pipelineTriggers([cron('H * * * *')]),
