@@ -23,8 +23,9 @@ def sanitize_filename(filename)
 end
 
 puts "Configuring Vagrant VM #{ENV['VAGRANT_VM_NAME']} on IP #{ENV['VAGRANT_VM_IP']}."
+
 if "#{ENV['JENKINS_BUILD']}" == '1'
-  puts "JENKINS build detected."
+  puts "[JENKINS] JENKINS build detected."
 end
 
 #install plugin to keep all the VBox Guest Additions updated.
@@ -76,19 +77,15 @@ Vagrant.configure("2") do |config|
     subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
   end
 
-  puts "AAAAAAA"
-  puts "AAAAAAA JENKINS #{ENV['JENKINS_BUILD']}"
-
   if "#{ENV['JENKINS_BUILD']}" == "1"
-    puts "Turning off automatic network configuration because we are building on Jenkins"
-    config.vm.network "public_network", auto_config: false
+    puts "[JENKINS] Configuring Network adapters...."
+    config.vm.network "private_network", :type => 'dhcp', :name 'vboxnet0', :adapter 1
+    config.vm.network "private_network", :type => 'dhcp', :name 'vboxnet1', :adapter 2, ip: "#{ENV['VAGRANT_VM_IP']}"
   else
-    config.vm.network :private_network, ip: "#{ENV['VAGRANT_VM_IP']}"
+    config.vm.network "private_network", ip: "#{ENV['VAGRANT_VM_IP']}"
   end
 
-  puts "BBBBB12897361287637182637812"
   config.vm.provider "virtualbox" do |vb|
-    puts "BBBBB12897361287637182637812 BOXXXXXXXXXXXXXXXXX"
      # Display the VirtualBox GUI when booting the machine
      # vb.gui = true
      # Customize the amount of memory on the VM:
@@ -97,7 +94,7 @@ Vagrant.configure("2") do |config|
      vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
 
      if "#{ENV['JENKINS_BUILD']}" == "1"
-       puts "JENKINS IN DA BOX"
+       puts "[JENKINS] IN DA BOX"
        vb.memory = "1536"
        vb.customize ["modifyvm", :id, "--hwvirtex", "off"]
        vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
@@ -112,23 +109,6 @@ Vagrant.configure("2") do |config|
   destination_folder = destination_folder
 
   if(ENV['VAGRANT_VM_INSTALL']=="true") then
-
-    if "#{ENV['JENKINS_BUILD']}" == "1"
-      puts 'tou a configurar a rede! no VAGRANTFILE'
-
-      config.vm.provision "shell",
-        run: "always",
-        inline: "echo 'tou a configurar a rede!'"
-
-      # manual ip
-      config.vm.provision "shell",
-        run: "always",
-        inline: "ifconfig eth1 #{ENV['VAGRANT_VM_IP']} netmask 255.255.255.0 up"
-
-      config.vm.provision "shell",
-        run: "always",
-        inline: "sudo service network-manager restart"
-    end
 
     puts "Vagrant File starting installation..."
     #send compressed scripts folder
