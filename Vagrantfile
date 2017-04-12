@@ -71,21 +71,22 @@ Vagrant.configure("2") do |config|
 
   if "#{ENV['JENKINS_BUILD']}" == "1"
     puts "[JENKINS] Configuring SSH settings...."
-    config.ssh.insert_key = true
-	config.ssh.host="127.0.0.1"
-	config.ssh.host="7665"
+	config.ssh.host="#{ENV['VAGRANT_VM_IP']}"
+	config.ssh.port="22"
+	config.ssh.keys_only=true
+	config.ssh.keep_alive=true
     config.ssh.username = 'vagrant'
     config.ssh.password = 'vagrant'
   else
     if ENV['VAGRANT_VM_SSH_USERNAME'] != nil && ENV['VAGRANT_VM_SSH_PASSWORD'] != nil
-      config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
-
       config.ssh.username=ENV['VAGRANT_VM_SSH_USERNAME']
       puts "SSH username to connect to the VM will be " + config.ssh.username
 
       config.ssh.password=ENV['VAGRANT_VM_SSH_PASSWORD']
       puts "SSH password to connect to the VM will be " + config.ssh.password
     end
+	
+	config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
     config.ssh.insert_key = true
   end
 
