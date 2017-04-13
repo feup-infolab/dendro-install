@@ -63,16 +63,16 @@ Vagrant.configure("2") do |config|
   config.vm.define "#{ENV['VAGRANT_VM_NAME']}" do |subconfig|
     subconfig.vm.network "private_network", ip: "#{ENV['VAGRANT_VM_IP']}"
 	   if "#{ENV['JENKINS_BUILD']}" == '1'
-		     subconfig.vm.network :forwarded_port, :guest => 22, :host => 8665
+		     subconfig.vm.network :forwarded_port, :guest => 22, :host => 7665
      end
      subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
   end
 
   if "#{ENV['JENKINS_BUILD']}" == "1"
     puts "[JENKINS] Configuring SSH settings...."
-    config.ssh.host="127.0.0.1"
-    config.ssh.port="8665"
-    config.ssh.keys_only=true
+    #config.ssh.host="127.0.0.1"
+    #config.ssh.port="8665"
+    #config.ssh.keys_only=true
     config.ssh.keep_alive=true
     config.ssh.username = 'vagrant'
     config.ssh.password = 'vagrant'
