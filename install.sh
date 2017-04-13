@@ -108,8 +108,19 @@ fi
 
 info "Running vagrant up..."
 #vagrant box update
-vagrant up --provider virtualbox --provision ||
-die "There were errors installing Dendro."
+if [ "$JENKINS_BUILD" == "1" ]
+then
+  export VAGRANT_LOG="debug"
+  OLD_SSH_AUTH_SOCK=$SSH_AUTH_SOCK
+  SSH_AUTH_SOCK=""
+  vagrant up --provider virtualbox --provision ||
+  die "There were errors installing Dendro."
+  SSH_AUTH_SOCK=$OLD_SSH_AUTH_SOCK
+  unset VAGRANT_LOG
+else
+  vagrant up --provider virtualbox --provision ||
+  die "There were errors installing Dendro."
+fi
 
 info "Cleaning up..."
 rm ./scripts.tar.gz

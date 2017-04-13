@@ -14,13 +14,17 @@ pipeline {
               sh "export JENKINS_BUILD='1'"
             }
         }
-        stage('Build') {
+        stage('Destroy existing VM if exists') {
             steps {
                 sh "chmod +x $WORKSPACE/uninstall.sh && env JENKINS_BUILD='1' $WORKSPACE/uninstall.sh"
+            }
+        }
+        stage('Install VM') {
+            steps {
                 sh "chmod +x $WORKSPACE/install.sh && env JENKINS_BUILD='1' $WORKSPACE/install.sh"
             }
         }
-        stage('Ping') {
+        stage('Ping Dendro in VM') {
             steps {
                 sh "chmod +x $WORKSPACE/jenkins_scripts/ping_dendro.sh && $WORKSPACE/jenkins_scripts/ping_dendro.sh 120 http://192.168.56.249:3007"
             }
@@ -33,14 +37,14 @@ pipeline {
         }
     }
 
-    post {
-      success {
-        sh "chmod +x $WORKSPACE/uninstall.sh"
-        sh "set JENKINS_BUILD='1' $WORKSPACE/uninstall.sh"
-      }
-      failure {
-        sh "chmod +x $WORKSPACE/uninstall.sh"
-        sh "set JENKINS_BUILD='1' $WORKSPACE/uninstall.sh"
-      }
-    }
+    // post {
+    //   success {
+    //     sh "chmod +x $WORKSPACE/uninstall.sh"
+    //     sh "set JENKINS_BUILD='1' $WORKSPACE/uninstall.sh"
+    //   }
+    //   failure {
+    //     sh "chmod +x $WORKSPACE/uninstall.sh"
+    //     sh "set JENKINS_BUILD='1' $WORKSPACE/uninstall.sh"
+    //   }
+    // }
 }

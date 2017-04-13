@@ -54,36 +54,35 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
+
   config.vm.box = "ubuntu/xenial64"
   config.vm.box_version = "20161214.0.1"
-  config.vm.boot_timeout= 120
-
-  if ENV['VAGRANT_VM_SSH_USERNAME'] != nil && ENV['VAGRANT_VM_SSH_PASSWORD'] != nil
-    config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
-
-    config.ssh.username=ENV['VAGRANT_VM_SSH_USERNAME']
-    puts "SSH username to connect to the VM will be " + config.ssh.username
-
-    config.ssh.password=ENV['VAGRANT_VM_SSH_PASSWORD']
-    puts "SSH password to connect to the VM will be " + config.ssh.password
-
-    config.ssh.insert_key = true
-  end
+  config.vm.boot_timeout= 600
 
   puts "IP of Virtualbox: #{ENV['VAGRANT_VM_IP']}"
 
   config.vm.define "#{ENV['VAGRANT_VM_NAME']}" do |subconfig|
-    #subconfig.vm.network :forwarded_port, :guest => 22, :host => 7665
+    subconfig.vm.network "private_network", ip: "#{ENV['VAGRANT_VM_IP']}"
     subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
   end
 
   if "#{ENV['JENKINS_BUILD']}" == "1"
-    puts "[JENKINS] Configuring Network adapters...."
-    #config.vm.network "private_network", :name => 'vboxnet0', :adapter => 1, ip: "#{ENV['VAGRANT_VM_IP']}"
-    #config.vm.network "private_network", :name => 'vboxnet0', :adapter => 2, ip: "10.10.10.10"
+    puts "[JENKINS] Configuring SSH settings...."
+    config.ssh.keep_alive=true
+    config.ssh.username = 'vagrant'
+    config.ssh.password = 'vagrant'
   else
-    config.vm.network "private_network", ip: "#{ENV['VAGRANT_VM_IP']}"
+      if ENV['VAGRANT_VM_SSH_USERNAME'] != nil && ENV['VAGRANT_VM_SSH_PASSWORD'] != nil
+        config.ssh.username=ENV['VAGRANT_VM_SSH_USERNAME']
+        puts "SSH username to connect to the VM will be " + config.ssh.username
+
+        config.ssh.password=ENV['VAGRANT_VM_SSH_PASSWORD']
+        puts "SSH password to connect to the VM will be " + config.ssh.password
+      end
   end
+
+  config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+  config.ssh.insert_key = true
 
   config.vm.provider "virtualbox" do |vb|
      # Display the VirtualBox GUI when booting the machine
@@ -95,7 +94,6 @@ Vagrant.configure("2") do |config|
 
      if "#{ENV['JENKINS_BUILD']}" == "1"
        puts "[JENKINS] Configuring VM for build..."
-       vb.memory = "1536"
        vb.customize ["modifyvm", :id, "--hwvirtex", "off"]
        vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
        vb.customize ["modifyvm", :id, "--cableconnected2", "on"]
@@ -103,6 +101,8 @@ Vagrant.configure("2") do |config|
      else
        vb.cpus = 2
      end
+
+     vb.memory = "2048"
   end
 
   time = sanitize_filename(Time.new.inspect)
