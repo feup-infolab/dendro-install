@@ -22,12 +22,7 @@ def sanitize_filename(filename)
   return fn.join '.'
 end
 
-puts "Configuring Vagrant VM #{ENV['VAGRANT_VM_NAME']} on IP #{ENV['VAGRANT_VM_IP']}."
-
-if "#{ENV['JENKINS_BUILD']}" == '1'
-  puts "[JENKINS] JENKINS build detected."
-end
-
+###INSTALL PLUGINS
 #install plugin to keep all the VBox Guest Additions updated.
 required_plugins = %w(vagrant-share vagrant-vbguest)
 
@@ -39,6 +34,13 @@ if not plugins_to_install.empty?
   else
     abort "Installation of one or more plugins has failed. Aborting."
   end
+end
+
+###Configuration
+puts "Configuring Vagrant VM #{ENV['VAGRANT_VM_NAME']} on IP #{ENV['VAGRANT_VM_IP']}."
+
+if "#{ENV['JENKINS_BUILD']}" == '1'
+  puts "[JENKINS] JENKINS build detected."
 end
 
 Vagrant.configure("2") do |config|
@@ -56,14 +58,14 @@ Vagrant.configure("2") do |config|
   # boxes at https://atlas.hashicorp.com/search.
 
   if "#{ENV['JENKINS_BUILD']}" == "1"
-    config.vm.box = "ubuntu/xenial32"
-    config.vm.box_version = "20170414.2.0"
+    config.vm.box = "ubuntu/precise32"
+    config.vm.box_version = "20170330.0.0"
+    config.vm.boot_timeout= 3600
   else
     config.vm.box = "ubuntu/xenial64"
-    config.vm.box_version = "20161214.0.1"
+    config.vm.box_version = "20170331.0.0"
+    config.vm.boot_timeout= 600
   end
-
-  config.vm.boot_timeout= 600
 
   puts "IP of Virtualbox: #{ENV['VAGRANT_VM_IP']}"
 
@@ -72,19 +74,12 @@ Vagrant.configure("2") do |config|
     subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
   end
 
-  if "#{ENV['JENKINS_BUILD']}" == "1"
-    puts "[JENKINS] Configuring SSH settings...."
-    config.ssh.keep_alive=true
-    config.ssh.username = 'vagrant'
-    config.ssh.password = 'vagrant'
-  else
-      if ENV['VAGRANT_VM_SSH_USERNAME'] != nil && ENV['VAGRANT_VM_SSH_PASSWORD'] != nil
-        config.ssh.username=ENV['VAGRANT_VM_SSH_USERNAME']
-        puts "SSH username to connect to the VM will be " + config.ssh.username
+  if ENV['VAGRANT_VM_SSH_USERNAME'] != nil && ENV['VAGRANT_VM_SSH_PASSWORD'] != nil
+    config.ssh.username=ENV['VAGRANT_VM_SSH_USERNAME']
+    puts "SSH username to connect to the VM will be " + config.ssh.username
 
-        config.ssh.password=ENV['VAGRANT_VM_SSH_PASSWORD']
-        puts "SSH password to connect to the VM will be " + config.ssh.password
-      end
+    config.ssh.password=ENV['VAGRANT_VM_SSH_PASSWORD']
+    puts "SSH password to connect to the VM will be " + config.ssh.password
   end
 
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
@@ -101,9 +96,9 @@ Vagrant.configure("2") do |config|
      if "#{ENV['JENKINS_BUILD']}" == "1"
        puts "[JENKINS] Configuring VM for build..."
        vb.customize ["modifyvm", :id, "--hwvirtex", "off"]
-       vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
-       vb.customize ["modifyvm", :id, "--cableconnected2", "on"]
        vb.cpus = 1
+       #vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
+       #vb.customize ["modifyvm", :id, "--cableconnected2", "on"]
      else
        vb.cpus = 2
      end

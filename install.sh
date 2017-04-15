@@ -110,13 +110,13 @@ info "Running vagrant up..."
 #vagrant box update
 if [ "$JENKINS_BUILD" == "1" ]
 then
-  export VAGRANT_LOG="info"
-  OLD_SSH_AUTH_SOCK=$SSH_AUTH_SOCK
-  SSH_AUTH_SOCK=""
+  #export VAGRANT_LOG="info"
+  #OLD_SSH_AUTH_SOCK=$SSH_AUTH_SOCK
+  #SSH_AUTH_SOCK=""
   vagrant up --provider virtualbox --provision ||
   die "There were errors installing Dendro."
-  SSH_AUTH_SOCK=$OLD_SSH_AUTH_SOCK
-  unset VAGRANT_LOG
+  #SSH_AUTH_SOCK=$OLD_SSH_AUTH_SOCK
+  #unset VAGRANT_LOG
 else
   vagrant up --provider virtualbox --provision ||
   die "There were errors installing Dendro."
