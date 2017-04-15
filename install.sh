@@ -110,7 +110,7 @@ info "Running vagrant up..."
 #vagrant box update
 if [ "$JENKINS_BUILD" == "1" ]
 then
-  export VAGRANT_LOG="debug"
+  export VAGRANT_LOG="info"
   OLD_SSH_AUTH_SOCK=$SSH_AUTH_SOCK
   SSH_AUTH_SOCK=""
   vagrant up --provider virtualbox --provision ||
