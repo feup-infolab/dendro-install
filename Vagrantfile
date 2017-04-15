@@ -55,8 +55,14 @@ Vagrant.configure("2") do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
 
-  config.vm.box = "ubuntu/xenial64"
-  config.vm.box_version = "20161214.0.1"
+  if "#{ENV['JENKINS_BUILD']}" == "1"
+    config.vm.box = "ubuntu/xenial32"
+    config.vm.box_version = "20170414.2.0"
+  else
+    config.vm.box = "ubuntu/xenial64"
+    config.vm.box_version = "20161214.0.1"
+  end
+
   config.vm.boot_timeout= 600
 
   puts "IP of Virtualbox: #{ENV['VAGRANT_VM_IP']}"
