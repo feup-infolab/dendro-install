@@ -22,7 +22,7 @@ sudo apt-get -y -f -qq install unzip devscripts autoconf automake libtool flex b
 sudo apt-get -y -f -qq install  systemd libpam-systemd systemd-ui
 
 #install mutt (mailer) without interactive screens
-sudo DEBIAN_FRONTEND=noninteractive apt-get -y install mutt
+sudo DEBIAN_FRONTEND=noninteractive apt-get -yq install mutt
 
  #echo "This is the message body" | mutt -a ./log.log -s "loladazinha" -- username@server.com
 
