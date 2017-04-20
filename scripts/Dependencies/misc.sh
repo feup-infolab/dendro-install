@@ -17,6 +17,9 @@ setup_dir=$(pwd)
 sudo apt-get update &&
 sudo apt-get -y -f -qq install unzip devscripts autoconf automake libtool flex bison gperf gawk m4 make libssl-dev git imagemagick subversion zip htop redis-server htop mongodb --fix-missing || die "Failed to install preliminary dependencies. Please check any prior error messages."
 
+#install mutt (mailer) without interactive screens
+sudo DEBIAN_FRONTEND=noninteractive apt-get -yq install mutt
+
 info "Installing text extraction tools..."
 #install text extraction stuff
 # (needed for https://github.com/dbashford/textract)
