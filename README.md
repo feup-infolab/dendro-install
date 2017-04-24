@@ -207,8 +207,12 @@ avn setup
 git clone https://github.com/feup-infolab/dendro.git
 cd dendro
 
+#on Windows you may need to do this to avoid git certificate errors (do this only if you get errors, as this is just a workaround and will skip certificate validations)
+git config --global http.sslverify "false"
+
 #install dependencies. Will also run bower install whenever needed
 npm install #this is needed when running npm install with sudo to install global modules
+
 grunt #use grunt to put everything in place
 
 #start app
