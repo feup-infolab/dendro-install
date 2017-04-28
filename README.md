@@ -254,6 +254,14 @@ If you want to run tests, run the program or generate test coverage reports, the
 
 ![npm](https://github.com/feup-infolab/dendro-install/blob/master/images/npm-codecoverage.png?raw=true)
 
+### Configuring Visual Studio 2017 for running tests
+
+Create a new run configuration and customize it as in the following screens. This is useful for debugging mocha tests in WebStorm when the breakpoints are not being hit (we believe this is a bug with WebStorm).
+
+![npm](https://github.com/feup-infolab/dendro-install/blob/master/images/visual_studio_debug_1.png?raw=true)
+
+![npm](https://github.com/feup-infolab/dendro-install/blob/master/images/visual_studio_debug_2.png?raw=true)
+
 #### Watch mode (run tests on any file modification)
 
 Open a terminal and run `npm run watch`. All tests will be run whenever you save a file.
