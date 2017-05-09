@@ -187,6 +187,12 @@ var possible_arguments = {
 	},
 
 	//startup
+	"load_databases" :
+	{
+		type: "boolean",
+		example : "\"true\" | \"false\"",
+		tip : "Coming soon"
+	},
 
 	"reload_administrators_on_startup" :
 	{
@@ -628,6 +634,7 @@ var write_dendro_configuration_file = function ()
       }
 		},
 		"startup" : {
+			"load_databases" : get_argument_by_name('load_databases'),
 			"reload_administrators_on_startup" : get_argument_by_name('reload_administrators_on_startup'),
 			"reload_demo_users_on_startup" : get_argument_by_name('reload_demo_users_on_startup'),
 			"reload_ontologies_on_startup" : get_argument_by_name('reload_ontologies_on_startup')

@@ -58,6 +58,7 @@ nodejs $running_folder/build_configuration_files.js \
 	--temp_files_directory $temp_files_directory \
 	--demo_mode_active $demo_mode_active \
 	--dendro_theme $dendro_theme \
+	--load_databases $load_databases \
 	--reload_administrators_on_startup $reload_administrators_on_startup \
 	--reload_demo_users_on_startup $reload_demo_users_on_startup \
 	--reload_ontologies_on_startup $reload_ontologies_on_startup \

@@ -36,6 +36,7 @@ recommender_installation_path='/dendro_recommender'
 	temp_files_directory="/tmp/dendro/${active_deployment_setting}"
 	demo_mode_active="true"
 	dendro_theme="lumen"
+	load_databases="true"
 	reload_administrators_on_startup="true"
 	reload_demo_users_on_startup="true"
 	reload_ontologies_on_startup="true"
