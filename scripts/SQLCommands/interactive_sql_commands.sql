@@ -1,5 +1,7 @@
 SPARQL LOAD <http://www.w3.org/ns/auth/cert#> INTO graph <http://www.w3.org/ns/auth/cert#>;
 
+SPARQL LOAD <http://topbraid.org/schema/schema.rdf> INTO graph <http://schema.org/>;
+
 SPARQL CLEAR GRAPH <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>;
 SPARQL LOAD <http://lov.okfn.org/dataset/lov/vocabs/nfo/versions/2012-06-10.n3> INTO graph <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('nfo', 2);
