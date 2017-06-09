@@ -1,6 +1,11 @@
 SPARQL LOAD <http://www.w3.org/ns/auth/cert#> INTO graph <http://www.w3.org/ns/auth/cert#>;
 
 SPARQL CLEAR GRAPH <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/SCHEMA_ORG/schema.rdf> INTO graph <http://schema.org/>;
+DB.DBA.XML_REMOVE_NS_BY_PREFIX('schema', 2);
+DB.DBA.XML_SET_NS_DECL ('schema', 'http://schema.org/', 2);
+
+SPARQL CLEAR GRAPH <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>;
 SPARQL LOAD <http://lov.okfn.org/dataset/lov/vocabs/nfo/versions/2012-06-10.n3> INTO graph <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('nfo', 2);
 DB.DBA.XML_SET_NS_DECL ('nfo', 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#', 2);
