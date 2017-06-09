@@ -753,7 +753,26 @@ var write_dendro_configuration_file = function ()
 	      }
 	    },
 			"analytics_tracking_code" : get_argument_by_name("google_analytics_tracking_code"),
-			"public_ontologies" : get_argument_by_name("public_ontologies")
+			"public_ontologies" : get_argument_by_name("public_ontologies"),
+			"authentication" :
+	    {
+	      "default" : {
+	        "enabled" : true
+	      },
+	      "orcid" : {
+	        "enabled" : true,
+	        "client_id" : get_argument_by_name("orcid_client_id"),
+	        "client_secret" : get_argument_by_name("orcid_client_secret"),
+	        "callback_url" : "/auth/orcid/callback"
+	      },
+	      "saml" : {
+	        "enabled" : false,
+	        "path": "/auth/saml/callback",
+	        "entry_point": "https://openidp.feide.no/simplesaml/saml2/idp/SSOService.php",
+	        "issuer": "passport-saml",
+	        "button_text" : "Sign-in with SIGARRA"
+	      }
+	    }
 	}
 
 	//console.log("FINISHED CONFIGURATION"));

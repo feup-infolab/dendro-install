@@ -54,3 +54,7 @@ svn_user_password="password_for_dendro_svn_repo"
 
 teamcity_admin_username="jrocha"
 teamcity_admin_password="bolachinhas_do_melhor_que_ha"
+
+#orcid authentication
+	orcid_client_id="ORCID_CLIENT_ID"
+	orcid_client_secret="ORCID_CLIENT_SECRET"

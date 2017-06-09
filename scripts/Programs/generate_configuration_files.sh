@@ -81,6 +81,8 @@ nodejs $running_folder/build_configuration_files.js \
 	--google_analytics_tracking_code $google_analytics_tracking_code \
 	--project_descriptors_recommender_active $project_descriptors_recommender_active \
 	--public_ontologies $public_ontologies \
+	--orcid_client_id $orcid_client_id \
+	--orcid_client_secret $orcid_client_secret \
 	--pipe_console_to_logfile $pipe_console_to_logfile || die "Failure generating configuration files."
 
 
