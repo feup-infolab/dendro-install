@@ -1,6 +1,6 @@
 # Contents
 
-[![Build Status](http://buildserver-rdm.up.pt:8111/job/Dendro%20Install/job/dendro-install/job/master/badge/icon)](http://buildserver-rdm.up.pt:8111/job/Dendro%20Install/job/dendro-install/job/master/)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/75e227c63f6e47b494763d5c81366ad4)](https://www.codacy.com/app/silvae86/dendro-install?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=feup-infolab/dendro-install&amp;utm_campaign=Badge_Grade)
 
 # What is Dendro?
 
