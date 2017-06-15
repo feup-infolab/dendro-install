@@ -1,6 +1,6 @@
-# Contents
-
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/75e227c63f6e47b494763d5c81366ad4)](https://www.codacy.com/app/silvae86/dendro-install?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=feup-infolab/dendro-install&amp;utm_campaign=Badge_Grade)
+
+# Contents
 
 # What is Dendro?
 
