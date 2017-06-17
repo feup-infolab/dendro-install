@@ -99,6 +99,16 @@ SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab-rdm/dendro-ontologie
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('gm', 2);
 DB.DBA.XML_SET_NS_DECL ('gm', 'http://dendro.fe.up.pt/ontology/game/', 2);
 
+SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/tvu#>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/TVU/TVU_XML.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/tvu#>;
+DB.DBA.XML_REMOVE_NS_BY_PREFIX('tvu', 2);
+DB.DBA.XML_SET_NS_DECL ('tvu', 'http://dendro.fe.up.pt/ontology/tvu#', 2);
+
+SPARQL CLEAR GRAPH <http://purl.org/ontology/po/>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/PO/po_2010-02-20.n3> INTO GRAPH <http://dendro.fe.up.pt/ontology/tvu#>;
+DB.DBA.XML_REMOVE_NS_BY_PREFIX('po', 2);
+DB.DBA.XML_SET_NS_DECL ('po', 'http://purl.org/ontology/po/', 2);
+
 GRANT SPARQL_UPDATE to "SPARQL";
 
 GRANT execute ON SPARQL_INSERT_DICT_CONTENT TO "SPARQL";
