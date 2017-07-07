@@ -80,7 +80,7 @@ var possible_arguments = {
 	"load_databases_on_startup" : boolean_t,
 	"reload_administrators_on_startup" : boolean_t,
 	"reload_demo_users_on_startup" : boolean_t,
-	"reload_ontologies_on_startup" : boolean_t
+	"reload_ontologies_on_startup" : boolean_t,
 	"clear_session_store_on_startup" : boolean_t,
 
 	//logging
@@ -157,7 +157,7 @@ var get_argument_by_name = function(argument)
 			}
 			else
 			{
-				console.log("[ERROR] Unable to parse flag " + argument + ". It must be a boolean (true/false). " + e.message);
+				console.log("[ERROR] Unable to parse flag " + argument + ". It must be a boolean (true/false). Got " + argumentValue );
 				process.exit(1);
 			}
 		}

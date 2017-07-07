@@ -27,7 +27,7 @@ else
 	exit
 fi
 
-nodejs $running_folder/build_configuration_files.js \
+node $running_folder/build_configuration_files.js \
 	--dr_config_output_folder_location "${running_folder}/generated_configurations" \
 	--dendro_config_output_folder_location "${running_folder}/generated_configurations" \
 	--dr_config_template_abs_path "${running_folder}/DendroRecommender/application.conf.template" \
@@ -102,7 +102,7 @@ nodejs $running_folder/build_configuration_files.js \
 	--orcid_authentication_enabled $orcid_authentication_enabled \
 	--orcid_client_id $orcid_client_id \
 	--orcid_client_secret $orcid_client_secret \
-	--orcid_client_secret $orcid_auth_callback_url \
+	--orcid_auth_callback_url $orcid_auth_callback_url \
 	--saml_authentication_enabled $saml_authentication_enabled \
 	--saml_authentication_callback_path $saml_authentication_callback_path \
 	--saml_authentication_entry_point $saml_authentication_entry_point \

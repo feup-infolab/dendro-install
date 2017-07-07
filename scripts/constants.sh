@@ -83,7 +83,7 @@ recommender_installation_path='/dendro_recommender'
 		mongodb_host="127.0.0.1"
 		mongodb_port=27017
 		mongodb_files_collection_name="${active_deployment_setting}_data"
-		mongodb_sessions_collection_name="${active_deployment_setting}_sessions"
+		mongodb_sessions_store_collection_name="${active_deployment_setting}_sessions"
 
 		#jenkins
 		jenkins_port=8080
@@ -106,7 +106,7 @@ recommender_installation_path='/dendro_recommender'
 	reload_administrators_on_startup="true"
 	reload_demo_users_on_startup="true"
 	reload_ontologies_on_startup="true"
-	clear_session_store="true"
+	clear_session_store_on_startup="true"
 
 #logging
 	pipe_console_to_logfile="true"
