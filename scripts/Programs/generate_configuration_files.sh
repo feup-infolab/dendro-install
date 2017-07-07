@@ -41,6 +41,16 @@ nodejs $running_folder/build_configuration_files.js \
 	--eudat_community_id $eudat_community_id \
 	--elasticsearch_port $elasticsearch_port \
 	--elasticsearch_host $elasticsearch_host \
+	--cache_active $cache_active \
+	--cache_type $cache_type \
+	--redis_cache_active $redis_cache_active \
+	--redis_cache_host $redis_cache_active \
+	--mongodb_cache_active $mongodb_cache_active \
+	--mongodb_cache_host $mongodb_cache_host \
+	--mongodb_cache_port $mongodb_cache_port \
+	--mongodb_cache_database $mongodb_cache_database \
+	--last_modified_caching $last_modified_caching \
+	--cache_period_in_seconds $cache_period_in_seconds \
 	--virtuoso_host $virtuoso_host \
 	--virtuoso_port $virtuoso_port \
 	--virtuoso_dba_user $virtuoso_dba_user \
@@ -49,38 +59,56 @@ nodejs $running_folder/build_configuration_files.js \
 	--mongodb_port $mongodb_port \
 	--mongodb_dba_user $mongodb_dba_user \
 	--mongodb_dba_password $mongodb_dba_password \
-	--mongodb_collection_name $mongodb_collection_name \
+	--mongodb_files_collection_name $mongodb_files_collection_name \
+	--mongodb_sessions_store_collection_name $mongodb_sessions_store_collection_name \
 	--mysql_host $mysql_host \
 	--mysql_port $mysql_port \
 	--mysql_dba_user $mysql_username \
 	--mysql_password $mysql_root_password \
 	--mysql_db_name $mysql_database_to_create \
+	--max_upload_size $max_upload_size \
+	--max_project_size $max_project_size \
 	--temp_files_directory $temp_files_directory \
 	--demo_mode_active $demo_mode_active \
 	--dendro_theme $dendro_theme \
+	--load_databases_on_startup $load_databases_on_startup \
 	--reload_administrators_on_startup $reload_administrators_on_startup \
 	--reload_demo_users_on_startup $reload_demo_users_on_startup \
 	--reload_ontologies_on_startup $reload_ontologies_on_startup \
+	--clear_session_store_on_startup $clear_session_store_on_startup \
+	--pipe_console_to_logfile $pipe_console_to_logfile \
+	--log_request_times $logging_log_request_times \
+	--custom_exception_logging $logging_custom_exception_logging \
 	--config_human_readable_name $config_human_readable_name \
 	--dendro_recommender_active $dendro_recommender_active \
 	--dendro_recommender_host $dendro_recommender_host \
 	--dendro_recommender_port $dendro_recommender_port \
+	--dr_all_ontologies_uri $dendro_recommender_all_ontologies_url \
 	--interactions_table_stage1 $interactions_table_stage1 \
 	--interactions_table_stage2 $interactions_table_stage2 \
-	--emailing_account_gmail_user $emailing_account_gmail_user \
-	--emailing_account_gmail_password $emailing_account_gmail_password \
-	--last_modified_caching $last_modified_caching \
-	--cache_period_in_seconds $cache_period_in_seconds \
-	--dr_all_ontologies_uri $dendro_recommender_all_ontologies_url \
-	--dr_interactions_table $dendro_recommender_interactions_table \
 	--dr_stage1_active $dr_stage1_active \
 	--dr_stage2_active $dr_stage2_active \
+	--project_descriptors_recommender_active $project_descriptors_recommender_active \
+	--emailing_account_gmail_reply_to_address $emailing_account_gmail_reply_to_address \
+	--emailing_account_gmail_user $emailing_account_gmail_user \
+	--emailing_account_gmail_password $emailing_account_gmail_password \
+	--dr_all_ontologies_uri $dendro_recommender_all_ontologies_url \
+	--dr_interactions_table $dendro_recommender_interactions_table \
 	--gmaps_api_key $gmaps_api_key \
 	--gmaps_map_height $gmaps_map_height \
 	--google_analytics_tracking_code $google_analytics_tracking_code \
-	--project_descriptors_recommender_active $project_descriptors_recommender_active \
 	--public_ontologies $public_ontologies \
-	--pipe_console_to_logfile $pipe_console_to_logfile || die "Failure generating configuration files."
+	--default_authentication_enabled $default_authentication_enabled \
+	--orcid_authentication_enabled $orcid_authentication_enabled \
+	--orcid_client_id $orcid_client_id \
+	--orcid_client_secret $orcid_client_secret \
+	--orcid_client_secret $orcid_auth_callback_url \
+	--saml_authentication_enabled $saml_authentication_enabled \
+	--saml_authentication_callback_path $saml_authentication_callback_path \
+	--saml_authentication_entry_point $saml_authentication_entry_point \
+	--saml_authentication_issuer $saml_authentication_issuer \
+	--saml_authentication_button_text $saml_authentication_button_text \
+	|| die "Failure generating configuration files."
 
 
 success "Generated configuration files."

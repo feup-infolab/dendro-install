@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+dendro_config_output_folder_location="."
+
 #global
 active_deployment_setting='dendroVagrantDemo'
 #will be used to generate URLs relative to a base address, so set it wisely
@@ -12,6 +14,10 @@ recommender_installation_path='/dendro_recommender'
 		mysql_host='127.0.0.1'
 		mysql_port='3306'
 		mysql_database_to_create=$active_deployment_setting
+
+	#uploads
+		max_upload_size="2147483648"
+		max_project_size="5368709120"
 
 #dendro
 	#startup services
@@ -36,19 +42,7 @@ recommender_installation_path='/dendro_recommender'
 	temp_files_directory="/tmp/dendro/${active_deployment_setting}"
 	demo_mode_active="true"
 	dendro_theme="lumen"
-	reload_administrators_on_startup="true"
-	reload_demo_users_on_startup="true"
-	reload_ontologies_on_startup="true"
 	config_human_readable_name='DendroVagrantDemo'
-
-	#logging
- 	logging_format="dev"
- 	logging_app_logs_folder="logs/app"
- 	logging_log_request_times="true"
- 	logging_request_times_log_folder="logs/request_times"
- 	logging_log_requests_in_apache_format="true"
- 	logging_requests_in_apache_format_log_folder="logs/requests_apache_format"
-	pipe_console_to_logfile="false"
 
  	#version
  	config_human_readable_name='Dendro RDM Demo @ UPorto'
@@ -56,6 +50,7 @@ recommender_installation_path='/dendro_recommender'
 	#descriptor recommendation
 	interactions_table_stage1="interactions_${active_deployment_setting}_stage1"
 	interactions_table_stage2="interactions_${active_deployment_setting}_stage2"
+	dr_interactions_table="interactions_${active_deployment_setting}_stage2"
 
 	dr_stage1_active="false"
 	dr_stage2_active="true"
@@ -73,7 +68,7 @@ recommender_installation_path='/dendro_recommender'
 
 	#dependencies
 		#nodejs version
-		node_version="7.8.0"
+		node_version="8.1.2"
 
 		#elasticsearch
 		elasticsearch_port=9200
@@ -87,28 +82,73 @@ recommender_installation_path='/dendro_recommender'
 		#mongodb
 		mongodb_host="127.0.0.1"
 		mongodb_port=27017
-		mongodb_collection_name="${active_deployment_setting}_data"
+		mongodb_files_collection_name="${active_deployment_setting}_data"
+		mongodb_sessions_collection_name="${active_deployment_setting}_sessions"
 
 		#jenkins
 		jenkins_port=8080
 		jenkins_config_file="/etc/default/jenkins"
 
+	#cache
+		cache_active="true"
+		cache_type="mongodb"
+			#redis
+				redis_cache_active="true"
+				redis_cache_host="127.0.0.1"
+			#mongodb
+				mongodb_cache_active="true"
+				mongodb_cache_host="127.0.0.1"
+				mongodb_cache_port="27017"
+				mongodb_cache_database="192.168.56.249:3007"
+
+#startup
+	load_databases_on_startup="true"
+	reload_administrators_on_startup="true"
+	reload_demo_users_on_startup="true"
+	reload_ontologies_on_startup="true"
+	clear_session_store="true"
+
+#logging
+	pipe_console_to_logfile="true"
+ 	logging_format="dev"
+ 	logging_app_logs_folder="logs/app"
+ 	logging_log_request_times="true"
+ 	logging_request_times_log_folder="logs/request_times"
+ 	logging_log_requests_in_apache_format="true"
+ 	logging_requests_in_apache_format_log_folder="logs/requests_apache_format"
+	logging_suppress_all_logs="false"
+	logging_suppress_all_errors="false"
+	logging_log_all_requests="false"
+	logging_log_emailing="false"
+	logging_custom_exception_logging="true"
+
 #dendro recommender
 	dendro_recommender_service_name=$active_deployment_setting-recommender
 	dendro_recommender_startup_item_file=/etc/systemd/system/$dendro_recommender_service_name.service
 	dendro_recommender_install_path=$recommender_installation_path/$active_deployment_setting
+
 	dendro_recommender_active="false"
-	project_descriptors_recommender_active="true"
-	public_ontologies="[\"foaf\",\"dcterms\",\"bdv\",\"research\"]"
-
-	dendro_recommender_svn_url='http://dendro-dev.fe.up.pt/svn/dendro_recommender/NewDendroRecommender/'
-	dendro_recommender_git_url='https://github.com/feup-infolab-rdm/dendro-recommender.git'
-
 	dendro_recommender_host=$host
 	dendro_recommender_port=9007
 	dendro_recommender_log_file=/var/log/$active_deployment_setting-recommender.log
 
+	project_descriptors_recommender_active="true"
+
+	dendro_recommender_svn_url='http://dendro-dev.fe.up.pt/svn/dendro_recommender/NewDendroRecommender/'
+	dendro_recommender_git_url='https://github.com/feup-infolab-rdm/dendro-recommender.git'
+
 	dendro_recommender_all_ontologies_url="${dendro_base_uri}/ontologies/all"
+
+#public_ontologies
+	public_ontologies="[\"foaf\",\"dcterms\",\"bdv\",\"research\"]"
+
+#authentication
+	#default
+		default_authentication_enabled="true"
+	#orcid
+		orcid_authentication_enabled="true"
+	#saml
+		saml_authentication_enabled="true"
 
 	#dependencies
 		#play framework
