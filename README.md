@@ -175,7 +175,7 @@ active_deployment_setting='dendroVagrantDemoTESTS'
 
 ### Install NVM on Windows
 
-Follow the installer [https://github.com/coreybutler/nvm-windows/releases](HERE).
+Follow the installer [HERE](https://github.com/coreybutler/nvm-windows/releases).
 
 ### Install NVM on Mac / Linux
 
