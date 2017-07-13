@@ -44,6 +44,7 @@ if "#{ENV['JENKINS_BUILD']}" == '1'
 end
 
 Vagrant.configure("2") do |config|
+  
   #shared folders
 
   # other config here
@@ -92,6 +93,8 @@ Vagrant.configure("2") do |config|
      vb.name = "#{ENV['VAGRANT_VM_NAME']}"
 
      vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+     vb.customize [ "modifyvm", :id, "--uart1", "0x3F8", "4" ]
+     vb.customize [ "modifyvm", :id, "--uartmode1", "file", File.join(Dir.pwd, "ubuntu-xenial-16.04-cloudimg-console.log") ]
 
      if "#{ENV['JENKINS_BUILD']}" == "1"
        puts "[JENKINS] Configuring VM for build..."

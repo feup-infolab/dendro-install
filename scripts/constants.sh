@@ -155,6 +155,12 @@ recommender_installation_path='/dendro_recommender'
 		play_framework_install_path='/etc/play'
 		play_framework_md5="cd59d02e49fce42bc87d230274c5701c"
 
+
+#Vagrant-specific configuration
+
+VAGRANT_VM_SSH_USERNAME="vagrant"
+VAGRANT_VM_SSH_PASSWORD="vagrant"
+
 #running variables help
 
 get_script_dir  () {
