@@ -388,8 +388,7 @@ var write_dendro_configuration_file = function ()
 		"debug": {
       "active": true,
       "database": {
-        "log_all_queries": true,
-        "destroy_all_graphs_on_startup": true
+        "log_all_queries": true
       },
       "session": {
         "auto_login": false,
@@ -444,7 +443,8 @@ var write_dendro_configuration_file = function ()
 			"reload_administrators_on_startup" : get_argument_by_name('reload_administrators_on_startup'),
 			"reload_demo_users_on_startup" : get_argument_by_name('reload_demo_users_on_startup'),
 			"reload_ontologies_on_startup" : get_argument_by_name('reload_ontologies_on_startup'),
-			"clear_session_store" : get_argument_by_name('clear_session_store_on_startup')
+			"clear_session_store" : get_argument_by_name('clear_session_store_on_startup'),
+	        "destroy_all_graphs_on_startup": false
 		},
 		"baselines" : {
 			"dublin_core_only" : false
