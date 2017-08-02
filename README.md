@@ -38,7 +38,7 @@ This package allows you to
 
 * Windows 7+
 	* Install ImageMagick [executable](https://www.imagemagick.org/script/download.php)
-	* During ImageMagick instalation check the option "Install legacy utilities (e.g. convert)". This is needed for generating resources thumbnails in Dendro.
+	* During the ImageMagick instalation check the option "Install legacy utilities (e.g. convert)". This is needed for generating resources thumbnails in Dendro.
 
 ## Dependencies
 
