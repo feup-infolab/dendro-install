@@ -39,7 +39,8 @@ recommender_installation_path='/dendro_recommender'
 	dendro_port=3007
 	dendro_host=$host:$dendro_port
 	dendro_base_uri="http://$dendro_host"
-	temp_files_directory="/tmp/dendro/${active_deployment_setting}"
+	temp_files_directory="temp"
+	temp_uploads_files_directory="temp_uploads"
 	demo_mode_active="true"
 	dendro_theme="lumen"
 	config_human_readable_name='DendroVagrantDemo'
@@ -106,6 +107,7 @@ recommender_installation_path='/dendro_recommender'
 	reload_administrators_on_startup="true"
 	reload_demo_users_on_startup="true"
 	reload_ontologies_on_startup="true"
+	reload_descriptors_on_startup="true"
 	clear_session_store_on_startup="true"
 
 #logging

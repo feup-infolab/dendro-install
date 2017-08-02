@@ -10,7 +10,7 @@ var array_t = {"type" : "array"};
 var possible_arguments = {
 	"dendro_config_output_folder_location" : string_t,
 	"dr_config_template_abs_path" : string_t,
-	
+
 	//identifier
 	"config_identifier" : string_t,
 
@@ -69,6 +69,7 @@ var possible_arguments = {
 
 	//dendro file storage
 	"temp_files_directory" : string_t,
+	"temp_uploads_files_directory" : string_t,
 
 	//demo mode
 	"demo_mode_active" : boolean_t,
@@ -81,6 +82,7 @@ var possible_arguments = {
 	"reload_administrators_on_startup" : boolean_t,
 	"reload_demo_users_on_startup" : boolean_t,
 	"reload_ontologies_on_startup" : boolean_t,
+	"reload_descriptors_on_startup" : boolean_t,
 	"clear_session_store_on_startup" : boolean_t,
 
 	//logging
@@ -101,7 +103,7 @@ var possible_arguments = {
 	"interactions_table_stage2" : string_t,
 	"dr_stage1_active" : boolean_t,
 	"dr_stage2_active" : boolean_t,
-	
+
 	"project_descriptors_recommender_active" : boolean_t,
 
 	//gmail mailing account for password resets, etc...
@@ -109,7 +111,7 @@ var possible_arguments = {
 	"emailing_account_gmail_reply_to_address" : string_t,
 	"emailing_account_gmail_user" : string_t,
 	"emailing_account_gmail_password" : string_t,
-	
+
 	//gmaps settings
 	"gmaps_api_key" : string_t,
 	"gmaps_map_height" : integer_t,
@@ -120,9 +122,9 @@ var possible_arguments = {
 
 	//public ontologies
 	"public_ontologies" : array_t,
-	
+
 	//authentication
-	
+
 	"default_authentication_enabled" : boolean_t,
 	"orcid_authentication_enabled" : boolean_t,
 	"orcid_client_id" : string_t,
@@ -242,15 +244,15 @@ var write_dendro_configuration_file = function ()
 		"port" : get_argument_by_name('port'),
 		"host" : get_argument_by_name('host'),
 		"crypto" :
-	    {
-	      "secret" : get_argument_by_name('secret')
-	    },
+    {
+      "secret" : get_argument_by_name('secret')
+    },
 		"baseUri" : get_argument_by_name('base_uri'),
 	  "eudatBaseUrl" : get_argument_by_name('eudat_base_url'),
-	    "eudatToken" : get_argument_by_name('eudat_token'),
-	    "eudatCommunityId" : get_argument_by_name('eudat_community_id'),
-	    "sendGridUser" : get_argument_by_name('emailing_account_gmail_user'),
-	    "sendGridPassword" : get_argument_by_name('emailing_account_gmail_user'),
+	  "eudatToken" : get_argument_by_name('eudat_token'),
+	  "eudatCommunityId" : get_argument_by_name('eudat_community_id'),
+	  "sendGridUser" : get_argument_by_name('emailing_account_gmail_user'),
+	  "sendGridPassword" : get_argument_by_name('emailing_account_gmail_user'),
 		"elasticSearchHost" : get_argument_by_name('elasticsearch_host'),
 		"elasticSearchPort" : get_argument_by_name('elasticsearch_port'),
 		"cache": {
@@ -262,23 +264,23 @@ var write_dendro_configuration_file = function ()
 	          "default": {
 	            "host": get_argument_by_name('redis_cache_host'),
 	            "port": "6780",
-	            "database_number": 1,
-	            "id": "default"
+	            "id": "default",
+							"database_number": 1
 	          },
 	          "social": {
 	            "options": {
 	              "host": get_argument_by_name('redis_cache_host'),
 	              "port": "6781",
-	              "database_number": 1,
-	              "id": "social"
+	              "id": "social",
+								"database_number": 1,
 	            }
 	          },
 	          "notifications": {
 	            "options": {
 	              "host": get_argument_by_name('redis_cache_host'),
 	              "port": "6782",
-	              "database_number": 1,
-	              "id": "notification"
+	              "id": "notification",
+	              "database_number": 1
 	            }
 	          }
 	        }
@@ -347,9 +349,10 @@ var write_dendro_configuration_file = function ()
 		"mySQLDBName" : get_argument_by_name('mysql_db_name'),
 		"maxUploadSize" : get_argument_by_name('max_upload_size'),
 		"maxProjectSize" : get_argument_by_name('max_project_size'),
-		"maxSimultanousConnectionsToDb" : 3,
+		"maxSimultanousConnectionsToDb" : 10,
 		"dbOperationTimeout" : 5000,
 		"tempFilesDir" : get_argument_by_name('temp_files_directory'),
+		"tempUploadsDir" : get_argument_by_name('temp_uploads_files_directory'),
 		"tempFilesCreationMode" : "0777",
 		"administrators" : [
 			{
@@ -388,18 +391,22 @@ var write_dendro_configuration_file = function ()
 		"debug": {
       "active": true,
       "database": {
-        "log_all_queries": true
+        "log_all_queries": false,
+				"log_all_cache_queries" : false,
+				"log_query_timeouts": false
       },
       "session": {
         "auto_login": false,
         "login_user": "demouser"
       },
       "files": {
-        "log_all_restore_operations": true,
-        "log_delete_operations": true,
-        "log_file_fetches": true,
-        "delete_temp_folder_on_startup": true,
-        "log_file_version_fetches": false
+				"log_all_restore_operations": false,
+        "log_delete_operations": false,
+        "log_file_fetches": false,
+        "delete_temp_folder_on_startup": false,
+        "log_file_version_fetches": false,
+        "log_temp_file_writes": false,
+        "log_temp_file_reads": false
       },
       "resources": {
         "log_all_type_checks": false,
@@ -435,8 +442,12 @@ var write_dendro_configuration_file = function ()
         "ram_usage_report": true
       },
       "index": {
-        "elasticsearch_connection_log_type": ""
-      }
+        	"elasticsearch_connection_log_type": ""
+	  	},
+			"tests" :
+			{
+				"log_unit_completion_and_startup" : false
+			}
     },
 		"startup" : {
 			"load_databases" : get_argument_by_name('load_databases_on_startup'),
@@ -444,7 +455,19 @@ var write_dendro_configuration_file = function ()
 			"reload_demo_users_on_startup" : get_argument_by_name('reload_demo_users_on_startup'),
 			"reload_ontologies_on_startup" : get_argument_by_name('reload_ontologies_on_startup'),
 			"clear_session_store" : get_argument_by_name('clear_session_store_on_startup'),
-	        "destroy_all_graphs_on_startup": false
+
+			"load_databases": get_argument_by_name('load_databases_on_startup'),
+			"reload_administrators_on_startup": get_argument_by_name('reload_administrators_on_startup'),
+			"reload_demo_users_on_startup": get_argument_by_name('reload_demo_users_on_startup'),
+			"reload_ontologies_on_startup": get_argument_by_name('reload_ontologies_on_startup'),
+			"reload_descriptors_on_startup": get_argument_by_name('reload_descriptors_on_startup'),
+			"reload_research_domains_on_startup": true,
+			"reload_descriptor_validation_data" : true,
+			"clear_session_store": true,
+			"clear_caches" : true,
+			"log_bootup_actions" : true,
+			"destroy_all_graphs": false,
+			"destroy_all_indexes": false
 		},
 		"baselines" : {
 			"dublin_core_only" : false

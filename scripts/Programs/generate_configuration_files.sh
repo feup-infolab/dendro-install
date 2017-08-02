@@ -69,12 +69,14 @@ nodejs $running_folder/build_configuration_files.js \
 	--max_upload_size $max_upload_size \
 	--max_project_size $max_project_size \
 	--temp_files_directory $temp_files_directory \
+	--temp_uploads_files_directory $temp_uploads_files_directory \
 	--demo_mode_active $demo_mode_active \
 	--dendro_theme $dendro_theme \
 	--load_databases_on_startup $load_databases_on_startup \
 	--reload_administrators_on_startup $reload_administrators_on_startup \
 	--reload_demo_users_on_startup $reload_demo_users_on_startup \
 	--reload_ontologies_on_startup $reload_ontologies_on_startup \
+	--reload_descriptors_on_startup $reload_descriptors_on_startup \
 	--clear_session_store_on_startup $clear_session_store_on_startup \
 	--pipe_console_to_logfile $pipe_console_to_logfile \
 	--log_request_times $logging_log_request_times \
