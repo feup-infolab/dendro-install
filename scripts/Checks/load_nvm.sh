@@ -8,6 +8,21 @@ load_nvm()
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && echo "NVM loaded."
 }
 
+add_line_at_end_of_file_if_tag_not_present()
+{
+	local file=$1
+	local new_line=$2
+	local tag=$3
+	grep -q -F "####$tag" $file || echo "$new_line   ####$tag" >> $file
+}
+
+append_nvm_and_avn_to_profile()
+{
+  add_line_at_end_of_file_if_tag_not_present ~/.bash_profile 'export NVM_DIR="$HOME/.nvm" &&' 'NVM_LOAD_1'
+  add_line_at_end_of_file_if_tag_not_present ~/.bash_profile '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && echo "NVM loaded."' 'NVM_LOAD_2'
+  add_line_at_end_of_file_if_tag_not_present ~/.bash_profile '[[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn' 'AVN_LOAD_1'
+}
+
 install_nvm()
 {
   echo "Installing NVM as $(whoami) and Node version $node_version..."
@@ -23,7 +38,7 @@ install_nvm()
   done
 
   #install NVM, use node version
-  curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash > /dev/null &&
+  curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash > /dev/null &&
   load_nvm
 }
 
@@ -32,7 +47,7 @@ install_node()
   echo "Installing node $node_version"
 
   nvm install "$node_version" &&
-  nvm use "$node_version" || exit 1
+  nvm use "$node_version" --delete-prefix || exit 1
 
   echo "Installed NVM and Node version $node_version successfully as $(whoami)."
 
@@ -65,6 +80,8 @@ install_node()
   else
     echo "User $(whoami) already has AVN installed."
   fi
+
+  append_nvm_and_avn_to_profile
 }
 
 echo "Starting NVM setup as $(whoami)..."

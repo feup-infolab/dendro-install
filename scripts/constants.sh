@@ -325,6 +325,14 @@ add_text_at_end_of_file()
 	cp $tmp_copy $file
 }
 
+add_line_at_end_of_file_if_tag_not_present()
+{
+	local file=$1
+	local new_line=$2
+	local tag=$3
+	grep -q -F "####$tag" $file || echo "\'$new_line\'   ####$tag" >> $file
+}
+
 get_timestamp()
 {
 	eval "$1=\"$(date "+%Y_%m_%d-%H_%M_%S")\""

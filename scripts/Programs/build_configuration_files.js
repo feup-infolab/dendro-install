@@ -349,7 +349,7 @@ var write_dendro_configuration_file = function ()
 		"mySQLDBName" : get_argument_by_name('mysql_db_name'),
 		"maxUploadSize" : get_argument_by_name('max_upload_size'),
 		"maxProjectSize" : get_argument_by_name('max_project_size'),
-		"maxSimultanousConnectionsToDb" : 10,
+		"maxSimultaneousConnectionsToDb" : 10,
 		"dbOperationTimeout" : 5000,
 		"tempFilesDir" : get_argument_by_name('temp_files_directory'),
 		"tempUploadsDir" : get_argument_by_name('temp_uploads_files_directory'),
