@@ -453,16 +453,10 @@ mysql_conf_file=/etc/mysql/mysql.conf.d/mysqld.cnf
 
 #redis instances (one per dendro graph to separate cached resources)
 
-redis_default_id="default"
-redis_default_host="127.0.0.1"
+redis_cache_host="127.0.0.1"
+
 redis_default_port="6780"
-
-redis_social_id="social"
-redis_social_host="127.0.0.1"
 redis_social_port="6781"
-
-redis_notification_id="notification"
-redis_notification_host="127.0.0.1"
 redis_notification_port="6782"
 
 #console colors
