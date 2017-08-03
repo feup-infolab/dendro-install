@@ -38,9 +38,9 @@ var possible_arguments = {
 	"mongodb_cache_host" : string_t,
 	"mongodb_cache_port" : integer_t,
 	"mongodb_cache_database" : string_t,
-		//caching of static content
-		"last_modified_caching" : boolean_t,
-		"cache_period_in_seconds" : integer_t,
+	//caching of static content
+	"last_modified_caching" : boolean_t,
+	"cache_period_in_seconds" : integer_t,
 
 	//virtuoso
 	"virtuoso_host" : string_t,
@@ -244,86 +244,73 @@ var write_dendro_configuration_file = function ()
 		"port" : get_argument_by_name('port'),
 		"host" : get_argument_by_name('host'),
 		"crypto" :
-    {
-      "secret" : get_argument_by_name('secret')
-    },
+		{
+			"secret" : get_argument_by_name('secret')
+		},
 		"baseUri" : get_argument_by_name('base_uri'),
-	  "eudatBaseUrl" : get_argument_by_name('eudat_base_url'),
-	  "eudatToken" : get_argument_by_name('eudat_token'),
-	  "eudatCommunityId" : get_argument_by_name('eudat_community_id'),
-	  "sendGridUser" : get_argument_by_name('emailing_account_gmail_user'),
-	  "sendGridPassword" : get_argument_by_name('emailing_account_gmail_user'),
+		"eudatBaseUrl" : get_argument_by_name('eudat_base_url'),
+		"eudatToken" : get_argument_by_name('eudat_token'),
+		"eudatCommunityId" : get_argument_by_name('eudat_community_id'),
+		"sendGridUser" : get_argument_by_name('emailing_account_gmail_user'),
+		"sendGridPassword" : get_argument_by_name('emailing_account_gmail_user'),
 		"elasticSearchHost" : get_argument_by_name('elasticsearch_host'),
 		"elasticSearchPort" : get_argument_by_name('elasticsearch_port'),
 		"cache": {
-	      "active": get_argument_by_name('cache_active'),
-	      "type": get_argument_by_name('cache_type'),
-	      "redis": {
-	        "active": get_argument_by_name('redis_cache_active'),
-	        "instances": {
-	          "default": {
-	            "host": get_argument_by_name('redis_cache_host'),
-	            "port": "6780",
-	            "id": "default",
-							"database_number": 1
-	          },
-	          "social": {
-	            "options": {
-	              "host": get_argument_by_name('redis_cache_host'),
-	              "port": "6781",
-	              "id": "social",
-								"database_number": 1,
-	            }
-	          },
-	          "notifications": {
-	            "options": {
-	              "host": get_argument_by_name('redis_cache_host'),
-	              "port": "6782",
-	              "id": "notification",
-	              "database_number": 1
-	            }
-	          }
-	        }
-	      },
-	      "mongodb": {
-	        "active": get_argument_by_name('mongodb_cache_active'),
-	        "instances": [
-	          {
-	            "id": "default",
-	            "options": {
-	              "database": get_argument_by_name('mongodb_cache_database'),
-	              "collection": "default_cache",
-	              "host": get_argument_by_name('mongodb_cache_host'),
-	              "port": get_argument_by_name('mongodb_cache_port'),
-	              "id": "default"
-	            }
-	          },
-	          {
-	            "id": "social",
-	            "options": {
-	              "database": get_argument_by_name('mongodb_cache_database'),
-	              "collection": "social_cache",
-	              "host": get_argument_by_name('mongodb_cache_host'),
-	              "port": get_argument_by_name('mongodb_cache_port'),
-	              "id": "social"
-	            }
-	          },
-	          {
-	            "id": "notifications",
-	            "options": {
-	              "database": get_argument_by_name('mongodb_cache_database'),
-	              "collection": "notifications_cache",
-								"port": get_argument_by_name('mongodb_cache_port'),
-	              "host": get_argument_by_name('mongodb_cache_host'),
-	              "id": "notifications"
-	            }
-	          }
-	        ]
-	      },
-	      "static": {
-        		"last_modified_caching" : get_argument_by_name('last_modified_caching'),
-        		"cache_period_in_seconds" : get_argument_by_name('cache_period_in_seconds')
-    	  }
+			"active": get_argument_by_name('cache_active'),
+			"type": get_argument_by_name('cache_type'),
+			"redis": {
+				"active": get_argument_by_name('redis_cache_active'),
+				"instances": {
+					"default": {
+						"host": get_argument_by_name('redis_cache_host'),
+						"port": "6780",
+						"id": "default",
+						"database_number": 1
+					},
+					"social": {
+						"host": get_argument_by_name('redis_cache_host'),
+						"port": "6781",
+						"id": "social",
+						"database_number": 1
+					},
+					"notifications": {
+						"host": get_argument_by_name('redis_cache_host'),
+						"port": "6782",
+						"id": "notification",
+						"database_number": 1
+					}
+				}
+			},
+			"mongodb": {
+				"active": get_argument_by_name('mongodb_cache_active'),
+				"instances": {
+					"default" : {
+						"database": get_argument_by_name('mongodb_cache_database'),
+						"collection": "default_cache",
+						"host": get_argument_by_name('mongodb_cache_host'),
+						"port": get_argument_by_name('mongodb_cache_port'),
+						"id": "default"
+					},
+					"social": {
+						"database": get_argument_by_name('mongodb_cache_database'),
+						"collection": "social_cache",
+						"host": get_argument_by_name('mongodb_cache_host'),
+						"port": get_argument_by_name('mongodb_cache_port'),
+						"id": "social"
+					},
+					"notifications": {
+						"database": get_argument_by_name('mongodb_cache_database'),
+						"collection": "notifications_cache",
+						"port": get_argument_by_name('mongodb_cache_port'),
+						"host": get_argument_by_name('mongodb_cache_host'),
+						"id": "notifications"
+					}
+				}
+			},
+			"static": {
+				"last_modified_caching" : get_argument_by_name('last_modified_caching'),
+				"cache_period_in_seconds" : get_argument_by_name('cache_period_in_seconds')
+			}
 		},
 		"virtuosoHost" : get_argument_by_name('virtuoso_host'),
 		"virtuosoPort" : get_argument_by_name('virtuoso_port'),
@@ -389,66 +376,66 @@ var write_dendro_configuration_file = function ()
 		"systemOrHiddenFilesRegexes" : ["__MACOSX", "^[.]"],
 		"theme" : get_argument_by_name('dendro_theme'),
 		"debug": {
-      "active": true,
-      "database": {
-        "log_all_queries": false,
+			"active": true,
+			"database": {
+				"log_all_queries": false,
 				"log_all_cache_queries" : false,
 				"log_query_timeouts": false
-      },
-      "session": {
-        "auto_login": false,
-        "login_user": "demouser"
-      },
-      "files": {
+			},
+			"session": {
+				"auto_login": false,
+				"login_user": "demouser"
+			},
+			"files": {
 				"log_all_restore_operations": false,
-        "log_delete_operations": false,
-        "log_file_fetches": false,
-        "delete_temp_folder_on_startup": false,
-        "log_file_version_fetches": false,
-        "log_temp_file_writes": false,
-        "log_temp_file_reads": false
-      },
-      "resources": {
-        "log_all_type_checks": false,
-        "log_missing_resources": false
-      },
-      "permissions": {
-        "enable_permissions_system": true,
-        "log_authorizations": false,
-        "log_denials": true,
-        "log_requests_and_permissions": false
-      },
-      "users": {
-        "log_fetch_by_username": false
-      },
-      "descriptors": {
-        "log_missing_unknown_descriptors": false,
-        "log_unknown_types": false,
-        "log_descriptor_filtering_operations": false
-      },
-      "ontologies": {
-        "log_autocomplete_requests": false
-      },
-      "views": {
-        "show_all_buttons_in_recommendations": false,
-        "prefill_text_boxes": false
-      },
-      "cache": {
-        "log_cache_hits": false,
-        "log_cache_writes": false,
-        "log_cache_deletes": false
-      },
-      "diagnostics": {
-        "ram_usage_report": true
-      },
-      "index": {
-        	"elasticsearch_connection_log_type": ""
-	  	},
+				"log_delete_operations": false,
+				"log_file_fetches": false,
+				"delete_temp_folder_on_startup": false,
+				"log_file_version_fetches": false,
+				"log_temp_file_writes": false,
+				"log_temp_file_reads": false
+			},
+			"resources": {
+				"log_all_type_checks": false,
+				"log_missing_resources": false
+			},
+			"permissions": {
+				"enable_permissions_system": true,
+				"log_authorizations": false,
+				"log_denials": true,
+				"log_requests_and_permissions": false
+			},
+			"users": {
+				"log_fetch_by_username": false
+			},
+			"descriptors": {
+				"log_missing_unknown_descriptors": false,
+				"log_unknown_types": false,
+				"log_descriptor_filtering_operations": false
+			},
+			"ontologies": {
+				"log_autocomplete_requests": false
+			},
+			"views": {
+				"show_all_buttons_in_recommendations": false,
+				"prefill_text_boxes": false
+			},
+			"cache": {
+				"log_cache_hits": false,
+				"log_cache_writes": false,
+				"log_cache_deletes": false
+			},
+			"diagnostics": {
+				"ram_usage_report": true
+			},
+			"index": {
+				"elasticsearch_connection_log_type": ""
+			},
 			"tests" :
 			{
 				"log_unit_completion_and_startup" : false
 			}
-    },
+		},
 		"startup" : {
 			"load_databases" : get_argument_by_name('load_databases_on_startup'),
 			"reload_administrators_on_startup" : get_argument_by_name('reload_administrators_on_startup'),
@@ -473,20 +460,20 @@ var write_dendro_configuration_file = function ()
 			"dublin_core_only" : false
 		},
 		"logging" :
-    {
-      "pipe_console_to_logfile" : get_argument_by_name('pipe_console_to_logfile'),
-      "format" : "combined",
-      "app_logs_folder" : "logs/app",
-      "log_request_times" : get_argument_by_name('log_request_times'),
-      "request_times_log_folder" : "logs/request_times",
-      "log_requests_in_apache_format" : false,
-      "requests_in_apache_format_log_folder" : "logs/requests_apache_format",
+		{
+			"pipe_console_to_logfile" : get_argument_by_name('pipe_console_to_logfile'),
+			"format" : "combined",
+			"app_logs_folder" : "logs/app",
+			"log_request_times" : get_argument_by_name('log_request_times'),
+			"request_times_log_folder" : "logs/request_times",
+			"log_requests_in_apache_format" : false,
+			"requests_in_apache_format_log_folder" : "logs/requests_apache_format",
 			"suppress_all_logs": false,
 			"suppress_all_errors": false,
 			"log_all_requests": false,
 			"log_emailing": false,
 			"custom_exception_logging": get_argument_by_name('custom_exception_logging')
-    },
+		},
 		"version" :
 		{
 			"number" : 0.2,
@@ -514,8 +501,8 @@ var write_dendro_configuration_file = function ()
 					}
 				},
 				"project_descriptors" : {
-          "active" : get_argument_by_name('project_descriptors_recommender_active')
-        },
+					"active" : get_argument_by_name('project_descriptors_recommender_active')
+				},
 				"standalone" : {
 					"active" : false
 				},
@@ -539,198 +526,198 @@ var write_dendro_configuration_file = function ()
 			}
 		},
 		"maps" :
-    {
-      "gmaps_api_key" : get_argument_by_name('gmaps_api_key'),
-      "map_height" : get_argument_by_name('gmaps_map_height')
-    },
-    "exporting" :
-    {
-      "generated_files_metadata" :
-      {
-		    	"bagit" :
-		    	{
-		    	  "dcterms" : {
-		    		"title" : "Full contents of the dataset in ZIP format (Bagit Specification)",
-		    		"description" : "This file contains all the files and corresponding metadata in a ZIP arghive that follows the BagIt (https://tools.ietf.org/html/draft-kunze-bagit-08) specification. Exported by the Dendro platform."
-		    	  }
-		    	},
-		    	"zip" :
-		    	{
-		    	  "dcterms" : {
-		    		"title" : "Full contents of the dataset in ZIP format",
-		    		"description" : "This file contains all the files and corresponding metadata in a ZIP archive. Exported by the Dendro platform."
-		    	  }
-		    	},
-		    	"json" :
-		    	{
-		    	  "dcterms" : {
-		    		"title" : "Dataset metadata in JSON format",
-		    		"description" : "This file contains all the metadata in JSON format. Exported by the Dendro platform."
-		    	  }
-		    	},
-		    	"rdf" :
-		    	{
-		    	  "dcterms" : {
-		    		"title" : "Dataset metadata in RDF format",
-		    		"description" : "This file contains all the metadata in RDF (Resource Description Framework) format. Exported by the Dendro platform."
-		    	  }
-		    	},
-		    	"txt" :
-		    	{
-		    	  "dcterms" : {
-		    		"title" : "Dataset metadata in human-readable TXT format",
-		    		"description" : "This file contains all the metadata in Plain text for human reading. Exported by the Dendro platform."
-		    	  }
-		    	}
-      },
-      "ckan" :
-      {
+		{
+			"gmaps_api_key" : get_argument_by_name('gmaps_api_key'),
+			"map_height" : get_argument_by_name('gmaps_map_height')
+		},
+		"exporting" :
+		{
+			"generated_files_metadata" :
+			{
+				"bagit" :
+				{
+					"dcterms" : {
+						"title" : "Full contents of the dataset in ZIP format (Bagit Specification)",
+						"description" : "This file contains all the files and corresponding metadata in a ZIP arghive that follows the BagIt (https://tools.ietf.org/html/draft-kunze-bagit-08) specification. Exported by the Dendro platform."
+						}
+					},
+					"zip" :
+					{
+						"dcterms" : {
+							"title" : "Full contents of the dataset in ZIP format",
+							"description" : "This file contains all the files and corresponding metadata in a ZIP archive. Exported by the Dendro platform."
+						}
+					},
+					"json" :
+					{
+						"dcterms" : {
+							"title" : "Dataset metadata in JSON format",
+							"description" : "This file contains all the metadata in JSON format. Exported by the Dendro platform."
+						}
+					},
+					"rdf" :
+					{
+						"dcterms" : {
+							"title" : "Dataset metadata in RDF format",
+							"description" : "This file contains all the metadata in RDF (Resource Description Framework) format. Exported by the Dendro platform."
+						}
+					},
+					"txt" :
+					{
+						"dcterms" : {
+							"title" : "Dataset metadata in human-readable TXT format",
+							"description" : "This file contains all the metadata in Plain text for human reading. Exported by the Dendro platform."
+						}
+					}
+				},
+				"ckan" :
+				{
 
-      }
-    },
-		"analytics_tracking_code" : get_argument_by_name("google_analytics_tracking_code"),
-		"public_ontologies" : get_argument_by_name("public_ontologies"),
-		"authentication": {
-      "default": {
-        "enabled": get_argument_by_name("default_authentication_enabled")
-      },
-      "orcid": {
-        "enabled": get_argument_by_name("orcid_authentication_enabled"),
-        "client_id": get_argument_by_name("orcid_client_id"),
-        "client_secret": get_argument_by_name("orcid_client_secret"),
-        "callback_url": get_argument_by_name("orcid_auth_callback_url")
-      },
-      "saml": {
-        "enabled":  get_argument_by_name("saml_authentication_enabled"),
-        "path": get_argument_by_name("saml_authentication_callback_path"),
-        "entry_point": get_argument_by_name("saml_authentication_entry_point"),
-        "issuer": get_argument_by_name("saml_authentication_issuer"),
-        "button_text": get_argument_by_name("saml_authentication_button_text")
-      }
-    }
-	};
+				}
+			},
+			"analytics_tracking_code" : get_argument_by_name("google_analytics_tracking_code"),
+			"public_ontologies" : get_argument_by_name("public_ontologies"),
+			"authentication": {
+				"default": {
+					"enabled": get_argument_by_name("default_authentication_enabled")
+				},
+				"orcid": {
+					"enabled": get_argument_by_name("orcid_authentication_enabled"),
+					"client_id": get_argument_by_name("orcid_client_id"),
+					"client_secret": get_argument_by_name("orcid_client_secret"),
+					"callback_url": get_argument_by_name("orcid_auth_callback_url")
+				},
+				"saml": {
+					"enabled":  get_argument_by_name("saml_authentication_enabled"),
+					"path": get_argument_by_name("saml_authentication_callback_path"),
+					"entry_point": get_argument_by_name("saml_authentication_entry_point"),
+					"issuer": get_argument_by_name("saml_authentication_issuer"),
+					"button_text": get_argument_by_name("saml_authentication_button_text")
+				}
+			}
+		};
 
-	//console.log("FINISHED CONFIGURATION"));
-	//console.log(JSON.stringify(dendro_config_template, null, 2));
+		//console.log("FINISHED CONFIGURATION"));
+		//console.log(JSON.stringify(dendro_config_template, null, 2));
 
-	var util = require('util');
+		var util = require('util');
 
-	var destinationFolder = get_argument_by_name('dendro_config_output_folder_location');
-	if(!fs.existsSync(destinationFolder))
-	{
-		fs.mkdirSync(destinationFolder);
-	}
-
-	var destinationFile = path.join(destinationFolder, 'deployment_configs.json');
-	fs.writeFileSync(destinationFile, JSON.stringify(dendro_config_template, null, 2) , 'utf-8');
-	return destinationFile;
-}
-
-var write_dendro_recommender_configuration_file = function ()
-{
-	var dr_parameters = [
+		var destinationFolder = get_argument_by_name('dendro_config_output_folder_location');
+		if(!fs.existsSync(destinationFolder))
 		{
-			key: "ontologies.all_ontologies_uri",
-			value : get_argument_by_name("dr_all_ontologies_uri")
-		},
-		{
-			key: "persistence.mysql.host",
-			value : get_argument_by_name("mysql_host")
-		},
-		{
-			key: "persistence.mysql.port",
-			value : get_argument_by_name("mysql_port")
-		},
-		{
-			key: "persistence.mysql.database",
-			value : get_argument_by_name("mysql_db_name")
-		},
-		{
-			key: "persistence.mysql.interactions_table",
-			value : get_argument_by_name("dr_interactions_table")
-		},
-		{
-			key: "persistence.mysql.username",
-			value : get_argument_by_name("mysql_dba_user")
-		},
-		{
-			key: "persistence.mysql.password",
-			value : get_argument_by_name("mysql_password")
-		},
-		{
-			key: "play.server.http.port",
-			value : get_argument_by_name("dendro_recommender_port")
+			fs.mkdirSync(destinationFolder);
 		}
-	];
 
-	var contents_of_current_file = fs.readFileSync(get_argument_by_name('dr_config_template_abs_path'), 'utf-8');
-
-	var output = contents_of_current_file.replace(/\n# BEGIN_AUTO_GENERATED_BY_BUILD_CONFIGURATIONS_JS.*#END_AUTO_GENERATED_BY_BUILD_CONFIGURATIONS_JS/gm, "");
-
-	output += "\n# BEGIN_AUTO_GENERATED_BY_BUILD_CONFIGURATIONS_JS\n";
-	output += "# auto-generated parameters DO NOT CHANGE.\n";
-	output += "# Edit the configuration generation script (build_configuration_files.js) instead!\n";
-
-	for (var i = 0; i < dr_parameters.length; i++) {
-		var dr_parameter = dr_parameters[i];
-		output += dr_parameter.key + "=\"" + dr_parameter.value+"\"\n";
+		var destinationFile = path.join(destinationFolder, 'deployment_configs.json');
+		fs.writeFileSync(destinationFile, JSON.stringify(dendro_config_template, null, 2) , 'utf-8');
+		return destinationFile;
 	}
 
-	output += "#END_AUTO_GENERATED_BY_BUILD_CONFIGURATIONS_JS\n";
-
-	var destinationFolder = get_argument_by_name('dr_config_output_folder_location');
-	if(!fs.existsSync(destinationFolder))
+	var write_dendro_recommender_configuration_file = function ()
 	{
-		fs.mkdirSync(destinationFolder);
+		var dr_parameters = [
+			{
+				key: "ontologies.all_ontologies_uri",
+				value : get_argument_by_name("dr_all_ontologies_uri")
+			},
+			{
+				key: "persistence.mysql.host",
+				value : get_argument_by_name("mysql_host")
+			},
+			{
+				key: "persistence.mysql.port",
+				value : get_argument_by_name("mysql_port")
+			},
+			{
+				key: "persistence.mysql.database",
+				value : get_argument_by_name("mysql_db_name")
+			},
+			{
+				key: "persistence.mysql.interactions_table",
+				value : get_argument_by_name("dr_interactions_table")
+			},
+			{
+				key: "persistence.mysql.username",
+				value : get_argument_by_name("mysql_dba_user")
+			},
+			{
+				key: "persistence.mysql.password",
+				value : get_argument_by_name("mysql_password")
+			},
+			{
+				key: "play.server.http.port",
+				value : get_argument_by_name("dendro_recommender_port")
+			}
+		];
+
+		var contents_of_current_file = fs.readFileSync(get_argument_by_name('dr_config_template_abs_path'), 'utf-8');
+
+		var output = contents_of_current_file.replace(/\n# BEGIN_AUTO_GENERATED_BY_BUILD_CONFIGURATIONS_JS.*#END_AUTO_GENERATED_BY_BUILD_CONFIGURATIONS_JS/gm, "");
+
+		output += "\n# BEGIN_AUTO_GENERATED_BY_BUILD_CONFIGURATIONS_JS\n";
+		output += "# auto-generated parameters DO NOT CHANGE.\n";
+		output += "# Edit the configuration generation script (build_configuration_files.js) instead!\n";
+
+		for (var i = 0; i < dr_parameters.length; i++) {
+			var dr_parameter = dr_parameters[i];
+			output += dr_parameter.key + "=\"" + dr_parameter.value+"\"\n";
+		}
+
+		output += "#END_AUTO_GENERATED_BY_BUILD_CONFIGURATIONS_JS\n";
+
+		var destinationFolder = get_argument_by_name('dr_config_output_folder_location');
+		if(!fs.existsSync(destinationFolder))
+		{
+			fs.mkdirSync(destinationFolder);
+		}
+
+		var destinationFile = path.join(destinationFolder, 'application.conf');
+		fs.writeFileSync(destinationFile, output , 'utf-8');
+		return destinationFile;
 	}
 
-	var destinationFile = path.join(destinationFolder, 'application.conf');
-	fs.writeFileSync(destinationFile, output , 'utf-8');
-	return destinationFile;
-}
-
-var write_active_deployment_config_file = function()
-{
-	var util = require('util');
-
-	var destinationFolder = get_argument_by_name('dendro_config_output_folder_location');
-	if(!fs.existsSync(destinationFolder))
+	var write_active_deployment_config_file = function()
 	{
-		fs.mkdirSync(destinationFolder);
-	};
+		var util = require('util');
 
-	var activeConfigTemplate = {
-		"key" : get_argument_by_name('config_identifier')
-	};
+		var destinationFolder = get_argument_by_name('dendro_config_output_folder_location');
+		if(!fs.existsSync(destinationFolder))
+		{
+			fs.mkdirSync(destinationFolder);
+		};
 
-	var destinationFile = path.join(destinationFolder, 'active_deployment_config.json');
-	fs.writeFileSync(destinationFile, JSON.stringify(activeConfigTemplate, null, 2) , 'utf-8');
-	return destinationFile;
-}
+		var activeConfigTemplate = {
+			"key" : get_argument_by_name('config_identifier')
+		};
 
-/**
- * Start the program!
- **/
+		var destinationFile = path.join(destinationFolder, 'active_deployment_config.json');
+		fs.writeFileSync(destinationFile, JSON.stringify(activeConfigTemplate, null, 2) , 'utf-8');
+		return destinationFile;
+	}
 
-// console.log(JSON.stringify(process.argv));
+	/**
+	* Start the program!
+	**/
 
-var missing_possible_arguments = detect_missing_possible_arguments(possible_arguments);
+	// console.log(JSON.stringify(process.argv));
 
-if(missing_possible_arguments.length == 0)
-{
-	var config_identifier = get_argument_by_name("config_identifier");
-	console.log(colors.cyan("[INFO] ") + "Creating new configuration file for Dendro with name " + colors.yellow(config_identifier) + "...");
-	var dendroConfigurationLocation = write_dendro_configuration_file();
-	var dendroActiveDeploymentConfigLocation = write_active_deployment_config_file();
-	console.log(colors.green("[OK] ") + "Configuration file for Dendro with name \"" + colors.yellow(config_identifier) + " created at " + dendroConfigurationLocation);
+	var missing_possible_arguments = detect_missing_possible_arguments(possible_arguments);
 
-	console.log(colors.cyan("[INFO] ") + "Creating new configuration file for Dendro Recommender...");
-	var dendroRecommenderConfigurationLocation = write_dendro_recommender_configuration_file();
-	console.log(colors.green("[OK] ") + "Created new configuration file for Dendro Recommender at " + dendroRecommenderConfigurationLocation);
-}
-else
-{
-	//console.log("Missing possible_arguments ", JSON.stringify(missing_possible_arguments));
-	print_usage(possible_arguments);
-	process.exit(1);
-}
+	if(missing_possible_arguments.length == 0)
+	{
+		var config_identifier = get_argument_by_name("config_identifier");
+		console.log(colors.cyan("[INFO] ") + "Creating new configuration file for Dendro with name " + colors.yellow(config_identifier) + "...");
+		var dendroConfigurationLocation = write_dendro_configuration_file();
+		var dendroActiveDeploymentConfigLocation = write_active_deployment_config_file();
+		console.log(colors.green("[OK] ") + "Configuration file for Dendro with name \"" + colors.yellow(config_identifier) + " created at " + dendroConfigurationLocation);
+
+		console.log(colors.cyan("[INFO] ") + "Creating new configuration file for Dendro Recommender...");
+		var dendroRecommenderConfigurationLocation = write_dendro_recommender_configuration_file();
+		console.log(colors.green("[OK] ") + "Created new configuration file for Dendro Recommender at " + dendroRecommenderConfigurationLocation);
+	}
+	else
+	{
+		//console.log("Missing possible_arguments ", JSON.stringify(missing_possible_arguments));
+		print_usage(possible_arguments);
+		process.exit(1);
+	}
