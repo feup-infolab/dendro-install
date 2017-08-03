@@ -34,6 +34,9 @@ var possible_arguments = {
 	"cache_type" : string_t,
 	"redis_cache_active" : boolean_t,
 	"redis_cache_host" : string_t,
+	"redis_default_port" : integer_t,
+	"redis_social_port" : integer_t,
+	"redis_notification_port" : integer_t,
 	"mongodb_cache_active" : boolean_t,
 	"mongodb_cache_host" : string_t,
 	"mongodb_cache_port" : integer_t,
@@ -263,19 +266,19 @@ var write_dendro_configuration_file = function ()
 				"instances": {
 					"default": {
 						"host": get_argument_by_name('redis_cache_host'),
-						"port": "6780",
+						"port": get_argument_by_name('redis_default_port'),
 						"id": "default",
 						"database_number": 1
 					},
 					"social": {
 						"host": get_argument_by_name('redis_cache_host'),
-						"port": "6781",
+						"port": get_argument_by_name('redis_social_port'),
 						"id": "social",
 						"database_number": 1
 					},
 					"notifications": {
 						"host": get_argument_by_name('redis_cache_host'),
-						"port": "6782",
+						"port": get_argument_by_name('redis_notifications_port'),
 						"id": "notification",
 						"database_number": 1
 					}

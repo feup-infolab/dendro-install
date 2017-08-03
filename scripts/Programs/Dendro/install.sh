@@ -19,11 +19,18 @@ then
 	echo "NVM is not installed for user $(whoami)!" &&
 	exit 1
 else
-	cd $dendro_installation_path &&
-	npm install &&
+	cd $dendro_installation_path
+    #delete node_modules folder
+    rm -rf node_modules
+    rm -rf package-lock.json
+
+    #install dependencies. Will also run bower install whenever needed
+   	npm install && #this is needed when running npm install with sudo to install global modules
 	npm install grunt &&
 	npm install grunt-cli &&
-	grunt
+	
+    #use grunt to put everything in place, recursively (bower + npm dependencies)
+    grunt
 fi
 
 #set active deployment configuration

@@ -44,7 +44,10 @@ nodejs $running_folder/build_configuration_files.js \
 	--cache_active $cache_active \
 	--cache_type $cache_type \
 	--redis_cache_active $redis_cache_active \
-	--redis_cache_host $redis_cache_active \
+	--redis_cache_host $redis_cache_host \
+	--redis_default_port $redis_default_port \
+	--redis_social_port $redis_social_port \
+	--redis_notification_port $redis_notification_port \
 	--mongodb_cache_active $mongodb_cache_active \
 	--mongodb_cache_host $mongodb_cache_host \
 	--mongodb_cache_port $mongodb_cache_port \
