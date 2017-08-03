@@ -18,8 +18,8 @@ info "Setting up Redis instances..."
 
 sudo chmod +x ./add_redis_instance.sh
 
-sudo ./add_redis_instance.sh $redis_default_id $redis_default_host $redis_default_port $set_dev_mode $set_dev_mode &&
-sudo ./add_redis_instance.sh $redis_social_id $redis_social_host $redis_social_port $set_dev_mode $set_dev_mode &&
-sudo ./add_redis_instance.sh $redis_notification_id $redis_notification_host $redis_notification_port $set_dev_mode || die "Unable to setup Redis instances."
+sudo ./add_redis_instance.sh "default" $redis_cache_host $redis_default_port $set_dev_mode &&
+sudo ./add_redis_instance.sh "social" $redis_cache_host $redis_social_port $set_dev_mode &&
+sudo ./add_redis_instance.sh "notification" $redis_cache_host $redis_notification_port $set_dev_mode || die "Unable to setup Redis instances."
 
 cd $setup_dir || die "Unable to return to base folder after setting up Redis instances."

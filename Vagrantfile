@@ -103,10 +103,10 @@ Vagrant.configure("2") do |config|
        #vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
        #vb.customize ["modifyvm", :id, "--cableconnected2", "on"]
      else
-       vb.cpus = 2
+       vb.cpus = 3
      end
 
-     vb.memory = "2048"
+     vb.memory = "4096"
   end
 
   time = sanitize_filename(Time.new.inspect)

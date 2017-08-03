@@ -453,7 +453,7 @@ var write_dendro_configuration_file = function ()
 			"reload_descriptors_on_startup": get_argument_by_name('reload_descriptors_on_startup'),
 			"reload_research_domains_on_startup": true,
 			"reload_descriptor_validation_data" : true,
-			"clear_session_store": true,
+			"clear_session_store": get_argument_by_name('clear_session_store_on_startup'),
 			"clear_caches" : true,
 			"log_bootup_actions" : true,
 			"destroy_all_graphs": false,

@@ -108,7 +108,7 @@ recommender_installation_path='/dendro_recommender'
 	reload_demo_users_on_startup="true"
 	reload_ontologies_on_startup="true"
 	reload_descriptors_on_startup="true"
-	clear_session_store_on_startup="true"
+	clear_session_store_on_startup="false"
 
 #logging
 	pipe_console_to_logfile="true"

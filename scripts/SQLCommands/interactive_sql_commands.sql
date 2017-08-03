@@ -80,7 +80,7 @@ DB.DBA.XML_REMOVE_NS_BY_PREFIX('research', 2);
 DB.DBA.XML_SET_NS_DECL ('research', 'http://dendro.fe.up.pt/ontology/research/', 2);
 
 SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/socialStudies#>;
-SPARQL LOAD <http://dendro.fe.up.pt/ontologies/SOCIAL_STUDIES/SocialStudies.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/socialStudies#>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/SOCIAL_STUDIES/SocialStudies.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/socialStudies#>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('socialStudies', 2);
 DB.DBA.XML_SET_NS_DECL ('socialStudies', 'http://dendro.fe.up.pt/ontology/socialStudies#', 2);
 
