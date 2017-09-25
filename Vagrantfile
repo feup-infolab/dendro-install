@@ -24,7 +24,7 @@ end
 
 ###INSTALL PLUGINS
 #install plugin to keep all the VBox Guest Additions updated.
-required_plugins = %w(vagrant-share vagrant-vbguest)
+required_plugins = %w(vagrant-share vagrant-vbguest vagrant-disksize)
 
 plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
 if not plugins_to_install.empty?
@@ -44,7 +44,7 @@ if "#{ENV['JENKINS_BUILD']}" == '1'
 end
 
 Vagrant.configure("2") do |config|
-  
+
   #shared folders
 
   # other config here
@@ -67,6 +67,9 @@ Vagrant.configure("2") do |config|
     config.vm.box_version = "20170331.0.0"
     config.vm.boot_timeout= 600
   end
+
+  #set maximum size of the main hard drive
+  config.disksize.size = '100GB'
 
   puts "IP of Virtualbox: #{ENV['VAGRANT_VM_IP']}"
 
