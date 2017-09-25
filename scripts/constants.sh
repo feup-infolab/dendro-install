@@ -360,7 +360,9 @@ replace_text_in_file()
 	if [ "$?" == "1" ] || [ "$node_exists" == "" ]
 	then
 		info "NodeJS is not installed! Installing..."
-		sudo apt-get -y install nodejs
+		sudo apt-get install -y build-essential &&
+		curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+		sudo apt-get install -y nodejs || die "Unable to install NodeJS"
 	fi
 
 	installation_scripts_dir="$(get_script_dir)"

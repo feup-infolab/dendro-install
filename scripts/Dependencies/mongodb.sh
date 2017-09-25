@@ -14,9 +14,11 @@ info "Installing latest MongoDB......"
 setup_dir=$(pwd) &&
 
 #install Java 8
-sudo add-apt-repository -y ppa:webupd8team/java &&
-sudo apt-get -qq update &&
-sudo apt-get -qq install oracle-java8-installer &&
+sudo apt-get install -y python-software-properties debconf-utils
+sudo add-apt-repository -y ppa:webupd8team/java
+sudo apt-get update
+echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
+sudo apt-get install -y oracle-java8-installer
 
 #install mongodb 10g
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 &&
@@ -24,8 +26,8 @@ echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | 
 sudo apt-get -qq update &&
 sudo apt-get -y -qq install -f mongodb-10gen &&
 
-sudo mkdir -p /data/db/ &&
-sudo chown `id -u` /data/db &&
+sudo mkdir -p /data/db &&
+sudo chown -R mongodb /data/db 
 
 #Apply locales fix...
 # line="LC_ALL=\"en_GB.utf8\""

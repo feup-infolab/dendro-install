@@ -60,11 +60,11 @@ Vagrant.configure("2") do |config|
 
   if "#{ENV['JENKINS_BUILD']}" == "1"
     config.vm.box = "ubuntu/xenial32"
-    config.vm.box_version = "20170330.0.0"
+    config.vm.box_version = "20170922.0.0"
     config.vm.boot_timeout= 1200
   else
     config.vm.box = "ubuntu/xenial64"
-    config.vm.box_version = "20170331.0.0"
+    config.vm.box_version = "20170922.0.0"
     config.vm.boot_timeout= 600
   end
 

@@ -90,6 +90,10 @@ source ./Fixes/fix_locales.sh
 warning "Creating $dendro_user_name if necessary and adding to $dendro_user_group if necessary"
 source ./Programs/create_dendro_user.sh
 
+# Install MongoDB
+source ./Dependencies/mongodb.sh
+source ./Services/mongodb.sh
+
 #install or load nvm
 warning "Starting NVM setup in order to install node version $node_version..."
 sudo chmod +x "$setup_dir/Checks/load_nvm.sh"
@@ -156,8 +160,6 @@ then
 			fi
 
 			source ./Dependencies/mysql.sh
-			#source ./Dependencies/mongodb.sh
-			#source ./Services/mongodb.sh
 
 			source ./Dependencies/elasticsearch.sh
 			source ./Services/elasticsearch.sh
