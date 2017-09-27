@@ -24,7 +24,7 @@ end
 
 ###INSTALL PLUGINS
 #install plugin to keep all the VBox Guest Additions updated.
-required_plugins = %w(vagrant-share vagrant-vbguest vagrant-disksize)
+required_plugins = %w(vagrant-share vagrant-vbguest vagrant-disksize vagrant-proxyconf)
 
 plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
 if not plugins_to_install.empty?
@@ -44,6 +44,18 @@ if "#{ENV['JENKINS_BUILD']}" == '1'
 end
 
 Vagrant.configure("2") do |config|
+  
+  if "#{ENV['VAGRANT_USE_SQUID_PROXY_VM']}" == 'true'
+    puts "Using Squid proxy VM for quicker deployments..."
+    # Enable caching web server
+    if Vagrant.has_plugin?("vagrant-proxyconf")
+      config.proxy.http     = "http://squid:squid@10.0.0.10:3128/"
+      config.proxy.https    = "http://squid:squid@10.0.0.10:3128/"
+      config.proxy.no_proxy = "localhost,127.0.0.1,deb.nodesource.com,ppa.launchpad.net,repo.mongodb.org,download.oracle.com,edelivery.oracle.com"
+      config.apt_proxy.http     = "http://squid:squid@10.0.0.10:8000/"
+      config.apt_proxy.https    = "http://squid:squid@10.0.0.10:8000/"
+    end
+  end
 
   #shared folders
 

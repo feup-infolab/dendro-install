@@ -5,6 +5,9 @@ SECONDS=0
 
 source ./scripts/constants.sh
 
+#spin up proxy machine
+
+
 #compress scripts folder
 rm -rf scripts.tar.gz
 tar -zcf scripts.tar.gz ./scripts
@@ -27,11 +30,17 @@ append_to_snapshot_name()
   fi
 }
 
-while getopts 'satcjudrb:' flag; do
+unset VAGRANT_USE_SQUID_PROXY_VM
+
+while getopts 'satcjudrpb:' flag; do
   case $flag in
     s)
       revert_to_last_snapshot="true"
       ;;
+  	p)
+		#use proxy vm
+		use_proxy_vm="true"
+   	  ;;
     a)
       #install TeamCity
       append_to_snapshot_name "install_teamcity_agent"
@@ -87,6 +96,14 @@ then
   VBoxManage snapshot $active_deployment_setting restore $snapshot_id
 else
   take_vm_snapshot $active_deployment_setting $snapshot_name
+fi
+
+if [[ "$use_proxy_vm" == "true" ]]; then
+	git clone https://github.com/zephod/squid-vagrant-server.git proxy-vm
+	cd proxy-vm
+	vagrant up
+	cd -
+	export VAGRANT_USE_SQUID_PROXY_VM="true"
 fi
 
 source ./define_env_vars.sh

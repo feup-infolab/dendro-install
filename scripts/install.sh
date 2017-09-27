@@ -79,7 +79,7 @@ source ./secrets.sh
 #apply pre-installation fixes such as DNS fixes (thank you bugged Vagrant Ubuntu boxes)
 info "Applying pre-installation fixes..."
 source ./Fixes/fix_dns.sh
-source ./Fixes/fix_locales.sh
+#source ./Fixes/fix_locales.sh
 
 #fix any unfinished installations
 	info "Preparing setup..."
@@ -89,10 +89,6 @@ source ./Fixes/fix_locales.sh
 #create dendro user is necessary
 warning "Creating $dendro_user_name if necessary and adding to $dendro_user_group if necessary"
 source ./Programs/create_dendro_user.sh
-
-# Install MongoDB
-source ./Dependencies/mongodb.sh
-source ./Services/mongodb.sh
 
 #install or load nvm
 warning "Starting NVM setup in order to install node version $node_version..."
@@ -129,6 +125,10 @@ then
 		else
 			warning "Installing dependencies"
 			source ./Dependencies/misc.sh
+
+			# Install MongoDB
+			source ./Dependencies/mongodb.sh
+			#source ./Services/mongodb.sh
 
 			#source ./Dependencies/drawing_to_text.sh #TODO this crashes still with GCC 5.8+. Commenting
 			source ./Dependencies/Redis/setup_redis_instances.sh

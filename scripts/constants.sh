@@ -450,7 +450,7 @@ redis_conf_file="$redis_conf_folder/redis.conf"
 redis_init_script_file="/etc/init.d/redis-server"
 
 elasticsearch_conf_file=/etc/elasticsearch/elasticsearch.yml
-mongodb_conf_file=/etc/mongodb.conf
+mongodb_conf_file=/etc/mongod.conf
 mysql_conf_file=/etc/mysql/mysql.conf.d/mysqld.cnf
 
 #redis instances (one per dendro graph to separate cached resources)

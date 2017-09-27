@@ -19,8 +19,8 @@ info "Trying to open MongoDB to ANY remote connection."
 file_exists file_exists_flag $mongodb_conf_file
 if [[ "$file_exists_flag" == "true" ]]; then
 	info "File $mongodb_conf_file exists..."
-	patch_file $mongodb_conf_file "bind_ip = 127.0.0.1" "#bind_ip = 127.0.0.1" "mongodb_dendro_dev_patch" && success "Opened MongoDB." || die "Unable to patch mongodb configuration file."
-	sudo service mongodb restart || die "Unable to restart mongodb service."
+	patch_file $mongodb_conf_file "bindIp: 127.0.0.1" "#bindIp: 127.0.0.1" "mongodb_dendro_dev_patch" && success "Opened MongoDB." || die "Unable to patch mongodb configuration file."
+	sudo service mongod restart || die "Unable to restart mongodb service."
 else
 	die "File $mongodb_conf_file does not exist."
 fi
