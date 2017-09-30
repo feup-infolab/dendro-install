@@ -25,6 +25,8 @@ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A1
 echo "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.4.list &&
 sudo apt-get -qq update &&
 sudo apt-get -y install -f mongodb-org &&
+sudo systemctl enable mongod.service && 
+sudo systemctl daemon-reload &&
 sudo service mongod start &&
 sudo service mongod restart || die "Unable to start mongodb service!"
 

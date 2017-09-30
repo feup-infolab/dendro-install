@@ -20,6 +20,9 @@ file_exists file_exists_flag $mongodb_conf_file
 if [[ "$file_exists_flag" == "true" ]]; then
 	info "File $mongodb_conf_file exists..."
 	patch_file $mongodb_conf_file "bindIp: 127.0.0.1" "#bindIp: 127.0.0.1" "mongodb_dendro_dev_patch" && success "Opened MongoDB." || die "Unable to patch mongodb configuration file."
+	sudo systemctl enable mongod.service && 
+	sudo systemctl daemon-reload &&
+	sudo service mongod start && 
 	sudo service mongod restart || die "Unable to restart mongodb service."
 else
 	die "File $mongodb_conf_file does not exist."
