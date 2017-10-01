@@ -34,7 +34,8 @@ file_exists file_exists_flag $elasticsearch_conf_file
 if [[ "$file_exists_flag" == "true" ]]; then
 	info "File $elasticsearch_conf_file exists..."
 	patch_file $elasticsearch_conf_file "# network.host: 192.168.0.1" "network.host: 0.0.0.0" "elasticsearch_dendro_dev_patch_network_host" && success "Set ElasticSearch HOST." || die "Unable to patch ElasticSearch configuration file (hostname)."
-	patch_file $elasticsearch_conf_file "http.port: 9200" "http.port: 9200" "elasticsearch_dendro_dev_patch_network_port" && success "Set ElasticSearch PORT." || die "Unable to patch ElasticSearch configuration file (port)."
+	patch_file $elasticsearch_conf_file "http.port: 9200" "http.port: 9200" "elasticsearch_dendro_dev_patch_network_port" && success "Set ElasticSearch PORT." || die "Unable to patch ElasticSearch configuration file (port)."  &&
+	sudo service elasticsearch start && 
 	sudo service elasticsearch restart || die "Unable to restart ElasticSearch service."
 else
 	die "File $elasticsearch_conf_file does not exist."
@@ -45,7 +46,8 @@ info "Trying to open Redis to ANY remote connection."
 file_exists file_exists_flag $redis_conf_file
 if [[ "$file_exists_flag" == "true" ]]; then
 	info "File $redis_conf_file exists..."
-	patch_file $redis_conf_file "bind 127.0.0.1" "bind 0.0.0.0" "redis_dendro_dev_patch"  && success "Opened Redis." || die "Unable to patch Redis configuration file."
+	patch_file $redis_conf_file "bind 127.0.0.1" "bind 0.0.0.0" "redis_dendro_dev_patch"  && success "Opened Redis." || die "Unable to patch Redis configuration file." &&
+ 	sudo service redis start && 
 	sudo service redis restart || die "Unable to restart Redis service."
 	#setup multiple redis instances
 	source ./Dependencies/Redis/setup_redis_instances.sh
