@@ -24,7 +24,7 @@ sudo apt-get install git-lfs && info "Installed git lfs" || die "Unable to insta
 #install Virtuoso devel from .deb
 
 git lfs clone https://github.com/feup-infolab/virtuoso7-debs.git virtuoso7 &&
-sudo dpkg -i virtuoso7/debs-ubuntu-16-04/*.deb
+sudo dpkg -i virtuoso7/debs-ubuntu-16-04/*stable*.deb
 
 #setup default configuration .ini file
 sudo cp /usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini.sample /usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini
