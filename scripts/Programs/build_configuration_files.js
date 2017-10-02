@@ -48,8 +48,10 @@ var possible_arguments = {
 	//virtuoso
 	"virtuoso_host" : string_t,
 	"virtuoso_port" : integer_t,
+	"virtuoso_isql_port" : integer_t,
 	"virtuoso_dba_user" : string_t,
 	"virtuoso_dba_password" : string_t,
+	"virtuoso_sql_loglevel" : integer_t,
 
 	//mongodb
 	"mongodb_host" : string_t,
@@ -258,9 +260,26 @@ var write_dendro_configuration_file = function ()
 		"sendGridPassword" : get_argument_by_name('emailing_account_gmail_user'),
 		"elasticSearchHost" : get_argument_by_name('elasticsearch_host'),
 		"elasticSearchPort" : get_argument_by_name('elasticsearch_port'),
+	    "datastore" :
+	    {
+	      "database": get_argument_by_name('port')+":"+get_argument_by_name('host')+"_datastore",
+	      "host": get_argument_by_name('mongodb_cache_host'),
+	      "port": get_argument_by_name('mongodb_cache_port'),
+	      "id": "default",
+	      "log" : {
+	        "log_datastore_ops" : true
+	      }
+	    },
+	    "ontologies_cache" :
+	    {
+	      "database": get_argument_by_name('port')+":"+get_argument_by_name('host')+"_ontologies",
+	      "host": get_argument_by_name('mongodb_cache_host'),
+	      "port": get_argument_by_name('mongodb_cache_port'),
+	      "id": "default",
+	      "collection" : "ontologies_cache"
+	    },
 		"cache": {
 			"active": get_argument_by_name('cache_active'),
-			"type": get_argument_by_name('cache_type'),
 			"redis": {
 				"active": get_argument_by_name('redis_cache_active'),
 				"instances": {
@@ -290,6 +309,7 @@ var write_dendro_configuration_file = function ()
 					"default" : {
 						"database": get_argument_by_name('mongodb_cache_database'),
 						"collection": "default_cache",
+						"clear_on_startup" : true,
 						"host": get_argument_by_name('mongodb_cache_host'),
 						"port": get_argument_by_name('mongodb_cache_port'),
 						"id": "default"
@@ -297,6 +317,7 @@ var write_dendro_configuration_file = function ()
 					"social": {
 						"database": get_argument_by_name('mongodb_cache_database'),
 						"collection": "social_cache",
+						"clear_on_startup" : true,
 						"host": get_argument_by_name('mongodb_cache_host'),
 						"port": get_argument_by_name('mongodb_cache_port'),
 						"id": "social"
@@ -304,6 +325,7 @@ var write_dendro_configuration_file = function ()
 					"notifications": {
 						"database": get_argument_by_name('mongodb_cache_database'),
 						"collection": "notifications_cache",
+						"clear_on_startup" : true,
 						"port": get_argument_by_name('mongodb_cache_port'),
 						"host": get_argument_by_name('mongodb_cache_host'),
 						"id": "notifications"
@@ -317,10 +339,13 @@ var write_dendro_configuration_file = function ()
 		},
 		"virtuosoHost" : get_argument_by_name('virtuoso_host'),
 		"virtuosoPort" : get_argument_by_name('virtuoso_port'),
+		"virtuosoISQLPort" : get_argument_by_name('virtuoso_isql_port'),
+		"virtuosoConnector" : "http",
 		"virtuosoAuth" : {
 			"user" : get_argument_by_name('virtuoso_dba_user'),
 			"password" : get_argument_by_name('virtuoso_dba_password')
 		},
+		"virtuosoSQLLogLevel":  get_argument_by_name('virtuoso_sql_loglevel'),
 		"mongoDBHost" : get_argument_by_name('mongodb_host'),
 		"mongoDbPort" : get_argument_by_name('mongodb_port'),
 		"mongoDbCollectionName" : get_argument_by_name('mongodb_files_collection_name'),
@@ -340,7 +365,7 @@ var write_dendro_configuration_file = function ()
 		"maxUploadSize" : get_argument_by_name('max_upload_size'),
 		"maxProjectSize" : get_argument_by_name('max_project_size'),
 		"maxSimultaneousConnectionsToDb" : 10,
-		"dbOperationTimeout" : 5000,
+		"dbOperationTimeout" : 8000,
 		"tempFilesDir" : get_argument_by_name('temp_files_directory'),
 		"tempUploadsDir" : get_argument_by_name('temp_uploads_files_directory'),
 		"tempFilesCreationMode" : "0777",

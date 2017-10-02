@@ -78,6 +78,8 @@ recommender_installation_path='/dendro_recommender'
 		#virtuoso
 		virtuoso_host="127.0.0.1"
 		virtuoso_port=8890
+		virtuoso_isql_port=1111
+		virtuoso_sql_loglevel=3
 		virtuoso_startup_item_file='/etc/systemd/system/virtuoso.service'
 
 		#mongodb

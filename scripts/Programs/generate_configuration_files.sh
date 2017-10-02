@@ -56,8 +56,10 @@ nodejs $running_folder/build_configuration_files.js \
 	--cache_period_in_seconds $cache_period_in_seconds \
 	--virtuoso_host $virtuoso_host \
 	--virtuoso_port $virtuoso_port \
+	--virtuoso_isql_port $virtuoso_isql_port \
 	--virtuoso_dba_user $virtuoso_dba_user \
 	--virtuoso_dba_password $virtuoso_dba_password \
+	--virtuoso_sql_loglevel $virtuoso_sql_loglevel \
 	--mongodb_host $mongodb_host \
 	--mongodb_port $mongodb_port \
 	--mongodb_dba_user $mongodb_dba_user \
