@@ -13,9 +13,17 @@ info "Installing Virtuoso 7.2.4 from .deb @feup-infolab/virtuoso7-debs."
 #save current dir
 setup_dir=$(pwd)
 
+#install git lfs
+
+sudo apt-get install software-properties-common &&
+sudo add-apt-repository ppa:git-core/ppa &&
+curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash &&
+sudo apt-get update &&
+sudo apt-get install git-lfs && info "Installed git lfs" || die "Unable to install Git lfs!"
+
 #install Virtuoso devel from .deb
 
-git clone https://github.com/feup-infolab/virtuoso7-debs.git virtuoso7 &&
+git lfs clone https://github.com/feup-infolab/virtuoso7-debs.git virtuoso7 &&
 sudo dpkg -i virtuoso7/debs-ubuntu-16-04/*.deb
 
 #setup default configuration .ini file
