@@ -26,7 +26,7 @@ sudo service virtuoso stop
 #install Virtuoso devel from .deb
 rm -rf virtuoso7
 git lfs clone https://github.com/feup-infolab/virtuoso7-debs.git virtuoso7 &&
-sudo dpkg -i virtuoso7/debs-ubuntu-16-04/virtuoso-opensource7_7.2.4-1_amd64.deb || die "Unable to install virtuoso!"
+sudo dpkg -i virtuoso7/debs-debian/*.deb || die "Unable to install virtuoso!"
 
 #setup default configuration .ini file
 sudo cp /usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini.sample /usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini
