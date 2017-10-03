@@ -8,23 +8,24 @@ else
 	source ./constants.sh
 fi
 
-info "Installing Virtuoso 7.2.4 from .deb @feup-infolab/virtuoso7-debs."
+info "Installing Virtuoso from .deb @feup-infolab/virtuoso7-debs."
 
 #save current dir
 setup_dir=$(pwd)
 
 #install git lfs
-
 sudo apt-get install software-properties-common &&
 sudo add-apt-repository ppa:git-core/ppa &&
 curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash &&
 sudo apt-get update &&
 sudo apt-get install git-lfs && info "Installed git lfs" || die "Unable to install Git lfs!"
 
-#install Virtuoso devel from .deb
+#stop virtuoso service if running
+sudo service virtuoso stop
 
+#install Virtuoso devel from .deb
 git lfs clone https://github.com/feup-infolab/virtuoso7-debs.git virtuoso7 &&
-sudo dpkg -i virtuoso7/debs-ubuntu-16-04/*stable*.deb
+sudo dpkg -i virtuoso7/debs-ubuntu-16-04/*devel*.deb
 
 #setup default configuration .ini file
 sudo cp /usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini.sample /usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini
@@ -62,4 +63,4 @@ die "Failed to set Virtuoso OpenSource crontab"
 #go back to initial dir
 cd $setup_dir
 
-success "Installed Virtuoso 7.2.4 from .deb @feup-infolab/virtuoso7-debs."
+success "Installed Virtuoso from .deb @feup-infolab/virtuoso7-debs."
