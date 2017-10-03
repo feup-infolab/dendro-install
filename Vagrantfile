@@ -71,14 +71,14 @@ Vagrant.configure("2") do |config|
   # boxes at https://atlas.hashicorp.com/search.
 
   if "#{ENV['JENKINS_BUILD']}" == "1"
-    config.vm.box = "ubuntu/xenial32"
-    config.vm.box_version = "20170922.0.0"
     config.vm.boot_timeout= 1200
   else
-    config.vm.box = "ubuntu/xenial64"
-    config.vm.box_version = "20170922.0.0"
     config.vm.boot_timeout= 600
   end
+  
+  config.vm.box = "ubuntu/xenial64"
+  config.vm.box_version = "20170922.0.0"
+  
 
   #set maximum size of the main hard drive
   config.disksize.size = '100GB'
