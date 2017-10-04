@@ -162,8 +162,8 @@ recommender_installation_path='/dendro_recommender'
 
 #Vagrant-specific configuration
 
-VAGRANT_VM_SSH_USERNAME="vagrant"
-VAGRANT_VM_SSH_PASSWORD="vagrant"
+#VAGRANT_VM_SSH_USERNAME="vagrant"
+#VAGRANT_VM_SSH_PASSWORD="vagrant"
 
 #running variables help
 
