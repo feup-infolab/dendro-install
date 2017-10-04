@@ -113,15 +113,15 @@ Vagrant.configure("2") do |config|
 
      if "#{ENV['JENKINS_BUILD']}" == "1"
        puts "[JENKINS] Configuring VM for build..."
-       vb.customize ["modifyvm", :id, "--hwvirtex", "off"]
-       vb.cpus = 1
+       #vb.customize ["modifyvm", :id, "--hwvirtex", "off"]
+       vb.cpus = 2
+       vb.memory = "2048"
        #vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
        #vb.customize ["modifyvm", :id, "--cableconnected2", "on"]
      else
+       vb.memory = "4096"
        vb.cpus = 3
      end
-
-     vb.memory = "4096"
   end
 
   time = sanitize_filename(Time.new.inspect)
