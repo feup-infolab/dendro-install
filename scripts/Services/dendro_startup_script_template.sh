@@ -10,7 +10,6 @@ nvm use %NODE_VERSION% --delete-prefix &&
 echo "node is at: $(which node)"
 echo "node version: $(node -v)"
 
-cd %DENDRO_INSTALLATION_PATH%
-npm run start >> %DENDRO_LOG_FILE% 2>&1
+cd %DENDRO_INSTALLATION_PATH% && npm run start | tee %DENDRO_LOG_FILE%
 
 #node %DENDRO_INSTALLATION_PATH%/src/app.js 
