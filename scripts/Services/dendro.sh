@@ -63,6 +63,16 @@ sudo systemctl reload
 sudo systemctl enable $dendro_service_name
 sudo systemctl start $dendro_service_name
 
+timeout=10
+echo "Waiting to start Dendro service... please wait $timeout seconds..."
+
+for (( i = 0; i < $timeout; i++ )); do
+	echo -ne $[$timeout-i]...
+	sleep 1s
+done
+
+sudo systemctl restart $dendro_service_name
+
 #go back to initial dir
 cd $setup_dir || die "Error returning to setup folder"
 
