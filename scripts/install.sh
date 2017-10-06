@@ -145,12 +145,13 @@ then
 				source ./Services/virtuoso.sh
 			fi
 
-			timeout=30
+			timeout=45
 			info "Waiting for virtuoso service to start. Installing base ontologies in virtuoso in $timeout seconds..."
 			for (( i = 0; i < $timeout; i++ )); do
 				echo -ne $[$timeout-i]...
 				sleep 1s
 			done
+			
 			source ./SQLCommands/grant_commands.sh
 			#source ./Checks/check_services_status.sh
 
