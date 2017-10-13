@@ -10,6 +10,6 @@ nvm use %NODE_VERSION% --delete-prefix &&
 echo "node is at: $(which node)"
 echo "node version: $(node -v)"
 
-node src/app.js | tee %DENDRO_LOG_FILE%
+node src/app.js | tee --append %DENDRO_LOG_FILE%
 
 #node %DENDRO_INSTALLATION_PATH%/src/app.js 
