@@ -40,12 +40,12 @@ add_line_to_file_if_not_present () {
 refresh_code_only="false"
 set_dev_mode="false"
 
-while getopts 'afctjdurb:' flag; do
+while getopts 'afgtjdurb:' flag; do
   case $flag in
 	a)
      	install_teamcity_agent="true"
       	;;
-	f)
+	g)
      	regenerate_configs="true"
       	;;
 	c)

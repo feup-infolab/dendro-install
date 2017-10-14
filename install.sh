@@ -32,7 +32,7 @@ append_to_snapshot_name()
 
 unset VAGRANT_USE_SQUID_PROXY_VM
 
-while getopts 'satcjudrpb:' flag; do
+while getopts 'satcjudrpbg:' flag; do
   case $flag in
     s)
       revert_to_last_snapshot="true"
@@ -50,6 +50,11 @@ while getopts 'satcjudrpb:' flag; do
       #install TeamCity Agent
       append_to_snapshot_name "install_teamcity"
     	VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-c '
+    	;;
+    g)
+      #refresh dendro config file only
+      append_to_snapshot_name "refresh_configs_only"
+    	VAGRANT_SHELL_ARGS=$VAGRANT_SHELL_ARGS'-g '
     	;;
     t)
       #Run Tests on Dendro after checkout
