@@ -90,12 +90,21 @@ copy_config_files() {
 	#place configuration file in dendro's deployment configs folder
 	wd="$starting_dir"
 	warning "Copying configuration file ${wd}/Programs/generated_configurations/deployment_configs.json to ${dendro_installation_path}/conf"
-	vim "$wd/Programs/generated_configurations/deployment_configs.json"
+	
+	if [ "${regenerate_configs}" == "true" ];
+	then
+		vim "$wd/Programs/generated_configurations/deployment_configs.json"
+	fi
+	
 	sudo cp "$wd/Programs/generated_configurations/deployment_configs.json" "$dendro_installation_path/conf"
 	sudo chown -R $dendro_user_name:$dendro_user_group $installation_path
 	sudo chmod -R 0755 $installation_path
-	success "All finished, new files copied."
-	exit 0 
+	
+	if [ "${regenerate_configs}" == "true" ];
+	then
+		success "All finished, new files copied."
+		exit 0 
+	fi
 }
 
 if [ "${regenerate_configs}" == "true" ];
