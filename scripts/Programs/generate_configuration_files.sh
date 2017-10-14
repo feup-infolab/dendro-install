@@ -33,7 +33,7 @@ node $running_folder/build_configuration_files.js \
 	--dr_config_template_abs_path "${running_folder}/DendroRecommender/application.conf.template" \
 	--config_identifier $active_deployment_setting \
 	--port $dendro_port \
-	--host $dendro_host  \
+	--host $host  \
 	--secret $secret \
 	--base_uri $dendro_base_uri \
 	--eudat_base_url $eudat_base_url \

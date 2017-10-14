@@ -21,7 +21,7 @@ get_script_dir  () {
 
 cd_to_current_dir () {
 	DIR="$(get_script_dir)"
-	info "CD'ing to ${DIR}"
+	echo "Changing ing to ${DIR}"
 	cd "${DIR}" || die "Folder ${DIR} does not exist."
 }
 
@@ -90,11 +90,11 @@ copy_config_files() {
 	#place configuration file in dendro's deployment configs folder
 	wd="$starting_dir"
 	warning "Copying configuration file ${wd}/Programs/generated_configurations/deployment_configs.json to ${dendro_installation_path}/conf"
+	vim "$wd/Programs/generated_configurations/deployment_configs.json"
 	sudo cp "$wd/Programs/generated_configurations/deployment_configs.json" "$dendro_installation_path/conf"
 	sudo chown -R $dendro_user_name:$dendro_user_group $installation_path
 	sudo chmod -R 0755 $installation_path
 	success "All finished, new files copied."
-	vim "$dendro_installation_path/conf/deployment_configs.json"
 	exit 0 
 }
 

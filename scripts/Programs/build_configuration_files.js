@@ -16,7 +16,7 @@ var possible_arguments = {
 
 	//dendro instance
 	"port" : integer_t,
-	"host" : integer_t,
+	"host" : string_t,
 	"secret" : string_t,
 	"base_uri" : string_t,
 
@@ -262,7 +262,7 @@ var write_dendro_configuration_file = function ()
 		"elasticSearchPort" : get_argument_by_name('elasticsearch_port'),
 	    "datastore" :
 	    {
-	      "database": get_argument_by_name('port')+":"+get_argument_by_name('host')+"_datastore",
+	      "database": get_argument_by_name('host')+"_"+get_argument_by_name('port')+"_datastore",
 	      "host": get_argument_by_name('mongodb_cache_host'),
 	      "port": get_argument_by_name('mongodb_cache_port'),
 	      "id": "default",
@@ -272,7 +272,7 @@ var write_dendro_configuration_file = function ()
 	    },
 	    "ontologies_cache" :
 	    {
-	      "database": get_argument_by_name('port')+":"+get_argument_by_name('host')+"_ontologies",
+	      "database": get_argument_by_name('host')+"_"+get_argument_by_name('port')+"_ontologies",
 	      "host": get_argument_by_name('mongodb_cache_host'),
 	      "port": get_argument_by_name('mongodb_cache_port'),
 	      "id": "default",
