@@ -40,10 +40,13 @@ add_line_to_file_if_not_present () {
 refresh_code_only="false"
 set_dev_mode="false"
 
-while getopts 'actjdurb:' flag; do
+while getopts 'afctjdurb:' flag; do
   case $flag in
 	a)
      	install_teamcity_agent="true"
+      	;;
+	f)
+     	regenerate_configs="true"
       	;;
 	c)
      	install_teamcity="true"
@@ -118,56 +121,62 @@ then
 		info "Creating temporary folder for downloads at : ${setup_dir}"
 		sudo mkdir -p $temp_downloads_folder
 
-	#install dependencies
-		if [ "${refresh_code_only}" == "true" ]; then
-			warning "Bypassing dependency installation"
-			source ./SQLCommands/grant_commands.sh
+		if [ "${regenerate_configs}" == "true" ]; then
+			warning "Regenerating configurations only"
+			#generate configuration files for both solutions
+			source ./Programs/generate_configuration_files.sh
 		else
-			warning "Installing dependencies"
-			source ./Dependencies/misc.sh
-
-			# Install MongoDB
-			source ./Dependencies/mongodb.sh
-			#source ./Services/mongodb.sh
-
-			#source ./Dependencies/drawing_to_text.sh #TODO this crashes still with GCC 5.8+. Commenting
-			source ./Dependencies/Redis/setup_redis_instances.sh
-
-			#install virtuoso
-			if [[ "${install_virtuoso_from_source}" == "true" ]]
-			then
-				info "Installing OpenLink Virtuoso Database from source"
-				source ./Dependencies/virtuoso_from_source.sh
-				source ./Services/virtuoso.sh
+			#install dependencies
+			if [ "${refresh_code_only}" == "true" ]; then
+				warning "Bypassing dependency installation"
+				source ./SQLCommands/grant_commands.sh
 			else
-				info "Installing OpenLink Virtuoso Database from .deb GitHub package @feup-infolab/virtuoso7-debs."
-				source ./Dependencies/virtuoso_from_deb.sh
-				source ./Services/virtuoso.sh
-			fi
+				warning "Installing dependencies"
+				source ./Dependencies/misc.sh
 
-			timeout=45
-			info "Waiting for virtuoso service to start. Installing base ontologies in virtuoso in $timeout seconds..."
-			for (( i = 0; i < $timeout; i++ )); do
-				echo -ne $[$timeout-i]...
-				sleep 1s
-			done
+				# Install MongoDB
+				source ./Dependencies/mongodb.sh
+				#source ./Services/mongodb.sh
+
+				#source ./Dependencies/drawing_to_text.sh #TODO this crashes still with GCC 5.8+. Commenting
+				source ./Dependencies/Redis/setup_redis_instances.sh
+
+				#install virtuoso
+				if [[ "${install_virtuoso_from_source}" == "true" ]]
+				then
+					info "Installing OpenLink Virtuoso Database from source"
+					source ./Dependencies/virtuoso_from_source.sh
+					source ./Services/virtuoso.sh
+				else
+					info "Installing OpenLink Virtuoso Database from .deb GitHub package @feup-infolab/virtuoso7-debs."
+					source ./Dependencies/virtuoso_from_deb.sh
+					source ./Services/virtuoso.sh
+				fi
+
+				timeout=45
+				info "Waiting for virtuoso service to start. Installing base ontologies in virtuoso in $timeout seconds..."
+				for (( i = 0; i < $timeout; i++ )); do
+					echo -ne $[$timeout-i]...
+					sleep 1s
+				done
 			
-			source ./SQLCommands/grant_commands.sh
-			#source ./Checks/check_services_status.sh
+				source ./SQLCommands/grant_commands.sh
+				#source ./Checks/check_services_status.sh
 
-			if [[ "$dendro_recommender_active" == "true" ]]
-			then
-				source ./Dependencies/play_framework.sh
+				if [[ "$dendro_recommender_active" == "true" ]]
+				then
+					source ./Dependencies/play_framework.sh
+				fi
+
+				source ./Dependencies/mysql.sh
+
+				source ./Dependencies/elasticsearch.sh
+				source ./Services/elasticsearch.sh
 			fi
-
-			source ./Dependencies/mysql.sh
-
-			source ./Dependencies/elasticsearch.sh
-			source ./Services/elasticsearch.sh
+			
+			#generate configuration files for both solutions
+			source ./Programs/generate_configuration_files.sh
 		fi
-
-		#generate configuration files for both solutions
-		source ./Programs/generate_configuration_files.sh
 
 	#create shared mysql database
 		source ./Programs/create_database.sh
