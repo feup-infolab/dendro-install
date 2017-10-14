@@ -32,7 +32,7 @@ append_to_snapshot_name()
 
 unset VAGRANT_USE_SQUID_PROXY_VM
 
-while getopts 'satcjudrpbg:' flag; do
+while getopts 'sagtcjudrpbg:' flag; do
   case $flag in
     s)
       revert_to_last_snapshot="true"
