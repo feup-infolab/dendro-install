@@ -15,7 +15,7 @@ setup_dir=$(pwd)
 
 #install git lfs
 sudo apt-get install software-properties-common &&
-sudo add-apt-repository ppa:git-core/ppa &&
+sudo add-apt-repository -y ppa:git-core/ppa &&
 curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash &&
 sudo apt-get update &&
 sudo apt-get install git-lfs && info "Installed git lfs" || die "Unable to install Git lfs!"
