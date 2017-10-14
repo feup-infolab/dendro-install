@@ -98,7 +98,7 @@ copy_config_files() {
 	exit 0 
 }
 
-if [ "${regenerate_configs}" == "true" ]; 
+if [ "${regenerate_configs}" == "true" ];
 then
 	warning "Regenerating configurations only"
 	#generate configuration files for both solutions
@@ -181,7 +181,7 @@ then
 				echo -ne $[$timeout-i]...
 				sleep 1s
 			done
-		
+
 			source ./SQLCommands/grant_commands.sh
 			#source ./Checks/check_services_status.sh
 
@@ -195,7 +195,7 @@ then
 			source ./Dependencies/elasticsearch.sh
 			source ./Services/elasticsearch.sh
 		fi
-		
+
 		#generate configuration files for both solutions
 		source ./Programs/generate_configuration_files.sh
 
