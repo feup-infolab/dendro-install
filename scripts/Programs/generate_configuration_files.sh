@@ -27,7 +27,7 @@ else
 	exit
 fi
 
-nodejs $running_folder/build_configuration_files.js \
+node $running_folder/build_configuration_files.js \
 	--dr_config_output_folder_location "${running_folder}/generated_configurations" \
 	--dendro_config_output_folder_location "${running_folder}/generated_configurations" \
 	--dr_config_template_abs_path "${running_folder}/DendroRecommender/application.conf.template" \

@@ -31,6 +31,13 @@ add_line_to_file_if_not_present () {
 	sudo sh -c "grep -q -F \"$LINE\" \"$FILE\" || sudo echo \"$LINE\" >> \"$FILE\""
 }
 
+copy_config_files() {
+	#place configuration file in dendro's deployment configs folder
+	wd="$starting_dir"
+	warning "Copying configuration file ${wd}/Programs/generated_configurations/deployment_configs.json to ${dendro_installation_path}/conf"
+	sudo cp "$wd/Programs/generated_configurations/deployment_configs.json" "$dendro_installation_path/conf"
+}
+
 #see if we are supposed to install dependencies or just refresh code from Dendro repositories
 # code from http://stackoverflow.com/questions/7069682/how-to-get-arguments-with-flags-in-bash-script
 
@@ -40,7 +47,7 @@ add_line_to_file_if_not_present () {
 refresh_code_only="false"
 set_dev_mode="false"
 
-while getopts 'afgtjdurb:' flag; do
+while getopts 'agfgtjdurb:' flag; do
   case $flag in
 	a)
      	install_teamcity_agent="true"
@@ -79,15 +86,32 @@ cd_to_current_dir
 source ./constants.sh
 source ./secrets.sh
 
+copy_config_files() {
+	#place configuration file in dendro's deployment configs folder
+	wd="$starting_dir"
+	warning "Copying configuration file ${wd}/Programs/generated_configurations/deployment_configs.json to ${dendro_installation_path}/conf"
+	sudo cp "$wd/Programs/generated_configurations/deployment_configs.json" "$dendro_installation_path/conf"
+	sudo chown -R $dendro_user_name:$dendro_user_group $installation_path
+	sudo chmod -R 0755 $installation_path 
+}
+
+if [ "${regenerate_configs}" == "true" ]; 
+then
+	warning "Regenerating configurations only"
+	#generate configuration files for both solutions
+	source ./Programs/generate_configuration_files.sh
+	copy_config_files
+fi
+
 #apply pre-installation fixes such as DNS fixes (thank you bugged Vagrant Ubuntu boxes)
 info "Applying pre-installation fixes..."
 source ./Fixes/fix_dns.sh
 #source ./Fixes/fix_locales.sh
 
 #fix any unfinished installations
-	info "Preparing setup..."
-	sudo dpkg --configure -a
-	sudo apt-get -qq update
+info "Preparing setup..."
+sudo dpkg --configure -a
+sudo apt-get -qq update
 
 #create dendro user is necessary
 warning "Creating $dendro_user_name if necessary and adding to $dendro_user_group if necessary"
@@ -121,62 +145,56 @@ then
 		info "Creating temporary folder for downloads at : ${setup_dir}"
 		sudo mkdir -p $temp_downloads_folder
 
-		if [ "${regenerate_configs}" == "true" ]; then
-			warning "Regenerating configurations only"
-			#generate configuration files for both solutions
-			source ./Programs/generate_configuration_files.sh
+		#install dependencies
+		if [ "${refresh_code_only}" == "true" ]; then
+			warning "Bypassing dependency installation"
+			source ./SQLCommands/grant_commands.sh
 		else
-			#install dependencies
-			if [ "${refresh_code_only}" == "true" ]; then
-				warning "Bypassing dependency installation"
-				source ./SQLCommands/grant_commands.sh
+			warning "Installing dependencies"
+			source ./Dependencies/misc.sh
+
+			# Install MongoDB
+			source ./Dependencies/mongodb.sh
+			#source ./Services/mongodb.sh
+
+			#source ./Dependencies/drawing_to_text.sh #TODO this crashes still with GCC 5.8+. Commenting
+			source ./Dependencies/Redis/setup_redis_instances.sh
+
+			#install virtuoso
+			if [[ "${install_virtuoso_from_source}" == "true" ]]
+			then
+				info "Installing OpenLink Virtuoso Database from source"
+				source ./Dependencies/virtuoso_from_source.sh
+				source ./Services/virtuoso.sh
 			else
-				warning "Installing dependencies"
-				source ./Dependencies/misc.sh
-
-				# Install MongoDB
-				source ./Dependencies/mongodb.sh
-				#source ./Services/mongodb.sh
-
-				#source ./Dependencies/drawing_to_text.sh #TODO this crashes still with GCC 5.8+. Commenting
-				source ./Dependencies/Redis/setup_redis_instances.sh
-
-				#install virtuoso
-				if [[ "${install_virtuoso_from_source}" == "true" ]]
-				then
-					info "Installing OpenLink Virtuoso Database from source"
-					source ./Dependencies/virtuoso_from_source.sh
-					source ./Services/virtuoso.sh
-				else
-					info "Installing OpenLink Virtuoso Database from .deb GitHub package @feup-infolab/virtuoso7-debs."
-					source ./Dependencies/virtuoso_from_deb.sh
-					source ./Services/virtuoso.sh
-				fi
-
-				timeout=45
-				info "Waiting for virtuoso service to start. Installing base ontologies in virtuoso in $timeout seconds..."
-				for (( i = 0; i < $timeout; i++ )); do
-					echo -ne $[$timeout-i]...
-					sleep 1s
-				done
-			
-				source ./SQLCommands/grant_commands.sh
-				#source ./Checks/check_services_status.sh
-
-				if [[ "$dendro_recommender_active" == "true" ]]
-				then
-					source ./Dependencies/play_framework.sh
-				fi
-
-				source ./Dependencies/mysql.sh
-
-				source ./Dependencies/elasticsearch.sh
-				source ./Services/elasticsearch.sh
+				info "Installing OpenLink Virtuoso Database from .deb GitHub package @feup-infolab/virtuoso7-debs."
+				source ./Dependencies/virtuoso_from_deb.sh
+				source ./Services/virtuoso.sh
 			fi
-			
-			#generate configuration files for both solutions
-			source ./Programs/generate_configuration_files.sh
+
+			timeout=45
+			info "Waiting for virtuoso service to start. Installing base ontologies in virtuoso in $timeout seconds..."
+			for (( i = 0; i < $timeout; i++ )); do
+				echo -ne $[$timeout-i]...
+				sleep 1s
+			done
+		
+			source ./SQLCommands/grant_commands.sh
+			#source ./Checks/check_services_status.sh
+
+			if [[ "$dendro_recommender_active" == "true" ]]
+			then
+				source ./Dependencies/play_framework.sh
+			fi
+
+			source ./Dependencies/mysql.sh
+
+			source ./Dependencies/elasticsearch.sh
+			source ./Services/elasticsearch.sh
 		fi
+		
+		#generate configuration files for both solutions
+		source ./Programs/generate_configuration_files.sh
 
 	#create shared mysql database
 		source ./Programs/create_database.sh
@@ -186,10 +204,7 @@ then
 		source ./Programs/Dendro/checkout.sh
 		sudo su $dendro_user_name ./Programs/Dendro/install.sh || die "Unable to install Dendro."
 
-		#place configuration file in dendro's deployment configs folder
-		wd=$(pwd)
-		warning "Copying configuration file ${wd}/Programs/generated_configurations/deployment_configs.json to ${dendro_installation_path}/conf"
-		sudo cp "$(pwd)/Programs/generated_configurations/deployment_configs.json" "$dendro_installation_path/conf"
+		copy_config_files
 
 		#stage dendro service
 		source ./Services/dendro.sh #??
