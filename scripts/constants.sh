@@ -2,6 +2,12 @@
 
 dendro_config_output_folder_location="."
 
+#tests branch
+#if this variable is set 
+#AND the build is running in a jenkins server (env variable JENKINS_BUILD='1'), 
+#it will check out this dendro branch to inside the VM for testing
+tests_branch="machine-plus-human-identifiers"
+
 #global
 active_deployment_setting='dendroVagrantDemo'
 #will be used to generate URLs relative to a base address, so set it wisely
