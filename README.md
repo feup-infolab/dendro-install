@@ -257,6 +257,12 @@ If you want to run tests, run the program or generate test coverage reports, the
 
 ![npm](https://github.com/feup-infolab/dendro-install/blob/master/images/npm-codecoverage.png?raw=true)
 
+**ESLint Configuration**
+
+You should configure ESLint in WebStorm as follows. This allows you to get warnings about best practices on code style, which helps you write clean code.
+
+![eslint](https://github.com/feup-infolab/dendro-install/blob/master/images/eslint.png?raw=true)
+
 ### Configuring Visual Studio 2017 for running tests
 
 Create a new run configuration and customize it as in the following screens. This is useful for debugging mocha tests in WebStorm when the breakpoints are not being hit (we believe this is a bug with WebStorm).
