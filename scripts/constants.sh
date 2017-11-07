@@ -3,8 +3,8 @@
 dendro_config_output_folder_location="."
 
 #tests branch
-#if this variable is set 
-#AND the build is running in a jenkins server (env variable JENKINS_BUILD='1'), 
+#if this variable is set
+#AND the build is running in a jenkins server (env variable JENKINS_BUILD='1'),
 #it will check out this dendro branch to inside the VM for testing
 tests_branch="machine-plus-human-identifiers"
 
@@ -75,7 +75,7 @@ recommender_installation_path='/dendro_recommender'
 
 	#dependencies
 		#nodejs version
-		node_version="8.6.0"
+		node_version="8.9.0"
 
 		#elasticsearch
 		elasticsearch_port=9200

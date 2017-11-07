@@ -31,11 +31,11 @@ sudo dpkg -i virtuoso7/debs-ubuntu-16-04/virtuoso_7.4.2-devel-1_amd64.deb || die
 #setup default configuration .ini file
 sudo cp /usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini.sample /usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini
 
-read -r -d '' replaced_line << LUCHI
-CheckpointInterval		= 60
-LUCHI
-
-replace_text_in_file "/usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini" "$replaced_line" "CheckpointInterval		= 0"  "eliminate_checkpoint_to_avoid_404_errors_as_per_github_issue_565_on_github_com_virtuoso_opensource"
+# read -r -d '' replaced_line << LUCHI
+# CheckpointInterval		= 60
+# LUCHI
+#
+# replace_text_in_file "/usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini" "$replaced_line" "CheckpointInterval		= 0"  "eliminate_checkpoint_to_avoid_404_errors_as_per_github_issue_565_on_github_com_virtuoso_opensource"
 
 #create virtuoso user and give ownership
 sudo useradd $virtuoso_user

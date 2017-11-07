@@ -165,13 +165,6 @@ then
 			warning "Installing dependencies"
 			source ./Dependencies/misc.sh
 
-			# Install MongoDB
-			source ./Dependencies/mongodb.sh
-			#source ./Services/mongodb.sh
-
-			#source ./Dependencies/drawing_to_text.sh #TODO this crashes still with GCC 5.8+. Commenting
-			source ./Dependencies/Redis/setup_redis_instances.sh
-
 			#install virtuoso
 			if [[ "${install_virtuoso_from_source}" == "true" ]]
 			then
@@ -192,7 +185,14 @@ then
 			done
 
 			source ./SQLCommands/grant_commands.sh
-			#source ./Checks/check_services_status.sh
+
+			# Install MongoDB
+			source ./Dependencies/mongodb.sh
+			#source ./Services/mongodb.sh
+
+			#source ./Dependencies/drawing_to_text.sh #TODO this crashes still with GCC 5.8+. Commenting
+			source ./Dependencies/Redis/setup_redis_instances.sh
+			
 
 			if [[ "$dendro_recommender_active" == "true" ]]
 			then
@@ -203,6 +203,8 @@ then
 
 			source ./Dependencies/elasticsearch.sh
 			source ./Services/elasticsearch.sh
+			
+			#source ./Checks/check_services_status.sh
 		fi
 
 		#generate configuration files for both solutions
