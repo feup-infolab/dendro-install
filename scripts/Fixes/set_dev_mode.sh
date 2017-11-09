@@ -41,6 +41,9 @@ else
 	die "File $elasticsearch_conf_file does not exist."
 fi
 
+#install management gui
+sudo /usr/share/elasticsearch/bin/plugin install royrusso/elasticsearch-HQ/v2.0.3
+
 ##Redis
 info "Trying to open Redis to ANY remote connection."
 file_exists file_exists_flag $redis_conf_file
