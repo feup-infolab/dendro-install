@@ -115,6 +115,7 @@ node $running_folder/build_configuration_files.js \
 	--saml_authentication_entry_point $saml_authentication_entry_point \
 	--saml_authentication_issuer $saml_authentication_issuer \
 	--saml_authentication_button_text $saml_authentication_button_text \
+	--num_cpus $num_cpus \
 	|| die "Failure generating configuration files."
 
 

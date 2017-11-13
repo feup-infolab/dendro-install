@@ -166,6 +166,9 @@ recommender_installation_path='/dendro_recommender'
 		play_framework_md5="cd59d02e49fce42bc87d230274c5701c"
 
 
+#multi-core configuration
+	num_cpus=1
+	
 #Vagrant-specific configuration
 
 #VAGRANT_VM_SSH_USERNAME="vagrant"

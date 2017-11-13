@@ -140,7 +140,10 @@ var possible_arguments = {
     "saml_authentication_callback_path" : string_t,
     "saml_authentication_entry_point" : string_t,
     "saml_authentication_issuer" : string_t,
-    "saml_authentication_button_text" : string_t
+    "saml_authentication_button_text" : string_t,
+	
+	//multicore configuration
+	"num_cpus" : integer_t
 };
 
 var get_argument_by_name = function(argument)
@@ -623,7 +626,8 @@ var write_dendro_configuration_file = function ()
                     "issuer": get_argument_by_name("saml_authentication_issuer"),
                     "button_text": get_argument_by_name("saml_authentication_button_text")
                 }
-            }
+            },
+			"numCPUs" : get_argument_by_name("num_cpus")
         };
 
         //console.log("FINISHED CONFIGURATION"));
