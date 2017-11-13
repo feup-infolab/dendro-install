@@ -20,17 +20,7 @@ then
 	exit 1
 else
 	cd $dendro_installation_path
-    #delete node_modules folder
-    rm -rf node_modules
-    rm -rf package-lock.json
-
-    #install dependencies. Will also run bower install whenever needed
-   	npm install && #this is needed when running npm install with sudo to install global modules
-	npm install grunt &&
-	npm install grunt-cli &&
-	
-    #use grunt to put everything in place, recursively (bower + npm dependencies)
-    grunt
+    $dendro_installation_path/conf/scripts/install.sh
 fi
 
 #set active deployment configuration
