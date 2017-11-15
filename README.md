@@ -68,7 +68,7 @@ Dendro relies on
 	*	[OracleVirtualBox](https://www.virtualbox.org/)
 	*	[Vagrant](https://www.vagrantup.com/downloads.html)
 
-	*	> #####**DO NOT** use packaged versions from your Linux Distro, as they are often outdated and will not work. On Debian-based distros you can use `$ sudo gdebi <package.deb>` to install `.deb` packages.
+	*	**DO NOT** use packaged versions from your Linux Distro, as they are often outdated and will not work. On Debian-based distros you can use `$ sudo gdebi <package.deb>` to install `.deb` packages.
 	* 	[Git](https://git-scm.com/downloads)
 
 2. **Check that everything is working**
