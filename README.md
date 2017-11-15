@@ -176,34 +176,35 @@ active_deployment_setting='dendroVagrantDemoTESTS'
 
 ### Cloning the dendro repository, initial setup and starting up the app
 
-### Install NVM on Windows
+#### For Mac / Linux
+
+```bash
+#clone repo
+git clone https://github.com/feup-infolab/dendro.git
+cd dendro
+
+#install everything
+./conf/scripts/install.sh
+
+#start app
+node src/app.js
+```
+
+#### For Windows
+
+##### Install NVM
 
 Follow the installer [HERE](https://github.com/coreybutler/nvm-windows/releases).
 
-### Install NVM on Mac / Linux
+##### Installing NodeJS and Automatic Version Manager
 
 ```bash
-#install NVM, Node 6.10, Node Automatic Version switcher
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash &&
-export NVM_DIR="$HOME/.nvm" &&
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
-# Want NVM to be loaded on every terminal you open? Add to ~/.bash_profile this:
-
-export NVM_DIR="$HOME/.nvm" &&
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
-```
-
-### Installing NodeJS and Automatic Version Manager
-
-```bash
-nvm install 6.10
+nvm install 8.9.0
 npm install -g avn avn-nvm avn-n
 avn setup
 ```
 
-### Installing Dendro
+##### Installing Dendro 
 
 ```bash
 #clone repo
@@ -213,8 +214,11 @@ cd dendro
 #on Windows you may need to do this to avoid git certificate errors (do this only if you get errors, as this is just a workaround and will skip certificate validations)
 git config --global http.sslverify "false"
 
+#activate node 8.9.0
+nvm use 8.9.0 
+
 #install dependencies. Will also run bower install whenever needed
-npm install #this is needed when running npm install with sudo to install global modules
+npm install
 
 grunt #use grunt to put everything in place
 
@@ -226,11 +230,16 @@ node src/app.js
 
 ```bash
 npm run everything #runs installation, grunt, tests, report results and code coverage
-rpm run coverage #updates test coverage report
-rpm run report-coverage #report coverage to codecov
-rpm run watch #start nyc watcher (runs tests on save on every file in the project)
-rpm run tests #run tests
-rpm run remote-debug #start the app in debug mode for remote debugging
+npm run calculate-coverage #updates test coverage report
+npm run report-coverage #report coverage to codecov
+npm run watch-dev #start nyc watcher (runs tests on save on every file in the project)
+npm run test #run tests
+npm run profile #runs tests with --prof flag to profile dendor performance
+npm run remote-debug #start the app in debug mode for remote debugging
+npm run fix-server #run eslint to fix the code style on src/
+npm run fix-client ##run eslint to fix the code style on public/app/
+npm run fix-tests ##run eslint to fix the code style on test/
+npm run fix #run eslint to fix the code style on src/, public/app/ and test/ directories
 ```
 
 #### USE THIS ONLY if you have permissions issues installing bower or your bower_components folder becomes read-only by some reason
@@ -276,6 +285,40 @@ Create a new run configuration and customize it as in the following screens. Thi
 Open a terminal and run `npm run watch`. All tests will be run whenever you save a file.
 ![watch](https://github.com/feup-infolab/dendro-install/blob/master/images/watch.png?raw=true)
 ![watch2](https://github.com/feup-infolab/dendro-install/blob/master/images/watch2.png?raw=true)
+
+## For sysadmins
+
+If you are maintaining an instance of Dendro installed with these scripts here are some things you should know. In this section, whenever we use the (`[[dendro instance name]]`) wildcard, it means the name you choose for your instance in the `scripts/constants.sh` file of the dendro-install folder. The default value is `dendroVagrantDemo` if you just run these scripts and ssh into the virtual machine using `./ssh_into_vm.sh`.
+
+### Logs locations
+There are two log locations: 
+
+`/dendro/[[dendro instance name]]` file).
+`/var/log/[[dendro instance name]].log`
+
+If you want to check the output of the server live, simply `tail` the log file with `-f`, it will keep monitoring the log file and stream any changes to the console:
+
+`tail -f /var/log/[[dendro instance name]].log` or `tail -f /var/log/[[dendro instance name]].log`
+
+Another way to see the log with more control is to use `journalctl`.
+
+Example of seeing the logs from yesterday in a dendro service:
+
+````bash
+sudo journalctl -u dendro_prd_demo_3007_port --since yesterday
+````
+
+### Verifying if the dendro service is running / Restarting the service
+
+Dendro runs as a service, which automatically brings back the service if it dies for some reason. 
+
+If you need to check if it is running, run:
+
+`sudo service [[dendro instance name] status`
+
+If you need to restart it manually, run: 
+
+`sudo service [[dendro instance name] restart`
 
 # Acknowledgements
 
