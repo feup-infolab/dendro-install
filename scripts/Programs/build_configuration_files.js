@@ -20,6 +20,7 @@ var possible_arguments = {
     "host" : string_t,
     "secret" : string_t,
     "base_uri" : string_t,
+    "environment" : string_t,
 
     //eudat
     "eudat_base_url" : string_t,
@@ -257,6 +258,7 @@ var write_dendro_configuration_file = function ()
             "secret" : get_argument_by_name('secret')
         },
         "baseUri" : get_argument_by_name('base_uri'),
+        "environment" : get_argument_by_name('environment'),
         "eudatBaseUrl" : get_argument_by_name('eudat_base_url'),
         "eudatToken" : get_argument_by_name('eudat_token'),
         "eudatCommunityId" : get_argument_by_name('eudat_community_id'),
@@ -500,8 +502,6 @@ var write_dendro_configuration_file = function ()
             "request_times_log_folder" : "logs/request_times",
             "log_requests_in_apache_format" : false,
             "requests_in_apache_format_log_folder" : "logs/requests_apache_format",
-            "suppress_all_logs": false,
-            "suppress_all_errors": false,
             "log_all_requests": false,
             "log_emailing": false,
             "custom_exception_logging": get_argument_by_name('custom_exception_logging')

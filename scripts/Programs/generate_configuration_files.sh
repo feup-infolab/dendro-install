@@ -36,6 +36,7 @@ node $running_folder/build_configuration_files.js \
 	--host $host  \
 	--secret $secret \
 	--base_uri $dendro_base_uri \
+	--environment $environment \
 	--eudat_base_url $eudat_base_url \
 	--eudat_token $eudat_token \
 	--eudat_community_id $eudat_community_id \
