@@ -123,6 +123,7 @@ recommender_installation_path='/dendro_recommender'
 #logging
 	pipe_console_to_logfile="true"
  	logging_format="dev"
+ 	logging_level="debug"
  	logging_app_logs_folder="logs/app"
  	logging_log_request_times="true"
  	logging_request_times_log_folder="logs/request_times"

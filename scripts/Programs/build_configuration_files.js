@@ -94,6 +94,7 @@ var possible_arguments = {
 
     //logging
     "pipe_console_to_logfile" : boolean_t,
+    "logging_level" : string_t,
     "log_request_times" : boolean_t,
     "custom_exception_logging" : boolean_t,
 
@@ -495,6 +496,7 @@ var write_dendro_configuration_file = function ()
         },
         "logging" :
         {
+            "level" : get_argument_by_name('logging_level'),
             "pipe_console_to_logfile" : get_argument_by_name('pipe_console_to_logfile'),
             "format" : "combined",
             "app_logs_folder" : "logs/app",

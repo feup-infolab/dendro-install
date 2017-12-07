@@ -84,6 +84,7 @@ node $running_folder/build_configuration_files.js \
 	--reload_ontologies_on_startup $reload_ontologies_on_startup \
 	--reload_descriptors_on_startup $reload_descriptors_on_startup \
 	--clear_session_store_on_startup $clear_session_store_on_startup \
+	--logging_level $logging_level \
 	--pipe_console_to_logfile $pipe_console_to_logfile \
 	--log_request_times $logging_log_request_times \
 	--custom_exception_logging $logging_custom_exception_logging \
