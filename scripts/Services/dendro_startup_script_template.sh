@@ -11,5 +11,10 @@ echo "node is at: $(which node)"
 echo "node version: $(node -v)"
 
 node src/app.js | tee --append %DENDRO_LOG_FILE%
+	
+if [[ "$?" != "0" ]]
+then
+	exit 1
+fi
 
 #node %DENDRO_INSTALLATION_PATH%/src/app.js 
