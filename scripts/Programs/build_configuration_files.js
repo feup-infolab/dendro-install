@@ -93,10 +93,7 @@ var possible_arguments = {
     "clear_session_store_on_startup" : boolean_t,
 
     //logging
-    "pipe_console_to_logfile" : boolean_t,
     "logging_level" : string_t,
-    "log_request_times" : boolean_t,
-    "custom_exception_logging" : boolean_t,
 
     //dendro configuration name
     "config_human_readable_name" : string_t,
