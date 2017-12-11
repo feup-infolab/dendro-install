@@ -121,19 +121,12 @@ recommender_installation_path='/dendro_recommender'
 	clear_session_store_on_startup="false"
 
 #logging
-	pipe_console_to_logfile="true"
- 	logging_format="dev"
  	logging_level="debug"
  	logging_app_logs_folder="logs/app"
- 	logging_log_request_times="true"
- 	logging_request_times_log_folder="logs/request_times"
- 	logging_log_requests_in_apache_format="true"
- 	logging_requests_in_apache_format_log_folder="logs/requests_apache_format"
 	logging_suppress_all_logs="false"
 	logging_suppress_all_errors="false"
-	logging_log_all_requests="false"
+	#logging_log_all_requests="false"
 	logging_log_emailing="false"
-	logging_custom_exception_logging="true"
 
 #dendro recommender
 	dendro_recommender_service_name=$active_deployment_setting-recommender

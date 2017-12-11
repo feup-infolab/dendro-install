@@ -497,16 +497,9 @@ var write_dendro_configuration_file = function ()
         "logging" :
         {
             "level" : get_argument_by_name('logging_level'),
-            "pipe_console_to_logfile" : get_argument_by_name('pipe_console_to_logfile'),
-            "format" : "combined",
             "app_logs_folder" : "logs/app",
-            "log_request_times" : get_argument_by_name('log_request_times'),
-            "request_times_log_folder" : "logs/request_times",
-            "log_requests_in_apache_format" : false,
-            "requests_in_apache_format_log_folder" : "logs/requests_apache_format",
-            "log_all_requests": false,
+            "log_all_requests": true,
             "log_emailing": false,
-            "custom_exception_logging": get_argument_by_name('custom_exception_logging')
         },
         "version" :
         {
