@@ -10,6 +10,7 @@ nvm use %NODE_VERSION% --delete-prefix &&
 echo "node is at: $(which node)"
 echo "node version: $(node -v)"
 
+pm2 list
 node src/app.js | tee --append %DENDRO_LOG_FILE%
 	
 if [[ "$?" != "0" ]]
