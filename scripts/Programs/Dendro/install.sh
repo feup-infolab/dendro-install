@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 source ./constants.sh
+source ./secrets.sh
 
 #save current dir
 setup_dir=$(pwd)
