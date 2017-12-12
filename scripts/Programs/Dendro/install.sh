@@ -22,7 +22,7 @@ then
 else
  	echo "Running $dendro_installation_path/conf/scripts/install.sh as user $(whoami)!"
 	cd $dendro_installation_path
-    echo "$dendro_user_password" | sudo su -c "$dendro_installation_path/conf/scripts/install.sh" $dendro_user_name
+    $dendro_installation_path/conf/scripts/install.sh
 fi
 
 #set active deployment configuration
