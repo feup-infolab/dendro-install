@@ -146,7 +146,7 @@ recommender_installation_path='/dendro_recommender'
 	dendro_recommender_all_ontologies_url="${dendro_base_uri}/ontologies/all"
 
 #public_ontologies
-	public_ontologies="[\"foaf\",\"dcterms\",\"bdv\",\"research\"]"
+	public_ontologies="[\"foaf\",\"dcterms\",\"bdv\",\"research\",\"ddiup\",\"disco\"]"
 
 #authentication
 	#default
