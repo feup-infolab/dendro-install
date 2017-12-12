@@ -95,7 +95,7 @@ DB.DBA.XML_REMOVE_NS_BY_PREFIX('gm', 2);
 DB.DBA.XML_SET_NS_DECL ('gm', 'http://dendro.fe.up.pt/ontology/game/', 2);
 
 SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/ddiup#>;
-SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/DDI_UP/ddi_up_ontology_2.0.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/ddiup#>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/DDI_UP/ddi_up_ontology_2.0.rdf> INTO GRAPH <http://dendro.fe.up.pt/ontology/ddiup#>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('ddiup', 2);
 DB.DBA.XML_SET_NS_DECL ('ddiup', 'http://dendro.fe.up.pt/ontology/ddiup#', 2);
 
