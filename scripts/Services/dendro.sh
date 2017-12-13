@@ -60,9 +60,10 @@ WantedBy=multi-user.target\n" | sudo tee $dendro_startup_item_file
 
 sudo chmod 0655 $dendro_startup_item_file
 sudo systemctl daemon-reload
-#sudo systemctl reload
+sudo systemctl reload
 sudo systemctl enable $dendro_service_name
 sudo systemctl start $dendro_service_name
+sudo systemctl restart $dendro_service_name
 
 timeout=10
 echo "Waiting to start Dendro service... please wait $timeout seconds..."
