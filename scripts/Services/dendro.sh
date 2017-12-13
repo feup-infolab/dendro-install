@@ -46,8 +46,8 @@ Description=Dendro ${active_deployment_setting} daemon
 [Service]
 Type=simple
 WorkingDirectory=$dendro_installation_path
-Restart=on-failure
-RestartSec=5s
+Restart=always
+#RestartSec=5s
 TimeoutStartSec=infinity
 User=$dendro_user_name
 Group=$dendro_user_group
