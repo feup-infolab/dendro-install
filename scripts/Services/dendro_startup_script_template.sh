@@ -14,6 +14,8 @@ echo "[[ dendro log location: %DENDRO_LOG_FILE% ]]"
 
 nvm use %NODE_VERSION% --delete-prefix &&
 pm2 list &&
+pm2 kill &&
+pm2 update && 
 node %DENDRO_INSTALLATION_PATH%/src/app.js | tee --append %DENDRO_LOG_FILE%
 	
 if [[ "$?" != "0" ]]
