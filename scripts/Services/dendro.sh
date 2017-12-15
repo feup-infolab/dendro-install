@@ -41,19 +41,38 @@ sudo sed -i "s;%NODE_VERSION%;$node_version;g" $dendro_startup_script || die "Un
 sudo chown -R $dendro_user_name:$dendro_user_group $dendro_startup_scripts_path &&
 sudo chmod +x $dendro_startup_script || die "Unable to change permissions of the startup script at $dendro_startup_scripts_path"
 
+# [Unit]
+# Description=Dendro dendro_prd_demo_3007_port daemon
+# [Service]
+# Type=simple
+# WorkingDirectory=/dendro/dendro_prd_demo_3007_port
+# Restart=on-failure
+# RestartSec=5s
+# TimeoutStartSec=infinity
+# User=dendro
+# Group=dendro
+# RuntimeMaxSec=infinity
+# KillMode=control-group
+# ExecStart=/bin/sh -c "/dendro/startup_scripts/dendro_prd_demo_3007_port.sh"
+# ExecStop=/bin/sh -c "kill -2 $(cat /dendro/dendro_prd_demo_3007_port/running.pid)"
+# PIDFile=/dendro/dendro_prd_demo_3007_port/running.pid
+# [Install]
+# WantedBy=multi-user.target
+
 printf "[Unit]
 Description=Dendro ${active_deployment_setting} daemon
 [Service]
 Type=simple
 WorkingDirectory=$dendro_installation_path
 Restart=on-failure
-#RestartSec=5s
+RestartSec=5s
 TimeoutStartSec=infinity
 User=$dendro_user_name
 Group=$dendro_user_group
 RuntimeMaxSec=infinity
 KillMode=control-group
-ExecStart=$dendro_startup_script
+ExecStart=/bin/sh -c "$dendro_startup_script"
+ExecStop=/bin/sh -c "kill -2 $(cat $dendro_installation_path/running.pid)"
 PIDFile=${dendro_installation_path}/running.pid
 [Install]
 WantedBy=multi-user.target\n" | sudo tee $dendro_startup_item_file
