@@ -496,6 +496,7 @@ var write_dendro_configuration_file = function ()
             "level" : get_argument_by_name('logging_level'),
             "app_logs_folder" : "logs/app",
             "log_all_requests": true,
+			"do_not_log_requests_to_public_assets": true,
             "log_emailing": false,
         },
         "version" :
