@@ -539,7 +539,8 @@ var write_dendro_configuration_file = function ()
             "max_suggestions_of_each_type" : 80,
             "recommendation_page_size" : 30,
             "random_interactions_generation_page_size": 5,
-            "max_interaction_pushing_threads" : 1
+            "max_interaction_pushing_threads" : 1,
+            "interactions_recording_table": "interactions"
         },
         "email" :
         {
