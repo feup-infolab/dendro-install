@@ -104,6 +104,11 @@ SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/ma
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('disco', 2);
 DB.DBA.XML_SET_NS_DECL ('disco', 'http://rdf-vocabulary.ddialliance.org/discovery#', 2);
 
+SPARQL CLEAR GRAPH <http://www.w3.org/1999/02/22-rdf-syntax-ns#>;
+SPARQL LOAD <https://www.w3.org/1999/02/22-rdf-syntax-ns.rdf> INTO GRAPH <http://www.w3.org/1999/02/22-rdf-syntax-ns#>;
+DB.DBA.XML_REMOVE_NS_BY_PREFIX('rdf', 2);
+DB.DBA.XML_SET_NS_DECL ('rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#', 2);
+
 GRANT SPARQL_UPDATE to "SPARQL";
 
 GRANT execute ON SPARQL_INSERT_DICT_CONTENT TO "SPARQL";
