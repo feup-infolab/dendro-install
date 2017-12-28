@@ -174,6 +174,33 @@ active_deployment_setting='dendroVagrantDemoTESTS'
 	host="192.168.56.248"
 ```
 
+### Install Java 1.8 (required for JDBC Database Adapter). This is mandatory
+
+#### For Debian Linux 
+
+```bash
+sudo apt-get install oracle-java8
+```
+
+#### For Ubuntu Linux 
+
+```bash
+#install Java 8
+sudo apt-get install -y python-software-properties debconf-utils
+sudo add-apt-repository -y ppa:webupd8team/java
+sudo apt-get update
+echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
+sudo apt-get install -y oracle-java8-installer
+```
+
+```bash
+➜  dendro-install git:(adding-unique-identifiers) ✗ java -version 
+Picked up _JAVA_OPTIONS:   -Dawt.useSystemAAFontSettings=gasp
+openjdk version "1.8.0_141"
+OpenJDK Runtime Environment (build 1.8.0_141-8u141-b15-3-b15)
+OpenJDK 64-Bit Server VM (build 25.141-b15, mixed mode)
+```
+
 ### Cloning the dendro repository, initial setup and starting up the app
 
 #### For Mac / Linux
