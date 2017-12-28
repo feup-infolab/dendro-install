@@ -194,11 +194,28 @@ sudo apt-get install -y oracle-java8-installer
 ```
 
 ```bash
+sudo update-alternatives --config java
+#Select the Oracle JDK
+```
+
+Before:
+
+```bash
 ➜  dendro-install git:(adding-unique-identifiers) ✗ java -version 
 Picked up _JAVA_OPTIONS:   -Dawt.useSystemAAFontSettings=gasp
 openjdk version "1.8.0_141"
 OpenJDK Runtime Environment (build 1.8.0_141-8u141-b15-3-b15)
 OpenJDK 64-Bit Server VM (build 25.141-b15, mixed mode)
+```
+
+After: 
+
+```bash
+➜  ~ java -version
+Picked up _JAVA_OPTIONS:   -Dawt.useSystemAAFontSettings=gasp
+java version "1.8.0_144"
+Java(TM) SE Runtime Environment (build 1.8.0_144-b01)
+Java HotSpot(TM) 64-Bit Server VM (build 25.144-b01, mixed mode)
 ```
 
 ### Cloning the dendro repository, initial setup and starting up the app
