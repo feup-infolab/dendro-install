@@ -227,6 +227,9 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.144-b01, mixed mode)
 git clone https://github.com/feup-infolab/dendro.git
 cd dendro
 
+#install prerequisites
+sudo apt-get -y -f -qq install unzip devscripts autoconf automake libtool flex bison gperf gawk m4 make libssl-dev git imagemagick subversion zip htop redis-server htop build-essential --fix-missing
+
 #install everything
 ./conf/scripts/install.sh
 
