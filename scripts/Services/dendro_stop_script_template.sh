@@ -21,6 +21,7 @@ echo "[[ dendro log location: %DENDRO_LOG_FILE% ]]"
 # ============
 # = stop app =
 # ============
+cd "%DENDRO_INSTALLATION_PATH%"
 pm2 status > /dev/null
 npm run stop
 
