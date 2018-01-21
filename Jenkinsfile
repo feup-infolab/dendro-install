@@ -5,16 +5,16 @@ properties(
 )
 
 pipeline {
-    agent {
-		label : "dendroinstall"
-	}
 	// options {
 	//     disableConcurrentBuilds()  //each branch has 1 job running at a time
 	//}
-	
+    agent {
+		label : 'dendroinstall'
+	}
     stages {
         stage('Set Jenkins Build Var')
         {
+	    	
             steps {
               sh "export JENKINS_BUILD='1'"
             }
