@@ -80,10 +80,6 @@ sudo chmod +x $dendro_startup_script &&
 sudo chmod +x $dendro_stop_script &&
 sudo chmod +x $dendro_reload_script  || die "Unable to change permissions of the startup script at $dendro_startup_scripts_path"
 
-#install pm2 as a service (does NOT work)
-#dendro_user_home=$( getent passwd "$dendro_user_name" | cut -d: -f6 )
-#$(pm2 startup -u $dendro_user_name --hp $dendro_user_home | tail -n 1)
-
 printf "[Unit]
 Description=Dendro Service (${active_deployment_setting})
 Wants=network-online.target
@@ -93,9 +89,6 @@ User=$dendro_user_name
 Group=$dendro_user_group
 Type=oneshot
 WorkingDirectory=$dendro_installation_path
-TimeoutStartSec=infinity
-RuntimeMaxSec=infinity
-KillMode=control-group
 ExecStart=$dendro_startup_script
 ExecStop=$dendro_stop_script
 ExecReload=$dendro_reload_script
