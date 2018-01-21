@@ -47,7 +47,7 @@ copy_config_files() {
 refresh_code_only="false"
 set_dev_mode="false"
 
-while getopts 'agfgtjdurb:' flag; do
+while getopts 'agfgtjdursb:' flag; do
   case $flag in
 	a)
      	install_teamcity_agent="true"
@@ -118,6 +118,14 @@ then
 	copy_config_files
 fi
 
+if [ "${setup_service_dendro_service_only}" == "true" ]
+then
+	info "Rebuilding the dendro service configuration for service $dendro_service_name..."
+	source ./Services/dendro.sh
+	success "Dendro service $dendro_service_name recreated and booting up. Setup will exit now."
+	exit 0
+fi
+
 #apply pre-installation fixes such as DNS fixes (thank you bugged Vagrant Ubuntu boxes)
 info "Applying pre-installation fixes..."
 source ./Fixes/fix_dns.sh
@@ -147,14 +155,6 @@ warning "Installing NVM as $(whoami) in order to install node version $node_vers
 #install nvm as ubuntu (vm user).
 #This can fail without dying because not always we have a 'ubuntu' user
 sudo su - "ubuntu" -c "$setup_dir/Checks/load_nvm.sh $node_version"
-
-if [ "${setup_service_dendro_service_only}" == "true" ]
-then
-	info "Rebuilding the dendro service configuration for service $dendro_service_name..."
-	source ./Services/dendro.sh
-	success "Dendro service $dendro_service_name recreated and booting up. Setup will exit now."
-	exit 0
-fi
 
 if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ] && [ "$install_jenkins" != "true" ] && [ "$install_teamcity" != "true" ] && [ "$install_teamcity_agent" != "true" ]
 then
