@@ -6,7 +6,7 @@ properties(
 
 pipeline {
     agent {
-		label : "dendro-install"
+		label : "dendroinstall"
 	}
 	// options {
 	//     disableConcurrentBuilds()  //each branch has 1 job running at a time
