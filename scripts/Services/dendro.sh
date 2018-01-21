@@ -23,7 +23,9 @@ CREATE_SERVICE_COMMAND=$(sudo su $dendro_user_name -c "source ~/.bash_profile > 
 #create service command
 info "Running command to load pm2 process manager daemon: $CREATE_SERVICE_COMMAND ..."
 
-load_nvm
+# load nvm, run service with the right node version
+export NVM_DIR="$HOME/.nvm" &&
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 nvm use $node_version 
 eval $CREATE_SERVICE_COMMAND
 sudo systemctl daemon-reload
