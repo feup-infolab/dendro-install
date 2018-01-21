@@ -83,13 +83,15 @@ printf "[Unit]
 Description=Dendro Service (${active_deployment_setting})
 Wants=network-online.target
 After=network.target network-online.target
+
 [Service]
 User=$dendro_user_name
 Group=$dendro_user_group
-Type=forking
+Type=simple
 ExecStart=$dendro_startup_script
 ExecStop=$dendro_stop_script
 ExecReload=$dendro_reload_script
+
 [Install]
 WantedBy=multi-user.target network-online.target\n" | sudo tee $dendro_startup_item_file
 
