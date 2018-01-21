@@ -91,10 +91,8 @@ After=network.target network-online.target
 [Service]
 User=$dendro_user_name
 Group=$dendro_user_group
-Type=forking #magical option
+Type=oneshot
 WorkingDirectory=$dendro_installation_path
-Restart=on-failure
-RestartSec=5s
 TimeoutStartSec=infinity
 RuntimeMaxSec=infinity
 KillMode=control-group

@@ -19,18 +19,8 @@ CWD=$(pwd)
 cd /
 cd "$CWD"
 
-#kill pm2 for the cases where the install folder is deleted, force to update pm2's CWD to avoid
-#Cluster mode "ENOENT: no such file or directory, uv_cwd" issue. Doesn't appear to relate to symlinks. #2057
-pm2 kill
-
-#force pm2 to daemonize
-pm2 list > /dev/null
-pm2 status > /dev/null
-
 #start app
 npm restart
-
-#npm start | tee --append %DENDRO_LOG_FILE%
 
 if [[ "$?" != "0" ]]
 then
