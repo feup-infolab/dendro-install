@@ -18,10 +18,10 @@ echo "[[ user running the script: $(whoami) ]]"
 echo "[[ dendro installation path: %DENDRO_INSTALLATION_PATH% ]]"
 echo "[[ dendro log location: %DENDRO_LOG_FILE% ]]"
 
-cd %DENDRO_INSTALLATION_PATH%
-
-#start app
-npm restart > %DENDRO_LOG_FILE%
+# ===============
+# = restart app =
+# ===============
+npm run stop && npm run start
 
 if [[ "$?" != "0" ]]
 then

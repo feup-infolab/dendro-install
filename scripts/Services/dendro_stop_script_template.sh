@@ -21,10 +21,7 @@ echo "[[ dendro log location: %DENDRO_LOG_FILE% ]]"
 # ============
 # = stop app =
 # ============
-cd %DENDRO_INSTALLATION_PATH%
-
-#stop app
-npm stop > %DENDRO_LOG_FILE%
+npm run stop
 
 if [[ "$?" != "0" ]]
 then
