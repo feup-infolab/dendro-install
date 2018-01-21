@@ -27,7 +27,6 @@ info "Running command to load pm2 process manager daemon: $CREATE_SERVICE_COMMAN
 export NVM_DIR="$HOME/.nvm" &&
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 eval "nvm use $node_version && $CREATE_SERVICE_COMMAND"
-sudo systemctl daemon-reload
 
 # ==================================
 # = Set up dendro instance service =
@@ -88,11 +87,9 @@ After=network.target network-online.target
 User=$dendro_user_name
 Group=$dendro_user_group
 Type=forking
-WorkingDirectory=$dendro_installation_path
 ExecStart=$dendro_startup_script
 ExecStop=$dendro_stop_script
 ExecReload=$dendro_reload_script
-TimeoutStartSec=1200
 [Install]
 WantedBy=multi-user.target network-online.target\n" | sudo tee $dendro_startup_item_file
 
@@ -100,18 +97,7 @@ sudo chmod 0655 $dendro_startup_item_file
 sudo systemctl daemon-reload
 sudo systemctl enable $dendro_service_name
 sudo systemctl start $dendro_service_name
-sudo systemctl restart $dendro_service_name
 
-# timeout=10
-# echo "Waiting to start Dendro service... please wait $timeout seconds..."
-#
-# for (( i = 0; i < $timeout; i++ )); do
-# 	echo -ne $[$timeout-i]...
-# 	sleep 1s
-# done
-# sudo systemctl restart $dendro_service_name
-
-#go back to initial dir
 cd $setup_dir || die "Error returning to setup folder"
 
 success "Finished setting up Dendro service.\n"

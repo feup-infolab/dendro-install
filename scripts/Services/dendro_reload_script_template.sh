@@ -18,8 +18,10 @@ echo "[[ user running the script: $(whoami) ]]"
 echo "[[ dendro installation path: %DENDRO_INSTALLATION_PATH% ]]"
 echo "[[ dendro log location: %DENDRO_LOG_FILE% ]]"
 
+cd %DENDRO_INSTALLATION_PATH%
+
 #start app
-npm restart
+npm restart > %DENDRO_LOG_FILE%
 
 if [[ "$?" != "0" ]]
 then
