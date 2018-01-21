@@ -8,16 +8,29 @@ else
 	source ./constants.sh
 fi
 
-info "Setting up Dendro service...\n"
-
 #save current dir
 setup_dir=$(pwd)
+
+# =====================
+# = PM2 Service setup =
+# =====================
+
+info "Setting up PM2 Daemon auto start for supporting Dendro in production...\n"
 
 #generate pm2 autostart command
 CREATE_SERVICE_COMMAND=$(sudo su $dendro_user_name -c "source ~/.bash_profile > /dev/null; pm2 startup | tail -n 1")
 
 #create service command
 info "Running command to load pm2 process manager daemon: $CREATE_SERVICE_COMMAND ..."
+
+eval $CREATE_SERVICE_COMMAND
+sudo systemctl daemon-reload
+
+# ==================================
+# = Set up dendro instance service =
+# ==================================
+
+info "Setting up $dendro_service_name Dendro service...\n"
 
 #stop current service if present
 info "Stopping $dendro_service_name service..."
@@ -90,7 +103,6 @@ WantedBy=multi-user.target network-online.target\n" | sudo tee $dendro_startup_i
 
 sudo chmod 0655 $dendro_startup_item_file
 sudo systemctl daemon-reload
-sudo systemctl reload
 sudo systemctl enable $dendro_service_name
 sudo systemctl start $dendro_service_name
 sudo systemctl restart $dendro_service_name
