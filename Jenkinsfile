@@ -5,9 +5,6 @@ properties(
 )
 
 pipeline {
-	// options {
-	//     disableConcurrentBuilds()  //each branch has 1 job running at a time
-	//}
     agent {
 		label : 'dendroinstall'
 	}
@@ -40,15 +37,4 @@ pipeline {
             }
         }
     }
-
-    // post {
-    //   success {
-    //     sh "chmod +x $WORKSPACE/uninstall.sh"
-    //     sh "set JENKINS_BUILD='1' $WORKSPACE/uninstall.sh"
-    //   }
-    //   failure {
-    //     sh "chmod +x $WORKSPACE/uninstall.sh"
-    //     sh "set JENKINS_BUILD='1' $WORKSPACE/uninstall.sh"
-    //   }
-    // }
 }
