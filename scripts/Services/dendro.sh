@@ -18,7 +18,7 @@ setup_dir=$(pwd)
 info "Setting up PM2 Daemon auto start for supporting Dendro in production...\n"
 
 #generate pm2 autostart command
-CREATE_SERVICE_COMMAND=$(sudo su $dendro_user_name -c "source ~/.bash_profile > /dev/null; pm2 startup | tail -n 1")
+CREATE_SERVICE_COMMAND=$(sudo su $dendro_user_name -c "source ~/.bash_profile > /dev/null; nvm use $node_version > /dev/null; pm2 startup | tail -n 1")
 
 #create service command
 info "Running command to load pm2 process manager daemon: $CREATE_SERVICE_COMMAND ..."
@@ -107,15 +107,14 @@ sudo systemctl enable $dendro_service_name
 sudo systemctl start $dendro_service_name
 sudo systemctl restart $dendro_service_name
 
-timeout=10
-echo "Waiting to start Dendro service... please wait $timeout seconds..."
-
-for (( i = 0; i < $timeout; i++ )); do
-	echo -ne $[$timeout-i]...
-	sleep 1s
-done
-
-sudo systemctl restart $dendro_service_name
+# timeout=10
+# echo "Waiting to start Dendro service... please wait $timeout seconds..."
+#
+# for (( i = 0; i < $timeout; i++ )); do
+# 	echo -ne $[$timeout-i]...
+# 	sleep 1s
+# done
+# sudo systemctl restart $dendro_service_name
 
 #go back to initial dir
 cd $setup_dir || die "Error returning to setup folder"
