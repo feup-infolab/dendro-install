@@ -92,6 +92,7 @@ WorkingDirectory=$dendro_installation_path
 ExecStart=$dendro_startup_script
 ExecStop=$dendro_stop_script
 ExecReload=$dendro_reload_script
+TimeoutStartSec=600
 [Install]
 WantedBy=multi-user.target network-online.target\n" | sudo tee $dendro_startup_item_file
 
