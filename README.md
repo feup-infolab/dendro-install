@@ -223,6 +223,16 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.144-b01, mixed mode)
 #### For Mac / Linux
 
 ```bash
+
+#install NVM, Node 8.9.0 + Node Automatic Version switcher
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash &&
+export NVM_DIR="$HOME/.nvm" &&
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+nvm install 8.9.0
+npm install -g avn avn-nvm avn-n
+avn setup
+
 #clone repo
 git clone https://github.com/feup-infolab/dendro.git
 cd dendro

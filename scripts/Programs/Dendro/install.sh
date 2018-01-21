@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 source ./constants.sh
+source ./secrets.sh
 
 #save current dir
 setup_dir=$(pwd)
@@ -19,11 +20,9 @@ then
 	echo "NVM is not installed for user $(whoami)!" &&
 	exit 1
 else
-	cd $dendro_installation_path &&
-	npm install &&
-	npm install grunt &&
-	npm install grunt-cli &&
-	grunt
+ 	echo "Running $dendro_installation_path/conf/scripts/install.sh as user $(whoami)!"
+	cd $dendro_installation_path
+    $dendro_installation_path/conf/scripts/install.sh
 fi
 
 #set active deployment configuration

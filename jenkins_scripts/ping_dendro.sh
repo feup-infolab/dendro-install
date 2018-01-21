@@ -10,6 +10,7 @@ for (( i = 0; i < $timeout; i++ )); do
   then
     exit 0
   fi
+  tail $dendro_install
   sleep 1s
 done
 

@@ -22,14 +22,9 @@ def sanitize_filename(filename)
   return fn.join '.'
 end
 
-puts "Configuring Vagrant VM #{ENV['VAGRANT_VM_NAME']} on IP #{ENV['VAGRANT_VM_IP']}."
-
-if "#{ENV['JENKINS_BUILD']}" == '1'
-  puts "[JENKINS] JENKINS build detected."
-end
-
+###INSTALL PLUGINS
 #install plugin to keep all the VBox Guest Additions updated.
-required_plugins = %w(vagrant-share vagrant-vbguest)
+required_plugins = %w(vagrant-share vagrant-vbguest vagrant-disksize vagrant-proxyconf)
 
 plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
 if not plugins_to_install.empty?
@@ -41,7 +36,27 @@ if not plugins_to_install.empty?
   end
 end
 
+###Configuration
+puts "Configuring Vagrant VM #{ENV['VAGRANT_VM_NAME']} on IP #{ENV['VAGRANT_VM_IP']}."
+
+if "#{ENV['JENKINS_BUILD']}" == '1'
+  puts "[JENKINS] JENKINS build detected."
+end
+
 Vagrant.configure("2") do |config|
+  
+  if "#{ENV['VAGRANT_USE_SQUID_PROXY_VM']}" == 'true'
+    puts "Using Squid proxy VM for quicker deployments..."
+    # Enable caching web server
+    if Vagrant.has_plugin?("vagrant-proxyconf")
+      config.proxy.http     = "http://squid:squid@10.0.0.10:3128/"
+      config.proxy.https    = "http://squid:squid@10.0.0.10:3128/"
+      config.proxy.no_proxy = "localhost,127.0.0.1,deb.nodesource.com,ppa.launchpad.net,repo.mongodb.org,download.oracle.com,edelivery.oracle.com"
+      config.apt_proxy.http     = "http://squid:squid@10.0.0.10:8000/"
+      config.apt_proxy.https    = "http://squid:squid@10.0.0.10:8000/"
+    end
+  end
+
   #shared folders
 
   # other config here
@@ -55,9 +70,18 @@ Vagrant.configure("2") do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
 
+  if "#{ENV['JENKINS_BUILD']}" == "1"
+    config.vm.boot_timeout= 1200
+  else
+    config.vm.boot_timeout= 600
+  end
+  
   config.vm.box = "ubuntu/xenial64"
-  config.vm.box_version = "20161214.0.1"
-  config.vm.boot_timeout= 600
+  config.vm.box_version = "20170922.0.0"
+  
+
+  #set maximum size of the main hard drive
+  config.disksize.size = '100GB'
 
   puts "IP of Virtualbox: #{ENV['VAGRANT_VM_IP']}"
 
@@ -66,19 +90,12 @@ Vagrant.configure("2") do |config|
     subconfig.vm.hostname = "#{ENV['VAGRANT_VM_NAME']}"
   end
 
-  if "#{ENV['JENKINS_BUILD']}" == "1"
-    puts "[JENKINS] Configuring SSH settings...."
-    config.ssh.keep_alive=true
-    config.ssh.username = 'vagrant'
-    config.ssh.password = 'vagrant'
-  else
-      if ENV['VAGRANT_VM_SSH_USERNAME'] != nil && ENV['VAGRANT_VM_SSH_PASSWORD'] != nil
-        config.ssh.username=ENV['VAGRANT_VM_SSH_USERNAME']
-        puts "SSH username to connect to the VM will be " + config.ssh.username
+  if ENV['VAGRANT_VM_SSH_USERNAME'] != nil && ENV['VAGRANT_VM_SSH_PASSWORD'] != nil
+    config.ssh.username=ENV['VAGRANT_VM_SSH_USERNAME']
+    puts "SSH username to connect to the VM will be " + config.ssh.username
 
-        config.ssh.password=ENV['VAGRANT_VM_SSH_PASSWORD']
-        puts "SSH password to connect to the VM will be " + config.ssh.password
-      end
+    config.ssh.password=ENV['VAGRANT_VM_SSH_PASSWORD']
+    puts "SSH password to connect to the VM will be " + config.ssh.password
   end
 
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
@@ -91,18 +108,19 @@ Vagrant.configure("2") do |config|
      vb.name = "#{ENV['VAGRANT_VM_NAME']}"
 
      vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+     vb.customize [ "modifyvm", :id, "--uart1", "0x3F8", "4" ]
+     vb.customize [ "modifyvm", :id, "--uartmode1", "file", File.join(Dir.pwd, "ubuntu-xenial-16.04-cloudimg-console.log") ]
 
      if "#{ENV['JENKINS_BUILD']}" == "1"
        puts "[JENKINS] Configuring VM for build..."
-       vb.customize ["modifyvm", :id, "--hwvirtex", "off"]
-       vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
-       vb.customize ["modifyvm", :id, "--cableconnected2", "on"]
-       vb.cpus = 1
+       #vb.customize ["modifyvm", :id, "--hwvirtex", "off"]
+       #vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
+       #vb.customize ["modifyvm", :id, "--cableconnected2", "on"]
      else
-       vb.cpus = 2
-     end
 
-     vb.memory = "2048"
+     end
+      vb.cpus = 2     
+      vb.memory = "2048"
   end
 
   time = sanitize_filename(Time.new.inspect)

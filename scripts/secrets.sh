@@ -17,6 +17,7 @@ eudat_token="veryLongAndComplicatedString"
 eudat_community_id="e9b9792e-79fb-4b07-b6b4-b9c2bd06d095"
 
 #email account for messages and password recovery messaging
+emailing_account_gmail_reply_to_address="noreply@dendro.fe.up.pt"
 emailing_account_gmail_user="gmail_user_to_send_emails"
 emailing_account_gmail_password="password_for_gmail_user_to_send_emails"
 
@@ -49,6 +50,17 @@ mongodb_dba_password="r00t"
 #svn users and passwords
 svn_user="user_for_dendro_svn_repo"
 svn_user_password="password_for_dendro_svn_repo"
+
+#orcid authentication settings
+orcid_client_id="ORCID_CLIENT_ID"
+orcid_client_secret="ORCID_CLIENT_SECRET"
+orcid_auth_callback_url="/auth/orcid/callback"
+
+#saml authentication settings
+saml_authentication_callback_path="/auth/saml/callback"
+saml_authentication_entry_point="https://openidp.feide.no/simplesaml/saml2/idp/SSOService.php"
+saml_authentication_issuer="passport-saml"
+saml_authentication_button_text="Sign-in with institutional login"
 
 #teamcity credentials
 

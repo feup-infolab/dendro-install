@@ -37,6 +37,8 @@ PIDFile=$installation_path/service_pids/mongodb.pid
 [Install]
 WantedBy=multi-user.target\n" | sudo tee /etc/systemd/system/mongodb.service &&
 
+
+sudo mkdir -p /data/db
 sudo chown mongodb /data/db/mongod.lock
 sudo chown -R mongodb /data/db
 

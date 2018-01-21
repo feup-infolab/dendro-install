@@ -8,19 +8,34 @@ else
 	source ./constants.sh
 fi
 
-info "Installing Virtuoso 7.2.4 from .deb @feup-infolab/virtuoso7-debs."
+info "Installing Virtuoso from .deb @feup-infolab/virtuoso7-debs."
 
 #save current dir
 setup_dir=$(pwd)
 
-#install Virtuoso 7.2.4 from .deb
+#install git lfs
+sudo apt-get install software-properties-common &&
+sudo add-apt-repository -y ppa:git-core/ppa &&
+curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash &&
+sudo apt-get update &&
+sudo apt-get install git-lfs && info "Installed git lfs" || die "Unable to install Git lfs!"
 
-git clone https://github.com/feup-infolab/virtuoso7-debs.git virtuoso7 &&
-cd virtuoso7/debs-ubuntu-16-04 &&
-sudo dpkg -i virtuoso-opensource*.deb
+#stop virtuoso service if running
+sudo service virtuoso stop
+
+#install Virtuoso devel from .deb
+rm -rf virtuoso7
+git lfs clone https://github.com/feup-infolab/virtuoso7-debs.git virtuoso7 &&
+sudo dpkg -i virtuoso7/debs-ubuntu-16-04/virtuoso_7.4.2-devel-1_amd64.deb || die "Unable to install virtuoso!"
 
 #setup default configuration .ini file
 sudo cp /usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini.sample /usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini
+
+# read -r -d '' replaced_line << LUCHI
+# CheckpointInterval		= 60
+# LUCHI
+#
+# replace_text_in_file "/usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini" "$replaced_line" "CheckpointInterval		= 0"  "eliminate_checkpoint_to_avoid_404_errors_as_per_github_issue_565_on_github_com_virtuoso_opensource"
 
 #create virtuoso user and give ownership
 sudo useradd $virtuoso_user
@@ -55,4 +70,4 @@ die "Failed to set Virtuoso OpenSource crontab"
 #go back to initial dir
 cd $setup_dir
 
-success "Installed Virtuoso 7.2.4 from .deb @feup-infolab/virtuoso7-debs."
+success "Installed Virtuoso from .deb @feup-infolab/virtuoso7-debs."

@@ -14,8 +14,17 @@ info "NOTE: To setup this Virtual Machine for Development, use the -d flag. Exam
 #save current dir
 setup_dir=$(pwd)
 
+#install first dependencies
 sudo apt-get update &&
-sudo apt-get -y -f -qq install unzip devscripts autoconf automake libtool flex bison gperf gawk m4 make libssl-dev git imagemagick subversion zip htop redis-server htop mongodb --fix-missing || die "Failed to install preliminary dependencies. Please check any prior error messages."
+sudo apt-get -y -f -qq install unzip devscripts autoconf automake libtool flex bison gperf gawk m4 make libssl-dev git imagemagick subversion zip htop redis-server htop --fix-missing || die "Failed to install preliminary dependencies. Please check any prior error messages."
+
+#install systemd (for precise32 boxes)
+sudo apt-get -y -f -qq install  systemd libpam-systemd systemd-ui
+
+#install mutt (mailer) without interactive screens
+sudo DEBIAN_FRONTEND=noninteractive apt-get -yq install mutt
+
+ #echo "This is the message body" | mutt -a ./log.log -s "loladazinha" -- username@server.com
 
 #install mutt (mailer) without interactive screens
 sudo DEBIAN_FRONTEND=noninteractive apt-get -yq install mutt

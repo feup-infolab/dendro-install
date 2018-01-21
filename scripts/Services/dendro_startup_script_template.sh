@@ -1,13 +1,34 @@
 #!/usr/bin/env bash
 
-echo "[[Dendro starting...]]"
+echo "[[ Dendro %DENDRO_SERVICE_NAME% starting...]]" 
+
+# =====================================================
+# = load nvm, run service with the right node version =
+# =====================================================
+
 export NVM_DIR="$HOME/.nvm" &&
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-echo "nvm is at: $NVM_DIR"
 
-nvm use %NODE_VERSION% &&
+nvm use "%NODE_VERSION%"
 
-echo "node is at: $(which node)"
-echo "node version: $(node -v)"
+echo "[[ nvm location: $NVM_DIR ]]"
+echo "[[ node location: $(which node) ]]"
+echo "[[ node version: $(node -v) ]]"
+echo "[[ user running the script: $(whoami) ]]"
+echo "[[ dendro installation path: %DENDRO_INSTALLATION_PATH% ]]"
+echo "[[ dendro log location: %DENDRO_LOG_FILE% ]]"
 
-node %DENDRO_INSTALLATION_PATH%/src/app.js >> %DENDRO_LOG_FILE% 2>&1
+# =============
+# = start app =
+# =============
+cd "%DENDRO_INSTALLATION_PATH%"
+pm2 status > /dev/null
+npm run start
+
+if [[ "$?" != "0" ]]
+then
+	echo "There was an error starting Dendro Service %DENDRO_SERVICE_NAME% !"
+	exit 1
+fi
+
+

@@ -1,12 +1,17 @@
 properties(
     [
-        pipelineTriggers([cron('H * * * *')]),
+        pipelineTriggers([cron('H 3 * * *')]),
     ]
 )
 
 pipeline {
-    agent any
-
+    agent {
+		label : "dendro-install"
+	}
+	// options {
+	//     disableConcurrentBuilds()  //each branch has 1 job running at a time
+	//}
+	
     stages {
         stage('Set Jenkins Build Var')
         {

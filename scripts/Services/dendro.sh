@@ -8,12 +8,33 @@ else
 	source ./constants.sh
 fi
 
-info "Setting up Dendro service...\n"
-
 #save current dir
 setup_dir=$(pwd)
 
-#stop current recommender service if present
+# # =====================
+# # = PM2 Service setup =
+# # =====================
+#
+# info "Setting up PM2 Daemon auto start for supporting Dendro in production...\n"
+#
+# #generate pm2 autostart command
+# CREATE_SERVICE_COMMAND=$(sudo su $dendro_user_name -c "source ~/.bash_profile > /dev/null; nvm use $node_version > /dev/null; pm2 startup | tail -n 1")
+#
+# #create service command
+# info "Running command to load pm2 process manager daemon: $CREATE_SERVICE_COMMAND ..."
+#
+# # load nvm, run service with the right node version
+# export NVM_DIR="$HOME/.nvm" &&
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# eval "nvm use $node_version && $CREATE_SERVICE_COMMAND"
+
+# ==================================
+# = Set up dendro instance service =
+# ==================================
+
+info "Setting up $dendro_service_name Dendro service...\n"
+
+#stop current service if present
 info "Stopping $dendro_service_name service..."
 sudo systemctl stop $dendro_service_name > /dev/null
 
@@ -34,36 +55,52 @@ printf "\n"
 sudo rm -rf $dendro_startup_script &&
 sudo cp $setup_dir/Services/dendro_startup_script_template.sh $dendro_startup_script &&
 sudo sed -i "s;%DENDRO_INSTALLATION_PATH%;$dendro_installation_path;g" $dendro_startup_script &&
+sudo sed -i "s;%DENDRO_SERVICE_NAME%;$dendro_service_name;g" $dendro_startup_script &&
 sudo sed -i "s;%DENDRO_LOG_FILE%;$dendro_log_file;g" $dendro_startup_script &&
-sudo sed -i "s;%NODE_VERSION%;$node_version;g" $dendro_startup_script || die "Unable to build the startup script at $dendro_startup_scripts_path"
+sudo sed -i "s;%NODE_VERSION%;$node_version;g" $dendro_startup_script || die "Unable to build the startup script at $dendro_startup_script"
+
+#build stop script file
+sudo rm -rf $dendro_stop_script &&
+sudo cp $setup_dir/Services/dendro_stop_script_template.sh $dendro_stop_script &&
+sudo sed -i "s;%DENDRO_INSTALLATION_PATH%;$dendro_installation_path;g" $dendro_stop_script &&
+sudo sed -i "s;%DENDRO_SERVICE_NAME%;$dendro_service_name;g" $dendro_stop_script &&
+sudo sed -i "s;%NODE_VERSION%;$node_version;g" $dendro_stop_script || die "Unable to build the stop script at $dendro_stop_script"
+
+#build reload script file
+sudo rm -rf $dendro_reload_script &&
+sudo cp $setup_dir/Services/dendro_reload_script_template.sh $dendro_reload_script &&
+sudo sed -i "s;%DENDRO_INSTALLATION_PATH%;$dendro_installation_path;g" $dendro_reload_script &&
+sudo sed -i "s;%DENDRO_SERVICE_NAME%;$dendro_service_name;g" $dendro_reload_script &&
+sudo sed -i "s;%NODE_VERSION%;$node_version;g" $dendro_reload_script || die "Unable to build the reload script at $dendro_stop_script"
 
 #restore ownership of the startup files to dendro user
 sudo chown -R $dendro_user_name:$dendro_user_group $dendro_startup_scripts_path &&
-sudo chmod +x $dendro_startup_script || die "Unable to change permissions of the startup script at $dendro_startup_scripts_path"
+sudo chmod +x $dendro_startup_script &&
+sudo chmod +x $dendro_stop_script &&
+sudo chmod +x $dendro_reload_script  || die "Unable to change permissions of the startup script at $dendro_startup_scripts_path"
 
 printf "[Unit]
-Description=Dendro ${active_deployment_setting} daemon
+Description=Dendro Service (${active_deployment_setting})
+Wants=network-online.target
+After=network.target network-online.target
 [Service]
-Type=simple
-Restart=on-failure
-RestartSec=5s
-TimeoutStartSec=infinity
+WorkingDirectory=$dendro_installation_path
 User=$dendro_user_name
 Group=$dendro_user_group
-RuntimeMaxSec=infinity
-KillMode=control-group
+Type=forking
 ExecStart=$dendro_startup_script
-PIDFile=${dendro_installation_path}/running.pid
+ExecStop=$dendro_stop_script
+ExecReload=$dendro_reload_script
+TimeoutSec=infinity,
+PIDFile=$dendro_installation_path/running.pid
 [Install]
-WantedBy=multi-user.target\n" | sudo tee $dendro_startup_item_file
+WantedBy=multi-user.target network-online.target\n" | sudo tee $dendro_startup_item_file
 
 sudo chmod 0655 $dendro_startup_item_file
 sudo systemctl daemon-reload
-sudo systemctl reload
 sudo systemctl enable $dendro_service_name
 sudo systemctl start $dendro_service_name
 
-#go back to initial dir
 cd $setup_dir || die "Error returning to setup folder"
 
 success "Finished setting up Dendro service.\n"

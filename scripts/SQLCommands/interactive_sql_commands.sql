@@ -85,7 +85,7 @@ DB.DBA.XML_REMOVE_NS_BY_PREFIX('research', 2);
 DB.DBA.XML_SET_NS_DECL ('research', 'http://dendro.fe.up.pt/ontology/research/', 2);
 
 SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/socialStudies#>;
-SPARQL LOAD <http://dendro.fe.up.pt/ontologies/SOCIAL_STUDIES/SocialStudies.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/socialStudies#>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/SOCIAL_STUDIES/SocialStudies.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/socialStudies#>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('socialStudies', 2);
 DB.DBA.XML_SET_NS_DECL ('socialStudies', 'http://dendro.fe.up.pt/ontology/socialStudies#', 2);
 
@@ -108,6 +108,21 @@ SPARQL CLEAR GRAPH <http://purl.org/ontology/po/>;
 SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/PO/1.1.ttl> INTO GRAPH <http://purl.org/ontology/po/>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('po', 2);
 DB.DBA.XML_SET_NS_DECL ('po', 'http://purl.org/ontology/po/', 2);
+
+SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/ddiup#>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/DDI_UP/ddi_up_ontology_2.0.rdf> INTO GRAPH <http://dendro.fe.up.pt/ontology/ddiup#>;
+DB.DBA.XML_REMOVE_NS_BY_PREFIX('ddiup', 2);
+DB.DBA.XML_SET_NS_DECL ('ddiup', 'http://dendro.fe.up.pt/ontology/ddiup#', 2);
+
+SPARQL CLEAR GRAPH <http://rdf-vocabulary.ddialliance.org/discovery#>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/DISCOVERY/discovery.rdf> INTO GRAPH <http://rdf-vocabulary.ddialliance.org/discovery#>;
+DB.DBA.XML_REMOVE_NS_BY_PREFIX('disco', 2);
+DB.DBA.XML_SET_NS_DECL ('disco', 'http://rdf-vocabulary.ddialliance.org/discovery#', 2);
+
+SPARQL CLEAR GRAPH <http://www.w3.org/1999/02/22-rdf-syntax-ns#>;
+SPARQL LOAD <https://www.w3.org/1999/02/22-rdf-syntax-ns.rdf> INTO GRAPH <http://www.w3.org/1999/02/22-rdf-syntax-ns#>;
+DB.DBA.XML_REMOVE_NS_BY_PREFIX('rdf', 2);
+DB.DBA.XML_SET_NS_DECL ('rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#', 2);
 
 GRANT SPARQL_UPDATE to "SPARQL";
 

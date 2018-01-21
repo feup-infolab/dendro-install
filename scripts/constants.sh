@@ -1,9 +1,19 @@
 #!/usr/bin/env bash
 
+dendro_config_output_folder_location="."
+
+#tests branch
+#if this variable is set
+#AND the build is running in a jenkins server (env variable JENKINS_BUILD='1'),
+#it will check out this dendro branch to inside the VM for testing
+tests_branch="machine-plus-human-identifiers"
+
 #global
 active_deployment_setting='dendroVagrantDemo'
 #will be used to generate URLs relative to a base address, so set it wisely
 	host="192.168.56.249"
+#node environment profile (test / production / development)
+environment='development'
 installation_path='/dendro'
 recommender_installation_path='/dendro_recommender'
 
@@ -12,6 +22,10 @@ recommender_installation_path='/dendro_recommender'
 		mysql_host='127.0.0.1'
 		mysql_port='3306'
 		mysql_database_to_create=$active_deployment_setting
+
+	#uploads
+		max_upload_size="2147483648"
+		max_project_size="5368709120"
 
 #dendro
 	#startup services
@@ -22,7 +36,9 @@ recommender_installation_path='/dendro_recommender'
 	dendro_installation_path=$installation_path/$active_deployment_setting
 
 	dendro_startup_scripts_path="$installation_path/startup_scripts"
-	dendro_startup_script="$dendro_startup_scripts_path/$active_deployment_setting.sh"
+	dendro_startup_script="$dendro_startup_scripts_path/$active_deployment_setting-start.sh"
+	dendro_stop_script="$dendro_startup_scripts_path/$active_deployment_setting-stop.sh"
+	dendro_reload_script="$dendro_startup_scripts_path/$active_deployment_setting-reload.sh"
 
 	temp_downloads_folder='/tmp/dendro_setup'
 	dendro_svn_url='http://dendro-dev.fe.up.pt/svn/dendro/'
@@ -33,23 +49,11 @@ recommender_installation_path='/dendro_recommender'
 	dendro_port=3007
 	dendro_host=$host:$dendro_port
 	dendro_base_uri="http://$dendro_host"
-	temp_files_directory="/tmp/dendro/${active_deployment_setting}"
+	temp_files_directory="temp"
+	temp_uploads_files_directory="temp_uploads"
 	demo_mode_active="true"
 	dendro_theme="lumen"
-	load_databases="true"
-	reload_administrators_on_startup="true"
-	reload_demo_users_on_startup="true"
-	reload_ontologies_on_startup="true"
 	config_human_readable_name='DendroVagrantDemo'
-
-	#logging
- 	logging_format="dev"
- 	logging_app_logs_folder="logs/app"
- 	logging_log_request_times="true"
- 	logging_request_times_log_folder="logs/request_times"
- 	logging_log_requests_in_apache_format="true"
- 	logging_requests_in_apache_format_log_folder="logs/requests_apache_format"
-	pipe_console_to_logfile="false"
 
  	#version
  	config_human_readable_name='Dendro RDM Demo @ UPorto'
@@ -57,6 +61,7 @@ recommender_installation_path='/dendro_recommender'
 	#descriptor recommendation
 	interactions_table_stage1="interactions_${active_deployment_setting}_stage1"
 	interactions_table_stage2="interactions_${active_deployment_setting}_stage2"
+	dr_interactions_table="interactions_${active_deployment_setting}_stage2"
 
 	dr_stage1_active="false"
 	dr_stage2_active="true"
@@ -74,7 +79,7 @@ recommender_installation_path='/dendro_recommender'
 
 	#dependencies
 		#nodejs version
-		node_version="8.1.2"
+		node_version="8.9.0"
 
 		#elasticsearch
 		elasticsearch_port=9200
@@ -83,38 +88,89 @@ recommender_installation_path='/dendro_recommender'
 		#virtuoso
 		virtuoso_host="127.0.0.1"
 		virtuoso_port=8890
+		virtuoso_isql_port=1111
+		virtuoso_sql_loglevel=3
 		virtuoso_startup_item_file='/etc/systemd/system/virtuoso.service'
 
 		#mongodb
 		mongodb_host="127.0.0.1"
 		mongodb_port=27017
-		mongodb_collection_name="${active_deployment_setting}_data"
+		mongodb_files_collection_name="${active_deployment_setting}_data"
+		mongodb_sessions_store_collection_name="${active_deployment_setting}_sessions"
 
 		#jenkins
 		jenkins_port=8080
 		jenkins_config_file="/etc/default/jenkins"
 
+	#cache
+		cache_active="true"
+		cache_type="mongodb"
+			#redis
+				redis_cache_active="true"
+				redis_cache_host="127.0.0.1"
+			#mongodb
+				mongodb_cache_active="true"
+				mongodb_cache_host="127.0.0.1"
+				mongodb_cache_port="27017"
+				mongodb_cache_database="192.168.56.249:3007"
+
+#startup
+	load_databases_on_startup="true"
+	reload_administrators_on_startup="true"
+	reload_demo_users_on_startup="true"
+	reload_ontologies_on_startup="true"
+	reload_descriptors_on_startup="true"
+	clear_session_store_on_startup="false"
+
+#logging
+ 	logging_level="debug"
+ 	logging_app_logs_folder="logs/app"
+	logging_suppress_all_logs="false"
+	logging_suppress_all_errors="false"
+	#logging_log_all_requests="false"
+	logging_log_emailing="false"
+
 #dendro recommender
 	dendro_recommender_service_name=$active_deployment_setting-recommender
 	dendro_recommender_startup_item_file=/etc/systemd/system/$dendro_recommender_service_name.service
 	dendro_recommender_install_path=$recommender_installation_path/$active_deployment_setting
+
 	dendro_recommender_active="false"
-	project_descriptors_recommender_active="true"
-	public_ontologies="[\"foaf\",\"dcterms\",\"bdv\",\"research\"]"
-
-	dendro_recommender_svn_url='http://dendro-dev.fe.up.pt/svn/dendro_recommender/NewDendroRecommender/'
-	dendro_recommender_git_url='https://github.com/feup-infolab-rdm/dendro-recommender.git'
-
 	dendro_recommender_host=$host
 	dendro_recommender_port=9007
 	dendro_recommender_log_file=/var/log/$active_deployment_setting-recommender.log
 
+	project_descriptors_recommender_active="true"
+
+	dendro_recommender_svn_url='http://dendro-dev.fe.up.pt/svn/dendro_recommender/NewDendroRecommender/'
+	dendro_recommender_git_url='https://github.com/feup-infolab-rdm/dendro-recommender.git'
+
 	dendro_recommender_all_ontologies_url="${dendro_base_uri}/ontologies/all"
+
+#public_ontologies
+	public_ontologies="[\"foaf\",\"dcterms\",\"bdv\",\"research\",\"dcb\",\"tsim\",\"hdg\",\"ddiup\",\"disco\"]"
+
+#authentication
+	#default
+		default_authentication_enabled="true"
+	#orcid
+		orcid_authentication_enabled="true"
+	#saml
+		saml_authentication_enabled="true"
 
 	#dependencies
 		#play framework
 		play_framework_install_path='/etc/play'
 		play_framework_md5="cd59d02e49fce42bc87d230274c5701c"
+
+
+#multi-core configuration
+	num_cpus=1
+	
+#Vagrant-specific configuration
+
+#VAGRANT_VM_SSH_USERNAME="vagrant"
+#VAGRANT_VM_SSH_PASSWORD="vagrant"
 
 #running variables help
 
@@ -278,6 +334,14 @@ add_text_at_end_of_file()
 	cp $tmp_copy $file
 }
 
+add_line_at_end_of_file_if_tag_not_present()
+{
+	local file=$1
+	local new_line=$2
+	local tag=$3
+	grep -q -F "####$tag" $file || echo "\'$new_line\'   ####$tag" >> $file
+}
+
 get_timestamp()
 {
 	eval "$1=\"$(date "+%Y_%m_%d-%H_%M_%S")\""
@@ -305,7 +369,9 @@ replace_text_in_file()
 	if [ "$?" == "1" ] || [ "$node_exists" == "" ]
 	then
 		info "NodeJS is not installed! Installing..."
-		sudo apt-get -y install nodejs
+		sudo apt-get install -y build-essential &&
+		curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+		sudo apt-get install -y nodejs || die "Unable to install NodeJS"
 	fi
 
 	installation_scripts_dir="$(get_script_dir)"
@@ -393,21 +459,15 @@ redis_conf_file="$redis_conf_folder/redis.conf"
 redis_init_script_file="/etc/init.d/redis-server"
 
 elasticsearch_conf_file=/etc/elasticsearch/elasticsearch.yml
-mongodb_conf_file=/etc/mongodb.conf
+mongodb_conf_file=/etc/mongod.conf
 mysql_conf_file=/etc/mysql/mysql.conf.d/mysqld.cnf
 
 #redis instances (one per dendro graph to separate cached resources)
 
-redis_default_id="default"
-redis_default_host="127.0.0.1"
+redis_cache_host="127.0.0.1"
+
 redis_default_port="6780"
-
-redis_social_id="social"
-redis_social_host="127.0.0.1"
 redis_social_port="6781"
-
-redis_notification_id="notification"
-redis_notification_host="127.0.0.1"
 redis_notification_port="6782"
 
 #console colors
