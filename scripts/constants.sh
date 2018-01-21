@@ -36,7 +36,9 @@ recommender_installation_path='/dendro_recommender'
 	dendro_installation_path=$installation_path/$active_deployment_setting
 
 	dendro_startup_scripts_path="$installation_path/startup_scripts"
-	dendro_startup_script="$dendro_startup_scripts_path/$active_deployment_setting.sh"
+	dendro_startup_script="$dendro_startup_scripts_path/$active_deployment_setting-start.sh"
+	dendro_stop_script="$dendro_startup_scripts_path/$active_deployment_setting-stop.sh"
+	dendro_reload_script="$dendro_startup_scripts_path/$active_deployment_setting-reload.sh"
 
 	temp_downloads_folder='/tmp/dendro_setup'
 	dendro_svn_url='http://dendro-dev.fe.up.pt/svn/dendro/'
