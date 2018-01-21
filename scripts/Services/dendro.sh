@@ -87,12 +87,12 @@ After=network.target network-online.target
 [Service]
 User=$dendro_user_name
 Group=$dendro_user_group
-Type=oneshot
+Type=forking
 WorkingDirectory=$dendro_installation_path
 ExecStart=$dendro_startup_script
 ExecStop=$dendro_stop_script
 ExecReload=$dendro_reload_script
-TimeoutStartSec=600
+TimeoutStartSec=1200
 [Install]
 WantedBy=multi-user.target network-online.target\n" | sudo tee $dendro_startup_item_file
 
