@@ -180,7 +180,7 @@ Follow the installer [https://github.com/coreybutler/nvm-windows/releases](HERE)
 ### Install NVM on Mac / Linux
 
 ```bash
-#install NVM, Node 6.10, Node Automatic Version switcher
+#install NVM, Node 8.9.0 + Node Automatic Version switcher
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash &&
 export NVM_DIR="$HOME/.nvm" &&
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -195,7 +195,7 @@ export NVM_DIR="$HOME/.nvm" &&
 ### Installing NodeJS and Automatic Version Manager
 
 ```bash
-nvm install 6.10
+nvm install 8.9.0
 npm install -g avn avn-nvm avn-n
 avn setup
 ```
