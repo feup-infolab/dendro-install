@@ -8,9 +8,9 @@ pipeline {
     agent {
 		label : "dendro-install"
 	}
-	options {
-	    disableConcurrentBuilds()  //each branch has 1 job running at a time
-	}
+	// options {
+	//     disableConcurrentBuilds()  //each branch has 1 job running at a time
+	//}
 	
     stages {
         stage('Set Jenkins Build Var')
