@@ -29,6 +29,7 @@ info "Running command: $CREATE_SERVICE_COMMAND ..."
 #execute the command
 eval $CREATE_SERVICE_COMMAND
 
+sudo systemctl daemon-reload
 sudo systemctl restart $dendro_service_name
 
 #go back to initial dir
