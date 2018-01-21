@@ -21,6 +21,7 @@ echo "[[ dendro log location: %DENDRO_LOG_FILE% ]]"
 # ===============
 # = restart app =
 # ===============
+pm2 status > /dev/null
 npm run stop && npm run start
 
 if [[ "$?" != "0" ]]
