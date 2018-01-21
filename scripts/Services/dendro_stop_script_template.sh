@@ -19,6 +19,9 @@ CWD=$(pwd)
 cd /
 cd "$CWD"
 
+#activate right node version
+nvm use %NODE_VERSION%
+
 #stop app
 npm stop
 
