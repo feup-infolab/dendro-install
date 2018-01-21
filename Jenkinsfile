@@ -14,7 +14,6 @@ pipeline {
     stages {
         stage('Set Jenkins Build Var')
         {
-	    	
             steps {
               sh "export JENKINS_BUILD='1'"
             }
