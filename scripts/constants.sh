@@ -91,6 +91,7 @@ recommender_installation_path='/dendro_recommender'
 		virtuoso_isql_port=1111
 		virtuoso_sql_loglevel=3
 		virtuoso_startup_item_file='/etc/systemd/system/virtuoso.service'
+		virtuoso_ini_path='/usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini'
 
 		#mongodb
 		mongodb_host="127.0.0.1"
@@ -305,6 +306,20 @@ LUCHI
 $new_line
 <!-- END REPLACEMENT by Dendro install scripts -->
 <!-- END_PATCH_TAG: $patch_tag-->
+LUCHI
+			unset IFS
+			;;
+		ini)
+			local replaced_line
+			IFS='%'
+			read -r -d '' replaced_line << LUCHI
+;; START_PATCH_TAG: $patch_tag
+;; START REPLACEMENT by Dendro install scripts
+;; OLD VALUE: $old_line
+;; NEW VALUE
+$new_line
+;; END REPLACEMENT by Dendro install scripts
+;; END_PATCH_TAG: $patch_tag
 LUCHI
 			unset IFS
 			;;
