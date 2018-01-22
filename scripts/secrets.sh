@@ -66,3 +66,7 @@ saml_authentication_button_text="Sign-in with institutional login"
 
 teamcity_admin_username="jrocha"
 teamcity_admin_password="bolachinhas_do_melhor_que_ha"
+
+#orcid authentication
+	orcid_client_id="ORCID_CLIENT_ID"
+	orcid_client_secret="ORCID_CLIENT_SECRET"

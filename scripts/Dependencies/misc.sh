@@ -26,6 +26,9 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get -yq install mutt
 
  #echo "This is the message body" | mutt -a ./log.log -s "loladazinha" -- username@server.com
 
+#install mutt (mailer) without interactive screens
+sudo DEBIAN_FRONTEND=noninteractive apt-get -yq install mutt
+
 info "Installing text extraction tools..."
 #install text extraction stuff
 # (needed for https://github.com/dbashford/textract)

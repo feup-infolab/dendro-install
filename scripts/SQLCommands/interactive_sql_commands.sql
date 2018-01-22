@@ -1,6 +1,11 @@
 SPARQL LOAD <http://www.w3.org/ns/auth/cert#> INTO graph <http://www.w3.org/ns/auth/cert#>;
 
 SPARQL CLEAR GRAPH <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/SCHEMA_ORG/schema.rdf> INTO graph <http://schema.org/>;
+DB.DBA.XML_REMOVE_NS_BY_PREFIX('schema', 2);
+DB.DBA.XML_SET_NS_DECL ('schema', 'http://schema.org/', 2);
+
+SPARQL CLEAR GRAPH <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>;
 SPARQL LOAD <http://lov.okfn.org/dataset/lov/vocabs/nfo/versions/2012-06-10.n3> INTO graph <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('nfo', 2);
 DB.DBA.XML_SET_NS_DECL ('nfo', 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#', 2);
@@ -93,6 +98,16 @@ SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/game/>;
 SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab-rdm/dendro-ontologies/master/GAME/game.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/game/>;
 DB.DBA.XML_REMOVE_NS_BY_PREFIX('gm', 2);
 DB.DBA.XML_SET_NS_DECL ('gm', 'http://dendro.fe.up.pt/ontology/game/', 2);
+
+SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/tvu#>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/TVU/TVU_XML.owl> INTO GRAPH <http://dendro.fe.up.pt/ontology/tvu#>;
+DB.DBA.XML_REMOVE_NS_BY_PREFIX('tvu', 2);
+DB.DBA.XML_SET_NS_DECL ('tvu', 'http://dendro.fe.up.pt/ontology/tvu#', 2);
+
+SPARQL CLEAR GRAPH <http://purl.org/ontology/po/>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/PO/1.1.ttl> INTO GRAPH <http://purl.org/ontology/po/>;
+DB.DBA.XML_REMOVE_NS_BY_PREFIX('po', 2);
+DB.DBA.XML_SET_NS_DECL ('po', 'http://purl.org/ontology/po/', 2);
 
 SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/ddiup#>;
 SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/DDI_UP/ddi_up_ontology_2.0.rdf> INTO GRAPH <http://dendro.fe.up.pt/ontology/ddiup#>;

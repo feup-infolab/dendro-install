@@ -1,6 +1,7 @@
-# Contents
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/75e227c63f6e47b494763d5c81366ad4)](https://www.codacy.com/app/silvae86/dendro-install?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=feup-infolab/dendro-install&amp;utm_campaign=Badge_Grade)
+[![Chat on gitter](https://img.shields.io/gitter/room/badges/shields.svg)](https://gitter.im/feup-infolab/dendro-install)
 
-[![Build Status](http://buildserver-rdm.up.pt:8111/job/Dendro%20Install/job/dendro-install/job/master/badge/icon)](http://buildserver-rdm.up.pt:8111/job/Dendro%20Install/job/dendro-install/job/master/)
+# Contents
 
 # What is Dendro?
 
@@ -37,6 +38,8 @@ This package allows you to
 	* Tested on Debian Jessie
 
 * Windows 7+
+	* Install ImageMagick [executable](https://www.imagemagick.org/script/download.php)
+	* During the ImageMagick instalation check the option "Install legacy utilities (e.g. convert)". This is needed for generating resources thumbnails in Dendro.
 
 ## Dependencies
 
@@ -65,7 +68,7 @@ Dendro relies on
 	*	[OracleVirtualBox](https://www.virtualbox.org/)
 	*	[Vagrant](https://www.vagrantup.com/downloads.html)
 
-	*	> #####**DO NOT** use packaged versions from your Linux Distro, as they are often outdated and will not work. On Debian-based distros you can use `$ sudo gdebi <package.deb>` to install `.deb` packages.
+	*	**DO NOT** use packaged versions from your Linux Distro, as they are often outdated and will not work. On Debian-based distros you can use `$ sudo gdebi <package.deb>` to install `.deb` packages.
 	* 	[Git](https://git-scm.com/downloads)
 
 2. **Check that everything is working**
@@ -171,28 +174,86 @@ active_deployment_setting='dendroVagrantDemoTESTS'
 	host="192.168.56.248"
 ```
 
-### Cloning the dendro repository, initial setup and starting up the app
+### Install Java 1.8 (required for JDBC Database Adapter). This is mandatory
 
-### Install NVM on Windows
-
-Follow the installer [https://github.com/coreybutler/nvm-windows/releases](HERE).
-
-### Install NVM on Mac / Linux
+#### For Debian Linux 
 
 ```bash
+sudo apt-get install oracle-java8
+```
+
+#### For Ubuntu Linux 
+
+```bash
+#install Java 8
+sudo apt-get install -y python-software-properties debconf-utils
+sudo add-apt-repository -y ppa:webupd8team/java
+sudo apt-get update
+echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
+sudo apt-get install -y oracle-java8-installer
+```
+
+```bash
+sudo update-alternatives --config java
+#Select the Oracle JDK
+```
+
+Before:
+
+```bash
+➜  dendro-install git:(adding-unique-identifiers) ✗ java -version 
+Picked up _JAVA_OPTIONS:   -Dawt.useSystemAAFontSettings=gasp
+openjdk version "1.8.0_141"
+OpenJDK Runtime Environment (build 1.8.0_141-8u141-b15-3-b15)
+OpenJDK 64-Bit Server VM (build 25.141-b15, mixed mode)
+```
+
+After: 
+
+```bash
+➜  ~ java -version
+Picked up _JAVA_OPTIONS:   -Dawt.useSystemAAFontSettings=gasp
+java version "1.8.0_144"
+Java(TM) SE Runtime Environment (build 1.8.0_144-b01)
+Java HotSpot(TM) 64-Bit Server VM (build 25.144-b01, mixed mode)
+```
+
+### Cloning the dendro repository, initial setup and starting up the app
+
+#### For Mac / Linux
+
+```bash
+
 #install NVM, Node 8.9.0 + Node Automatic Version switcher
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash &&
 export NVM_DIR="$HOME/.nvm" &&
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-# Want NVM to be loaded on every terminal you open? Add to ~/.bash_profile this:
+nvm install 8.9.0
+npm install -g avn avn-nvm avn-n
+avn setup
 
-export NVM_DIR="$HOME/.nvm" &&
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+#clone repo
+git clone https://github.com/feup-infolab/dendro.git
+cd dendro
 
+#install prerequisites
+sudo apt-get -y -f -qq install unzip devscripts autoconf automake libtool flex bison gperf gawk m4 make libssl-dev git imagemagick subversion zip htop redis-server htop build-essential --fix-missing
+
+#install everything
+./conf/scripts/install.sh
+
+#start app
+node src/app.js
 ```
 
-### Installing NodeJS and Automatic Version Manager
+#### For Windows
+
+##### Install NVM
+
+Follow the installer [HERE](https://github.com/coreybutler/nvm-windows/releases).
+
+##### Installing NodeJS and Automatic Version Manager
 
 ```bash
 nvm install 8.9.0
@@ -200,15 +261,22 @@ npm install -g avn avn-nvm avn-n
 avn setup
 ```
 
-### Installing Dendro
+##### Installing Dendro 
 
 ```bash
 #clone repo
 git clone https://github.com/feup-infolab/dendro.git
 cd dendro
 
+#on Windows you may need to do this to avoid git certificate errors (do this only if you get errors, as this is just a workaround and will skip certificate validations)
+git config --global http.sslverify "false"
+
+#activate node 8.9.0
+nvm use 8.9.0 
+
 #install dependencies. Will also run bower install whenever needed
-npm install #this is needed when running npm install with sudo to install global modules
+npm install
+
 grunt #use grunt to put everything in place
 
 #start app
@@ -219,11 +287,16 @@ node src/app.js
 
 ```bash
 npm run everything #runs installation, grunt, tests, report results and code coverage
-rpm run coverage #updates test coverage report
-rpm run report-coverage #report coverage to codecov
-rpm run watch #start nyc watcher (runs tests on save on every file in the project)
-rpm run tests #run tests
-rpm run remote-debug #start the app in debug mode for remote debugging
+npm run calculate-coverage #updates test coverage report
+npm run report-coverage #report coverage to codecov
+npm run watch-dev #start nyc watcher (runs tests on save on every file in the project)
+npm run test #run tests
+npm run profile #runs tests with --prof flag to profile dendor performance
+npm run remote-debug #start the app in debug mode for remote debugging
+npm run fix-server #run eslint to fix the code style on src/
+npm run fix-client ##run eslint to fix the code style on public/app/
+npm run fix-tests ##run eslint to fix the code style on test/
+npm run fix #run eslint to fix the code style on src/, public/app/ and test/ directories
 ```
 
 #### USE THIS ONLY if you have permissions issues installing bower or your bower_components folder becomes read-only by some reason
@@ -250,11 +323,59 @@ If you want to run tests, run the program or generate test coverage reports, the
 
 ![npm](https://github.com/feup-infolab/dendro-install/blob/master/images/npm-codecoverage.png?raw=true)
 
+**ESLint Configuration**
+
+You should configure ESLint in WebStorm as follows. This allows you to get warnings about best practices on code style, which helps you write clean code.
+
+![eslint](https://github.com/feup-infolab/dendro-install/blob/master/images/eslint.png?raw=true)
+
+### Configuring Visual Studio 2017 for running tests
+
+Create a new run configuration and customize it as in the following screens. This is useful for debugging mocha tests in WebStorm when the breakpoints are not being hit (we believe this is a bug with WebStorm).
+
+![npm](https://github.com/feup-infolab/dendro-install/blob/master/images/visual_studio_debug_1.png?raw=true)
+
+![npm](https://github.com/feup-infolab/dendro-install/blob/master/images/visual_studio_debug_2.png?raw=true)
+
 #### Watch mode (run tests on any file modification)
 
 Open a terminal and run `npm run watch`. All tests will be run whenever you save a file.
 ![watch](https://github.com/feup-infolab/dendro-install/blob/master/images/watch.png?raw=true)
 ![watch2](https://github.com/feup-infolab/dendro-install/blob/master/images/watch2.png?raw=true)
+
+## For sysadmins
+
+If you are maintaining an instance of Dendro installed with these scripts here are some things you should know. In this section, whenever we use the (`[[dendro instance name]]`) wildcard, it means the name you choose for your instance in the `scripts/constants.sh` file of the dendro-install folder. The default value is `dendroVagrantDemo` if you just run these scripts and ssh into the virtual machine using `./ssh_into_vm.sh`.
+
+### Logs locations
+There are two log locations: 
+
+`/dendro/[[dendro instance name]]` file).
+`/var/log/[[dendro instance name]].log`
+
+If you want to check the output of the server live, simply `tail` the log file with `-f`, it will keep monitoring the log file and stream any changes to the console:
+
+`tail -f /var/log/[[dendro instance name]].log` or `tail -f /var/log/[[dendro instance name]].log`
+
+Another way to see the log with more control is to use `journalctl`.
+
+Example of seeing the logs from yesterday in a dendro service:
+
+````bash
+sudo journalctl -u dendro_prd_demo_3007_port --since yesterday
+````
+
+### Verifying if the dendro service is running / Restarting the service
+
+Dendro runs as a service, which automatically brings back the service if it dies for some reason. 
+
+If you need to check if it is running, run:
+
+`sudo service [[dendro instance name] status`
+
+If you need to restart it manually, run: 
+
+`sudo service [[dendro instance name] restart`
 
 # Acknowledgements
 
