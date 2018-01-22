@@ -31,13 +31,43 @@ sudo dpkg -i virtuoso7/debs-ubuntu-16-04/virtuoso_7.4.2-devel-1_amd64.deb || die
 #setup default configuration .ini file
 sudo cp /usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini.sample /usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini
 
-# read -r -d '' replaced_line << LUCHI
-# CheckpointInterval		= 60
-# LUCHI
-#
-# replace_text_in_file "/usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini" "$replaced_line" "CheckpointInterval		= 0"  "eliminate_checkpoint_to_avoid_404_errors_as_per_github_issue_565_on_github_com_virtuoso_opensource"
+# ================================
+# = Virtuoso Performance Patches =
+# ================================
 
-#create virtuoso user and give ownership
+read -r -d '' replaced_line << LUCHI
+MaxClientConnections		= 10
+LUCHI
+
+replace_text_in_file "$virtuoso_ini_path" "$replaced_line" "MaxClientConnections		= 100"  "MaxClientConnectionsDendroPatch" "ini"
+
+read -r -d '' replaced_line << LUCHI
+ServerThreads		= 10
+LUCHI
+
+replace_text_in_file "$virtuoso_ini_path" "$replaced_line" "ServerThreads			= 100"  "ServerThreadsDendroPatch" "ini"
+
+read -r -d '' replaced_line << LUCHI
+MaxKeepAlives			= 10
+LUCHI
+
+replace_text_in_file "$virtuoso_ini_path" "$replaced_line" "MaxKeepAlives			= 100"  "MaxKeepAlivesDendroPatch" "ini"
+
+read -r -d '' replaced_line << LUCHI
+NumberOfBuffers          = 10000
+LUCHI
+
+replace_text_in_file "$virtuoso_ini_path" "$replaced_line" "NumberOfBuffers          = 80000"  "NumberOfBuffersDendroPatch" "ini"
+
+read -r -d '' replaced_line << LUCHI
+MaxDirtyBuffers          = 6000
+LUCHI
+
+replace_text_in_file "$virtuoso_ini_path" "$replaced_line" "MaxDirtyBuffers          = 65000"  "MaxDirtyBuffersDendroPatch" "ini"
+
+# ===========================================
+# = create virtuoso user and give ownership =
+# ===========================================
 sudo useradd $virtuoso_user
 sudo addgroup $virtuoso_group
 sudo usermod $virtuoso_user -g $virtuoso_group
