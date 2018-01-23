@@ -359,6 +359,14 @@ var write_dendro_configuration_file = function ()
             "user" : get_argument_by_name('mongodb_dba_user'),
             "password" : get_argument_by_name('mongodb_dba_password'),
         },
+        "storageDefaults" : {
+          "storageType" : "mongoDB",
+          "host": get_argument_by_name('mongodb_host'),
+          "port": get_argument_by_name('mongodb_port'),
+          "collectionName": get_argument_by_name('mongodb_files_collection_name'),
+          "username": get_argument_by_name('mongodb_dba_user'),
+          "password": get_argument_by_name('mongodb_dba_password')
+        },
         "mySQLHost" : get_argument_by_name('mysql_host'),
         "mySQLPort" : get_argument_by_name('mysql_port'),
         "mySQLAuth" : {
