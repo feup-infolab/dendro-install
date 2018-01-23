@@ -280,7 +280,7 @@ npm install
 grunt #use grunt to put everything in place
 
 #start app
-node src/app.js
+npm start
 ```
 
 ### NPM Commands available at the project root

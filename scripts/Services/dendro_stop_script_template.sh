@@ -1,32 +1,54 @@
 #!/usr/bin/env bash
 
-echo "[[ Dendro %DENDRO_SERVICE_NAME% stopping...]]"
+# =================
+# = Injected vars =
+# =================
 
-# =====================================================
-# = load nvm, run service with the right node version =
-# =====================================================
+NODE_VERSION="%NODE_VERSION%"
+DENDRO_SERVICE_NAME="%DENDRO_SERVICE_NAME%"
+DENDRO_INSTALLATION_PATH="%DENDRO_INSTALLATION_PATH%"
+DENDRO_LOG_FILE="%DENDRO_LOG_FILE%"
 
+echo "[[ Dendro $DENDRO_SERVICE_NAME stopping...]]" 
+
+# ============
+# = load nvm =
+# ============
 export NVM_DIR="$HOME/.nvm" &&
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
-nvm use "%NODE_VERSION%"
+nvm use "$NODE_VERSION" || nvm install "$NODE_VERSION"  && nvm use "$NODE_VERSION"
+
+# ============
+# = load avn =
+# ============
+
+[[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" && # load avn
+
+# ==========
+# = Status =
+# ==========
 
 echo "[[ nvm location: $NVM_DIR ]]"
 echo "[[ node location: $(which node) ]]"
 echo "[[ node version: $(node -v) ]]"
 echo "[[ user running the script: $(whoami) ]]"
-echo "[[ dendro installation path: %DENDRO_INSTALLATION_PATH% ]]"
-echo "[[ dendro log location: %DENDRO_LOG_FILE% ]]"
+echo "[[ dendro installation path: $DENDRO_INSTALLATION_PATH ]]"
+echo "[[ dendro log location: $DENDRO_LOG_FILE ]]"
 
-# ============
-# = stop app =
-# ============
-cd "%DENDRO_INSTALLATION_PATH%"
-pm2 status > /dev/null
-npm run stop
+# =============
+# = start app =
+# =============
+
+cd "$DENDRO_INSTALLATION_PATH"
+pm2 status > /dev/null || npm install -g pm2 && pm2 status
+pm2 kill 
+npm run stop-without-nodengine
 
 if [[ "$?" != "0" ]]
 then
-	echo "There was an error stopping Dendro Service %DENDRO_SERVICE_NAME% !"
+	echo "There was an error stopping Dendro Service $DENDRO_SERVICE_NAME !"
 	exit 1
 fi
+
+
