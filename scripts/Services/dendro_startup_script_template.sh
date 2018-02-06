@@ -43,7 +43,7 @@ echo "[[ dendro log location: $DENDRO_LOG_FILE ]]"
 cd "$DENDRO_INSTALLATION_PATH"
 pm2 status > /dev/null || npm install -g pm2 && pm2 status
 pm2 kill 
-npm run start-without-nodengine
+npm run start
 
 if [[ "$?" != "0" ]]
 then
