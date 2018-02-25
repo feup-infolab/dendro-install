@@ -79,22 +79,40 @@ sudo chmod +x $dendro_startup_script &&
 sudo chmod +x $dendro_stop_script &&
 sudo chmod +x $dendro_reload_script  || die "Unable to change permissions of the startup script at $dendro_startup_scripts_path"
 
-printf "[Unit]
-Description=Dendro Service (${active_deployment_setting})
-Wants=network-online.target
-After=network.target network-online.target
-[Service]
-WorkingDirectory=$dendro_installation_path
-User=$dendro_user_name
-Group=$dendro_user_group
-Type=forking
-ExecStart=$dendro_startup_script
-ExecStop=$dendro_stop_script
-ExecReload=$dendro_reload_script
-TimeoutSec=infinity,
-PIDFile=$dendro_installation_path/running.pid
-[Install]
-WantedBy=multi-user.target network-online.target\n" | sudo tee $dendro_startup_item_file
+if [[ "$environment" == "production" ]]; then
+	printf "[Unit]
+	Description=Dendro Service (${active_deployment_setting})
+	Wants=network-online.target
+	After=network.target network-online.target
+	[Service]
+	WorkingDirectory=$dendro_installation_path
+	User=$dendro_user_name
+	Group=$dendro_user_group
+	Type=forking
+	ExecStart=$dendro_startup_script
+	ExecStop=$dendro_stop_script
+	ExecReload=$dendro_reload_script
+	TimeoutSec=infinity,
+	PIDFile=$dendro_installation_path/running.pid
+	[Install]
+	WantedBy=multi-user.target network-online.target\n" | sudo tee $dendro_startup_item_file		
+else
+	printf "[Unit]
+	Description=Dendro Service${active_deployment_setting}
+	[Service]
+	Type=simple
+	Restart=on-failure
+	RestartSec=5s
+	TimeoutStartSec=infinity
+	User=$dendro_user_name
+	Group=$dendro_user_group
+	RuntimeMaxSec=infinity
+	KillMode=control-group
+	ExecStart=$dendro_startup_script
+	PIDFile=${dendro_installation_path}/running.pid
+	[Install]
+	WantedBy=multi-user.target\n" | sudo tee $dendro_startup_item_file
+fi
 
 sudo chmod 0655 $dendro_startup_item_file
 sudo systemctl daemon-reload
