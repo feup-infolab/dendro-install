@@ -23,7 +23,8 @@ nvm use "$NODE_VERSION" || nvm install "$NODE_VERSION"  && nvm use "$NODE_VERSIO
 # = load avn =
 # ============
 
-[[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" && # load avn
+#commented for debug
+#[[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" && # load avn
 
 # ==========
 # = Status =

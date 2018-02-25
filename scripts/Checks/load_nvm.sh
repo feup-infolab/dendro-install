@@ -16,12 +16,13 @@ add_line_at_end_of_file_if_tag_not_present()
 	grep -q -F "####$tag" $file || echo "$new_line   ####$tag" >> $file
 }
 
-append_nvm_and_avn_to_profile()
-{
-  add_line_at_end_of_file_if_tag_not_present ~/.bash_profile 'export NVM_DIR="$HOME/.nvm" &&' 'NVM_LOAD_1'
-  add_line_at_end_of_file_if_tag_not_present ~/.bash_profile '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && echo "NVM loaded."' 'NVM_LOAD_2'
-  add_line_at_end_of_file_if_tag_not_present ~/.bash_profile '[[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn' 'AVN_LOAD_1'
-}
+#commented for debug
+#append_nvm_and_avn_to_profile()
+#{
+#  add_line_at_end_of_file_if_tag_not_present ~/.bash_profile 'export NVM_DIR="$HOME/.nvm" &&' 'NVM_LOAD_1'
+#  add_line_at_end_of_file_if_tag_not_present ~/.bash_profile '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && echo "NVM loaded."' 'NVM_LOAD_2'
+#  add_line_at_end_of_file_if_tag_not_present ~/.bash_profile '[[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn' 'AVN_LOAD_1'
+#}
 
 install_nvm()
 {
@@ -71,17 +72,18 @@ install_node()
     echo "User $(whoami) already has Bower installed."
   fi
 
+  #commented for debug
   #install automatic version switching
-  avn > /dev/null 2>&1
-  if [ "$?" != "0" ]
-  then
-    npm install -g avn avn-nvm avn-n && avn setup || exit 1
-    echo "Installed AVN as $(whoami)"
-  else
-    echo "User $(whoami) already has AVN installed."
-  fi
+  #avn > /dev/null 2>&1
+  #if [ "$?" != "0" ]
+  #then
+  #  npm install -g avn avn-nvm avn-n && avn setup || exit 1
+  #  echo "Installed AVN as $(whoami)"
+  #else
+  #  echo "User $(whoami) already has AVN installed."
+  #fi
 
-  append_nvm_and_avn_to_profile
+  #append_nvm_and_avn_to_profile
 }
 
 echo "Starting NVM setup as $(whoami)..."
