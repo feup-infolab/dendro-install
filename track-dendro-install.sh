@@ -7,3 +7,6 @@ git remote add upstream https://github.com/feup-infolab/dendro-install.git
 
 #block pushing to the tracked repository
 git config remote.upstream.pushurl "NEVER GONNA GIVE YOU UP"
+
+#fetch branches from upstream repository (dendro-install)
+git fetch upstream
