@@ -95,10 +95,10 @@ if [[ "$environment" == "production" ]]; then
 	TimeoutSec=infinity,
 	PIDFile=$dendro_installation_path/running.pid
 	[Install]
-	WantedBy=multi-user.target network-online.target\n" | sudo tee $dendro_startup_item_file		
+	WantedBy=multi-user.target network-online.target\n" | sudo tee $dendro_startup_item_file
 else
 	printf "[Unit]
-	Description=Dendro Service${active_deployment_setting}
+	Description=Dendro Service (${active_deployment_setting})
 	[Service]
 	Type=simple
 	Restart=on-failure
