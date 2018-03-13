@@ -9,7 +9,7 @@ DENDRO_SERVICE_NAME="%DENDRO_SERVICE_NAME%"
 DENDRO_INSTALLATION_PATH="%DENDRO_INSTALLATION_PATH%"
 DENDRO_LOG_FILE="%DENDRO_LOG_FILE%"
 
-echo "[[ Dendro $DENDRO_SERVICE_NAME reloading...]]" 
+echo "[[ Dendro $DENDRO_SERVICE_NAME reloading...]]"
 
 # ============
 # = load nvm =
@@ -43,7 +43,7 @@ echo "[[ dendro log location: $DENDRO_LOG_FILE ]]"
 
 cd "$DENDRO_INSTALLATION_PATH"
 pm2 status > /dev/null || npm install -g pm2 && pm2 status
-pm2 kill 
+# pm2 kill
 npm run stop
 npm run start
 
@@ -52,5 +52,3 @@ then
 	echo "There was an error reloading Dendro Service $DENDRO_SERVICE_NAME !"
 	exit 1
 fi
-
-
