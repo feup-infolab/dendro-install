@@ -17,8 +17,6 @@ fi
 
 /usr/local/virtuoso-opensource/bin/isql 1111 "$virtuoso_dba_user" "$virtuoso_dba_password" < $running_folder/interactive_sql_commands.sql || die "Unable to load ontologies into Virtuoso."
 
-die "Unable to load ontologies into Virtuoso."
-
 success "Installed base ontologies in virtuoso."
 
 #go back to initial dir
