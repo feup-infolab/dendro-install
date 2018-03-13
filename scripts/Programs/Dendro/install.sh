@@ -21,8 +21,8 @@ then
 	exit 1
 else
  	echo "Running $dendro_installation_path/conf/scripts/install.sh as user $(whoami)!"
-	cd $dendro_installation_path
-    $dendro_installation_path/conf/scripts/install.sh
+	cd $dendro_installation_path || die "Unable to go to Dendro installation directory, ${dendro_installation_path}, for running npm install"
+	$dendro_installation_path/conf/scripts/install.sh
 fi
 
 #set active deployment configuration
