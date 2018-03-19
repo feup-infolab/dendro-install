@@ -176,13 +176,13 @@ active_deployment_setting='dendroVagrantDemoTESTS'
 
 ### Install Java 1.8 (required for JDBC Database Adapter). This is mandatory
 
-#### For Debian Linux 
+#### For Debian Linux
 
 ```bash
 sudo apt-get install oracle-java8
 ```
 
-#### For Ubuntu Linux 
+#### For Ubuntu Linux
 
 ```bash
 #install Java 8
@@ -201,14 +201,14 @@ sudo update-alternatives --config java
 Before:
 
 ```bash
-➜  dendro-install git:(adding-unique-identifiers) ✗ java -version 
+➜  dendro-install git:(adding-unique-identifiers) ✗ java -version
 Picked up _JAVA_OPTIONS:   -Dawt.useSystemAAFontSettings=gasp
 openjdk version "1.8.0_141"
 OpenJDK Runtime Environment (build 1.8.0_141-8u141-b15-3-b15)
 OpenJDK 64-Bit Server VM (build 25.141-b15, mixed mode)
 ```
 
-After: 
+After:
 
 ```bash
 ➜  ~ java -version
@@ -230,8 +230,6 @@ export NVM_DIR="$HOME/.nvm" &&
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 nvm install 8.9.0
-npm install -g avn avn-nvm avn-n
-avn setup
 
 #clone repo
 git clone https://github.com/feup-infolab/dendro.git
@@ -257,11 +255,9 @@ Follow the installer [HERE](https://github.com/coreybutler/nvm-windows/releases)
 
 ```bash
 nvm install 8.9.0
-npm install -g avn avn-nvm avn-n
-avn setup
 ```
 
-##### Installing Dendro 
+##### Installing Dendro
 
 ```bash
 #clone repo
@@ -272,7 +268,7 @@ cd dendro
 git config --global http.sslverify "false"
 
 #activate node 8.9.0
-nvm use 8.9.0 
+nvm use 8.9.0
 
 #install dependencies. Will also run bower install whenever needed
 npm install
@@ -348,7 +344,7 @@ Open a terminal and run `npm run watch`. All tests will be run whenever you save
 If you are maintaining an instance of Dendro installed with these scripts here are some things you should know. In this section, whenever we use the (`[[dendro instance name]]`) wildcard, it means the name you choose for your instance in the `scripts/constants.sh` file of the dendro-install folder. The default value is `dendroVagrantDemo` if you just run these scripts and ssh into the virtual machine using `./ssh_into_vm.sh`.
 
 ### Logs locations
-There are two log locations: 
+There are two log locations:
 
 `/dendro/[[dendro instance name]]` file).
 `/var/log/[[dendro instance name]].log`
@@ -367,13 +363,13 @@ sudo journalctl -u dendro_prd_demo_3007_port --since yesterday
 
 ### Verifying if the dendro service is running / Restarting the service
 
-Dendro runs as a service, which automatically brings back the service if it dies for some reason. 
+Dendro runs as a service, which automatically brings back the service if it dies for some reason.
 
 If you need to check if it is running, run:
 
 `sudo service [[dendro instance name] status`
 
-If you need to restart it manually, run: 
+If you need to restart it manually, run:
 
 `sudo service [[dendro instance name] restart`
 

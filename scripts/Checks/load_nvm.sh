@@ -18,11 +18,11 @@ add_line_at_end_of_file_if_tag_not_present()
 
 #commented for debug
 #append_nvm_and_avn_to_profile()
-#{
-#  add_line_at_end_of_file_if_tag_not_present ~/.bash_profile 'export NVM_DIR="$HOME/.nvm" &&' 'NVM_LOAD_1'
-#  add_line_at_end_of_file_if_tag_not_present ~/.bash_profile '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && echo "NVM loaded."' 'NVM_LOAD_2'
-#  add_line_at_end_of_file_if_tag_not_present ~/.bash_profile '[[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn' 'AVN_LOAD_1'
-#}
+# {
+#   add_line_at_end_of_file_if_tag_not_present ~/.bash_profile 'export NVM_DIR="$HOME/.nvm" &&' 'NVM_LOAD_1'
+#   add_line_at_end_of_file_if_tag_not_present ~/.bash_profile '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && echo "NVM loaded."' 'NVM_LOAD_2'
+#   add_line_at_end_of_file_if_tag_not_present ~/.bash_profile '[[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn' 'AVN_LOAD_1'
+# }
 
 install_nvm()
 {
