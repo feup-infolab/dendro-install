@@ -30,7 +30,8 @@ function wait_for_virtuoso_to_boot()
 wait_for_virtuoso_to_boot
 
 # change the default password if it is set as default and the password is different
-if [[ "${virtuoso_dba_password}" != "dba"]]; then
+if [[ "${virtuoso_dba_password}" != "dba" ]]
+then
 	echo "set password dba ${virtuoso_dba_password};" | /usr/local/virtuoso-opensource/bin/isql 127.0.0.1 "dba" "dba"
 fi
 
