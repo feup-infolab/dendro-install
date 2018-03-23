@@ -188,12 +188,12 @@ then
 				source ./Services/virtuoso.sh
 			fi
 
-			timeout=45
-			info "Waiting for virtuoso service to start. Installing base ontologies in virtuoso in $timeout seconds..."
-			for (( i = 0; i < $timeout; i++ )); do
-				echo -ne $[$timeout-i]...
-				sleep 1s
-			done
+			# timeout=45
+			# info "Waiting for virtuoso service to start. Installing base ontologies in virtuoso in $timeout seconds..."
+			# for (( i = 0; i < $timeout; i++ )); do
+			# 	echo -ne $[$timeout-i]...
+			# 	sleep 1s
+			# done
 
 			source ./SQLCommands/grant_commands.sh
 
@@ -203,7 +203,7 @@ then
 
 			#source ./Dependencies/drawing_to_text.sh #TODO this crashes still with GCC 5.8+. Commenting
 			source ./Dependencies/Redis/setup_redis_instances.sh
-			
+
 
 			if [[ "$dendro_recommender_active" == "true" ]]
 			then
@@ -214,7 +214,7 @@ then
 
 			source ./Dependencies/elasticsearch.sh
 			source ./Services/elasticsearch.sh
-			
+
 			#source ./Checks/check_services_status.sh
 		fi
 
