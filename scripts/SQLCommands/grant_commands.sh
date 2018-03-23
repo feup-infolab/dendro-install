@@ -15,19 +15,27 @@ else
 	running_folder=$script_dir/SQLCommands
 fi
 
-function wait_for_virtuoso_to_boot()
+function wait_for_server_to_boot_on_port()
 {
     echo "Waiting for virtuoso to boot up..."
     attempts=0
     max_attempts=30
-    while ( nc 127.0.0.1 8890 < /dev/null || nc 127.0.0.1 1111 < /dev/null )  && [[ $attempts < $max_attempts ]] ; do
+    port=$1
+    while [[ $(telnet 127.0.0.1 "$port") ]] ; do
         attempts=$((attempts+1))
-        sleep 1;
-        echo "waiting... (${attempts}/${max_attempts})"
+				if (( $attempts > $max_attempts )); then
+					break;
+				else
+					sleep 1;
+	        echo "waiting... (${attempts}/${max_attempts})"
+				fi
     done
 }
 
-wait_for_virtuoso_to_boot
+sudo service virtuoso start
+
+wait_for_server_to_boot_on_port 8890
+wait_for_server_to_boot_on_port 1111
 
 # change the default password if it is set as default and the password is different
 if [[ "${virtuoso_dba_password}" != "dba" ]]
