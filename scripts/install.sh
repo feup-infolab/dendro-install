@@ -110,6 +110,30 @@ copy_config_files() {
 	fi
 }
 
+load_nvm()
+{
+	#install nvm as current user
+	warning "Installing NVM as $(whoami) in order to install node version $node_version..."
+	./Checks/load_nvm.sh $node_version || die "Unable to install/load NVM as $dendro_user_name" || die "Unable to install/load NVM as $(whoami)"
+
+	#install nvm as ubuntu (vm user).
+	#This can fail without dying because not always we have a 'ubuntu' user
+	sudo su - "ubuntu" -c "$setup_dir/Checks/load_nvm.sh $node_version"
+}
+
+install_and_load_nvm()
+{
+	#install or load nvm
+	warning "Starting NVM setup in order to install node version $node_version..."
+	sudo chmod +x "$setup_dir/Checks/load_nvm.sh"
+
+	#install nvm as dendro_user
+	warning "Installing NVM as $dendro_user_name in order to install node version $node_version..."
+	sudo su - "$dendro_user_name" -c "$setup_dir/Checks/load_nvm.sh $node_version" || die "Unable to install/load NVM as $dendro_user_name"
+
+	load_nvm
+}
+
 if [ "${regenerate_configs}" == "true" ];
 then
 	warning "Regenerating configurations only"
@@ -140,23 +164,11 @@ sudo apt-get -qq update
 warning "Creating $dendro_user_name if necessary and adding to $dendro_user_group if necessary"
 source ./Programs/create_dendro_user.sh
 
-#install or load nvm
-warning "Starting NVM setup in order to install node version $node_version..."
-sudo chmod +x "$setup_dir/Checks/load_nvm.sh"
-
-#install nvm as dendro_user
-warning "Installing NVM as $dendro_user_name in order to install node version $node_version..."
-sudo su - "$dendro_user_name" -c "$setup_dir/Checks/load_nvm.sh $node_version" || die "Unable to install/load NVM as $dendro_user_name"
-
-#install nvm as current user
-warning "Installing NVM as $(whoami) in order to install node version $node_version..."
-./Checks/load_nvm.sh $node_version || die "Unable to install/load NVM as $dendro_user_name" || die "Unable to install/load NVM as $(whoami)"
-
-#install nvm as ubuntu (vm user).
-#This can fail without dying because not always we have a 'ubuntu' user
-sudo su - "ubuntu" -c "$setup_dir/Checks/load_nvm.sh $node_version"
-
-if [ "${set_dev_mode}" != "true" ] && [ "${unset_dev_mode}" != "true" ] && [ "$install_jenkins" != "true" ] && [ "$install_teamcity" != "true" ] && [ "$install_teamcity_agent" != "true" ]
+if 	[ "${set_dev_mode}" != "true" ] && \
+		[ "${unset_dev_mode}" != "true" ] && \
+		[ "$install_jenkins" != "true" ] && \
+		[ "$install_teamcity" != "true" ] && \
+		[ "$install_teamcity_agent" != "true" ]
 then
 	info "Running the Dendro User Setup."
 
@@ -171,6 +183,7 @@ then
 		#install dependencies
 		if [ "${refresh_code_only}" == "true" ]; then
 			warning "Bypassing dependency installation"
+			load_nvm
 			source ./SQLCommands/grant_commands.sh
 		else
 			warning "Installing dependencies"
@@ -188,14 +201,9 @@ then
 				source ./Services/virtuoso.sh
 			fi
 
-			# timeout=45
-			# info "Waiting for virtuoso service to start. Installing base ontologies in virtuoso in $timeout seconds..."
-			# for (( i = 0; i < $timeout; i++ )); do
-			# 	echo -ne $[$timeout-i]...
-			# 	sleep 1s
-			# done
-
 			source ./SQLCommands/grant_commands.sh
+
+			install_and_load_nvm
 
 			# Install MongoDB
 			source ./Dependencies/mongodb.sh

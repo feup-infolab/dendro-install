@@ -17,20 +17,27 @@ fi
 
 function wait_for_server_to_boot_on_port()
 {
-    echo "Waiting for virtuoso to boot up..."
-    attempts=0
-    max_attempts=30
-    port=$1
-    while [[ $(telnet 127.0.0.1 "$port") ]] ; do
+    local port=$1
+    local attempts=0
+    local max_attempts=60
+
+    echo "Waiting for server on port $port to boot up..."
+
+    while nc 127.0.0.1 "$port" < /dev/null > /dev/null && [[ $attempts < $max_attempts ]]  ; do
         attempts=$((attempts+1))
-				if (( $attempts > $max_attempts )); then
-					break;
-				else
-					sleep 1;
-	        echo "waiting... (${attempts}/${max_attempts})"
-				fi
+        sleep 1;
+        echo "waiting... (${attempts}/${max_attempts})"
     done
+
+    if (( $attempts == $max_attempts ));
+    then
+        echo "Server on port $port failed to start after $max_attempts"
+    elif (( $attempts < $max_attempts ));
+    then
+        echo "Server on port $port started successfully at attempt (${attempts}/${max_attempts})"
+    fi
 }
+
 
 sudo service virtuoso start
 

@@ -167,7 +167,7 @@ recommender_installation_path='/dendro_recommender'
 
 #multi-core configuration
 	num_cpus=1
-	
+
 #Vagrant-specific configuration
 
 #VAGRANT_VM_SSH_USERNAME="vagrant"
