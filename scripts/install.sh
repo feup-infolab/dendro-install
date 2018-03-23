@@ -183,8 +183,8 @@ then
 		#install dependencies
 		if [ "${refresh_code_only}" == "true" ]; then
 			warning "Bypassing dependency installation"
-			load_nvm
 			source ./SQLCommands/grant_commands.sh
+			install_and_load_nvm
 		else
 			warning "Installing dependencies"
 			source ./Dependencies/misc.sh
