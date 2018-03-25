@@ -44,7 +44,7 @@ if "#{ENV['JENKINS_BUILD']}" == '1'
 end
 
 Vagrant.configure("2") do |config|
-  
+
   if "#{ENV['VAGRANT_USE_SQUID_PROXY_VM']}" == 'true'
     puts "Using Squid proxy VM for quicker deployments..."
     # Enable caching web server
@@ -75,10 +75,10 @@ Vagrant.configure("2") do |config|
   else
     config.vm.boot_timeout= 600
   end
-  
+
   config.vm.box = "ubuntu/xenial64"
   config.vm.box_version = "20170922.0.0"
-  
+
 
   #set maximum size of the main hard drive
   config.disksize.size = '100GB'
@@ -119,8 +119,8 @@ Vagrant.configure("2") do |config|
      else
 
      end
-      vb.cpus = 2     
-      vb.memory = "2048"
+      vb.cpus = 2
+      vb.memory = "4096"
   end
 
   time = sanitize_filename(Time.new.inspect)

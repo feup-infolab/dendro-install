@@ -23,7 +23,10 @@ function wait_for_server_to_boot_on_port()
 
     echo "Waiting for server on port $port to boot up..."
 
-    while nc 127.0.0.1 "$port" < /dev/null > /dev/null && [[ $attempts < $max_attempts ]]  ; do
+    while (
+						nc 127.0.0.1 "$port" < /dev/null ||
+						telnet 127.0.0.1 $port
+					) && [[ $attempts < $max_attempts ]] ; do
         attempts=$((attempts+1))
         if [[ "$attempts" == "$max_attempts" ]]
         then
@@ -43,6 +46,9 @@ function wait_for_server_to_boot_on_port()
 }
 
 sudo service virtuoso start
+
+# echo "sleeping for 30 seconds before attempting to load ontologies into virtuoso"
+# sleep 30
 
 wait_for_server_to_boot_on_port 8890
 wait_for_server_to_boot_on_port 1111
