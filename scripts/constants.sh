@@ -43,6 +43,7 @@ recommender_installation_path='/dendro_recommender'
 	temp_downloads_folder='/tmp/dendro_setup'
 	dendro_svn_url='http://dendro-dev.fe.up.pt/svn/dendro/'
 	dendro_git_url='https://github.com/feup-infolab-rdm/dendro.git'
+	job_types='ImportProjectJob,TestJob'
 
 	#deployment settings
 	dendro_log_file=/var/log/$active_deployment_setting.log
@@ -98,6 +99,7 @@ recommender_installation_path='/dendro_recommender'
 		mongodb_port=27017
 		mongodb_files_collection_name="${active_deployment_setting}_data"
 		mongodb_sessions_store_collection_name="${active_deployment_setting}_sessions"
+		mongo_job_collection_name="${active_deployment_setting}_job_collection"
 
 		#jenkins
 		jenkins_port=8080

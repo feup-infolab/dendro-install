@@ -41,6 +41,7 @@ node $running_folder/build_configuration_files.js \
 	--secret $secret \
 	--base_uri $dendro_base_uri \
 	--environment $environment \
+	--job_types $job_types \
 	--eudat_base_url $eudat_base_url \
 	--eudat_token $eudat_token \
 	--eudat_community_id $eudat_community_id \
@@ -71,6 +72,7 @@ node $running_folder/build_configuration_files.js \
 	--mongodb_dba_password $mongodb_dba_password \
 	--mongodb_files_collection_name $mongodb_files_collection_name \
 	--mongodb_sessions_store_collection_name $mongodb_sessions_store_collection_name \
+	--mongo_job_collection_name $mongo_job_collection_name \
 	--mysql_host $mysql_host \
 	--mysql_port $mysql_port \
 	--mysql_dba_user $mysql_username \
