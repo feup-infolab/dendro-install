@@ -2,12 +2,6 @@
 
 node_version=$1
 
-load_nvm()
-{
-  export NVM_DIR="$HOME/.nvm" &&
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && echo "NVM loaded."
-}
-
 add_line_at_end_of_file_if_tag_not_present()
 {
 	local file=$1
@@ -40,7 +34,8 @@ install_nvm()
 
   #install NVM, use node version
   curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash > /dev/null &&
-  load_nvm
+  export NVM_DIR="$HOME/.nvm" &&
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && echo "NVM loaded."
 }
 
 install_node()
@@ -101,7 +96,8 @@ then
     install_nvm
   else
     echo "User $(whoami) has nvm installed. Trying to load it..."
-    load_nvm
+    export NVM_DIR="$HOME/.nvm" &&
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && echo "NVM loaded."
   fi
 fi
 
