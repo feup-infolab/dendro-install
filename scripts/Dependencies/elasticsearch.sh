@@ -28,8 +28,6 @@ cd $temp_downloads_folder
 sudo wget --progress=bar:force https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.2.2.deb
 sudo dpkg -i elasticsearch-6.2.2.deb
 
-
-
 #go back to initial dir
 cd $setup_dir
 
