@@ -100,7 +100,7 @@ then
   source ./halt_vm.sh
   VBoxManage snapshot $active_deployment_setting restore $snapshot_id
 else
-  take_vm_snapshot $active_deployment_setting $snapshot_name
+  take_vm_snapshot $active_deployment_setting "before_$snapshot_name"
 fi
 
 if [[ "$use_proxy_vm" == "true" ]]; then
@@ -143,6 +143,9 @@ else
   vagrant up --provider virtualbox --provision ||
   die "There were errors installing Dendro."
 fi
+
+info "Taking VM snapshot after operation..."
+take_vm_snapshot $active_deployment_setting "after_$snapshot_name"
 
 info "Cleaning up..."
 rm ./scripts.tar.gz

@@ -41,12 +41,12 @@ else
 	die "File $elasticsearch_conf_file does not exist."
 fi
 
-# install kibana
-wget https://artifacts.elastic.co/downloads/kibana/kibana-6.2.2-amd64.deb
-shasum -a 512 kibana-6.2.2-amd64.deb
-sudo dpkg -i kibana-6.2.2-amd64.deb
-sudo systemctl enable kibana.service
-sudo service kibana start
+# # install kibana
+# wget https://artifacts.elastic.co/downloads/kibana/kibana-6.2.2-amd64.deb
+# shasum -a 512 kibana-6.2.2-amd64.deb
+# sudo dpkg -i kibana-6.2.2-amd64.deb
+# sudo systemctl enable kibana.service
+# sudo service kibana start
 
 ##Redis
 info "Trying to open Redis to ANY remote connection."
