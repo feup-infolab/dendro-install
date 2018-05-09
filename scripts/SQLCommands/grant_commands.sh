@@ -56,6 +56,7 @@ wait_for_server_to_boot_on_port 1111
 echo "trying to run ontology loading commands in virtuoso"
 
 /usr/local/virtuoso-opensource/bin/isql 1111 "$virtuoso_dba_user" "$virtuoso_dba_password" < $running_folder/interactive_sql_commands.sql
+/usr/local/virtuoso-opensource/bin/isql 1111 "$virtuoso_dba_user" "$virtuoso_dba_password" < $running_folder/declare_namespaces.sql
 
 # change the default password if it is set as default and the password is different
 if [[ "${virtuoso_dba_password}" != "dba" ]]
