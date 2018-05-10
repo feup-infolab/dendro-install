@@ -15,8 +15,8 @@ setup_dir=$(pwd)
 
 #set elasticsearch startup service
 sudo systemctl daemon-reload
-sudo systemctl enable elasticsearch
-sudo systemctl start elasticsearch
+sudo systemctl enable elasticsearch &&
+sudo systemctl start elasticsearch || die "Error starting ElasticSearch service! Maybe it did not install correctly!"
 
 #install elasticsearch gui client
 sudo /usr/share/elasticsearch/bin/plugin install jettro/elasticsearch-gui

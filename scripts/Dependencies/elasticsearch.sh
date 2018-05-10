@@ -24,11 +24,11 @@ sudo apt-get install --yes oracle-java8-installer
 sudo sh -c "yes \"\" | apt-get -f install"
 
 #install elasticsearch
-cd $temp_downloads_folder
+cd $temp_downloads_folder || die "Unable to cd to $temp_downloads_folder"
 sudo wget --progress=bar:force https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.2.2.deb
-sudo dpkg -i elasticsearch-6.2.2.deb
+sudo dpkg -i elasticsearch-6.2.2.deb || die "Error installing ElasticSearch!"
 
 #go back to initial dir
-cd $setup_dir
+cd $setup_dir || die "Unable to cd to $setup_dir"
 
 success "Installed ElasticSearch 6.2.2."
