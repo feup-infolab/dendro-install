@@ -58,6 +58,12 @@ echo "trying to run ontology loading commands in virtuoso"
 /usr/local/virtuoso-opensource/bin/isql 1111 "$virtuoso_dba_user" "$virtuoso_dba_password" < $running_folder/interactive_sql_commands.sql
 /usr/local/virtuoso-opensource/bin/isql 1111 "$virtuoso_dba_user" "$virtuoso_dba_password" < $running_folder/declare_namespaces.sql
 
+# flush OS buffers
+sync
+
+# force virtuoso to save the data to the hard drive
+/usr/local/virtuoso-opensource/bin/isql 1111 "$virtuoso_dba_user" "$virtuoso_dba_password" "EXEC=checkpoint;"
+
 # change the default password if it is set as default and the password is different
 if [[ "${virtuoso_dba_password}" != "dba" ]]
 then
