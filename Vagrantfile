@@ -36,6 +36,14 @@ if not plugins_to_install.empty?
   end
 end
 
+if ENV['VAGRANT_VM_NAME'] == nil
+  ENV['VAGRANT_VM_NAME'] = 'dendroVagrantDemo'
+end
+
+if ENV['VAGRANT_VM_IP'] == nil
+  ENV['VAGRANT_VM_IP'] = '192.168.56.249'
+end
+
 ###Configuration
 puts "Configuring Vagrant VM #{ENV['VAGRANT_VM_NAME']} on IP #{ENV['VAGRANT_VM_IP']}."
 
