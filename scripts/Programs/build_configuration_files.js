@@ -148,9 +148,9 @@ var possible_arguments = {
     "shibbolethUP_authentication_issuer" : string_t,
     "shibbolethUP_authentication_session_secret" : string_t,
     "shibbolethUP_authentication_button_text" : string_t,   
-    "shibbolethUP_authentication_idp_cert" : string_t, 
-    "shibbolethUP_authentication_key" : string_t, 
-    "shibbolethUP_authentication_cert" : string_t, 
+    "shibbolethUP_authentication_idp_cert_path" : string_t, 
+    "shibbolethUP_authentication_key_path" : string_t, 
+    "shibbolethUP_authentication_cert_path" : string_t, 
 	
 	//multicore configuration
 	"num_cpus" : integer_t
@@ -647,9 +647,9 @@ var write_dendro_configuration_file = function ()
                     "ISSUER": get_argument_by_name("shibbolethUP_authentication_issuer"),
                     "SESSION_SECRET": get_argument_by_name("shibbolethUP_authentication_session_secret"),
                     "button_text": get_argument_by_name("shibbolethUP_authentication_button_text"),
-                    "idp_cert": get_argument_by_name("shibbolethUP_authentication_idp_cert"),
-                    "key": get_argument_by_name("shibbolethUP_authentication_key"),
-                    "cert": get_argument_by_name("shibbolethUP_authentication_cert")
+                    "idp_cert_path": get_argument_by_name("shibbolethUP_authentication_idp_cert_path"),
+                    "key_path": get_argument_by_name("shibbolethUP_authentication_key_path"),
+                    "cert_path": get_argument_by_name("shibbolethUP_authentication_cert_path")
                 }
             },
 			"numCPUs" : get_argument_by_name("num_cpus")
