@@ -118,6 +118,15 @@ node $running_folder/build_configuration_files.js \
 	--saml_authentication_entry_point $saml_authentication_entry_point \
 	--saml_authentication_issuer $saml_authentication_issuer \
 	--saml_authentication_button_text $saml_authentication_button_text \
+	--shibbolethUP_authentication_enabled $shibbolethUP_authentication_enabled \
+    --shibbolethUP_authentication_callback_url $shibbolethUP_authentication_callback_url \
+    --shibbolethUP_authentication_entry_point $shibbolethUP_authentication_entry_point \
+    --shibbolethUP_authentication_issuer $shibbolethUP_authentication_issuer \
+    --shibbolethUP_authentication_session_secret $shibbolethUP_authentication_session_secret \
+    --shibbolethUP_authentication_button_text $shibbolethUP_authentication_button_text \
+    --shibbolethUP_authentication_idp_cert $shibbolethUP_authentication_idp_cert \
+    --shibbolethUP_authentication_key $shibbolethUP_authentication_key \
+    --shibbolethUP_authentication_cert $shibbolethUP_authentication_cert \
 	--num_cpus $num_cpus \
 	|| die "Failure generating configuration files."
 

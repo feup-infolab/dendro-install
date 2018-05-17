@@ -62,6 +62,16 @@ saml_authentication_entry_point="https://openidp.feide.no/simplesaml/saml2/idp/S
 saml_authentication_issuer="passport-saml"
 saml_authentication_button_text="Sign-in with institutional login"
 
+#shibbolethUP authentication settings
+shibbolethUP_authentication_callback_url="shibbolethUP_authentication_callback_url"
+shibbolethUP_authentication_entry_point="shibbolethUP_authentication_entry_point"
+shibbolethUP_authentication_issuer="shibbolethUP_authentication_issuer"
+shibbolethUP_authentication_session_secret="shibbolethUP_authentication_session_secret"
+shibbolethUP_authentication_button_text="Sign-in with shibboleth UP"
+shibbolethUP_authentication_idp_cert="shibbolethUP_authentication_idp_cert"
+shibbolethUP_authentication_key="shibbolethUP_authentication_key"
+shibbolethUP_authentication_cert="shibbolethUP_authentication_cert"
+
 #teamcity credentials
 
 teamcity_admin_username="jrocha"

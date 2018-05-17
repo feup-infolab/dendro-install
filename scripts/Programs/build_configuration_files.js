@@ -140,6 +140,17 @@ var possible_arguments = {
     "saml_authentication_entry_point" : string_t,
     "saml_authentication_issuer" : string_t,
     "saml_authentication_button_text" : string_t,
+
+    //shibbolethUP
+    "shibbolethUP_authentication_enabled" : boolean_t,
+    "shibbolethUP_authentication_callback_url" : string_t,
+    "shibbolethUP_authentication_entry_point" : string_t,
+    "shibbolethUP_authentication_issuer" : string_t,
+    "shibbolethUP_authentication_session_secret" : string_t,
+    "shibbolethUP_authentication_button_text" : string_t,   
+    "shibbolethUP_authentication_idp_cert" : string_t, 
+    "shibbolethUP_authentication_key" : string_t, 
+    "shibbolethUP_authentication_cert" : string_t, 
 	
 	//multicore configuration
 	"num_cpus" : integer_t
@@ -627,6 +638,18 @@ var write_dendro_configuration_file = function ()
                     "entry_point": get_argument_by_name("saml_authentication_entry_point"),
                     "issuer": get_argument_by_name("saml_authentication_issuer"),
                     "button_text": get_argument_by_name("saml_authentication_button_text")
+                },
+                "shibbolethUP":
+                {
+                    "enabled": get_argument_by_name("shibbolethUP_authentication_enabled"),
+                    "CALLBACK_URL": get_argument_by_name("shibbolethUP_authentication_callback_url"),
+                    "ENTRY_POINT": get_argument_by_name("shibbolethUP_authentication_entry_point"),
+                    "ISSUER": get_argument_by_name("shibbolethUP_authentication_issuer"),
+                    "SESSION_SECRET": get_argument_by_name("shibbolethUP_authentication_session_secret"),
+                    "button_text": get_argument_by_name("shibbolethUP_authentication_button_text"),
+                    "idp_cert": get_argument_by_name("shibbolethUP_authentication_idp_cert"),
+                    "key": get_argument_by_name("shibbolethUP_authentication_key"),
+                    "cert": get_argument_by_name("shibbolethUP_authentication_cert")
                 }
             },
 			"numCPUs" : get_argument_by_name("num_cpus")
