@@ -150,7 +150,8 @@ var possible_arguments = {
     "shibbolethUP_authentication_button_text" : string_t,   
     "shibbolethUP_authentication_idp_cert_path" : string_t, 
     "shibbolethUP_authentication_key_path" : string_t, 
-    "shibbolethUP_authentication_cert_path" : string_t, 
+    "shibbolethUP_authentication_cert_path" : string_t,
+    "shibbolethUP_URL" : string_t,
 	
 	//multicore configuration
 	"num_cpus" : integer_t
@@ -649,7 +650,8 @@ var write_dendro_configuration_file = function ()
                     "button_text": get_argument_by_name("shibbolethUP_authentication_button_text"),
                     "idp_cert_path": get_argument_by_name("shibbolethUP_authentication_idp_cert_path"),
                     "key_path": get_argument_by_name("shibbolethUP_authentication_key_path"),
-                    "cert_path": get_argument_by_name("shibbolethUP_authentication_cert_path")
+                    "cert_path": get_argument_by_name("shibbolethUP_authentication_cert_path"),
+                    "URL" : get_argument_by_name("shibbolethUP_URL")
                 }
             },
 			"numCPUs" : get_argument_by_name("num_cpus")
