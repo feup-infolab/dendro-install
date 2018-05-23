@@ -68,6 +68,11 @@ SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/ma
 SPARQL CLEAR GRAPH <http://purl.org/ontology/po/>;
 SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/PO/1.1.ttl> INTO GRAPH <http://purl.org/ontology/po/>;
 
+SPARQL CLEAR GRAPH <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/M3-LITE/M3-lite.owl#>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/M3-LITE/M3-lite.owl> INTO GRAPH <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/M3-LITE/M3-lite.owl#>;
+
+SPARQL CLEAR GRAPH <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/SSN/SSN.owl#>;
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/SSN/SSN.owl> INTO GRAPH <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/SSN/SSN.owl#>;
 
 SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/ddiup#>;
 SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/DDI_UP/ddi_up_ontology_2.0.rdf> INTO GRAPH <http://dendro.fe.up.pt/ontology/ddiup#>;
