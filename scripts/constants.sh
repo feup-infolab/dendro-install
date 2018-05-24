@@ -149,7 +149,7 @@ recommender_installation_path='/dendro_recommender'
 	dendro_recommender_all_ontologies_url="${dendro_base_uri}/ontologies/all"
 
 #public_ontologies
-	public_ontologies="[\"foaf\",\"dcterms\",\"bdv\",\"research\",\"dcb\",\"tsim\",\"hdg\",\"ddiup\",\"disco\"]"
+	public_ontologies="[\"foaf\",\"dcterms\",\"bdv\",\"research\",\"dcb\",\"tsim\",\"hdg\",\"ddiup\",\"disco\",\"m3lite\",\"ssn\"]"
 
 #authentication
 	#default
@@ -167,7 +167,7 @@ recommender_installation_path='/dendro_recommender'
 
 #multi-core configuration
 	num_cpus=1
-	
+
 #Vagrant-specific configuration
 
 #VAGRANT_VM_SSH_USERNAME="vagrant"
