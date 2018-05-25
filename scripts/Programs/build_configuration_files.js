@@ -151,7 +151,7 @@ var possible_arguments = {
     "shibbolethUP_authentication_idp_cert_path" : string_t, 
     "shibbolethUP_authentication_key_path" : string_t, 
     "shibbolethUP_authentication_cert_path" : string_t,
-    "shibbolethUP_URL" : string_t,
+    "shibbolethUP_authentication_button_url" : string_t,
 	
 	//multicore configuration
 	"num_cpus" : integer_t
@@ -643,15 +643,15 @@ var write_dendro_configuration_file = function ()
                 "shibbolethUP":
                 {
                     "enabled": get_argument_by_name("shibbolethUP_authentication_enabled"),
-                    "CALLBACK_URL": get_argument_by_name("shibbolethUP_authentication_callback_url"),
-                    "ENTRY_POINT": get_argument_by_name("shibbolethUP_authentication_entry_point"),
-                    "ISSUER": get_argument_by_name("shibbolethUP_authentication_issuer"),
-                    "SESSION_SECRET": get_argument_by_name("shibbolethUP_authentication_session_secret"),
+                    "callback_url": get_argument_by_name("shibbolethUP_authentication_callback_url"),
+                    "button_url" : get_argument_by_name("shibbolethUP_authentication_button_url")
+                    "entry_point": get_argument_by_name("shibbolethUP_authentication_entry_point"),
+                    "issuer": get_argument_by_name("shibbolethUP_authentication_issuer"),
+                    "session_secret": get_argument_by_name("shibbolethUP_authentication_session_secret"),
                     "button_text": get_argument_by_name("shibbolethUP_authentication_button_text"),
                     "idp_cert_path": get_argument_by_name("shibbolethUP_authentication_idp_cert_path"),
                     "key_path": get_argument_by_name("shibbolethUP_authentication_key_path"),
-                    "cert_path": get_argument_by_name("shibbolethUP_authentication_cert_path"),
-                    "URL" : get_argument_by_name("shibbolethUP_URL")
+                    "cert_path": get_argument_by_name("shibbolethUP_authentication_cert_path")
                 }
             },
 			"numCPUs" : get_argument_by_name("num_cpus")

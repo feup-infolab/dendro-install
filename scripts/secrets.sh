@@ -71,7 +71,7 @@ shibbolethUP_authentication_button_text="Sign-in with shibboleth UP"
 shibbolethUP_authentication_idp_cert_path="shibbolethUP_authentication_idp_cert_path"
 shibbolethUP_authentication_key_path="shibbolethUP_authentication_key_path"
 shibbolethUP_authentication_cert_path="shibbolethUP_authentication_cert_path"
-shibbolethUP_URL="shibbolethUP_URL" 
+shibbolethUP_authentication_button_url="shibbolethUP_authentication_button_url" 
 
 #teamcity credentials
 

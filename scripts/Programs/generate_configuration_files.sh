@@ -127,7 +127,7 @@ node $running_folder/build_configuration_files.js \
     --shibbolethUP_authentication_idp_cert_path $shibbolethUP_authentication_idp_cert_path \
     --shibbolethUP_authentication_key_path $shibbolethUP_authentication_key_path \
     --shibbolethUP_authentication_cert_path $shibbolethUP_authentication_cert_path \
-    --shibbolethUP_URL $shibbolethUP_URL \
+    --shibbolethUP_authentication_button_url $shibbolethUP_authentication_button_url \
 	--num_cpus $num_cpus \
 	|| die "Failure generating configuration files."
 
