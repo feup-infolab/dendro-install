@@ -644,7 +644,7 @@ var write_dendro_configuration_file = function ()
                 {
                     "enabled": get_argument_by_name("shibbolethUP_authentication_enabled"),
                     "callback_url": get_argument_by_name("shibbolethUP_authentication_callback_url"),
-                    "button_url" : get_argument_by_name("shibbolethUP_authentication_button_url")
+                    "button_url" : get_argument_by_name("shibbolethUP_authentication_button_url"),
                     "entry_point": get_argument_by_name("shibbolethUP_authentication_entry_point"),
                     "issuer": get_argument_by_name("shibbolethUP_authentication_issuer"),
                     "session_secret": get_argument_by_name("shibbolethUP_authentication_session_secret"),
