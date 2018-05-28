@@ -52,7 +52,7 @@ installShibbolethDependencies()
 	tempCertFolderPath="${starting_dir}/Programs/generated_configurations/conf/cert"
 	echo "tempCertFolderPath is: "$tempCertFolderPath
 	echo "certFolderPath is: "$certFolderPath
-	die
+	#die
 	checkIfServiceProviderShibbolethFilesExist()
 	{
 		#checks if the files bellow exist:
