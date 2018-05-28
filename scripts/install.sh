@@ -38,6 +38,59 @@ copy_config_files() {
 	sudo cp "$wd/Programs/generated_configurations/deployment_configs.json" "$dendro_installation_path/conf"
 }
 
+installShibbolethDependencies()
+{
+	#certFolderPath="./cert"
+	certFolderPath="${dendro_installation_path}/conf/cert"
+	echo "certFolderPath is: "$certFolderPath
+	die
+	checkIfServiceProviderShibbolethFilesExist()
+	{
+		#checks if the files bellow exist:
+		#"idp_cert_path": "dendro/conf/cert/idp_cert.pem",
+	    #"key_path": "dendro/conf/cert/key.pem",
+	    #"cert_path": "dendro/conf/cert/cert.pem"
+
+	    #if key.pem and cert.pem files are missing, the script should generate them
+	    #However the idp_cert.pem file is dependend on the Shibboleth IDP, so this file must be manually retrieved and set by the system admin
+	    if [ ! -f "key.pem" -o  ! -f "cert.pem" ]; then
+	        warning "Shibboleth service provider files not found!"
+	        warning "Will generate Shibboleth service provider files!"
+	        openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -days 900
+	        success "Shibboleth service provider files generated!"
+	    else
+	        success "All Shibboleth service provider files already exist!"
+	    fi
+	}
+
+	checkIfIdentityProviderFilesExist()
+	{
+	    if [ ! -f "idp_cert.pem" ]; then
+	        error "Shibboleth identity provider files not found!"
+	        echo "Please upload the idp_cert.pem file in 'cert' folder at:" && pwd
+	        while true; do
+	            read -p "Type 'yes' to try again, OR 'no' to quit the instalation: " yn
+	            case $yn in
+	                [Yy]* ) checkIfIdentityProviderFilesExist; break;;
+	                [Nn]* ) die;;
+	                * ) echo "Please answer yes or no.";;
+	            esac
+	        done
+	    else
+	        success "Shibboleth identity provider files already exist!"
+	    fi   
+	}
+
+	setup()
+	{
+	    mkdir -p $certFolderPath && cd $certFolderPath
+	    checkIfServiceProviderShibbolethFilesExist
+	    checkIfIdentityProviderFilesExist
+	    success "All dependencies for Shibboleth are now created!"
+	}
+	setup
+}
+
 #see if we are supposed to install dependencies or just refresh code from Dendro repositories
 # code from http://stackoverflow.com/questions/7069682/how-to-get-arguments-with-flags-in-bash-script
 
@@ -116,6 +169,7 @@ then
 	#generate configuration files for both solutions
 	source ./Programs/generate_configuration_files.sh
 	copy_config_files
+	installShibbolethDependencies
 fi
 
 if [ "${setup_service_dendro_service_only}" == "true" ]
