@@ -48,6 +48,7 @@ copyTempCertsIntoCertFolder()
 installShibbolethDependencies()
 {
 	#certFolderPath="./cert"
+	previousFolder=$(pwd) 
 	certFolderPath="${dendro_installation_path}/conf/"
 	tempCertFolderPath="${starting_dir}/Programs/generated_configurations/conf/cert"
 	echo "tempCertFolderPath is: "$tempCertFolderPath
@@ -97,6 +98,7 @@ installShibbolethDependencies()
 	    checkIfIdentityProviderFilesExist
 	    copyTempCertsIntoCertFolder "$tempCertFolderPath" "$certFolderPath"
 	    success "All dependencies for Shibboleth are now created at: "$certFolderPath
+	    cd $previousFolder
 	}
 	setup
 }
