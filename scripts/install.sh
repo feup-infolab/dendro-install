@@ -47,13 +47,11 @@ copyTempCertsIntoCertFolder()
 
 installShibbolethDependencies()
 {
-	#certFolderPath="./cert"
 	previousFolder=$(pwd) 
 	certFolderPath="${dendro_installation_path}/conf/"
 	tempCertFolderPath="${starting_dir}/Programs/generated_configurations/conf/cert"
 	echo "tempCertFolderPath is: "$tempCertFolderPath
 	echo "certFolderPath is: "$certFolderPath
-	#die
 	checkIfServiceProviderShibbolethFilesExist()
 	{
 		#checks if the files bellow exist:
@@ -97,7 +95,7 @@ installShibbolethDependencies()
 	    checkIfServiceProviderShibbolethFilesExist
 	    checkIfIdentityProviderFilesExist
 	    copyTempCertsIntoCertFolder "$tempCertFolderPath" "$certFolderPath"
-	    success "All dependencies for Shibboleth are now created at: "$certFolderPath
+	    success "All dependencies for Shibboleth are now created at: "$certFolderPath"cert"
 	    cd $previousFolder
 	}
 	setup
@@ -175,7 +173,6 @@ copy_config_files() {
 	fi
 }
 
-installShibbolethDependencies
 if [ "${regenerate_configs}" == "true" ];
 then
 	warning "Regenerating configurations only"
@@ -376,6 +373,8 @@ cd "${starting_dir}" || warning "Unable to go back to the starting directory."
 
 #install vm tools to prevent crashes
 sudo apt-get install open-vm-tools
+
+installShibbolethDependencies
 
 #all ok.
 success "Setup operations complete."
