@@ -40,7 +40,7 @@ copy_config_files() {
 
 copyTempCertsIntoCertFolder()
 {
-	warning "Copying Shibboleth files from " $1 " to " $2
+	warning "Copying Shibboleth files from $1 to $2"
 	#sudo cp $tempFolder $finalFolder
 	sudo cp -R $1 $2
 }
@@ -48,7 +48,7 @@ copyTempCertsIntoCertFolder()
 installShibbolethDependencies()
 {
 	#certFolderPath="./cert"
-	certFolderPath="${dendro_installation_path}/conf/cert/"
+	certFolderPath="${dendro_installation_path}/conf/"
 	tempCertFolderPath="${starting_dir}/Programs/generated_configurations/conf/cert"
 	echo "tempCertFolderPath is: "$tempCertFolderPath
 	echo "certFolderPath is: "$certFolderPath
@@ -95,7 +95,7 @@ installShibbolethDependencies()
 	    mkdir -p $tempCertFolderPath && cd $tempCertFolderPath
 	    checkIfServiceProviderShibbolethFilesExist
 	    checkIfIdentityProviderFilesExist
-	    copyTempCertsIntoCertFolder $tempFolder $certFolderPath)
+	    copyTempCertsIntoCertFolder "$tempCertFolderPath" "$certFolderPath"
 	    success "All dependencies for Shibboleth are now created at: "$certFolderPath
 	}
 	setup
