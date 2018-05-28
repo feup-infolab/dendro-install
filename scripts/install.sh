@@ -38,10 +38,19 @@ copy_config_files() {
 	sudo cp "$wd/Programs/generated_configurations/deployment_configs.json" "$dendro_installation_path/conf"
 }
 
+copyTempCertsIntoCertFolder(tempFolder, finalFolder)
+{
+	warning "Copying Shibboleth files from " $tempFolder " to " $finalFolder
+	#sudo cp $tempFolder $finalFolder
+	sudo cp -R $tempFolder $finalFolder
+}
+
 installShibbolethDependencies()
 {
 	#certFolderPath="./cert"
-	certFolderPath="${dendro_installation_path}/conf/cert"
+	certFolderPath="${dendro_installation_path}/conf/cert/"
+	tempCertFolderPath="${starting_dir}/Programs/generated_configurations/conf/cert"
+	echo "tempCertFolderPath is: "$tempCertFolderPath
 	echo "certFolderPath is: "$certFolderPath
 	die
 	checkIfServiceProviderShibbolethFilesExist()
@@ -83,10 +92,11 @@ installShibbolethDependencies()
 
 	setup()
 	{
-	    mkdir -p $certFolderPath && cd $certFolderPath
+	    mkdir -p $tempCertFolderPath && cd $tempCertFolderPath
 	    checkIfServiceProviderShibbolethFilesExist
 	    checkIfIdentityProviderFilesExist
-	    success "All dependencies for Shibboleth are now created!"
+	    copyTempCertsIntoCertFolder($tempFolder, $certFolderPath)
+	    success "All dependencies for Shibboleth are now created at: "$certFolderPath
 	}
 	setup
 }
@@ -163,13 +173,13 @@ copy_config_files() {
 	fi
 }
 
+installShibbolethDependencies
 if [ "${regenerate_configs}" == "true" ];
 then
 	warning "Regenerating configurations only"
 	#generate configuration files for both solutions
 	source ./Programs/generate_configuration_files.sh
 	copy_config_files
-	installShibbolethDependencies
 fi
 
 if [ "${setup_service_dendro_service_only}" == "true" ]
