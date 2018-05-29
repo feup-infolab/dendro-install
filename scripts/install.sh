@@ -52,6 +52,7 @@ installShibbolethDependencies()
 	tempCertFolderPath="${starting_dir}/Programs/generated_configurations/conf/cert"
 	echo "tempCertFolderPath is: "$tempCertFolderPath
 	echo "certFolderPath is: "$certFolderPath
+
 	checkIfServiceProviderShibbolethFilesExist()
 	{
 		#checks if the files bellow exist:
@@ -98,7 +99,19 @@ installShibbolethDependencies()
 	    success "All dependencies for Shibboleth are now created at: "$certFolderPath"cert"
 	    cd $previousFolder
 	}
-	setup
+
+	checkIfAdminWantsToInstallShibboleth()
+	{
+		while true; do
+            read -p "Do you want o install Shibboleth dependencies ? Type 'yes' OR 'no' : " yn
+            case $yn in
+                [Yy]* ) setup; break;;
+                [Nn]* ) info "Will not install Shibboleth dependencies!" break;;
+                * ) echo "Please answer yes or no.";;
+            esac
+        done
+	}
+	#setup
 }
 
 #see if we are supposed to install dependencies or just refresh code from Dendro repositories
