@@ -38,13 +38,6 @@ copy_config_files() {
 	sudo cp "$wd/Programs/generated_configurations/deployment_configs.json" "$dendro_installation_path/conf"
 }
 
-copyTempCertsIntoCertFolder()
-{
-	warning "Copying Shibboleth files from $1 to $2"
-	#sudo cp $tempFolder $finalFolder
-	sudo cp -R $1 $2
-}
-
 installShibbolethDependencies()
 {
 	previousFolder=$(pwd) 
@@ -52,6 +45,13 @@ installShibbolethDependencies()
 	tempCertFolderPath="${starting_dir}/Programs/generated_configurations/conf/cert"
 	echo "tempCertFolderPath is: "$tempCertFolderPath
 	echo "certFolderPath is: "$certFolderPath
+
+	copyTempCertsIntoCertFolder()
+	{
+		warning "Copying Shibboleth files from $1 to $2"
+		#sudo cp $tempFolder $finalFolder
+		sudo cp -R $1 $2
+	}
 
 	checkIfServiceProviderShibbolethFilesExist()
 	{
@@ -100,10 +100,10 @@ installShibbolethDependencies()
 	    cd $previousFolder
 	}
 
-	checkIfAdminWantsToInstallShibboleth()
+	checkIfAdminWantsToInstallShibbolethDependencies()
 	{
 		while true; do
-            read -p "Do you want o install Shibboleth dependencies ? Type 'yes' OR 'no' : " yn
+            read -p "Do you want to install Shibboleth dependencies ? Type 'yes' OR 'no' : " yn
             case $yn in
                 [Yy]* ) setup; break;;
                 [Nn]* ) info "Will not install Shibboleth dependencies!" break;;
@@ -111,6 +111,8 @@ installShibbolethDependencies()
             esac
         done
 	}
+
+	checkIfAdminWantsToInstallShibbolethDependencies
 	#setup
 }
 
@@ -185,6 +187,8 @@ copy_config_files() {
 		exit 0
 	fi
 }
+
+installShibbolethDependencies
 
 if [ "${regenerate_configs}" == "true" ];
 then
@@ -387,7 +391,7 @@ cd "${starting_dir}" || warning "Unable to go back to the starting directory."
 #install vm tools to prevent crashes
 sudo apt-get install open-vm-tools
 
-installShibbolethDependencies
+#installShibbolethDependencies
 
 #all ok.
 success "Setup operations complete."
