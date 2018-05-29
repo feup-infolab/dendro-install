@@ -106,7 +106,7 @@ installShibbolethDependencies()
             read -p "Do you want to install Shibboleth dependencies ? Type 'yes' OR 'no' : " yn
             case $yn in
                 [Yy]* ) setup; break;;
-                [Nn]* ) info "Will not install Shibboleth dependencies!" break;;
+                [Nn]* ) info "Will not install Shibboleth dependencies!"; break;;
                 * ) echo "Please answer yes or no.";;
             esac
         done
