@@ -92,12 +92,25 @@ installShibbolethDependencies()
 
 	setup()
 	{
+		wd="$starting_dir"
+		idp_cert_path ="{$certFolderPath}cert/idp_cert.pem"
+		key_path="{$certFolderPath}cert/key.pem"
+		cert_path="{$certFolderPath}cert/cert_path.pem"
+		deployment_configs_path="{$certFolderPath}deployment_configs.json"
+		updateDeploymentConfigsScriptPath="${wd}/Programs/updateDeploymentConfigs.js"
+
+
 	    mkdir -p $tempCertFolderPath && cd $tempCertFolderPath
 	    checkIfServiceProviderShibbolethFilesExist
 	    checkIfIdentityProviderFilesExist
 	    copyTempCertsIntoCertFolder "$tempCertFolderPath" "$certFolderPath"
 	    success "All dependencies for Shibboleth are now created at: "$certFolderPath"cert"
 	    cd $previousFolder
+	    info "Will now update the deployment_configs.js file"
+	    node -p "require({$updateDeploymentConfigsScriptPath}).updateJSONFile({$deployment_configs_path}, 'dev.authentication.shibbolethUP.idp_cert_path', {$idp_cert_path})"
+	    node -p "require({$updateDeploymentConfigsScriptPath}).updateJSONFile({$deployment_configs_path}, 'dev.authentication.shibbolethUP.key_path', {$key_path})"
+	    node -p "require({$updateDeploymentConfigsScriptPath}).updateJSONFile({$deployment_configs_path}, 'dev.authentication.shibbolethUP.cert_path', {$cert_path})"
+	    success "deployment_configs.js file updated"
 	}
 
 	checkIfAdminWantsToInstallShibbolethDependencies()
@@ -188,14 +201,13 @@ copy_config_files() {
 	fi
 }
 
-installShibbolethDependencies
-
 if [ "${regenerate_configs}" == "true" ];
 then
 	warning "Regenerating configurations only"
 	#generate configuration files for both solutions
 	source ./Programs/generate_configuration_files.sh
 	copy_config_files
+	installShibbolethDependencies
 fi
 
 if [ "${setup_service_dendro_service_only}" == "true" ]
@@ -310,6 +322,7 @@ then
 		sudo su $dendro_user_name ./Programs/Dendro/install.sh || die "Unable to install Dendro."
 
 		copy_config_files
+		installShibbolethDependencies
 
 		#stage dendro service
 		source ./Services/dendro.sh #??
