@@ -55,6 +55,13 @@ installShibbolethDependencies()
 
 	checkIfServiceProviderShibbolethFilesExist()
 	{
+		info $openssl_country
+	    info $openssl_state
+	    info $openssl_location
+	    info $openssl_organization
+	    info $openssl_organizational_unit
+	    info $openssl_common_name
+
 		#checks if the files bellow exist:
 		#"idp_cert_path": "dendro/conf/cert/idp_cert.pem",
 	    #"key_path": "dendro/conf/cert/key.pem",
@@ -65,7 +72,7 @@ installShibbolethDependencies()
 	    if [ ! -f "key.pem" -o  ! -f "cert.pem" ]; then
 	        warning "Shibboleth service provider files not found!"
 	        warning "Will generate Shibboleth service provider files!"
-	        openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -days 900
+	        openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -days 900 -subj "/C=$openssl_country/ST=$openssl_state/L=$openssl_location/O=$openssl_organization/OU=$openssl_organizational_unit/CN=$openssl_common_name"
 	        success "Shibboleth service provider files generated!"
 	    else
 	        success "All Shibboleth service provider files already exist!"

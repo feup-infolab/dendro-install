@@ -73,6 +73,14 @@ shibbolethUP_authentication_key_path="shibbolethUP_authentication_key_path"
 shibbolethUP_authentication_cert_path="shibbolethUP_authentication_cert_path"
 shibbolethUP_authentication_button_url="shibbolethUP_authentication_button_url" 
 
+#openssl parameters to generate certificates and keys
+openssl_country="PT"
+openssl_state="Porto"
+openssl_location="Porto"
+openssl_organization="Dendro Infolab"
+openssl_organizational_unit="Dendro Infolab"
+openssl_common_name="dendro.fe.up.pt"
+
 #teamcity credentials
 
 teamcity_admin_username="jrocha"
