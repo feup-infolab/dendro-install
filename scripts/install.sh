@@ -40,19 +40,6 @@ copy_config_files() {
 
 installShibbolethDependencies()
 {
-	previousFolder=$(pwd) 
-	certFolderPath="${dendro_installation_path}/conf/"
-	tempCertFolderPath="${starting_dir}/Programs/generated_configurations/conf/cert"
-	echo "tempCertFolderPath is: "$tempCertFolderPath
-	echo "certFolderPath is: "$certFolderPath
-
-	copyTempCertsIntoCertFolder()
-	{
-		warning "Copying Shibboleth files from $1 to $2"
-		#sudo cp $tempFolder $finalFolder
-		sudo cp -R $1 $2
-	}
-
 	checkIfServiceProviderShibbolethFilesExist()
 	{
 		parent_of_shibbolethUP_authentication_key_file=${shibbolethUP_authentication_key_path%/*}
@@ -189,13 +176,14 @@ copy_config_files() {
 	fi
 }
 
+installShibbolethDependencies
+
 if [ "${regenerate_configs}" == "true" ];
 then
 	warning "Regenerating configurations only"
 	#generate configuration files for both solutions
 	source ./Programs/generate_configuration_files.sh
 	copy_config_files
-	installShibbolethDependencies
 fi
 
 if [ "${setup_service_dendro_service_only}" == "true" ]
@@ -310,7 +298,6 @@ then
 		sudo su $dendro_user_name ./Programs/Dendro/install.sh || die "Unable to install Dendro."
 
 		copy_config_files
-		installShibbolethDependencies
 
 		#stage dendro service
 		source ./Services/dendro.sh #??
@@ -391,8 +378,6 @@ cd "${starting_dir}" || warning "Unable to go back to the starting directory."
 
 #install vm tools to prevent crashes
 sudo apt-get install open-vm-tools
-
-#installShibbolethDependencies
 
 #all ok.
 success "Setup operations complete."
