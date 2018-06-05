@@ -55,85 +55,66 @@ installShibbolethDependencies()
 
 	checkIfServiceProviderShibbolethFilesExist()
 	{
-		info $openssl_country
-	    info $openssl_state
-	    info $openssl_location
-	    info $openssl_organization
-	    info $openssl_organizational_unit
-	    info $openssl_common_name
+		parent_of_shibbolethUP_authentication_key_file=${shibbolethUP_authentication_key_path%/*}
+	    parent_of_shibbolethUP_authentication_cert_file=${shibbolethUP_authentication_cert_path%/*}
 
-		#checks if the files bellow exist:
-		#"idp_cert_path": "dendro/conf/cert/idp_cert.pem",
-	    #"key_path": "dendro/conf/cert/key.pem",
-	    #"cert_path": "dendro/conf/cert/cert.pem"
+	    info "parent_of_shibbolethUP_authentication_key: $parent_of_shibbolethUP_authentication_key_file"
+	    info "parent_of_shibbolethUP_authentication_cert: $parent_of_shibbolethUP_authentication_cert_file" 
 
 	    #if key.pem and cert.pem files are missing, the script should generate them
-	    #However the idp_cert.pem file is dependend on the Shibboleth IDP, so this file must be manually retrieved and set by the system admin
-	    if [ ! -f "key.pem" -o  ! -f "cert.pem" ]; then
+	    #However the idp_cert.pem file is dependent on the Shibboleth IDP, so this file must be manually retrieved and set by the system admin
+	    if [ ! -f $shibbolethUP_authentication_key_path -o  ! -f $shibbolethUP_authentication_cert_path ]; then
 	        warning "Shibboleth service provider files not found!"
 	        warning "Will generate Shibboleth service provider files!"
-	        openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -days 900 -subj "/C=$openssl_country/ST=$openssl_state/L=$openssl_location/O=$openssl_organization/OU=$openssl_organizational_unit/CN=$openssl_common_name"
+	        mkdir -p $parent_of_shibbolethUP_authentication_key_file
+	        mkdir -p $parent_of_shibbolethUP_authentication_cert_file
+	        openssl req -x509 -newkey rsa:4096 -keyout $shibbolethUP_authentication_key_path -out $shibbolethUP_authentication_cert_path -nodes -days 900 -subj "/C=$openssl_country/ST=$openssl_state/L=$openssl_location/O=$openssl_organization/OU=$openssl_organizational_unit/CN=$openssl_common_name"
 	        success "Shibboleth service provider files generated!"
 	    else
-	        success "All Shibboleth service provider files already exist!"
+	        success "Shibboleth service provider files already exist!"
 	    fi
 	}
 
 	checkIfIdentityProviderFilesExist()
 	{
-	    if [ ! -f "idp_cert.pem" ]; then
-	        error "Shibboleth identity provider files not found!"
-	        echo "Please upload the idp_cert.pem file in 'cert' folder at:" && pwd
-	        while true; do
-	            read -p "Type 'yes' to try again, OR 'no' to quit the instalation: " yn
-	            case $yn in
-	                [Yy]* ) checkIfIdentityProviderFilesExist; break;;
-	                [Nn]* ) die;;
-	                * ) echo "Please answer yes or no.";;
-	            esac
-	        done
+		if [ ! -f $shibbolethUP_authentication_idp_cert_path ]; then
+        	error "Shibboleth identity provider files not found!"
+	        die "Please upload $shibbolethUP_authentication_idp_cert_path"
 	    else
 	        success "Shibboleth identity provider files already exist!"
-	    fi   
+	    fi
 	}
 
 	setup()
 	{
-		wd="$starting_dir"
-		idp_cert_path ="{$certFolderPath}cert/idp_cert.pem"
-		key_path="{$certFolderPath}cert/key.pem"
-		cert_path="{$certFolderPath}cert/cert_path.pem"
-		deployment_configs_path="{$certFolderPath}deployment_configs.json"
-		updateDeploymentConfigsScriptPath="${wd}/Programs/updateDeploymentConfigs.js"
-
-
-	    mkdir -p $tempCertFolderPath && cd $tempCertFolderPath
-	    checkIfServiceProviderShibbolethFilesExist
+		checkIfServiceProviderShibbolethFilesExist
 	    checkIfIdentityProviderFilesExist
-	    copyTempCertsIntoCertFolder "$tempCertFolderPath" "$certFolderPath"
-	    success "All dependencies for Shibboleth are now created at: "$certFolderPath"cert"
-	    cd $previousFolder
-	    info "Will now update the deployment_configs.js file"
-	    node -p "require({$updateDeploymentConfigsScriptPath}).updateJSONFile({$deployment_configs_path}, 'dev.authentication.shibbolethUP.idp_cert_path', {$idp_cert_path})"
-	    node -p "require({$updateDeploymentConfigsScriptPath}).updateJSONFile({$deployment_configs_path}, 'dev.authentication.shibbolethUP.key_path', {$key_path})"
-	    node -p "require({$updateDeploymentConfigsScriptPath}).updateJSONFile({$deployment_configs_path}, 'dev.authentication.shibbolethUP.cert_path', {$cert_path})"
-	    success "deployment_configs.js file updated"
+	    success "$shibbolethUP_authentication_idp_cert_path set!"
+	    success "$shibbolethUP_authentication_key_path set!"
+	    success "$shibbolethUP_authentication_cert_path set!"
 	}
 
 	checkIfAdminWantsToInstallShibbolethDependencies()
 	{
-		while true; do
-            read -p "Do you want to install Shibboleth dependencies ? Type 'yes' OR 'no' : " yn
-            case $yn in
-                [Yy]* ) setup; break;;
-                [Nn]* ) info "Will not install Shibboleth dependencies!"; break;;
-                * ) echo "Please answer yes or no.";;
-            esac
-        done
+		#while true; do
+        #    read -p "Do you want to install Shibboleth dependencies ? Type 'yes' OR 'no' : " yn
+        #    case $yn in
+        #        [Yy]* ) setup; break;;
+        #        [Nn]* ) info "Will not install Shibboleth dependencies!"; break;;
+        #        * ) echo "Please answer yes or no.";;
+        #    esac
+        #done
+
+        #shibbolethUP_authentication_enabled
+        if [ "$shibbolethUP_authentication_enabled" = "true" ]; then
+  			info "Will install Shibboleth dependencies!"
+  			setup
+	    else
+	        info "Will not install Shibboleth dependencies!"
+	    fi
 	}
 
 	checkIfAdminWantsToInstallShibbolethDependencies
-	#setup
 }
 
 #see if we are supposed to install dependencies or just refresh code from Dendro repositories
