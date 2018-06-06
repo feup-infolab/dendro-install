@@ -159,7 +159,7 @@ recommender_installation_path='/dendro_recommender'
 	#saml
 		saml_authentication_enabled="false"
 	#shibboleth
-		shibboleth_authentication_enabled="true"
+		shibboleth_authentication_enabled="false"
 
 	#dependencies
 		#play framework
