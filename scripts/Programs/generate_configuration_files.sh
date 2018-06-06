@@ -118,16 +118,17 @@ node $running_folder/build_configuration_files.js \
 	--saml_authentication_entry_point $saml_authentication_entry_point \
 	--saml_authentication_issuer $saml_authentication_issuer \
 	--saml_authentication_button_text $saml_authentication_button_text \
-	--shibbolethUP_authentication_enabled $shibbolethUP_authentication_enabled \
-    --shibbolethUP_authentication_callback_url $shibbolethUP_authentication_callback_url \
-    --shibbolethUP_authentication_entry_point $shibbolethUP_authentication_entry_point \
-    --shibbolethUP_authentication_issuer $shibbolethUP_authentication_issuer \
-    --shibbolethUP_authentication_session_secret $shibbolethUP_authentication_session_secret \
-    --shibbolethUP_authentication_button_text $shibbolethUP_authentication_button_text \
-    --shibbolethUP_authentication_idp_cert_path $shibbolethUP_authentication_idp_cert_path \
-    --shibbolethUP_authentication_key_path $shibbolethUP_authentication_key_path \
-    --shibbolethUP_authentication_cert_path $shibbolethUP_authentication_cert_path \
-    --shibbolethUP_authentication_button_url $shibbolethUP_authentication_button_url \
+	--shibboleth_authentication_enabled $shibboleth_authentication_enabled \
+	--shibboleth_business_logic_handler $shibboleth_business_logic_handler \
+    --shibboleth_authentication_callback_url $shibboleth_authentication_callback_url \
+    --shibboleth_authentication_entry_point $shibboleth_authentication_entry_point \
+    --shibboleth_authentication_issuer $shibboleth_authentication_issuer \
+    --shibboleth_authentication_session_secret $shibboleth_authentication_session_secret \
+    --shibboleth_authentication_button_text $shibboleth_authentication_button_text \
+    --shibboleth_authentication_idp_cert_path $shibboleth_authentication_idp_cert_path \
+    --shibboleth_authentication_key_path $shibboleth_authentication_key_path \
+    --shibboleth_authentication_cert_path $shibboleth_authentication_cert_path \
+    --shibboleth_authentication_button_url $shibboleth_authentication_button_url \
 	--num_cpus $num_cpus \
 	|| die "Failure generating configuration files."
 

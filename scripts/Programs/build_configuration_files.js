@@ -141,17 +141,18 @@ var possible_arguments = {
     "saml_authentication_issuer" : string_t,
     "saml_authentication_button_text" : string_t,
 
-    //shibbolethUP
-    "shibbolethUP_authentication_enabled" : boolean_t,
-    "shibbolethUP_authentication_callback_url" : string_t,
-    "shibbolethUP_authentication_entry_point" : string_t,
-    "shibbolethUP_authentication_issuer" : string_t,
-    "shibbolethUP_authentication_session_secret" : string_t,
-    "shibbolethUP_authentication_button_text" : string_t,   
-    "shibbolethUP_authentication_idp_cert_path" : string_t, 
-    "shibbolethUP_authentication_key_path" : string_t, 
-    "shibbolethUP_authentication_cert_path" : string_t,
-    "shibbolethUP_authentication_button_url" : string_t,
+    //shibboleth
+    "shibboleth_authentication_enabled" : boolean_t,
+    "shibboleth_business_logic_handler" : string_t,
+    "shibboleth_authentication_callback_url" : string_t,
+    "shibboleth_authentication_entry_point" : string_t,
+    "shibboleth_authentication_issuer" : string_t,
+    "shibboleth_authentication_session_secret" : string_t,
+    "shibboleth_authentication_button_text" : string_t,
+    "shibboleth_authentication_idp_cert_path" : string_t,
+    "shibboleth_authentication_key_path" : string_t,
+    "shibboleth_authentication_cert_path" : string_t,
+    "shibboleth_authentication_button_url" : string_t,
 	
 	//multicore configuration
 	"num_cpus" : integer_t
@@ -640,18 +641,19 @@ var write_dendro_configuration_file = function ()
                     "issuer": get_argument_by_name("saml_authentication_issuer"),
                     "button_text": get_argument_by_name("saml_authentication_button_text")
                 },
-                "shibbolethUP":
+                "shibboleth":
                 {
-                    "enabled": get_argument_by_name("shibbolethUP_authentication_enabled"),
-                    "callback_url": get_argument_by_name("shibbolethUP_authentication_callback_url"),
-                    "button_url" : get_argument_by_name("shibbolethUP_authentication_button_url"),
-                    "entry_point": get_argument_by_name("shibbolethUP_authentication_entry_point"),
-                    "issuer": get_argument_by_name("shibbolethUP_authentication_issuer"),
-                    "session_secret": get_argument_by_name("shibbolethUP_authentication_session_secret"),
-                    "button_text": get_argument_by_name("shibbolethUP_authentication_button_text"),
-                    "idp_cert_path": get_argument_by_name("shibbolethUP_authentication_idp_cert_path"),
-                    "key_path": get_argument_by_name("shibbolethUP_authentication_key_path"),
-                    "cert_path": get_argument_by_name("shibbolethUP_authentication_cert_path")
+                    "enabled": get_argument_by_name("shibboleth_authentication_enabled"),
+                    "business_logic_handler": get_argument_by_name("shibboleth_business_logic_handler"),
+                    "callback_url": get_argument_by_name("shibboleth_authentication_callback_url"),
+                    "button_url" : get_argument_by_name("shibboleth_authentication_button_url"),
+                    "entry_point": get_argument_by_name("shibboleth_authentication_entry_point"),
+                    "issuer": get_argument_by_name("shibboleth_authentication_issuer"),
+                    "session_secret": get_argument_by_name("shibboleth_authentication_session_secret"),
+                    "button_text": get_argument_by_name("shibboleth_authentication_button_text"),
+                    "idp_cert_path": get_argument_by_name("shibboleth_authentication_idp_cert_path"),
+                    "key_path": get_argument_by_name("shibboleth_authentication_key_path"),
+                    "cert_path": get_argument_by_name("shibboleth_authentication_cert_path")
                 }
             },
 			"numCPUs" : get_argument_by_name("num_cpus")

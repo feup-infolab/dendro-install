@@ -42,20 +42,26 @@ installShibbolethDependencies()
 {
 	checkIfServiceProviderShibbolethFilesExist()
 	{
-		parent_of_shibbolethUP_authentication_key_file=${shibbolethUP_authentication_key_path%/*}
-	    parent_of_shibbolethUP_authentication_cert_file=${shibbolethUP_authentication_cert_path%/*}
+		parent_of_shibboleth_authentication_key_file=${shibboleth_authentication_key_path%/*}
+	    parent_of_shibboleth_authentication_cert_file=${shibboleth_authentication_cert_path%/*}
 
-	    info "parent_of_shibbolethUP_authentication_key: $parent_of_shibbolethUP_authentication_key_file"
-	    info "parent_of_shibbolethUP_authentication_cert: $parent_of_shibbolethUP_authentication_cert_file" 
+	    info "parent_of_shibboleth_authentication_key: $parent_of_shibboleth_authentication_key_file"
+	    info "parent_of_shibboleth_authentication_cert: $parent_of_shibboleth_authentication_cert_file"
 
 	    #if key.pem and cert.pem files are missing, the script should generate them
 	    #However the idp_cert.pem file is dependent on the Shibboleth IDP, so this file must be manually retrieved and set by the system admin
-	    if [ ! -f $shibbolethUP_authentication_key_path -o  ! -f $shibbolethUP_authentication_cert_path ]; then
+	    if [ ! -f $shibboleth_authentication_key_path -o  ! -f $shibboleth_authentication_cert_path ]; then
 	        warning "Shibboleth service provider files not found!"
 	        warning "Will generate Shibboleth service provider files!"
-	        mkdir -p $parent_of_shibbolethUP_authentication_key_file
-	        mkdir -p $parent_of_shibbolethUP_authentication_cert_file
-	        openssl req -x509 -newkey rsa:4096 -keyout $shibbolethUP_authentication_key_path -out $shibbolethUP_authentication_cert_path -nodes -days 900 -subj "/C=$openssl_country/ST=$openssl_state/L=$openssl_location/O=$openssl_organization/OU=$openssl_organizational_unit/CN=$openssl_common_name"
+	        mkdir -p $parent_of_shibboleth_authentication_key_file || die "could not create folder $parent_of_shibboleth_authentication_key_file"
+	        mkdir -p $parent_of_shibboleth_authentication_cert_file || die "could not create folder $parent_of_shibboleth_authentication_cert_file"
+	        openssl req -x509 \
+	        	-newkey rsa:4096 \
+	        	-keyout $shibboleth_authentication_key_path \
+	        	-out $shibboleth_authentication_cert_path \
+	        	-nodes \
+	        	-days 900 \
+	        	-subj "/C=$openssl_country/ST=$openssl_state/L=$openssl_location/O=$openssl_organization/OU=$openssl_organizational_unit/CN=$openssl_common_name" || die "could not create service provider files!"
 	        success "Shibboleth service provider files generated!"
 	    else
 	        success "Shibboleth service provider files already exist!"
@@ -64,9 +70,9 @@ installShibbolethDependencies()
 
 	checkIfIdentityProviderFilesExist()
 	{
-		if [ ! -f $shibbolethUP_authentication_idp_cert_path ]; then
+		if [ ! -f $shibboleth_authentication_idp_cert_path ]; then
         	error "Shibboleth identity provider files not found!"
-	        die "Please upload $shibbolethUP_authentication_idp_cert_path"
+	        die "Please upload $shibboleth_authentication_idp_cert_path"
 	    else
 	        success "Shibboleth identity provider files already exist!"
 	    fi
@@ -76,9 +82,9 @@ installShibbolethDependencies()
 	{
 		checkIfServiceProviderShibbolethFilesExist
 	    checkIfIdentityProviderFilesExist
-	    success "$shibbolethUP_authentication_idp_cert_path set!"
-	    success "$shibbolethUP_authentication_key_path set!"
-	    success "$shibbolethUP_authentication_cert_path set!"
+	    success "$shibboleth_authentication_idp_cert_path set!"
+	    success "$shibboleth_authentication_key_path set!"
+	    success "$shibboleth_authentication_cert_path set!"
 	}
 
 	checkIfAdminWantsToInstallShibbolethDependencies()
@@ -92,8 +98,8 @@ installShibbolethDependencies()
         #    esac
         #done
 
-        #shibbolethUP_authentication_enabled
-        if [ "$shibbolethUP_authentication_enabled" = "true" ]; then
+        #shibboleth_authentication_enabled
+        if [ "$shibboleth_authentication_enabled" = "true" ]; then
   			info "Will install Shibboleth dependencies!"
   			setup
 	    else
