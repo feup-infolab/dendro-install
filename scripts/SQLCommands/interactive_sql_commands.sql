@@ -77,9 +77,8 @@ SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/ma
 SPARQL CLEAR GRAPH <http://dendro.fe.up.pt/ontology/ddiup#>;
 SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/DDI_UP/ddi_up_ontology_2.0.rdf> INTO GRAPH <http://dendro.fe.up.pt/ontology/ddiup#>;
 
-
 SPARQL CLEAR GRAPH <http://rdf-vocabulary.ddialliance.org/discovery#>;
-SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/DIS
+SPARQL LOAD <https://raw.githubusercontent.com/feup-infolab/dendro-ontologies/master/DISCOVERY/discovery.rdf> INTO GRAPH <http://rdf-vocabulary.ddialliance.org/discovery#>;
 
 SPARQL CLEAR GRAPH <http://www.w3.org/1999/02/22-rdf-syntax-ns#>;
 SPARQL LOAD <https://www.w3.org/1999/02/22-rdf-syntax-ns.rdf> INTO GRAPH <http://www.w3.org/1999/02/22-rdf-syntax-ns#>;
