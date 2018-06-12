@@ -309,7 +309,7 @@ fi
 cd "${starting_dir}" || warning "Unable to go back to the starting directory."
 
 #install vm tools to prevent crashes
-sudo apt-get install open-vm-tools
+sudo apt-get install -y open-vm-tools
 
 #all ok.
 success "Setup operations complete."
