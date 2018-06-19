@@ -46,9 +46,6 @@ installShibbolethDependencies()
 		parent_of_shibboleth_authentication_key_file=$1
 		parent_of_shibboleth_authentication_cert_file=$2
 
-		info "parent_of_shibboleth_authentication_key DEBUG: $parent_of_shibboleth_authentication_key_file"
-	    info "parent_of_shibboleth_authentication_cert DEBUG: $parent_of_shibboleth_authentication_cert_file"
-
 		warning "Will generate Shibboleth service provider files!"
         mkdir -p $parent_of_shibboleth_authentication_key_file || die "could not create folder $parent_of_shibboleth_authentication_key_file"
         mkdir -p $parent_of_shibboleth_authentication_cert_file || die "could not create folder $parent_of_shibboleth_authentication_cert_file"
