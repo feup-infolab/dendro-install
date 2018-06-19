@@ -40,6 +40,28 @@ copy_config_files() {
 
 installShibbolethDependencies()
 {
+
+	generateNewServiceProvideFiles()
+	{
+		parent_of_shibboleth_authentication_key_file=$1
+		parent_of_shibboleth_authentication_cert_file=$2
+
+		info "parent_of_shibboleth_authentication_key DEBUG: $parent_of_shibboleth_authentication_key_file"
+	    info "parent_of_shibboleth_authentication_cert DEBUG: $parent_of_shibboleth_authentication_cert_file"
+
+		warning "Will generate Shibboleth service provider files!"
+        mkdir -p $parent_of_shibboleth_authentication_key_file || die "could not create folder $parent_of_shibboleth_authentication_key_file"
+        mkdir -p $parent_of_shibboleth_authentication_cert_file || die "could not create folder $parent_of_shibboleth_authentication_cert_file"
+        openssl req -x509 \
+        	-newkey rsa:4096 \
+        	-keyout $shibboleth_authentication_key_path \
+        	-out $shibboleth_authentication_cert_path \
+        	-nodes \
+        	-days 900 \
+        	-subj "/C=$openssl_country/ST=$openssl_state/L=$openssl_location/O=$openssl_organization/OU=$openssl_organizational_unit/CN=$openssl_common_name" || die "could not create service provider files!"
+        success "Shibboleth service provider files generated!"
+	}
+
 	checkIfServiceProviderShibbolethFilesExist()
 	{
 		parent_of_shibboleth_authentication_key_file=${shibboleth_authentication_key_path%/*}
@@ -52,25 +74,25 @@ installShibbolethDependencies()
 	    #However the idp_cert.pem file is dependent on the Shibboleth IDP, so this file must be manually retrieved and set by the system admin
 	    if [ ! -f $shibboleth_authentication_key_path -o  ! -f $shibboleth_authentication_cert_path ]; then
 	        warning "Shibboleth service provider files not found!"
-	        warning "Will generate Shibboleth service provider files!"
-	        mkdir -p $parent_of_shibboleth_authentication_key_file || die "could not create folder $parent_of_shibboleth_authentication_key_file"
-	        mkdir -p $parent_of_shibboleth_authentication_cert_file || die "could not create folder $parent_of_shibboleth_authentication_cert_file"
-	        openssl req -x509 \
-	        	-newkey rsa:4096 \
-	        	-keyout $shibboleth_authentication_key_path \
-	        	-out $shibboleth_authentication_cert_path \
-	        	-nodes \
-	        	-days 900 \
-	        	-subj "/C=$openssl_country/ST=$openssl_state/L=$openssl_location/O=$openssl_organization/OU=$openssl_organizational_unit/CN=$openssl_common_name" || die "could not create service provider files!"
-	        success "Shibboleth service provider files generated!"
 	        while true; do
-	            read -p "New service provider files generated! Please provide the updated xml file to the Identity Provider! Type 'yes' to continue installation OR 'no' to abort : " yn
+	            read -p "Will generate new Shibboleth service provider files!!! PLEASE PROVIDE the updated xml(with the updated $shibboleth_authentication_cert_path) file to the Identity Provider! Type 'yes' to continue OR 'no' to abort : " yn
 	            case $yn in
-	                [Yy]* ) info "Will CONTINUE with Shibboleth installation!"; break;;
+	                [Yy]* ) generateNewServiceProvideFiles "$parent_of_shibboleth_authentication_key_file" "$parent_of_shibboleth_authentication_cert_file"; break;;
 	                [Nn]* ) die "Will NOT continue Shibboleth installation!"; break;;
 	                * ) echo "Please answer yes or no.";;
 	            esac
 	        done
+	        #warning "Will generate Shibboleth service provider files!"
+	        #mkdir -p $parent_of_shibboleth_authentication_key_file || die "could not create folder $parent_of_shibboleth_authentication_key_file"
+	        #mkdir -p $parent_of_shibboleth_authentication_cert_file || die "could not create folder $parent_of_shibboleth_authentication_cert_file"
+	        #openssl req -x509 \
+	        #	-newkey rsa:4096 \
+	        #	-keyout $shibboleth_authentication_key_path \
+	        #	-out $shibboleth_authentication_cert_path \
+	        #	-nodes \
+	        #	-days 900 \
+	        #	-subj "/C=$openssl_country/ST=$openssl_state/L=$openssl_location/O=$openssl_organization/OU=$openssl_organizational_unit/CN=$openssl_common_name" || die "could not create service provider files!"
+	        #success "Shibboleth service provider files generated!"
 	    else
 	        success "Shibboleth service provider files already exist!"
 	    fi
@@ -88,8 +110,8 @@ installShibbolethDependencies()
 
 	setup()
 	{
+		checkIfIdentityProviderFilesExist
 		checkIfServiceProviderShibbolethFilesExist
-	    checkIfIdentityProviderFilesExist
 	    success "$shibboleth_authentication_idp_cert_path set!"
 	    success "$shibboleth_authentication_key_path set!"
 	    success "$shibboleth_authentication_cert_path set!"
