@@ -64,7 +64,7 @@ installShibbolethDependencies()
 	        	-subj "/C=$openssl_country/ST=$openssl_state/L=$openssl_location/O=$openssl_organization/OU=$openssl_organizational_unit/CN=$openssl_common_name" || die "could not create service provider files!"
 	        success "Shibboleth service provider files generated!"
 	        while true; do
-	            read -p "New service provider files generated! Please provide the updated xml file to the Identity Provider ? Type 'yes' to continue installation OR 'no' to abort : " yn
+	            read -p "New service provider files generated! Please provide the updated xml file to the Identity Provider! Type 'yes' to continue installation OR 'no' to abort : " yn
 	            case $yn in
 	                [Yy]* ) info "Will CONTINUE with Shibboleth installation!"; break;;
 	                [Nn]* ) die "Will NOT continue Shibboleth installation!"; break;;
