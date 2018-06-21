@@ -133,13 +133,13 @@ Dendro relies on
 	
 	
 	* shibboleth_authentication_callback_url="shibboleth_authentication_callback_url"
-	#this is the endpoint where the login request falls back into after the authentication in the IDP is successful for example: "http://dendropessoal.up.pt:3001/Shibboleth/login/callback"
+	#this is the endpoint where the login request falls back into after the authentication in the IDP is successful. Example value: "http://dendropessoal.up.pt:3001/Shibboleth/login/callback"
 	
 	* shibboleth_authentication_entry_point="shibboleth_authentication_entry_point"
-	#this is the IDP entry point for the Shibboleth authentication, in this case for the University of Porto for example: "https://stark.up.pt/idp/profile/SAML2/Redirect/SSO"
+	#this is the IDP entry point for the Shibboleth authentication, in this case for the University of Porto. Example value: "https://stark.up.pt/idp/profile/SAML2/Redirect/SSO"
 	
 	* shibboleth_authentication_issuer="shibboleth_authentication_issuer"
-	#this url identifies the issuer (the service provider, usually ends with "shibboleth") for example: "https://dendropessoal.up.pt/shibboleth"
+	#this url identifies the issuer (the service provider, usually ends with "shibboleth"). Example value: "https://dendropessoal.up.pt/shibboleth"
 	
 	* shibboleth_authentication_session_secret="shibboleth_authentication_session_secret"
 	#the session secret
@@ -148,16 +148,16 @@ Dendro relies on
 	#A label for the authentication button
 	
 	* shibboleth_authentication_idp_cert_path="shibboleth_authentication_idp_cert_path"
-	#The IDP public key file path in your machine, the IDP must provide this to you. It Must be uploaded to the machine before the installation or Dendro-Install will warn you and exit For example: "/Users/nelsonpereira/Desktop/dendro/conf/cert/idp_cert.pem"
+	#The IDP public key file path in your machine, the IDP must provide this to you. It Must be uploaded to the machine before the installation or Dendro-Install will warn you and exit. Example value: "/Users/nelsonpereira/Desktop/dendro/conf/cert/idp_cert.pem"
 	
 	* shibboleth_authentication_key_path="shibboleth_authentication_key_path"
-	#The Service provider(Dendro) private key path, if the file does not exist Dendro-Install will generate it and warn you to provide an updated metadata.xml file to the IDP For example: "/Users/nelsonpereira/Desktop/dendro/conf/cert/key.pem"
+	#The Service provider(Dendro) private key path, if the file does not exist Dendro-Install will generate it and warn you to provide an updated metadata.xml file to the IDP. Example value: "/Users/nelsonpereira/Desktop/dendro/conf/cert/key.pem"
 	
 	* shibboleth_authentication_cert_path="shibboleth_authentication_cert_path"
-	#The Service provider(Dendro) public key path, if the file does not exist Dendro-Install will generate it and warn you to provide an updated metadata.xml file to the IDP For example: "/Users/nelsonpereira/Desktop/dendro/conf/cert/cert.pem"
+	#The Service provider(Dendro) public key path, if the file does not exist Dendro-Install will generate it and warn you to provide an updated metadata.xml file to the IDP. Example value: "/Users/nelsonpereira/Desktop/dendro/conf/cert/cert.pem"
 	
 	* shibboleth_authentication_button_url="shibboleth_authentication_button_url"
-	#The URL for the authentication button For example: "http://dendropessoal.up.pt:3001/Shibboleth"
+	#The URL for the authentication button. Example value: "http://dendropessoal.up.pt:3001/Shibboleth"
 
 
 * After the previous step is done, the Dendro installation will continue as usual.
