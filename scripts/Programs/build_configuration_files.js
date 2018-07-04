@@ -629,7 +629,32 @@ var write_dendro_configuration_file = function ()
                     "button_text": get_argument_by_name("saml_authentication_button_text")
                 }
             },
-			"numCPUs" : get_argument_by_name("num_cpus")
+			"numCPUs" : get_argument_by_name("num_cpus"),
+		    "testing": {
+		      "apply_cooldown_every_x_tests": -1,
+		      "cooldown_secs": 20
+		    },
+		    "docker": {
+		      "active": false,
+		      "reuse_checkpoints": false,
+		      "create_checkpoints": false,
+		      "destroy_existing_images_at_start": false,
+		      "start_and_stop_containers_automatically" : false
+		    },
+		    "virtualbox": {
+		      "active": false,
+		      "reuse_shapshots": false,
+		      "create_snapshots": false,
+		      "restart_vm_every_x_tests": 15,
+		      "restart_services_every_x_tests": 1,
+		      "services_to_be_restarted": [
+		        "virtuoso",
+		        "elasticsearch",
+		        "mongodb"
+		      ],
+		      "vmName": "dendroVagrantDemo",
+		      "vmIP" : "192.168.56.249"
+		    }
         };
 
         //console.log("FINISHED CONFIGURATION"));
