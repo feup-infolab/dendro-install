@@ -157,7 +157,9 @@ recommender_installation_path='/dendro_recommender'
 	#orcid
 		orcid_authentication_enabled="true"
 	#saml
-		saml_authentication_enabled="true"
+		saml_authentication_enabled="false"
+	#shibboleth
+		shibboleth_authentication_enabled="false"
 
 	#dependencies
 		#play framework

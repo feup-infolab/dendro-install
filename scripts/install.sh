@@ -38,6 +38,94 @@ copy_config_files() {
 	sudo cp "$wd/Programs/generated_configurations/deployment_configs.json" "$dendro_installation_path/conf"
 }
 
+installShibbolethDependencies()
+{
+
+	generateNewServiceProviderFiles()
+	{
+		parent_of_shibboleth_authentication_key_file=$1
+		parent_of_shibboleth_authentication_cert_file=$2
+
+		warning "Will generate Shibboleth service provider files!"
+        mkdir -p $parent_of_shibboleth_authentication_key_file || die "could not create folder $parent_of_shibboleth_authentication_key_file"
+        mkdir -p $parent_of_shibboleth_authentication_cert_file || die "could not create folder $parent_of_shibboleth_authentication_cert_file"
+        openssl req -x509 \
+        	-newkey rsa:4096 \
+        	-keyout $shibboleth_authentication_key_path \
+        	-out $shibboleth_authentication_cert_path \
+        	-nodes \
+        	-days 900 \
+        	-subj "/C=$openssl_country/ST=$openssl_state/L=$openssl_location/O=$openssl_organization/OU=$openssl_organizational_unit/CN=$openssl_common_name" || die "could not create service provider files!"
+        success "Shibboleth service provider files generated!"
+	}
+
+	checkIfServiceProviderShibbolethFilesExist()
+	{
+		parent_of_shibboleth_authentication_key_file=${shibboleth_authentication_key_path%/*}
+	    parent_of_shibboleth_authentication_cert_file=${shibboleth_authentication_cert_path%/*}
+
+	    info "parent_of_shibboleth_authentication_key: $parent_of_shibboleth_authentication_key_file"
+	    info "parent_of_shibboleth_authentication_cert: $parent_of_shibboleth_authentication_cert_file"
+
+	    #if key.pem and cert.pem files are missing, the script should generate them
+	    #However the idp_cert.pem file is dependent on the Shibboleth IDP, so this file must be manually retrieved and set by the system admin
+	    if [ ! -f $shibboleth_authentication_key_path -o  ! -f $shibboleth_authentication_cert_path ]; then
+	        warning "Shibboleth service provider files not found!"
+	        while true; do
+	            read -p "Will generate new Shibboleth service provider files!!! PLEASE PROVIDE the updated xml(with the updated $shibboleth_authentication_cert_path) file to the Identity Provider! Type 'yes' to continue OR 'no' to abort : " yn
+	            case $yn in
+	                [Yy]* ) generateNewServiceProviderFiles "$parent_of_shibboleth_authentication_key_file" "$parent_of_shibboleth_authentication_cert_file"; break;;
+	                [Nn]* ) die "Will NOT continue Shibboleth installation!"; break;;
+	                * ) echo "Please answer yes or no.";;
+	            esac
+	        done
+	    else
+	        success "Shibboleth service provider files already exist!"
+	    fi
+	}
+
+	checkIfIdentityProviderFilesExist()
+	{
+		if [ ! -f $shibboleth_authentication_idp_cert_path ]; then
+        	error "Shibboleth identity provider files not found!"
+	        die "Please upload $shibboleth_authentication_idp_cert_path"
+	    else
+	        success "Shibboleth identity provider files already exist!"
+	    fi
+	}
+
+	setup()
+	{
+		checkIfIdentityProviderFilesExist
+		checkIfServiceProviderShibbolethFilesExist
+	    success "$shibboleth_authentication_idp_cert_path set!"
+	    success "$shibboleth_authentication_key_path set!"
+	    success "$shibboleth_authentication_cert_path set!"
+	}
+
+	checkIfAdminWantsToInstallShibbolethDependencies()
+	{
+		#while true; do
+        #    read -p "Do you want to install Shibboleth dependencies ? Type 'yes' OR 'no' : " yn
+        #    case $yn in
+        #        [Yy]* ) setup; break;;
+        #        [Nn]* ) info "Will not install Shibboleth dependencies!"; break;;
+        #        * ) echo "Please answer yes or no.";;
+        #    esac
+        #done
+
+        #shibboleth_authentication_enabled
+        if [ "$shibboleth_authentication_enabled" = "true" ]; then
+  			info "Will install Shibboleth dependencies!"
+  			setup
+	    else
+	        info "Will not install Shibboleth dependencies!"
+	    fi
+	}
+
+	checkIfAdminWantsToInstallShibbolethDependencies
+}
+
 #see if we are supposed to install dependencies or just refresh code from Dendro repositories
 # code from http://stackoverflow.com/questions/7069682/how-to-get-arguments-with-flags-in-bash-script
 
@@ -109,6 +197,8 @@ copy_config_files() {
 		exit 0
 	fi
 }
+
+installShibbolethDependencies
 
 if [ "${regenerate_configs}" == "true" ];
 then

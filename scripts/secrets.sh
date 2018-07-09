@@ -62,6 +62,26 @@ saml_authentication_entry_point="https://openidp.feide.no/simplesaml/saml2/idp/S
 saml_authentication_issuer="passport-saml"
 saml_authentication_button_text="Sign-in with institutional login"
 
+#shibboleth authentication settings
+shibboleth_business_logic_handler="bootup/models/shibboleth/shibboleth_UP.js"
+shibboleth_authentication_callback_url="shibboleth_authentication_callback_url"
+shibboleth_authentication_entry_point="shibboleth_authentication_entry_point"
+shibboleth_authentication_issuer="shibboleth_authentication_issuer"
+shibboleth_authentication_session_secret="shibboleth_authentication_session_secret"
+shibboleth_authentication_button_text="Sign-in with shibboleth UP"
+shibboleth_authentication_idp_cert_path="shibboleth_authentication_idp_cert_path"
+shibboleth_authentication_key_path="shibboleth_authentication_key_path"
+shibboleth_authentication_cert_path="shibboleth_authentication_cert_path"
+shibboleth_authentication_button_url="shibboleth_authentication_button_url"
+
+#openssl parameters to generate certificates and keys
+openssl_country="PT"
+openssl_state="Porto"
+openssl_location="Porto"
+openssl_organization="Dendro Infolab"
+openssl_organizational_unit="Dendro Infolab"
+openssl_common_name="dendro.fe.up.pt"
+
 #teamcity credentials
 
 teamcity_admin_username="jrocha"
