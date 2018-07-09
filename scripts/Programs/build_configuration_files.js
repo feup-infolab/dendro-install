@@ -285,7 +285,9 @@ var write_dendro_configuration_file = function ()
           "id": "default",
           "log" : {
             "log_datastore_ops" : true
-          }
+          },
+          "username" : get_argument_by_name('mongodb_dba_user'),
+          "password" : get_argument_by_name('mongodb_dba_password')
         },
         "ontologies_cache" :
         {
@@ -293,7 +295,9 @@ var write_dendro_configuration_file = function ()
           "host": get_argument_by_name('mongodb_cache_host'),
           "port": get_argument_by_name('mongodb_cache_port'),
           "id": "default",
-          "collection" : "ontologies_cache"
+          "collection" : "ontologies_cache",
+          "username" : get_argument_by_name('mongodb_dba_user'),
+          "password" : get_argument_by_name('mongodb_dba_password')
         },
         "cache": {
             "active": get_argument_by_name('cache_active'),
@@ -329,7 +333,9 @@ var write_dendro_configuration_file = function ()
                         "clear_on_startup" : true,
                         "host": get_argument_by_name('mongodb_cache_host'),
                         "port": get_argument_by_name('mongodb_cache_port'),
-                        "id": "default"
+                        "id": "default",
+                        "username" : get_argument_by_name('mongodb_dba_user'),
+                        "password" : get_argument_by_name('mongodb_dba_password')
                     },
                     "social": {
                         "database": slug(get_argument_by_name('mongodb_cache_database'), '_'),
@@ -337,7 +343,9 @@ var write_dendro_configuration_file = function ()
                         "clear_on_startup" : true,
                         "host": get_argument_by_name('mongodb_cache_host'),
                         "port": get_argument_by_name('mongodb_cache_port'),
-                        "id": "social"
+                        "id": "social",
+                        "username" : get_argument_by_name('mongodb_dba_user'),
+                        "password" : get_argument_by_name('mongodb_dba_password')
                     },
                     "notifications": {
                         "database": slug(get_argument_by_name('mongodb_cache_database'), '_'),
@@ -345,7 +353,9 @@ var write_dendro_configuration_file = function ()
                         "clear_on_startup" : true,
                         "port": get_argument_by_name('mongodb_cache_port'),
                         "host": get_argument_by_name('mongodb_cache_host'),
-                        "id": "notifications"
+                        "id": "notifications",
+                        "username" : get_argument_by_name('mongodb_dba_user'),
+                        "password" : get_argument_by_name('mongodb_dba_password')
                     }
                 }
             },
@@ -369,8 +379,8 @@ var write_dendro_configuration_file = function ()
         "mongoDBSessionStoreCollection" : get_argument_by_name('mongodb_sessions_store_collection_name'),
         "mongoDbVersion" : "",
         "mongoDBAuth" : {
-            "user" : get_argument_by_name('mongodb_dba_user'),
-            "password" : get_argument_by_name('mongodb_dba_password'),
+            "username" : get_argument_by_name('mongodb_dba_user'),
+            "password" : get_argument_by_name('mongodb_dba_password')
         },
         "storageDefaults" : {
           "storageType" : "mongoDB",
