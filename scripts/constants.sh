@@ -286,7 +286,7 @@ get_replacement_line()
 		sh|properties|yaml|yml|conf|cnf)
 			local replaced_line
 			IFS='%'
-			read -r -d '' replaced_line << LUCHI
+			read -r -d '' replaced_line << BUFFERDELIMITER
 #START_PATCH_TAG: $patch_tag
 ###START REPLACEMENT by Dendro install scripts
 #OLD VALUE: $old_line
@@ -294,13 +294,13 @@ get_replacement_line()
 $new_line
 ###END REPLACEMENT by Dendro install scripts
 #END_PATCH_TAG: $patch_tag
-LUCHI
+BUFFERDELIMITER
 			unset IFS
 			;;
 		xml)
 			local replaced_line
 			IFS='%'
-			read -r -d '' replaced_line << LUCHI
+			read -r -d '' replaced_line << BUFFERDELIMITER
 <!-- START_PATCH_TAG: $patch_tag -->
 <!-- START REPLACEMENT by Dendro install scripts -->
 <!-- OLD VALUE: $old_line-->
@@ -308,13 +308,13 @@ LUCHI
 $new_line
 <!-- END REPLACEMENT by Dendro install scripts -->
 <!-- END_PATCH_TAG: $patch_tag-->
-LUCHI
+BUFFERDELIMITER
 			unset IFS
 			;;
 		ini)
 			local replaced_line
 			IFS='%'
-			read -r -d '' replaced_line << LUCHI
+			read -r -d '' replaced_line << BUFFERDELIMITER
 ;; START_PATCH_TAG: $patch_tag
 ;; START REPLACEMENT by Dendro install scripts
 ;; OLD VALUE: $old_line
@@ -322,7 +322,7 @@ LUCHI
 $new_line
 ;; END REPLACEMENT by Dendro install scripts
 ;; END_PATCH_TAG: $patch_tag
-LUCHI
+BUFFERDELIMITER
 			unset IFS
 			;;
 		*)

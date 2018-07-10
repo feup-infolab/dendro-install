@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
 
 IFS='%'
-read -r -d '' old_line << LUCHI
+read -r -d '' old_line << BUFFERDELIMITER
 #
 # Instead of skip-networking the default is now to listen only on
 # localhost which is more compatible and is not less secure.
 bind-address		= 127.0.0.1
-LUCHI
+BUFFERDELIMITER
 unset IFS
 
 IFS='%'
-read -r -d '' new_line << LUCHI
+read -r -d '' new_line << BUFFERDELIMITER
 #
 # Instead of skip-networking the default is now to listen only on
 # localhost which is more compatible and is not less secure.
 #bind-address		= 127.0.0.1
-LUCHI
+BUFFERDELIMITER
 unset IFS
 
 file="/Users/joaorocha/Desktop/mysqld.cnf"

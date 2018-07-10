@@ -35,33 +35,33 @@ sudo cp /usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini.sample /
 # = Virtuoso Performance Patches =
 # ================================
 
-read -r -d '' replaced_line << LUCHI
+read -r -d '' replaced_line << BUFFERDELIMITER
 MaxClientConnections		= 10
-LUCHI
+BUFFERDELIMITER
 
 replace_text_in_file "$virtuoso_ini_path" "$replaced_line" "MaxClientConnections		= 100"  "MaxClientConnectionsDendroPatch" "ini"
 
-read -r -d '' replaced_line << LUCHI
+read -r -d '' replaced_line << BUFFERDELIMITER
 ServerThreads		= 10
-LUCHI
+BUFFERDELIMITER
 
 replace_text_in_file "$virtuoso_ini_path" "$replaced_line" "ServerThreads			= 100"  "ServerThreadsDendroPatch" "ini"
 
-read -r -d '' replaced_line << LUCHI
+read -r -d '' replaced_line << BUFFERDELIMITER
 MaxKeepAlives			= 10
-LUCHI
+BUFFERDELIMITER
 
 replace_text_in_file "$virtuoso_ini_path" "$replaced_line" "MaxKeepAlives			= 100"  "MaxKeepAlivesDendroPatch" "ini"
 
-read -r -d '' replaced_line << LUCHI
+read -r -d '' replaced_line << BUFFERDELIMITER
 NumberOfBuffers          = 10000
-LUCHI
+BUFFERDELIMITER
 
 replace_text_in_file "$virtuoso_ini_path" "$replaced_line" "NumberOfBuffers          = 80000"  "NumberOfBuffersDendroPatch" "ini"
 
-read -r -d '' replaced_line << LUCHI
+read -r -d '' replaced_line << BUFFERDELIMITER
 MaxDirtyBuffers          = 6000
-LUCHI
+BUFFERDELIMITER
 
 replace_text_in_file "$virtuoso_ini_path" "$replaced_line" "MaxDirtyBuffers          = 65000"  "MaxDirtyBuffersDendroPatch" "ini"
 

@@ -49,7 +49,7 @@ sudo mkdir -p $teamcity_installation_path &&
 sudo mv $teamcity_unpackage_destination/TeamCity/* $teamcity_installation_path &&
 
 IFS='%'
-read -r -d '' old_line << LUCHI
+read -r -d '' old_line << BUFFERDELIMITER
     <Connector port="8111" protocol="org.apache.coyote.http11.Http11NioProtocol"
                connectionTimeout="60000"
                redirectPort="8543"
@@ -58,11 +58,11 @@ read -r -d '' old_line << LUCHI
                socket.rxBufSize="64000"
                tcpNoDelay="1"
         />
-LUCHI
+BUFFERDELIMITER
 unset IFS
 
 IFS='%'
-read -r -d '' new_line << LUCHI
+read -r -d '' new_line << BUFFERDELIMITER
     <Connector port="$teamcity_port" protocol="org.apache.coyote.http11.Http11NioProtocol"
                connectionTimeout="60000"
                redirectPort="8543"
@@ -71,7 +71,7 @@ read -r -d '' new_line << LUCHI
                socket.rxBufSize="64000"
                tcpNoDelay="1"
         />
-LUCHI
+BUFFERDELIMITER
 unset IFS
 
 patch_file 	"$teamcity_installation_path/conf/server.xml" \
