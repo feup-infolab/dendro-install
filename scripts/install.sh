@@ -268,8 +268,6 @@ then
 
 			# Install MongoDB
 			source ./Dependencies/mongodb.sh
-			
-			exit 1
 
 			#install virtuoso
 			if [[ "${install_virtuoso_from_source}" == "true" ]]

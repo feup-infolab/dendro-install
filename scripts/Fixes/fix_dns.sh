@@ -19,18 +19,18 @@ sudo resolvconf -u || die "Unable to run DNS fixing commands."
 
 IFS='%'
 read -r -d '' old_line << BUFFERDELIMITER
-127.0.0.1 localhost
+127.0.0.1       localhost
 BUFFERDELIMITER
 unset IFS
 
 IFS='%'
 read -r -d '' new_line << BUFFERDELIMITER
-127.0.0.1 localhost
-127.0.0.1 $host
+127.0.0.1       localhost
+127.0.0.1       $host
 BUFFERDELIMITER
 unset IFS
 
-patch_file /etc/hosts "$old_line" "$new_line" "localhost_dns_patch" "sh" && success "Patched hostname $host to 127.0.0.1." || die "Unable to patch /etc/hosts to refer to $host as 127.0.0.1."
+patch_file "/etc/hosts" "$old_line" "$new_line" "localhost_dns_patch" "sh" && success "Patched hostname $host to 127.0.0.1." || die "Unable to patch /etc/hosts to refer to $host as 127.0.0.1."
 
 
 success "Applied DNS resolution fix."

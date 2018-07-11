@@ -73,6 +73,7 @@ db.getUsers();
 BUFFERDELIMITER
 unset IFS
 
+wait_for_mongodb_to_boot
 #change default password of mongodb database if it is open	
 if ! mongo admin --eval "$authenticate_and_get_users_query"
 then
