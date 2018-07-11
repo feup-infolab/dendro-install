@@ -24,16 +24,16 @@ end
 
 ###INSTALL PLUGINS
 #install plugin to keep all the VBox Guest Additions updated.
+
 required_plugins = %w(vagrant-share vagrant-vbguest vagrant-disksize vagrant-proxyconf)
 
-plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
-if not plugins_to_install.empty?
-  puts "Installing plugins: #{plugins_to_install.join(' ')}"
-  if system "vagrant plugin install #{plugins_to_install.join(' ')}"
-    exec "vagrant #{ARGV.join(' ')}"
-  else
-    abort "Installation of one or more plugins has failed. Aborting."
-  end
+return if !Vagrant.plugins_enabled?
+
+plugins_to_install = required_plugins.select { |plugin| !Vagrant.has_plugin? plugin }
+
+if plugins_to_install.any?
+  system "vagrant plugin install #{plugins_to_install.join(' ')}"
+  exit system 'vagrant up'
 end
 
 ###Configuration
@@ -77,7 +77,7 @@ Vagrant.configure("2") do |config|
   end
   
   config.vm.box = "ubuntu/xenial64"
-  config.vm.box_version = "20170922.0.0"
+  config.vm.box_version = "20180710.0.0"
   
 
   #set maximum size of the main hard drive
@@ -120,7 +120,7 @@ Vagrant.configure("2") do |config|
 
      end
       vb.cpus = 2     
-      vb.memory = "2048"
+      vb.memory = "4096"
   end
 
   time = sanitize_filename(Time.new.inspect)

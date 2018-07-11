@@ -8,7 +8,19 @@ else
 	source ./constants.sh
 fi
 
-info "Installing ElasticSearch 2.2.3......"
+function wait_for_elasticsearch_to_boot()
+{
+    echo "Waiting for elasticsearch to boot up..."
+    attempts=0
+    max_attempts=30
+    while ( nc 127.0.0.1 9200 < /dev/null ) && [[ $attempts < $max_attempts ]] ; do
+        attempts=$((attempts+1))
+        sleep 1;
+        echo "waiting... (${attempts}/${max_attempts})"
+    done
+}
+
+info "Installing ElasticSearch 6.2.2......"
 
 #save current dir
 setup_dir=$(pwd)
@@ -25,12 +37,10 @@ sudo sh -c "yes \"\" | apt-get -f install"
 
 #install elasticsearch
 cd $temp_downloads_folder
-sudo wget --progress=bar:force https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.3.3/elasticsearch-2.3.3.deb
-sudo dpkg -i elasticsearch-2.3.3.deb
-
-
+sudo wget --progress=bar:force https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.2.2.deb
+sudo dpkg -i elasticsearch-6.2.2.deb
 
 #go back to initial dir
 cd $setup_dir
 
-success "Installed ElasticSearch 2.2.3."
+success "Installed ElasticSearch 6.2.2."

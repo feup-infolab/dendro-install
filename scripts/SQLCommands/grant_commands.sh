@@ -17,14 +17,9 @@ fi
 
 function wait_for_virtuoso_to_boot()
 {
-    echo "Waiting for virtuoso to boot up..."
-    attempts=0
-    max_attempts=30
-    while ( nc 127.0.0.1 8890 < /dev/null || nc 127.0.0.1 1111 < /dev/null )  && [[ $attempts < $max_attempts ]] ; do
-        attempts=$((attempts+1))
-        sleep 1;
-        echo "waiting... (${attempts}/${max_attempts})"
-    done
+	echo "Waiting for virtuoso to boot up..."
+	wait_for_server_to_boot_on_port "127.0.0.1" "8890"
+	wait_for_server_to_boot_on_port "127.0.0.1" "1111"
 }
 
 wait_for_virtuoso_to_boot

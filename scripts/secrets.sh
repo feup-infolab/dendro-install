@@ -44,8 +44,8 @@ jenkins_user_group="jenkins"
 jenkins_user_password="jenkins______PASSSSWORD_COMPLICA4ted"
 
 #mongodb
-mongodb_dba_user="root"
-mongodb_dba_password="r00t"
+mongodb_dba_user="admin"
+mongodb_dba_password="34857q98efhlajwehrlaeroiu2yq3948q2uweoiqwherluqywioerqhw0p92874983724rhqwelrhqweiuryoiqwerhlqwhjeflkawejrp9023475823y4rjhelkjrheiouryi"
 
 #svn users and passwords
 svn_user="user_for_dendro_svn_repo"

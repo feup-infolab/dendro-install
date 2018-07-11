@@ -8,3 +8,5 @@ shared_folders/
 
 
 scripts/secrets.sh
+ubuntu-xenial-16.04-cloudimg-configdrive.vmdk
+ubuntu-xenial-16.04-cloudimg.vmdk

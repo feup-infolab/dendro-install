@@ -4,7 +4,7 @@ new_init_script_file="/etc/init.d/$redis_instance_name"
 
 #section to replace in redis service file
 IFS='%'
-read -r -d '' old_service_script_section << LUCHI
+read -r -d '' old_service_script_section << BUFFERDELIMITER
 ### BEGIN INIT INFO
 # Provides:		redis-server
 # Required-Start:	\$syslog \$remote_fs
@@ -26,12 +26,12 @@ DESC=redis-server
 
 RUNDIR=/var/run/redis
 PIDFILE=\$RUNDIR/redis-server.pid
-LUCHI
+BUFFERDELIMITER
 unset IFS
 
 #patch init script for new redis instance
 IFS='%'
-read -r -d '' new_service_script_section << LUCHI
+read -r -d '' new_service_script_section << BUFFERDELIMITER
 ### BEGIN INIT INFO
 # Provides:		$redis_instance_name
 # Required-Start:	\$syslog \$remote_fs
@@ -56,7 +56,7 @@ chown -R redis:redis $new_workdir
 
 RUNDIR=$new_workdir
 PIDFILE=$new_pidfile
-LUCHI
+BUFFERDELIMITER
 unset IFS
 
   printf "$old_service_script_section"

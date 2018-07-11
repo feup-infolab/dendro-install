@@ -19,27 +19,27 @@ setup_dir=$(pwd)
 
 #sections to replace in redis configuration file
 IFS='%'
-read -r -d '' old_conf_file_pid_section << LUCHI
+read -r -d '' old_conf_file_pid_section << BUFFERDELIMITER
 pidfile /var/run/redis/redis-server.pid
-LUCHI
+BUFFERDELIMITER
 unset IFS
 
 IFS='%'
-read -r -d '' old_conf_file_port_section << LUCHI
+read -r -d '' old_conf_file_port_section << BUFFERDELIMITER
 port 6379
-LUCHI
+BUFFERDELIMITER
 unset IFS
 
 IFS='%'
-read -r -d '' old_conf_file_logfile_section << LUCHI
+read -r -d '' old_conf_file_logfile_section << BUFFERDELIMITER
 logfile /var/log/redis/redis-server.log
-LUCHI
+BUFFERDELIMITER
 unset IFS
 
 IFS='%'
-read -r -d '' old_conf_file_dir_section << LUCHI
+read -r -d '' old_conf_file_dir_section << BUFFERDELIMITER
 dir /var/lib/redis
-LUCHI
+BUFFERDELIMITER
 unset IFS
 
 
@@ -91,7 +91,7 @@ setup_redis_instance()
 
 
 	IFS='%'
-	read -r -d '' new_service_contents << LUCHI
+	read -r -d '' new_service_contents << BUFFERDELIMITER
 [Unit]
 Description=Advanced key-value store ($redis_instance_name)
 After=network.target
@@ -133,7 +133,7 @@ ReadWriteDirectories=-/etc/redis
 [Install]
 WantedBy=multi-user.target
 Alias=$redis_instance_name.service
-LUCHI
+BUFFERDELIMITER
 	unset IFS
 
 	if [[ -f $new_service_file ]]

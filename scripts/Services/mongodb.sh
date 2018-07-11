@@ -8,7 +8,7 @@ else
 	source ./constants.sh
 fi
 
-info "Installing latest MongoDB......"
+info "Setting up MongoDB service......"
 
 #save current dir
 setup_dir=$(pwd)
@@ -42,7 +42,7 @@ sudo mkdir -p /data/db
 sudo chown mongodb /data/db/mongod.lock
 sudo chown -R mongodb /data/db
 
-#set elasticsearch startup service
+#set mongodb startup service
 sudo chmod 0744 /etc/systemd/system/mongodb.service &&
 sudo systemctl daemon-reload &&
 sudo systemctl enable mongodb &&

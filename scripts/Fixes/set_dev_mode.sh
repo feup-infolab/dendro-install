@@ -65,15 +65,15 @@ if [[ "$file_exists_flag" == "true" ]]; then
 	info "File $mysql_conf_file exists..."
 
 IFS='%'
-read -r -d '' old_line << LUCHI
+read -r -d '' old_line << BUFFERDELIMITER
 bind-address		= 127.0.0.1
-LUCHI
+BUFFERDELIMITER
 unset IFS
 
 IFS='%'
-read -r -d '' new_line << LUCHI
+read -r -d '' new_line << BUFFERDELIMITER
 #bind-address		= 127.0.0.1
-LUCHI
+BUFFERDELIMITER
 unset IFS
 
 	patch_file $mysql_conf_file "$old_line" "$new_line" "mysql_dendro_dev_patch"  && success "MySQL Opened." || die "Unable to patch MySQL configuration file: $mysql_conf_file."
