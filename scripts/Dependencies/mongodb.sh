@@ -8,6 +8,12 @@ else
 	source ./constants.sh
 fi
 
+function wait_for_mongodb_to_boot()
+{
+    info "Waiting for mongodb to boot up..."
+    wait_for_server_to_boot_on_port "127.0.0.1" "27017"
+}
+
 info "Installing MongoDB Community Edition......"
 
 #save current dir
@@ -32,11 +38,74 @@ sudo service mongod restart || die "Unable to start mongodb service!"
 
 sudo mkdir -p /data/db &&
 sudo chown -R mongodb /data/db &&
+sudo service mongod restart || die "Unable to create /data/db directory for mongodb!"
+
+# enable mongodb authentication
+IFS='%'
+read -r -d '' old_conf_file_port_section << BUFFERDELIMITER
+#security:
+BUFFERDELIMITER
+unset IFS
+
+IFS='%'
+read -r -d '' new_conf_file_port_section << BUFFERDELIMITER
+security:
+  authorization: enabled
+BUFFERDELIMITER
+unset IFS
+
+IFS='%'
+read -r -d '' create_user_query << BUFFERDELIMITER
+db.createUser(
+	{
+		user: "$mongodb_dba_user", 
+		pwd: "$mongodb_dba_password", 
+		roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+	}
+);
+BUFFERDELIMITER
+unset IFS
+
+IFS='%'
+read -r -d '' authenticate_and_get_users_query << BUFFERDELIMITER
+db.auth("$mongodb_dba_user", "$mongodb_dba_password" );
+db.getUsers();
+BUFFERDELIMITER
+unset IFS
+
+#change default password of mongodb database if it is open	
+if ! mongo admin --eval "$authenticate_and_get_users_query"
+then
+	sudo service mongod stop || die "Unable to stop MongoDB service"
+
+	patch_file "$mongodb_conf_file" "$old_conf_file_port_section" "$new_conf_file_port_section" "mongodb_enable_authentication_patch" || die "Unable to patch MongoDB configuration file: $mongodb_conf_file."	
+	
+	sudo service mongod start || die "Unable to start MongoDB service after enabling authentication"	
+	wait_for_mongodb_to_boot
+		
+	info "Creating $mongodb_dba_user user with password..."
+
+	echo "$create_user_query"
+	mongo admin --eval "$create_user_query"
+
+	info "Restarting mongodb..."
+	sudo service mongod restart || die "Unable to restart MongoDB service after creating \"$mongodb_dba_user\" user with the password set in secrets.sh and root role!"
+
+	wait_for_mongodb_to_boot	
+	info "Trying to reconnect to mongodb as user $mongodb_dba_user..."
+	echo "$authenticate_and_get_users_query"
+	mongo admin --eval "$authenticate_and_get_users_query" || die "Unable to login as $mongodb_dba_user after setting authentication password." 
+
+	# info "Logging in again..."
+	# mongo admin -u "$mongodb_dba_user" \ 
+	# 			-p "$mongodb_dba_user" \ 
+	# 			--authenticationDatabase "admin" \ 
+	# 			--eval "db.getUsers();"
+fi
 
 #go back to initial dir
-cd $setup_dir && 
-success "Installed latest MongoDB Community Edition." ||
-die "Failed to install latest MongoDB Community Edition." 
+cd "$setup_dir" || die "Unable to cd to $setup_dir"
+success "Installed latest MongoDB Community Edition."
 
 #SCRAP
 
