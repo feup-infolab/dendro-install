@@ -73,17 +73,21 @@ db.getUsers();
 BUFFERDELIMITER
 unset IFS
 
-wait_for_mongodb_to_boot
-#change default password of mongodb database if it is open	
-if ! mongo admin --eval "$authenticate_and_get_users_query"
-then
-	sudo service mongod stop || die "Unable to stop MongoDB service"
+file_is_patched_for_line file_is_patched "$mongodb_conf_file" "$old_conf_file_port_section" "$new_conf_file_port_section" "mongodb_enable_authentication_patch"
 
+if [ ! "$file_is_patched" ]
+then
+	info "File $mongodb_conf_file is not patched. Patching now..."
+	sudo service mongod stop || die "Unable to stop MongoDB service"
 	patch_file "$mongodb_conf_file" "$old_conf_file_port_section" "$new_conf_file_port_section" "mongodb_enable_authentication_patch" || die "Unable to patch MongoDB configuration file: $mongodb_conf_file."	
-	
-	sudo service mongod start || die "Unable to start MongoDB service after enabling authentication"	
-	wait_for_mongodb_to_boot
-		
+	sudo service mongod start || die "Unable to start MongoDB service after enabling authentication"
+fi 
+
+wait_for_mongodb_to_boot
+
+#change default password of mongodb database if it is open	
+if ! mongo -u "$mongodb_dba_user" -p "$mongodb_dba_password" --authenticationDatabase "admin"
+then		
 	info "Creating $mongodb_dba_user user with password..."
 
 	echo "$create_user_query"
