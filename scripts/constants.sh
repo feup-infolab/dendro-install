@@ -33,7 +33,7 @@ recommender_installation_path='/dendro_recommender'
 	dendro_startup_item_file=/etc/systemd/system/$dendro_service_name.service
 
 	#installation
-	dendro_installation_path=$installation_path/$active_deployment_setting
+	dendro_installation_path="$installation_path/$active_deployment_setting"
 
 	dendro_startup_scripts_path="$installation_path/startup_scripts"
 	dendro_startup_script="$dendro_startup_scripts_path/$active_deployment_setting-start.sh"

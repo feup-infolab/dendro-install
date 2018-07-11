@@ -33,9 +33,8 @@ add_line_to_file_if_not_present () {
 
 copy_config_files() {
 	#place configuration file in dendro's deployment configs folder
-	wd="$starting_dir"
-	warning "Copying configuration file ${wd}/Programs/generated_configurations/deployment_configs.json to ${dendro_installation_path}/conf"
-	sudo cp "$wd/Programs/generated_configurations/deployment_configs.json" "$dendro_installation_path/conf"
+	warning "Copying configuration file $running_dir/Programs/generated_configurations/deployment_configs.json to $dendro_installation_path/conf"
+	sudo cp "$running_dir/Programs/generated_configurations/deployment_configs.json" "$dendro_installation_path/conf"
 }
 
 installShibbolethDependencies()
@@ -168,8 +167,8 @@ while getopts 'agfgtjdursb:' flag; do
    	 	setup_service_dendro_service_only="true"
     	;;
     *)
-			error "Unexpected option $flag"
-		  ;;
+		error "Unexpected option $flag"
+		;;
   esac
 done
 
@@ -178,20 +177,28 @@ source ./constants.sh
 source ./secrets.sh
 
 copy_config_files() {
+	local starting_dir
+	starting_dir=$(get_script_dir)
+
+	info "Starting dir when copying config files: $starting_dir"
 	#place configuration file in dendro's deployment configs folder
-	wd="$starting_dir"
-	warning "Copying configuration file ${wd}/Programs/generated_configurations/deployment_configs.json to ${dendro_installation_path}/conf"
+	warning "Copying configuration file $starting_dir/Programs/generated_configurations/deployment_configs.json to ${dendro_installation_path}/conf"
 
 	if [ "${regenerate_configs}" == "true" ];
 	then
-		vim "$wd/Programs/generated_configurations/deployment_configs.json"
+		if [ -f "$starting_dir/Programs/generated_configurations/deployment_configs.json.swp" ]
+		then 
+			rm "$starting_dir/Programs/generated_configurations/deployment_configs.json.swp"
+		fi
+
+		cat "$starting_dir/Programs/generated_configurations/deployment_configs.json"
 	fi
 
-	sudo cp "$wd/Programs/generated_configurations/deployment_configs.json" "$dendro_installation_path/conf"
+	sudo cp "$starting_dir/Programs/generated_configurations/deployment_configs.json" "$dendro_installation_path/conf"
 	sudo chown -R $dendro_user_name:$dendro_user_group $installation_path
 	sudo chmod -R 0755 $installation_path
 
-	if [ "${regenerate_configs}" == "true" ];
+	if [ "$regenerate_configs" == "true" ];
 	then
 		success "All finished, new files copied."
 		exit 0
@@ -203,6 +210,7 @@ installShibbolethDependencies
 if [ "${regenerate_configs}" == "true" ];
 then
 	warning "Regenerating configurations only"
+	cd_to_current_dir
 	#generate configuration files for both solutions
 	source ./Programs/generate_configuration_files.sh
 	copy_config_files
