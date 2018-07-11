@@ -281,13 +281,12 @@ then
 				source ./Services/virtuoso.sh
 			fi
 
-			timeout=45
-			info "Waiting for virtuoso service to start. Installing base ontologies in virtuoso in $timeout seconds..."
-			for (( i = 0; i < $timeout; i++ )); do
-				echo -ne $[$timeout-i]...
-				sleep 1s
-			done
 
+			info "Waiting for virtuoso service to start."
+			wait_for_server_to_boot_on_port "127.0.0.1" "8890"
+			wait_for_server_to_boot_on_port "127.0.0.1" "1111"
+
+			info "Installing base ontologies in virtuoso..."
 			source ./SQLCommands/grant_commands.sh
 
 			# Install MongoDB
