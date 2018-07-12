@@ -56,15 +56,14 @@ unset IFS
 
 IFS='%'
 read -r -d '' create_user_query << BUFFERDELIMITER
-use admin
 db.createUser(
 	{
 		user: "$mongodb_dba_user", 
 		pwd: "$mongodb_dba_password", 
 		roles : [ 
 			"userAdminAnyDatabase",
-            "dbAdminAnyDatabase",
-            "readWriteAnyDatabase"
+			"dbAdminAnyDatabase",
+			"readWriteAnyDatabase",
 			"clusterAdmin"
 		]
 	}
@@ -74,7 +73,6 @@ unset IFS
 
 IFS='%'
 read -r -d '' authenticate_and_get_users_query << BUFFERDELIMITER
-use admin
 db.auth("$mongodb_dba_user", "$mongodb_dba_password" );
 db.getUsers();
 BUFFERDELIMITER
@@ -94,20 +92,20 @@ fi
 wait_for_mongodb_to_boot
 
 #change default password of mongodb database if it is open	
-if ! mongo -u "$mongodb_dba_user" -p "$mongodb_dba_password" --authenticationDatabase "admin" --eval="quit()" 
+if ! mongo admin -u "$mongodb_dba_user" -p "$mongodb_dba_password" --authenticationDatabase "admin" --eval="quit();" 
 then		
 	info "Creating $mongodb_dba_user user with password..."
 
 	echo "$create_user_query"
-	mongo --eval "$create_user_query"
+	mongo admin --eval "$create_user_query"
 
 	info "Restarting mongodb..."
 	sudo service mongod restart || die "Unable to restart MongoDB service after creating \"$mongodb_dba_user\" user with the password set in secrets.sh and root role!"
-	wait_for_mongodb_to_boot	
 fi
 
+wait_for_mongodb_to_boot
+
 info "Trying to reconnect to mongodb as user $mongodb_dba_user..."
-echo "$authenticate_and_get_users_query"
 mongo admin --eval "$authenticate_and_get_users_query" || die "Unable to login as $mongodb_dba_user after setting authentication password." 
 
 #go back to initial dir
