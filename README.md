@@ -1,7 +1,23 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/75e227c63f6e47b494763d5c81366ad4)](https://www.codacy.com/app/silvae86/dendro-install?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=feup-infolab/dendro-install&amp;utm_campaign=Badge_Grade)
 [![Chat on gitter](https://img.shields.io/gitter/room/badges/shields.svg)](https://gitter.im/feup-infolab/dendro-install)
 
-# Contents
+### Looking for a Docker Image to try out Dendro quickly in your computer? 
+
+1. Install [Docker](https://docs.docker.com/docker-for-windows/install/)
+2. Open a Terminal window on Linux/Mac or press Ctrl+R on Windows, type cmd.exe in the box that appears and press Enter
+3. Clone the Dendro Docker installation repository by pasting this code
+````bash
+git clone https://github.com/feup-infolab/dendro-install-docker dendro-install-docker
+````
+4. Run the installation command in the same terminal and wait until no more text is printed. It can take several minutes.
+````bash
+cd dendro-install-docker
+docker-compose up
+````
+5. Access your dendro installation at [127.0.0.1:3001](http://127.0.0.1:3001) in your browser.
+6. When you want to stop Dendro, just press Ctrl+C at the terminal window
+
+We provide a [Docker image](https://hub.docker.com/r/joaorosilva/dendro/) for getting you up and running quickly. For deployment in a production server, however, we recommend you use the Dendro install scripts.
 
 # What is Dendro?
 
