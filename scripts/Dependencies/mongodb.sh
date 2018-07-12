@@ -60,7 +60,11 @@ db.createUser(
 	{
 		user: "$mongodb_dba_user", 
 		pwd: "$mongodb_dba_password", 
-		roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+		roles : [ 
+			"userAdminAnyDatabase",
+            "dbAdminAnyDatabase",
+            "readWriteAnyDatabase"
+		]
 	}
 );
 BUFFERDELIMITER
