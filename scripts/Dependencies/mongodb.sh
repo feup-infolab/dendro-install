@@ -87,7 +87,7 @@ fi
 wait_for_mongodb_to_boot
 
 #change default password of mongodb database if it is open	
-if ! mongo -u "$mongodb_dba_user" -p "$mongodb_dba_password" --authenticationDatabase "admin" --eval="quit()"
+if ! mongo -u "$mongodb_dba_user" -p "$mongodb_dba_password" --authenticationDatabase "admin" --eval="quit()" 
 then		
 	info "Creating $mongodb_dba_user user with password..."
 
@@ -96,11 +96,7 @@ then
 
 	info "Restarting mongodb..."
 	sudo service mongod restart || die "Unable to restart MongoDB service after creating \"$mongodb_dba_user\" user with the password set in secrets.sh and root role!"
-
 	wait_for_mongodb_to_boot	
-	info "Trying to reconnect to mongodb as user $mongodb_dba_user..."
-	echo "$authenticate_and_get_users_query"
-	mongo admin --eval "$authenticate_and_get_users_query" || die "Unable to login as $mongodb_dba_user after setting authentication password." 
 
 	# info "Logging in again..."
 	# mongo admin -u "$mongodb_dba_user" \ 
@@ -108,6 +104,10 @@ then
 	# 			--authenticationDatabase "admin" \ 
 	# 			--eval "db.getUsers();"
 fi
+
+info "Trying to reconnect to mongodb as user $mongodb_dba_user..."
+echo "$authenticate_and_get_users_query"
+mongo admin --eval "$authenticate_and_get_users_query" || die "Unable to login as $mongodb_dba_user after setting authentication password." 
 
 #go back to initial dir
 cd "$setup_dir" || die "Unable to cd to $setup_dir"
@@ -152,6 +152,5 @@ success "Installed latest MongoDB Community Edition."
 # #Because sometimes this folder is not created properly... go figure.
 # sudo mkdir -p /data/db
 # sudo chown -R mongodb /data/db
-
 
 
