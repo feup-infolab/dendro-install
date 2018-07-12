@@ -56,6 +56,7 @@ unset IFS
 
 IFS='%'
 read -r -d '' create_user_query << BUFFERDELIMITER
+use admin
 db.createUser(
 	{
 		user: "$mongodb_dba_user", 
@@ -64,6 +65,7 @@ db.createUser(
 			"userAdminAnyDatabase",
             "dbAdminAnyDatabase",
             "readWriteAnyDatabase"
+			"clusterAdmin"
 		]
 	}
 );
@@ -72,6 +74,7 @@ unset IFS
 
 IFS='%'
 read -r -d '' authenticate_and_get_users_query << BUFFERDELIMITER
+use admin
 db.auth("$mongodb_dba_user", "$mongodb_dba_password" );
 db.getUsers();
 BUFFERDELIMITER
@@ -96,17 +99,11 @@ then
 	info "Creating $mongodb_dba_user user with password..."
 
 	echo "$create_user_query"
-	mongo admin --eval "$create_user_query"
+	mongo --eval "$create_user_query"
 
 	info "Restarting mongodb..."
 	sudo service mongod restart || die "Unable to restart MongoDB service after creating \"$mongodb_dba_user\" user with the password set in secrets.sh and root role!"
 	wait_for_mongodb_to_boot	
-
-	# info "Logging in again..."
-	# mongo admin -u "$mongodb_dba_user" \ 
-	# 			-p "$mongodb_dba_user" \ 
-	# 			--authenticationDatabase "admin" \ 
-	# 			--eval "db.getUsers();"
 fi
 
 info "Trying to reconnect to mongodb as user $mongodb_dba_user..."
