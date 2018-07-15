@@ -30,7 +30,7 @@ wait_for_virtuoso_to_boot
 VIRTUOSO_ADDRESS="127.0.0.1:1111"
 if echo "exit();" | /usr/local/virtuoso-opensource/bin/isql "$VIRTUOSO_ADDRESS" "dba" "dba"
 then
-        echo "set password dba $virtuoso_dba_password;" | /usr/local/virtuoso-opensource/bin/isql 127.0.0.1 "dba" "dba"
+	echo "set password dba $virtuoso_dba_password;" | /usr/local/virtuoso-opensource/bin/isql "$VIRTUOSO_ADDRESS" "dba" "dba"
 fi
 
 echo "exit();" | /usr/local/virtuoso-opensource/bin/isql "$VIRTUOSO_ADDRESS" "$virtuoso_dba_user" "$virtuoso_dba_password" || die "Error logging into Virtuoso after setting up credentials."
