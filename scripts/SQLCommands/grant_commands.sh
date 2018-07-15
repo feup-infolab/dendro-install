@@ -24,16 +24,21 @@ function wait_for_virtuoso_to_boot()
 
 wait_for_virtuoso_to_boot
 
-# change the default password if it is set as default and the password is different
-if [[ "${virtuoso_dba_password}" != "dba" ]]
+# change the default password if it the default but the
+# password set in secrets.sh is different
+
+VIRTUOSO_ADDRESS="127.0.0.1:1111"
+if echo "exit();" | /usr/local/virtuoso-opensource/bin/isql "$VIRTUOSO_ADDRESS" "dba" "dba"
 then
-	echo "set password dba ${virtuoso_dba_password};" | /usr/local/virtuoso-opensource/bin/isql 127.0.0.1 "dba" "dba"
+        echo "set password dba $virtuoso_dba_password;" | /usr/local/virtuoso-opensource/bin/isql 127.0.0.1 "dba" "dba"
 fi
 
-/usr/local/virtuoso-opensource/bin/isql 1111 "$virtuoso_dba_user" "$virtuoso_dba_password" < $running_folder/interactive_sql_commands.sql || die "Unable to load ontologies into Virtuoso."
-/usr/local/virtuoso-opensource/bin/isql 1111 "$virtuoso_dba_user" "$virtuoso_dba_password" < $running_folder/declare_namespaces.sql || die "Unable to setup namespaces"
+echo "exit();" | /usr/local/virtuoso-opensource/bin/isql "$VIRTUOSO_ADDRESS" "$virtuoso_dba_user" "$virtuoso_dba_password" || die "Error logging into Virtuoso after setting up credentials."
+
+/usr/local/virtuoso-opensource/bin/isql "$VIRTUOSO_ADDRESS" "$virtuoso_dba_user" "$virtuoso_dba_password" < "$running_folder/interactive_sql_commands.sql" || die "Unable to load ontologies into Virtuoso."
+/usr/local/virtuoso-opensource/bin/isql "$VIRTUOSO_ADDRESS" "$virtuoso_dba_user" "$virtuoso_dba_password" < "$running_folder/declare_namespaces.sql" || die "Unable to setup namespaces"
 
 success "Installed base ontologies in virtuoso."
 
 #go back to initial dir
-cd $setup_dir
+cd "$setup_dir"
