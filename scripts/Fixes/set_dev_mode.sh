@@ -33,7 +33,7 @@ info "Trying to open ElasticSearch to ANY remote connection."
 file_exists file_exists_flag $elasticsearch_conf_file
 if [[ "$file_exists_flag" == "true" ]]; then
 	info "File $elasticsearch_conf_file exists..."
-	patch_file $elasticsearch_conf_file "# network.host: 192.168.0.1" "network.host: 0.0.0.0" "elasticsearch_dendro_dev_patch_network_host" && success "Set ElasticSearch HOST." || die "Unable to patch ElasticSearch configuration file (hostname)."
+	patch_file $elasticsearch_conf_file "#network.host: 192.168.0.1" "network.host: 0.0.0.0" "elasticsearch_dendro_dev_patch_network_host" && success "Set ElasticSearch HOST." || die "Unable to patch ElasticSearch configuration file (hostname)."
 	patch_file $elasticsearch_conf_file "http.port: 9200" "http.port: 9200" "elasticsearch_dendro_dev_patch_network_port" && success "Set ElasticSearch PORT." || die "Unable to patch ElasticSearch configuration file (port)."  &&
 	sudo service elasticsearch start && 
 	sudo service elasticsearch restart || die "Unable to restart ElasticSearch service."
