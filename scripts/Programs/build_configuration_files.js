@@ -21,6 +21,7 @@ var possible_arguments = {
     "secret" : string_t,
     "base_uri" : string_t,
     "environment" : string_t,
+    "job_types" : string_t,
 
     //eudat
     "eudat_base_url" : string_t,
@@ -62,6 +63,7 @@ var possible_arguments = {
     "mongodb_sessions_store_collection_name" : string_t,
     "mongodb_dba_user" : string_t,
     "mongodb_dba_password" : string_t,
+    "mongo_job_collection_name" : string_t,
 
     //mysql
     "mysql_host" : string_t,
@@ -270,6 +272,7 @@ var write_dendro_configuration_file = function ()
         },
         "baseUri" : get_argument_by_name('base_uri'),
         "environment" : get_argument_by_name('environment'),
+        "jobTypes" : get_argument_by_name('job_types'),
         "eudatBaseUrl" : get_argument_by_name('eudat_base_url'),
         "eudatToken" : get_argument_by_name('eudat_token'),
         "eudatCommunityId" : get_argument_by_name('eudat_community_id'),
@@ -377,6 +380,7 @@ var write_dendro_configuration_file = function ()
         "mongoDbPort" : get_argument_by_name('mongodb_port'),
         "mongoDbCollectionName" : get_argument_by_name('mongodb_files_collection_name'),
         "mongoDBSessionStoreCollection" : get_argument_by_name('mongodb_sessions_store_collection_name'),
+        "mongoJobCollectionName" : get_argument_by_name('mongo_job_collection_name'),
         "mongoDbVersion" : "",
         "mongoDBAuth" : {
             "username" : get_argument_by_name('mongodb_dba_user'),
