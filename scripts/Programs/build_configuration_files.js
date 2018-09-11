@@ -270,6 +270,7 @@ var write_dendro_configuration_file = function ()
         },
         "baseUri" : get_argument_by_name('base_uri'),
         "environment" : get_argument_by_name('environment'),
+		"skipDescriptorValuesValidation": false,
         "eudatBaseUrl" : get_argument_by_name('eudat_base_url'),
         "eudatToken" : get_argument_by_name('eudat_token'),
         "eudatCommunityId" : get_argument_by_name('eudat_community_id'),
@@ -367,7 +368,7 @@ var write_dendro_configuration_file = function ()
         "virtuosoHost" : get_argument_by_name('virtuoso_host'),
         "virtuosoPort" : get_argument_by_name('virtuoso_port'),
         "virtuosoISQLPort" : get_argument_by_name('virtuoso_isql_port'),
-        "virtuosoConnector" : "http",
+        "virtuosoConnector" : "jdbc",
         "virtuosoAuth" : {
             "user" : get_argument_by_name('virtuoso_dba_user'),
             "password" : get_argument_by_name('virtuoso_dba_password')
@@ -376,6 +377,7 @@ var write_dendro_configuration_file = function ()
         "mongoDBHost" : get_argument_by_name('mongodb_host'),
         "mongoDbPort" : get_argument_by_name('mongodb_port'),
         "mongoDbCollectionName" : get_argument_by_name('mongodb_files_collection_name'),
+		"useMongoDBSessionStore": true,
         "mongoDBSessionStoreCollection" : get_argument_by_name('mongodb_sessions_store_collection_name'),
         "mongoDbVersion" : "",
         "mongoDBAuth" : {
@@ -399,8 +401,8 @@ var write_dendro_configuration_file = function ()
         "mySQLDBName" : slug(get_argument_by_name('mysql_db_name'), '_'),
         "maxUploadSize" : get_argument_by_name('max_upload_size'),
         "maxProjectSize" : get_argument_by_name('max_project_size'),
-        "maxSimultaneousConnectionsToDb" : 12,
-        "dbOperationTimeout" : 8000,
+        "maxSimultaneousConnectionsToDb" : 1,
+        "dbOperationTimeout" : 16000,
         "tempFilesDir" : get_argument_by_name('temp_files_directory'),
         "tempUploadsDir" : get_argument_by_name('temp_uploads_files_directory'),
         "tempFilesCreationMode" : "0777",
@@ -505,8 +507,6 @@ var write_dendro_configuration_file = function ()
             "reload_demo_users_on_startup" : get_argument_by_name('reload_demo_users_on_startup'),
             "reload_ontologies_on_startup" : get_argument_by_name('reload_ontologies_on_startup'),
             "clear_session_store" : get_argument_by_name('clear_session_store_on_startup'),
-
-            "load_databases": get_argument_by_name('load_databases_on_startup'),
             "reload_administrators_on_startup": get_argument_by_name('reload_administrators_on_startup'),
             "reload_demo_users_on_startup": get_argument_by_name('reload_demo_users_on_startup'),
             "reload_ontologies_on_startup": get_argument_by_name('reload_ontologies_on_startup'),
@@ -517,7 +517,9 @@ var write_dendro_configuration_file = function ()
             "clear_caches" : true,
             "log_bootup_actions" : true,
             "destroy_all_graphs": false,
-            "destroy_all_indexes": false
+            "destroy_all_indexes": false,
+			"destroy_datastore": false,
+			"destroy_mysql_database": false
         },
         "baselines" : {
             "dublin_core_only" : false
@@ -529,11 +531,6 @@ var write_dendro_configuration_file = function ()
             "log_all_requests": true,
 			"do_not_log_requests_to_public_assets": true,
             "log_emailing": false,
-        },
-        "version" :
-        {
-            "number" : 0.2,
-            "name" : get_argument_by_name('config_human_readable_name')
         },
         "recommendation":
         {
