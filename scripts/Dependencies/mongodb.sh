@@ -40,6 +40,10 @@ sudo mkdir -p /data/db &&
 sudo chown -R mongodb /data/db &&
 sudo service mongod restart || die "Unable to create /data/db directory for mongodb!"
 
+####################################################################
+### Define Constants
+####################################################################
+
 # enable mongodb authentication
 IFS='%'
 read -r -d '' old_conf_file_port_section << BUFFERDELIMITER
@@ -54,6 +58,7 @@ security:
 BUFFERDELIMITER
 unset IFS
 
+# Create MongoDB user
 IFS='%'
 read -r -d '' create_user_query << BUFFERDELIMITER
 db.createUser(
@@ -106,34 +111,40 @@ then
 	sudo service mongod start || die "Unable to start MongoDB service after enabling authentication"
 fi 
 
-wait_for_mongodb_to_boot
+mongodb_databases_to_patch=( $mongodb_files_collection_name, $mongodb_sessions_store_collection_name )
 
-#change default password of mongodb database if it is open	
-if ! mongo admin -u "$mongodb_dba_user" -p "$mongodb_dba_password" --authenticationDatabase "admin" --eval="quit();" 
-then		
-	info "Creating $mongodb_dba_user user with password..."
+for database in "${mongodb_databases_to_patch[@]}"
+do
+	echo "Setting up database $database..."
+	
+	wait_for_mongodb_to_boot
 
-	echo "$create_user_query"
-	mongo admin --eval "$create_user_query"
-fi
+	#change default password of mongodb database if it is open	
+	if ! mongo "$database" -u "$mongodb_dba_user" -p "$mongodb_dba_password" --authenticationDatabase "admin" --eval="quit();" 
+	then		
+		info "Creating $mongodb_dba_user user on database $i with password..."
 
-info "Restarting mongodb..."
-sudo service mongod restart || die "Unable to restart MongoDB service after creating \"$mongodb_dba_user\" user with the password set in secrets.sh and root role!"
+		echo "$create_user_query"
+		mongo admin --eval "$create_user_query"
+	fi
 
-wait_for_mongodb_to_boot
+	info "Restarting mongodb..."
+	sudo service mongod restart || die "Unable to restart MongoDB service after creating \"$mongodb_dba_user\" user with the password set in secrets.sh and root role!"
 
-info "Granting all roles to $mongodb_dba_user user with password..."
+	wait_for_mongodb_to_boot
 
-echo "$grant_roles_query"
-mongo admin --eval "$grant_roles_query"
+	info "Granting all roles to $mongodb_dba_user user on database $i with password..."
+	echo "$grant_roles_query"
+	mongo "$database" --eval "$grant_roles_query"
 
-info "Restarting mongodb..."
-sudo service mongod restart || die "Unable to restart MongoDB service after granting all permissions to \"$mongodb_dba_user\" user with the password set in secrets.sh!"
+	info "Restarting mongodb..."
+	sudo service mongod restart || die "Unable to restart MongoDB service after granting all permissions to \"$mongodb_dba_user\" user with the password set in secrets.sh!"
 
-wait_for_mongodb_to_boot
+	wait_for_mongodb_to_boot
 
-info "Trying to reconnect to mongodb as user $mongodb_dba_user..."
-mongo admin --eval "$authenticate_and_get_users_query" || die "Unable to login as $mongodb_dba_user after setting authentication password." 
+	info "Trying to reconnect to mongodb as user $mongodb_dba_user..."
+	mongo "$database" --eval "$authenticate_and_get_users_query" || die "Unable to login as $mongodb_dba_user after setting authentication password." 
+done
 
 #go back to initial dir
 cd "$setup_dir" || die "Unable to cd to $setup_dir"
