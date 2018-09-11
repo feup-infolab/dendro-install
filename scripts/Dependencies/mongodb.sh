@@ -64,9 +64,26 @@ db.createUser(
 			"userAdminAnyDatabase",
 			"dbAdminAnyDatabase",
 			"readWriteAnyDatabase",
-			"clusterAdmin"
+			"clusterAdmin",
+			"readWrite"
 		]
 	}
+);
+BUFFERDELIMITER
+unset IFS
+
+IFS='%'
+read -r -d '' grant_roles_query << BUFFERDELIMITER
+db.auth("$mongodb_dba_user", "$mongodb_dba_password" );
+db.grantRolesToUser(
+		"$mongodb_dba_user",
+		[ 
+			"userAdminAnyDatabase",
+			"dbAdminAnyDatabase",
+			"readWriteAnyDatabase",
+			"clusterAdmin",
+			"readWrite"
+		]
 );
 BUFFERDELIMITER
 unset IFS
@@ -98,10 +115,20 @@ then
 
 	echo "$create_user_query"
 	mongo admin --eval "$create_user_query"
-
-	info "Restarting mongodb..."
-	sudo service mongod restart || die "Unable to restart MongoDB service after creating \"$mongodb_dba_user\" user with the password set in secrets.sh and root role!"
 fi
+
+info "Restarting mongodb..."
+sudo service mongod restart || die "Unable to restart MongoDB service after creating \"$mongodb_dba_user\" user with the password set in secrets.sh and root role!"
+
+wait_for_mongodb_to_boot
+
+info "Granting all roles to $mongodb_dba_user user with password..."
+
+echo "$grant_roles_query"
+mongo admin --eval "$grant_roles_query"
+
+info "Restarting mongodb..."
+sudo service mongod restart || die "Unable to restart MongoDB service after granting all permissions to \"$mongodb_dba_user\" user with the password set in secrets.sh!"
 
 wait_for_mongodb_to_boot
 
