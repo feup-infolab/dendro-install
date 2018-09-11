@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 if [ -z ${DIR+x} ]; then 
-	#running by itself
-	source ../constants.sh
+    #running by itself
+    source ../constants.sh
 else 
-	#running from dendro_full_setup_ubuntu_server_ubuntu_16.sh
-	source ./constants.sh
+    #running from dendro_full_setup_ubuntu_server_ubuntu_16.sh
+    source ./constants.sh
 fi
 
 function wait_for_mongodb_to_boot()
@@ -62,40 +62,36 @@ unset IFS
 IFS='%'
 read -r -d '' create_user_query << BUFFERDELIMITER
 db.createUser(
-	{
-		user: "$mongodb_dba_user", 
-		pwd: "$mongodb_dba_password", 
-		roles : [ 
-			"userAdminAnyDatabase",
-			"dbAdminAnyDatabase",
-			"readWriteAnyDatabase",
-			"clusterAdmin",
-			"readWrite"
-		]
-	}
+    {
+        user: "$mongodb_dba_user", 
+        pwd: "$mongodb_dba_password", 
+        roles : [
+			"readWrite",
+			"dbAdmin",
+			"dbOwner"
+        ]
+    }
 );
 BUFFERDELIMITER
 unset IFS
+
 
 IFS='%'
 read -r -d '' grant_roles_query << BUFFERDELIMITER
-db.auth("$mongodb_dba_user", "$mongodb_dba_password" );
 db.grantRolesToUser(
-		"$mongodb_dba_user",
+        "$mongodb_dba_user",
 		[ 
-			"userAdminAnyDatabase",
-			"dbAdminAnyDatabase",
-			"readWriteAnyDatabase",
-			"clusterAdmin",
-			"readWrite"
-		]
+			"readWrite",
+			"dbAdmin",
+			"dbOwner"
+        ]
 );
 BUFFERDELIMITER
 unset IFS
 
+# db.auth("$mongodb_dba_user", "$mongodb_dba_password" );
 IFS='%'
 read -r -d '' authenticate_and_get_users_query << BUFFERDELIMITER
-db.auth("$mongodb_dba_user", "$mongodb_dba_password" );
 db.getUsers();
 BUFFERDELIMITER
 unset IFS
@@ -103,48 +99,69 @@ unset IFS
 file_is_patched=""
 file_is_patched_for_line file_is_patched "$mongodb_conf_file" "$old_conf_file_port_section" "$new_conf_file_port_section" "mongodb_enable_authentication_patch"
 
+mongodb_databases_to_patch=( "$mongodb_files_collection_name", "$mongodb_sessions_store_collection_name", "files" )
+
+function patch_databases()
+{
+	for database in "${mongodb_databases_to_patch[@]}"
+	do
+	    echo "Setting up database $database..."
+    
+		warning "Restarting mongodb...1"
+	    wait_for_mongodb_to_boot
+
+	    # #change default password of mongodb database if it is open
+	    # if ! mongo "$database" -u "$mongodb_dba_user" -p "$mongodb_dba_password" --authenticationDatabase "admin" --eval="quit();"
+	    # then
+	    #     info "Creating $mongodb_dba_user user on database $database with password..."
+	    #     echo "$create_user_query"
+	    #     mongo $database --eval "$create_user_query"
+	    # fi
+		
+        info "Creating $mongodb_dba_user user on database $database with password..."
+        echo "$create_user_query"
+        mongo $database --eval "$create_user_query"
+
+	    warning "Restarting mongodb...2"
+	    sudo service mongod restart || die "Unable to restart MongoDB service after creating \"$mongodb_dba_user\" user with the password set in secrets.sh and root role!"
+
+	    wait_for_mongodb_to_boot
+
+	    info "Granting all roles to $mongodb_dba_user user on database $database with password..."
+	    echo "$grant_roles_query"
+	    mongo "$database" --eval "$grant_roles_query"
+
+	    warning "Restarting mongodb...3"
+	    sudo service mongod restart || die "Unable to restart MongoDB service after granting all permissions to \"$mongodb_dba_user\" user with the password set in secrets.sh!"
+
+	    wait_for_mongodb_to_boot
+	done
+}
+
+function validate_existence_of_permissions 
+{	
+	for database in "${mongodb_databases_to_patch[@]}"
+	do
+	    info "Trying to reconnect to mongodb as user $mongodb_dba_user..."
+	    echo "$authenticate_and_get_users_query"
+		
+		wait_for_mongodb_to_boot
+			
+	    mongo "$database" --eval "$authenticate_and_get_users_query" -u "$mongodb_dba_user" -p "$mongodb_dba_password" --authenticationDatabase admin || die "Unable to login into database $database as $mongodb_dba_user after setting authentication password." 
+	done
+}
+
 if [ "$file_is_patched" == "false" ]
 then
-	info "File $mongodb_conf_file is not patched. Patching now..."
-	sudo service mongod stop || die "Unable to stop MongoDB service"
-	patch_file "$mongodb_conf_file" "$old_conf_file_port_section" "$new_conf_file_port_section" "mongodb_enable_authentication_patch" || die "Unable to patch MongoDB configuration file: $mongodb_conf_file."	
-	sudo service mongod start || die "Unable to start MongoDB service after enabling authentication"
-fi 
-
-mongodb_databases_to_patch=( $mongodb_files_collection_name, $mongodb_sessions_store_collection_name )
-
-for database in "${mongodb_databases_to_patch[@]}"
-do
-	echo "Setting up database $database..."
-	
+    info "MongoDB Authentication not enabled. Creating admin user and granting root privileges..."
+	patch_databases
+    sudo service mongod stop || die "Unable to stop MongoDB service"
+    patch_file "$mongodb_conf_file" "$old_conf_file_port_section" "$new_conf_file_port_section" "mongodb_enable_authentication_patch" || die "Unable to patch MongoDB configuration file: $mongodb_conf_file."    
+    sudo service mongod start || die "Unable to start MongoDB service after enabling authentication"
 	wait_for_mongodb_to_boot
+fi
 
-	#change default password of mongodb database if it is open	
-	if ! mongo "$database" -u "$mongodb_dba_user" -p "$mongodb_dba_password" --authenticationDatabase "admin" --eval="quit();" 
-	then		
-		info "Creating $mongodb_dba_user user on database $i with password..."
-
-		echo "$create_user_query"
-		mongo admin --eval "$create_user_query"
-	fi
-
-	info "Restarting mongodb..."
-	sudo service mongod restart || die "Unable to restart MongoDB service after creating \"$mongodb_dba_user\" user with the password set in secrets.sh and root role!"
-
-	wait_for_mongodb_to_boot
-
-	info "Granting all roles to $mongodb_dba_user user on database $i with password..."
-	echo "$grant_roles_query"
-	mongo "$database" --eval "$grant_roles_query"
-
-	info "Restarting mongodb..."
-	sudo service mongod restart || die "Unable to restart MongoDB service after granting all permissions to \"$mongodb_dba_user\" user with the password set in secrets.sh!"
-
-	wait_for_mongodb_to_boot
-
-	info "Trying to reconnect to mongodb as user $mongodb_dba_user..."
-	mongo "$database" --eval "$authenticate_and_get_users_query" || die "Unable to login as $mongodb_dba_user after setting authentication password." 
-done
+validate_existence_of_permissions
 
 #go back to initial dir
 cd "$setup_dir" || die "Unable to cd to $setup_dir"
@@ -157,11 +174,11 @@ success "Installed latest MongoDB Community Edition."
 #
 # if [ -f /etc/environment.bak_before_dendro_setup ]
 # then
-# 	echo "[INFO] Locales fix already applied. Continuing..."
+#     echo "[INFO] Locales fix already applied. Continuing..."
 # else
-# 	echo "[INFO] Adding locales fix..."
-# 	sudo cp /etc/environment /etc/environment.bak_before_dendro_setup
-# 	echo $line | sudo tee -a /etc/environment
+#     echo "[INFO] Adding locales fix..."
+#     sudo cp /etc/environment /etc/environment.bak_before_dendro_setup
+#     echo $line | sudo tee -a /etc/environment
 # fi
 
 # command="cat /etc/environment | grep '${line}'"
