@@ -8,11 +8,18 @@ else
     source ./constants.sh
 fi
 
+# whoami
+# db.runCommand({connectionStatus : 1})
+# db.changeUserPassword(username, password)
+# db.collection.find(query, projection)
+
 function wait_for_mongodb_to_boot()
 {
     info "Waiting for mongodb to boot up..."
     wait_for_server_to_boot_on_port "127.0.0.1" "27017"
 }
+
+sudo service mongod restart > /dev/null
 
 info "Installing MongoDB Community Edition......"
 
@@ -78,6 +85,8 @@ unset IFS
 
 IFS='%'
 read -r -d '' grant_roles_query << BUFFERDELIMITER
+db.changeUserPassword("$mongodb_dba_user", "$mongodb_dba_password");
+
 db.grantRolesToUser(
         "$mongodb_dba_user",
 		[ 
@@ -91,15 +100,16 @@ unset IFS
 
 # db.auth("$mongodb_dba_user", "$mongodb_dba_password" );
 IFS='%'
-read -r -d '' authenticate_and_get_users_query << BUFFERDELIMITER
+read -r -d '' get_users_query << BUFFERDELIMITER
 db.getUsers();
+db.runCommand({connectionStatus : 1})
 BUFFERDELIMITER
 unset IFS
 
 file_is_patched=""
 file_is_patched_for_line file_is_patched "$mongodb_conf_file" "$old_conf_file_port_section" "$new_conf_file_port_section" "mongodb_enable_authentication_patch"
 
-mongodb_databases_to_patch=( "$mongodb_files_collection_name", "$mongodb_sessions_store_collection_name", "files" )
+mongodb_databases_to_patch=( "$mongodb_files_collection_name" , "$mongodb_sessions_store_collection_name" , "fs.files" )
 
 function patch_databases()
 {
@@ -120,7 +130,7 @@ function patch_databases()
 		
         info "Creating $mongodb_dba_user user on database $database with password..."
         echo "$create_user_query"
-        mongo $database --eval "$create_user_query"
+        mongo "$database" --eval "$create_user_query"
 
 	    warning "Restarting mongodb...2"
 	    sudo service mongod restart || die "Unable to restart MongoDB service after creating \"$mongodb_dba_user\" user with the password set in secrets.sh and root role!"
@@ -133,30 +143,32 @@ function patch_databases()
 
 	    warning "Restarting mongodb...3"
 	    sudo service mongod restart || die "Unable to restart MongoDB service after granting all permissions to \"$mongodb_dba_user\" user with the password set in secrets.sh!"
-
-	    wait_for_mongodb_to_boot
 	done
 }
 
 function validate_existence_of_permissions 
 {	
+	wait_for_mongodb_to_boot
 	for database in "${mongodb_databases_to_patch[@]}"
 	do
-	    info "Trying to reconnect to mongodb as user $mongodb_dba_user..."
-	    echo "$authenticate_and_get_users_query"
+	    info "Trying to reconnect to mongodb as user $mongodb_dba_user with password $mongodb_dba_password..."
+		
+	    echo "$get_users_query"
 		
 		wait_for_mongodb_to_boot
 			
-	    mongo "$database" --eval "$authenticate_and_get_users_query" -u "$mongodb_dba_user" -p "$mongodb_dba_password" --authenticationDatabase admin || die "Unable to login into database $database as $mongodb_dba_user after setting authentication password." 
+	    # mongo "$database" --eval "$get_users_query" -u "$mongodb_dba_user" -p "$mongodb_dba_password" --authenticationDatabase admin || die "Unable to login into database $database as $mongodb_dba_user after setting authentication password." 
+		
+	    mongo "$database" --eval "$get_users_query" -u "$mongodb_dba_user" -p "$mongodb_dba_password" || die "Unable to login into database $database as $mongodb_dba_user after setting authentication password." 
 	done
 }
 
 if [ "$file_is_patched" == "false" ]
 then
-    info "MongoDB Authentication not enabled. Creating admin user and granting root privileges..."
+    info "MongoDB Authentication not enabled. Creating admin user and granting privileges..."
 	patch_databases
     sudo service mongod stop || die "Unable to stop MongoDB service"
-    patch_file "$mongodb_conf_file" "$old_conf_file_port_section" "$new_conf_file_port_section" "mongodb_enable_authentication_patch" || die "Unable to patch MongoDB configuration file: $mongodb_conf_file."    
+    patch_file "$mongodb_conf_file" "$old_conf_file_port_section" "$new_conf_file_port_section" "mongodb_enable_authentication_patch" || die "Unable to patch MongoDB configuration file: $mongodb_conf_file."
     sudo service mongod start || die "Unable to start MongoDB service after enabling authentication"
 	wait_for_mongodb_to_boot
 fi
